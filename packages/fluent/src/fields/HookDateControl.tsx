@@ -1,8 +1,8 @@
-import { IHookFieldSharedProps } from "@brhanso/dynamic-forms-core";
+import { IHookFieldSharedProps } from "@bghcore/dynamic-forms-core";
 import { DatePicker, IDatePickerProps, IconButton } from "@fluentui/react";
 import React from "react";
 import { FieldClassName, GetFieldDataTestId, formatDateTime } from "../helpers";
-import { HookInlineFormStrings } from "@brhanso/dynamic-forms-core";
+import { HookInlineFormStrings } from "@bghcore/dynamic-forms-core";
 
 interface IHookDateControlProps extends IDatePickerProps {}
 

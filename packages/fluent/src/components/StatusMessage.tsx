@@ -1,4 +1,4 @@
-import { HookInlineFormStrings } from "@brhanso/dynamic-forms-core";
+import { HookInlineFormStrings } from "@bghcore/dynamic-forms-core";
 import { Icon, Spinner, SpinnerSize } from "@fluentui/react";
 import React from "react";
 import { FieldError } from "react-hook-form";

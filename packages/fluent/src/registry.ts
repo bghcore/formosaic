@@ -1,4 +1,4 @@
-import { ComponentTypes, Dictionary } from "@brhanso/dynamic-forms-core";
+import { ComponentTypes, Dictionary } from "@bghcore/dynamic-forms-core";
 import HookTextbox from "./fields/HookTextbox";
 import HookNumber from "./fields/HookNumber";
 import HookToggle from "./fields/HookToggle";

@@ -1,4 +1,4 @@
-import { IHookFieldSharedProps, convertBooleanToYesOrNoText } from "@brhanso/dynamic-forms-core";
+import { IHookFieldSharedProps, convertBooleanToYesOrNoText } from "@bghcore/dynamic-forms-core";
 import { IToggleProps, Toggle } from "@fluentui/react";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";

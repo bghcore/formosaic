@@ -1,4 +1,4 @@
-import { IHookFieldSharedProps } from "@brhanso/dynamic-forms-core";
+import { IHookFieldSharedProps } from "@bghcore/dynamic-forms-core";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import DocumentLinks, { IDocumentLink } from "../components/DocumentLinks/DocumentLinks";

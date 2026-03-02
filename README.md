@@ -6,13 +6,13 @@ A React library for rendering complex, configuration-driven forms with a built-i
 
 | Package | Description | Size |
 |---------|-------------|------|
-| [`@brhanso/dynamic-forms-core`](./packages/core) | Business rules engine, form orchestration, providers, types. Framework-agnostic (React + react-hook-form only). | ~67 KB ESM |
-| [`@brhanso/dynamic-forms-fluent`](./packages/fluent) | Fluent UI v8 field components. One of potentially many UI adapter packages. | ~40 KB ESM |
+| [`@bghcore/dynamic-forms-core`](./packages/core) | Business rules engine, form orchestration, providers, types. Framework-agnostic (React + react-hook-form only). | ~67 KB ESM |
+| [`@bghcore/dynamic-forms-fluent`](./packages/fluent) | Fluent UI v8 field components. One of potentially many UI adapter packages. | ~40 KB ESM |
 
 ## Quick Start
 
 ```bash
-npm install @brhanso/dynamic-forms-core @brhanso/dynamic-forms-fluent
+npm install @bghcore/dynamic-forms-core @bghcore/dynamic-forms-fluent
 ```
 
 ```tsx
@@ -21,8 +21,8 @@ import {
   InjectedHookFieldProvider,
   UseInjectedHookFieldContext,
   HookInlineForm,
-} from "@brhanso/dynamic-forms-core";
-import { createFluentFieldRegistry } from "@brhanso/dynamic-forms-fluent";
+} from "@bghcore/dynamic-forms-core";
+import { createFluentFieldRegistry } from "@bghcore/dynamic-forms-fluent";
 import { useEffect } from "react";
 
 // Register Fluent UI fields
@@ -135,7 +135,7 @@ The library uses a component injection system for field rendering. Core provides
 
 ```tsx
 // Use built-in Fluent UI fields
-import { createFluentFieldRegistry } from "@brhanso/dynamic-forms-fluent";
+import { createFluentFieldRegistry } from "@bghcore/dynamic-forms-fluent";
 setInjectedFields(createFluentFieldRegistry());
 
 // Or mix in custom fields
@@ -166,7 +166,7 @@ interface IHookFieldSharedProps<T> {
 Register custom validators and value functions:
 
 ```tsx
-import { registerValidations, registerValueFunctions } from "@brhanso/dynamic-forms-core";
+import { registerValidations, registerValueFunctions } from "@bghcore/dynamic-forms-core";
 
 registerValidations({
   myCustomValidation: (value) => {
@@ -206,7 +206,7 @@ const fieldConfigs = {
 
 ## Available Field Types
 
-### Editable Fields (from `@brhanso/dynamic-forms-fluent`)
+### Editable Fields (from `@bghcore/dynamic-forms-fluent`)
 
 | Component Key | Component | Description |
 |---------------|-----------|-------------|
@@ -278,7 +278,7 @@ To create fields for a different UI library (e.g., Material UI, Ant Design):
 3. Pass the registry to `InjectedHookFieldProvider` via `setInjectedFields()`
 
 ```tsx
-import { IHookFieldSharedProps, ComponentTypes } from "@brhanso/dynamic-forms-core";
+import { IHookFieldSharedProps, ComponentTypes } from "@bghcore/dynamic-forms-core";
 
 const MaterialTextbox = (props: IHookFieldSharedProps<{}>) => {
   const { fieldName, value, readOnly, error, setFieldValue } = props;
@@ -322,10 +322,10 @@ npm run clean
 
 ```
 packages/
-  core/     -- @brhanso/dynamic-forms-core (React + react-hook-form only)
-  fluent/   -- @brhanso/dynamic-forms-fluent (Fluent UI v8 adapter)
+  core/     -- @bghcore/dynamic-forms-core (React + react-hook-form only)
+  fluent/   -- @bghcore/dynamic-forms-fluent (Fluent UI v8 adapter)
 ```
 
 ## License
 
-ISC
+MIT

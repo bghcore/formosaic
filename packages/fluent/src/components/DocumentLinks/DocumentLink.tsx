@@ -1,4 +1,4 @@
-import { HookInlineFormStrings, HookInlineFormConstants } from "@brhanso/dynamic-forms-core";
+import { HookInlineFormStrings, HookInlineFormConstants } from "@bghcore/dynamic-forms-core";
 import { IconButton, TextField, TooltipHost } from "@fluentui/react";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";

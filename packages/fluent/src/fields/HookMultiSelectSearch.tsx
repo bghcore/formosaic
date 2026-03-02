@@ -1,4 +1,4 @@
-import { IHookFieldSharedProps } from "@brhanso/dynamic-forms-core";
+import { IHookFieldSharedProps } from "@bghcore/dynamic-forms-core";
 import { ComboBox, IComboBox, IComboBoxOption, IComboBoxProps, Dropdown, IDropdownOption } from "@fluentui/react";
 import React from "react";
 import { FieldClassName, GetFieldDataTestId, onRenderDropdownItemWithIcon } from "../helpers";

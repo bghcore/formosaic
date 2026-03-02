@@ -1,4 +1,4 @@
-import { IHookFieldSharedProps, isEmpty } from "@brhanso/dynamic-forms-core";
+import { IHookFieldSharedProps, isEmpty } from "@bghcore/dynamic-forms-core";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { ReadOnlyText, IReadOnlyFieldProps } from "../../components/ReadOnlyText";

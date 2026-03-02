@@ -1,4 +1,4 @@
-import { Dictionary } from "@brhanso/dynamic-forms-core";
+import { Dictionary } from "@bghcore/dynamic-forms-core";
 import { Dropdown, IDropdownOption } from "@fluentui/react";
 import React from "react";
 import { GetFieldDataTestId, onRenderDropdownItemWithIcon } from "../../helpers";

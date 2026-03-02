@@ -1,4 +1,4 @@
-import { IHookFieldSharedProps, getDropdownValue, Dictionary } from "@brhanso/dynamic-forms-core";
+import { IHookFieldSharedProps, getDropdownValue, Dictionary } from "@bghcore/dynamic-forms-core";
 import { IDropdownOption, IDropdownProps } from "@fluentui/react";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";

@@ -1,4 +1,4 @@
-import { IHookFieldSharedProps } from "@brhanso/dynamic-forms-core";
+import { IHookFieldSharedProps } from "@bghcore/dynamic-forms-core";
 import { ISliderProps, Slider } from "@fluentui/react";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";

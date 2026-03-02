@@ -5,8 +5,8 @@
 A React library for rendering complex, configuration-driven forms with a built-in business rules engine. Forms are defined as JSON configurations (field definitions, dependency rules, dropdown options, ordering) and the library handles rendering, validation, auto-save, and field interactions automatically.
 
 Published as two npm packages:
-- `@brhanso/dynamic-forms-core` -- Framework-agnostic business rules engine and form orchestration
-- `@brhanso/dynamic-forms-fluent` -- Fluent UI v8 field component implementations
+- `@bghcore/dynamic-forms-core` -- Framework-agnostic business rules engine and form orchestration
+- `@bghcore/dynamic-forms-fluent` -- Fluent UI v8 field component implementations
 
 ## Architecture
 
@@ -68,7 +68,7 @@ Validation and value functions use pluggable registries instead of hardcoded swi
 
 ```
 packages/
-  core/                          -- @brhanso/dynamic-forms-core
+  core/                          -- @bghcore/dynamic-forms-core
     src/
       index.ts                   -- Public API barrel exports
       constants.ts               -- Form constants (expand cutoff, shimmer config, component type keys)
@@ -109,7 +109,7 @@ packages/
       utils/
         index.ts                 -- Local utility functions (isEmpty, isNull, deepCopy, Dictionary, etc.)
 
-  fluent/                        -- @brhanso/dynamic-forms-fluent
+  fluent/                        -- @bghcore/dynamic-forms-fluent
     src/
       index.ts                   -- Public API barrel exports
       registry.ts                -- createFluentFieldRegistry() for one-line setup

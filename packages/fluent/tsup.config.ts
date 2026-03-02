@@ -12,7 +12,7 @@ export default defineConfig({
     "react-hook-form",
     "@fluentui/react",
     "@fluentui/react-hooks",
-    "@brhanso/dynamic-forms-core",
+    "@bghcore/dynamic-forms-core",
   ],
   jsx: "automatic",
 });

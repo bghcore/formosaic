@@ -1,5 +1,5 @@
 {
-  "name": "@brhanso/dynamic-forms-core",
+  "name": "@bghcore/dynamic-forms-core",
   "version": "0.1.0",
   "description": "Core business rules engine and form orchestration for dynamic React forms",
   "main": "dist/index.cjs",
@@ -13,6 +13,7 @@
     }
   },
   "files": ["dist"],
+  "license": "MIT",
   "sideEffects": false,
   "scripts": {
     "build": "tsup",

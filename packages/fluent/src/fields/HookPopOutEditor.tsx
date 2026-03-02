@@ -1,4 +1,4 @@
-import { IHookFieldSharedProps, HookInlineFormStrings } from "@brhanso/dynamic-forms-core";
+import { IHookFieldSharedProps, HookInlineFormStrings } from "@bghcore/dynamic-forms-core";
 import {
   DefaultButton,
   Dialog,

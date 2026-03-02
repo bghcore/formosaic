@@ -1,5 +1,5 @@
 import { FieldError } from "react-hook-form";
-import { IDropdownOption } from "@brhanso/dynamic-forms-core";
+import { IDropdownOption } from "@bghcore/dynamic-forms-core";
 import { Icon, IDropdownOption as IFluentDropdownOption } from "@fluentui/react";
 import React from "react";
 

@@ -13,7 +13,7 @@ an internal monorepo) into two independent, publishable packages.
 ### Added
 
 - **Monorepo structure** with npm workspaces (`packages/core`, `packages/fluent`)
-- **`@brhanso/dynamic-forms-core`** -- Framework-agnostic business rules engine
+- **`@bghcore/dynamic-forms-core`** -- Framework-agnostic business rules engine
   - `BusinessRulesProvider` and `InjectedHookFieldProvider` React context providers
   - `ProcessAllBusinessRules`, `ProcessFieldBusinessRule`, and full rule evaluation pipeline
   - `HookInlineForm` component with auto-save, expand/collapse, and confirm-input modal
@@ -26,7 +26,7 @@ an internal monorepo) into two independent, publishable packages.
   - All TypeScript interfaces exported (`IFieldConfig`, `IBusinessRule`, `IHookFieldSharedProps`, etc.)
   - Local utility types replacing external dependencies (`Dictionary<T>`, `IEntityData`, `SubEntityType`)
   - Local utility functions (`isEmpty`, `isNull`, `deepCopy`, `sortDropdownOptions`, etc.)
-- **`@brhanso/dynamic-forms-fluent`** -- Fluent UI v8 field components
+- **`@bghcore/dynamic-forms-fluent`** -- Fluent UI v8 field components
   - 13 editable field components: Textbox, Number, Toggle, Dropdown, MultiSelect, DateControl, Slider, Fragment, SimpleDropdown, MultiSelectSearch, PopOutEditor, DocumentLinks, StatusDropdown
   - 6 read-only field components: ReadOnly, ReadOnlyArray, ReadOnlyDateTime, ReadOnlyCumulativeNumber, ReadOnlyRichText, ReadOnlyWithButton
   - Supporting components: ReadOnlyText, StatusMessage, HookFormLoading (Shimmer), StatusColor, StatusDropdown, DocumentLink, DocumentLinks
@@ -63,7 +63,7 @@ an internal monorepo) into two independent, publishable packages.
 - **Host-app coupled components**: HookInlineFormWrapper (data fetching), HookFormPanel (slide-out panel), HookFormBoundary (error boundary with hardcoded internal link)
 - **Panel system**: HookInlineFormPanelProvider, IHookFormPanelActionProps, IHookPanelConfig
 - **Domain-specific helpers**: People picker rendering, product taxonomy API, work item creation, block status change processing, customer resolution
-- `InjectComponents.tsx` (replaced by `@brhanso/dynamic-forms-fluent` `createFluentFieldRegistry()`)
+- `InjectComponents.tsx` (replaced by `@bghcore/dynamic-forms-fluent` `createFluentFieldRegistry()`)
 - `HookInlineForm.scss` (broken -- used undefined SCSS variables)
 - `rollup.config.js` (replaced by tsup)
 - Domain-specific strings and constants

@@ -18,8 +18,8 @@ A **configuration-driven React form library** with a built-in business rules eng
 
 The library is split into two packages:
 
-- **`@brhanso/dynamic-forms-core`** -- Framework-agnostic business rules engine, form orchestration, providers, and TypeScript interfaces. No UI library dependency.
-- **`@brhanso/dynamic-forms-fluent`** -- Fluent UI v8 field component implementations. Depends on core.
+- **`@bghcore/dynamic-forms-core`** -- Framework-agnostic business rules engine, form orchestration, providers, and TypeScript interfaces. No UI library dependency.
+- **`@bghcore/dynamic-forms-fluent`** -- Fluent UI v8 field component implementations. Depends on core.
 
 ---
 
@@ -94,8 +94,8 @@ The library is split into two packages:
 
 ### 3.3 Additional UI Adapters
 
-- Create a `@brhanso/dynamic-forms-mui` package for Material UI field components
-- Create a `@brhanso/dynamic-forms-headless` package for unstyled/headless field components
+- Create a `@bghcore/dynamic-forms-mui` package for Material UI field components
+- Create a `@bghcore/dynamic-forms-headless` package for unstyled/headless field components
 - Document how to create a custom UI adapter package
 
 ### 3.4 Tooling & CI

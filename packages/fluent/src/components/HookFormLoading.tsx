@@ -1,4 +1,4 @@
-import { HookInlineFormConstants } from "@brhanso/dynamic-forms-core";
+import { HookInlineFormConstants } from "@bghcore/dynamic-forms-core";
 import { Shimmer, ShimmerElementType } from "@fluentui/react";
 import React from "react";
 
