@@ -1,5 +1,5 @@
 import { HookInlineFormConstants } from "@bghcore/dynamic-forms-core";
-import { Shimmer, ShimmerElementType } from "@fluentui/react";
+import { Skeleton, SkeletonItem } from "@fluentui/react-components";
 import React from "react";
 
 interface IHookFormLoadingProps {
@@ -15,16 +15,10 @@ export const HookFormLoading = (props: IHookFormLoadingProps) => {
     <div className={`hook-form-loading ${inPanel ? "in-panel" : ""}`}>
       {[...Array(loadingShimmerCount || HookInlineFormConstants.loadingShimmerCount)].map((_, i) => (
         <div key={`hook-form-loading-${i}`} className="form-field-loading">
-          {!hideTitleShimmer && <Shimmer width="33%" />}
-          <Shimmer
-            shimmerElements={[
-              {
-                type: ShimmerElementType.line,
-                width: "100%",
-                height: loadingFieldShimmerHeight || HookInlineFormConstants.loadingFieldShimmerHeight
-              }
-            ]}
-          />
+          <Skeleton>
+            {!hideTitleShimmer && <SkeletonItem style={{ width: "33%" }} />}
+            <SkeletonItem style={{ height: `${loadingFieldShimmerHeight || HookInlineFormConstants.loadingFieldShimmerHeight}px` }} />
+          </Skeleton>
         </div>
       ))}
     </div>

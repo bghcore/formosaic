@@ -1,5 +1,6 @@
 import { HookInlineFormStrings } from "@bghcore/dynamic-forms-core";
-import { Icon, Spinner, SpinnerSize } from "@fluentui/react";
+import { Spinner } from "@fluentui/react-components";
+import { ErrorCircleRegular, WarningRegular } from "@fluentui/react-icons";
 import React from "react";
 import { FieldError } from "react-hook-form";
 
@@ -17,28 +18,26 @@ export const StatusMessage: React.FunctionComponent<IStatusMessageProps> = (prop
     <div className="message">
       {error ? (
         <>
-          <Icon className="error-icon" iconName="Error" />
+          <ErrorCircleRegular className="error-icon" />
           <span className="error-message" id={id} role="alert">
             {error.message || "Error"}
           </span>
         </>
       ) : savePending ? (
         <>
-          <Icon className="warning-icon" iconName="Warning" />
+          <WarningRegular className="warning-icon" />
           <span className="warning-message" id={id} role="alert">
             {HookInlineFormStrings.autoSavePending} ({errorCount} {HookInlineFormStrings.remaining})
           </span>
         </>
       ) : saving ? (
         <>
-          <Spinner size={SpinnerSize.xSmall} />
+          <Spinner size="tiny" />
           <span className="save-message" id={id} role="alert">
             {HookInlineFormStrings.saving}
           </span>
         </>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </div>
   );
 };

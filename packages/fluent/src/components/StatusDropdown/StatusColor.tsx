@@ -11,7 +11,13 @@ const StatusColor = (props: IStatusColorProps) => {
   return (
     <div
       className="status-color"
-      style={{ backgroundColor: statusColors && status && statusColors[status] }}
+      style={{
+        backgroundColor: statusColors && status && statusColors[status],
+        width: "12px",
+        height: "12px",
+        borderRadius: "50%",
+        flexShrink: 0
+      }}
     />
   );
 };

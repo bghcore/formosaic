@@ -1,21 +1,24 @@
-import { IHookFieldSharedProps } from "@bghcore/dynamic-forms-core";
-import { DatePicker, IDatePickerProps, IconButton } from "@fluentui/react";
+import { IHookFieldSharedProps, HookInlineFormStrings } from "@bghcore/dynamic-forms-core";
+import { Input, Button } from "@fluentui/react-components";
+import { DismissRegular } from "@fluentui/react-icons";
 import React from "react";
 import { FieldClassName, GetFieldDataTestId, formatDateTime } from "../helpers";
-import { HookInlineFormStrings } from "@bghcore/dynamic-forms-core";
 
-interface IHookDateControlProps extends IDatePickerProps {}
+const HookDateControl = (props: IHookFieldSharedProps<{}>) => {
+  const { fieldName, programName, entityType, entityId, value, readOnly, error, setFieldValue } = props;
 
-const HookDateControl = (props: IHookFieldSharedProps<IHookDateControlProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, meta, error, setFieldValue } = props;
-
-  const onChange = (date: Date) => {
-    setFieldValue(fieldName, date.toISOString());
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const date = new Date(event.target.value);
+    if (!isNaN(date.getTime())) {
+      setFieldValue(fieldName, date.toISOString());
+    }
   };
 
   const onClearDate = () => {
     setFieldValue(fieldName, null);
   };
+
+  const dateInputValue = value ? new Date(value as string).toISOString().split("T")[0] : "";
 
   return readOnly ? (
     <>
@@ -26,19 +29,19 @@ const HookDateControl = (props: IHookFieldSharedProps<IHookDateControlProps>) =>
       )}
     </>
   ) : (
-    <div className="hook-date-control-container">
-      <DatePicker
+    <div className="hook-date-control-container" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+      <Input
         className={FieldClassName("hook-date-control", error)}
-        value={value ? new Date(value as string) : null}
-        onSelectDate={onChange}
+        type="date"
+        value={dateInputValue}
+        onChange={onChange}
         data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
-        {...meta}
       />
-      <IconButton
-        iconProps={{ iconName: "Cancel", className: "clear-date" }}
-        title={HookInlineFormStrings.clickToClear}
+      <Button
+        appearance="subtle"
+        icon={<DismissRegular />}
         onClick={onClearDate}
-        tabIndex={0}
+        title={HookInlineFormStrings.clickToClear}
         aria-label={`${fieldName} ${HookInlineFormStrings.clear}`}
       />
     </div>

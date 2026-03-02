@@ -1,19 +1,20 @@
 import { IHookFieldSharedProps } from "@bghcore/dynamic-forms-core";
-import { DefaultButton, IButtonProps } from "@fluentui/react";
+import { Button } from "@fluentui/react-components";
 import React from "react";
 import { ReadOnlyText, IReadOnlyFieldProps } from "../../components/ReadOnlyText";
 
-interface HookReadOnlyWithButton extends IReadOnlyFieldProps {
+interface HookReadOnlyWithButtonProps extends IReadOnlyFieldProps {
   containerClassName?: string;
-  buttonConfig?: IButtonProps & { text?: string; onClick?: () => void };
+  buttonText?: string;
+  onButtonClick?: () => void;
 }
 
-const HookReadOnlyWithButton = (props: IHookFieldSharedProps<HookReadOnlyWithButton>) => {
+const HookReadOnlyWithButton = (props: IHookFieldSharedProps<HookReadOnlyWithButtonProps>) => {
   const { fieldName, value, meta } = props;
   return (
-    <div className={`flexBox ${meta?.containerClassName || ""}`}>
+    <div style={{ display: "flex", alignItems: "center", gap: "8px" }} className={meta?.containerClassName}>
       <ReadOnlyText fieldName={fieldName} value={`${value}`} />
-      {meta?.buttonConfig && <DefaultButton {...meta.buttonConfig} />}
+      {meta?.buttonText && <Button onClick={meta.onButtonClick}>{meta.buttonText}</Button>}
     </div>
   );
 };

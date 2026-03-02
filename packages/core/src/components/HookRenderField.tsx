@@ -61,7 +61,7 @@ const HookRenderField = (props: IRenderFieldProps) => {
 
   const { injectedFields } = UseInjectedHookFieldContext();
   const { control, getValues } = useFormContext();
-  const [FieldComponent, setFieldComponent] = React.useState<JSX.Element>(<></>);
+  const [FieldComponent, setFieldComponent] = React.useState<React.JSX.Element>(<></>);
 
   const isDisabled = disabled ?? false;
 

@@ -28,14 +28,14 @@ interface IHookInlineFormProps extends IHookInlineFormSharedProps {
   isChildEntity?: boolean;
   saveData?: (entityData: IEntityData, dirtyFieldNames?: string[]) => Promise<IEntityData>;
   /** Render custom expand/collapse button. If not provided, uses a simple <button>. */
-  renderExpandButton?: (props: { isExpanded: boolean; onToggle: () => void }) => JSX.Element;
+  renderExpandButton?: (props: { isExpanded: boolean; onToggle: () => void }) => React.JSX.Element;
   /** Render custom filter/search input. If not provided and enableFilter is true, renders a simple <input>. */
-  renderFilterInput?: (props: { onChange: (value: string) => void }) => JSX.Element;
+  renderFilterInput?: (props: { onChange: (value: string) => void }) => React.JSX.Element;
   /** Render custom confirm dialog. Passed to HookConfirmInputsModal. */
-  renderDialog?: (props: { isOpen: boolean; onSave: () => void; onCancel: () => void; children: React.ReactNode }) => JSX.Element;
+  renderDialog?: (props: { isOpen: boolean; onSave: () => void; onCancel: () => void; children: React.ReactNode }) => React.JSX.Element;
 }
 
-export const HookInlineForm: React.FC<IHookInlineFormProps> = (props: IHookInlineFormProps): JSX.Element => {
+export const HookInlineForm: React.FC<IHookInlineFormProps> = (props: IHookInlineFormProps): React.JSX.Element => {
   const {
     configName,
     entityId,
@@ -68,9 +68,9 @@ export const HookInlineForm: React.FC<IHookInlineFormProps> = (props: IHookInlin
 
   const { initBusinessRules, processBusinessRule, businessRules } = UseBusinessRulesContext();
 
-  const saveTimeoutDelay = React.useRef<number>();
-  const saveTimeout = React.useRef<ReturnType<typeof setTimeout>>();
-  const confirmInputModalProps = React.useRef<IConfirmInputModalProps>();
+  const saveTimeoutDelay = React.useRef<number | undefined>(undefined);
+  const saveTimeout = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const confirmInputModalProps = React.useRef<IConfirmInputModalProps | undefined>(undefined);
   const [isExpanded, setIsExpanded] = React.useState<boolean>(false);
   const [expandEnabled, setExpandEnabled] = React.useState<boolean>();
   const [inputFieldsConfirmed, setInputFieldsConfirmed] = React.useState<boolean>(true);

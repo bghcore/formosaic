@@ -1,12 +1,13 @@
-import { IHookFieldSharedProps, getDropdownValue, Dictionary } from "@bghcore/dynamic-forms-core";
-import { IDropdownOption, IDropdownProps } from "@fluentui/react";
+import { IHookFieldSharedProps, Dictionary } from "@bghcore/dynamic-forms-core";
+import { Dropdown, Option } from "@fluentui/react-components";
+import type { OptionOnSelectData } from "@fluentui/react-components";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
 import StatusColor from "../components/StatusDropdown/StatusColor";
 import StatusDropdown from "../components/StatusDropdown/StatusDropdown";
 import { FieldClassName } from "../helpers";
 
-export interface IHookStatusDropdownProps extends IDropdownProps {
+export interface IHookStatusDropdownProps {
   placeHolder?: string;
   statusColors?: Dictionary<string>;
 }
@@ -14,14 +15,14 @@ export interface IHookStatusDropdownProps extends IDropdownProps {
 const HookStatusDropdown = (props: IHookFieldSharedProps<IHookStatusDropdownProps>) => {
   const { fieldName, programName, entityType, entityId, value, readOnly, error, meta, dropdownOptions, setFieldValue } = props;
 
-  const onChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
-    setFieldValue(fieldName, getDropdownValue(option));
+  const onOptionSelect = (_: unknown, data: OptionOnSelectData) => {
+    setFieldValue(fieldName, data.optionValue);
   };
 
   return readOnly ? (
-    <div className="hook-read-only-status-dropdown">
+    <div className="hook-read-only-status-dropdown" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
       <StatusColor statusColors={meta?.statusColors as Dictionary<string>} status={value as string} />
-      <ReadOnlyText fieldName={fieldName} value={value as string} {...meta} />
+      <ReadOnlyText fieldName={fieldName} value={value as string} />
     </div>
   ) : (
     <StatusDropdown
@@ -30,9 +31,9 @@ const HookStatusDropdown = (props: IHookFieldSharedProps<IHookStatusDropdownProp
       programName={programName}
       entityType={entityType}
       entityId={entityId}
-      dropdownOptions={dropdownOptions as IDropdownOption[]}
+      dropdownOptions={dropdownOptions}
       status={value as string}
-      onChange={onChange}
+      onOptionSelect={onOptionSelect}
       meta={meta as unknown as Record<string, unknown>}
     />
   );

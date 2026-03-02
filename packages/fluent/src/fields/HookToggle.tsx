@@ -1,29 +1,24 @@
 import { IHookFieldSharedProps, convertBooleanToYesOrNoText } from "@bghcore/dynamic-forms-core";
-import { IToggleProps, Toggle } from "@fluentui/react";
+import { Switch } from "@fluentui/react-components";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId } from "../helpers";
 
-interface IHookToggleProps extends IToggleProps {
-  value: boolean;
-}
+const HookToggle = (props: IHookFieldSharedProps<{}>) => {
+  const { fieldName, programName, entityType, entityId, value, readOnly, setFieldValue } = props;
 
-const HookToggle = (props: IHookFieldSharedProps<IHookToggleProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, meta, setFieldValue } = props;
-
-  const onChange = (event: React.MouseEvent<HTMLElement, MouseEvent>, checked?: boolean) => {
-    setFieldValue(fieldName, checked);
+  const onChange = (_: React.ChangeEvent<HTMLInputElement>, data: { checked: boolean }) => {
+    setFieldValue(fieldName, data.checked);
   };
 
   return readOnly ? (
     <ReadOnlyText fieldName={fieldName} value={convertBooleanToYesOrNoText(value as boolean)} />
   ) : (
-    <Toggle
+    <Switch
       className="hook-toggle"
       checked={value as boolean}
       onChange={onChange}
       data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
-      {...meta}
     />
   );
 };

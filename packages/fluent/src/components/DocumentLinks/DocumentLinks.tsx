@@ -1,4 +1,5 @@
-import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, TooltipHost } from "@fluentui/react";
+import { Button, Dialog, DialogSurface, DialogBody, DialogTitle, DialogContent, DialogActions, Tooltip } from "@fluentui/react-components";
+import { AddRegular } from "@fluentui/react-icons";
 import React from "react";
 import { GetFieldDataTestId, DocumentLinksStrings } from "../../helpers";
 import DocumentLink from "./DocumentLink";
@@ -40,32 +41,38 @@ const DocumentLinks = (props: IDocumentLinksProps) => {
           entityType={entityType} entityId={entityId} index={index} title={link.title}
           url={link.url} saveLinks={saveLinks} onConfirmDeleteLink={onConfirmDeleteLink} readOnly={readOnly}
         />
-      )) : <></>}
+      )) : null}
       {addNewLink ? (
         <DocumentLink fieldName={fieldName} programName={programName} entityType={entityType} entityId={entityId}
           addNewLink saveLinks={saveLinks} onCancelAddLink={onCancelAddLink} />
       ) : !readOnly ? (
         <div className="add-link">
-          <TooltipHost content={DocumentLinksStrings.addAnotherLink}>
-            <DefaultButton
-              text={links?.length > 0 ? DocumentLinksStrings.addAnotherLink : DocumentLinksStrings.addLink}
-              iconProps={{ iconName: "Add" }} onClick={onAddNewLink}
+          <Tooltip content={DocumentLinksStrings.addAnotherLink} relationship="label">
+            <Button
+              appearance="secondary"
+              icon={<AddRegular />}
+              onClick={onAddNewLink}
               data-testid={`${GetFieldDataTestId(fieldName, programName, entityType, entityId)}-add-link`}
-            />
-          </TooltipHost>
+            >
+              {links?.length > 0 ? DocumentLinksStrings.addAnotherLink : DocumentLinksStrings.addLink}
+            </Button>
+          </Tooltip>
         </div>
-      ) : <></>}
-      <Dialog
-        hidden={deleteLinkIndex === undefined}
-        onDismiss={onCloseDeleteDialog}
-        dialogContentProps={{ title: DocumentLinksStrings.deleteLink, type: DialogType.normal }}
-        modalProps={{ isBlocking: true }}
-      >
-        <div>{`${DocumentLinksStrings.confirmDeleteLink} ${links?.[deleteLinkIndex]?.title || ""}?`}</div>
-        <DialogFooter>
-          <PrimaryButton text={DocumentLinksStrings.delete} onClick={commitDeleteLink} />
-          <DefaultButton text={DocumentLinksStrings.cancel} onClick={onCloseDeleteDialog} />
-        </DialogFooter>
+      ) : null}
+
+      <Dialog open={deleteLinkIndex !== undefined} onOpenChange={(_, data) => { if (!data.open) onCloseDeleteDialog(); }}>
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>{DocumentLinksStrings.deleteLink}</DialogTitle>
+            <DialogContent>
+              {`${DocumentLinksStrings.confirmDeleteLink} ${links?.[deleteLinkIndex]?.title || ""}?`}
+            </DialogContent>
+            <DialogActions>
+              <Button appearance="secondary" onClick={onCloseDeleteDialog}>{DocumentLinksStrings.cancel}</Button>
+              <Button appearance="primary" onClick={commitDeleteLink}>{DocumentLinksStrings.delete}</Button>
+            </DialogActions>
+          </DialogBody>
+        </DialogSurface>
       </Dialog>
     </div>
   );

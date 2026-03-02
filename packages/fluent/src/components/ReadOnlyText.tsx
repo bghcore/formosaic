@@ -1,4 +1,4 @@
-import { Label } from "@fluentui/react";
+import { Label } from "@fluentui/react-components";
 import React from "react";
 
 export interface IReadOnlyFieldProps {
@@ -17,7 +17,7 @@ export const ReadOnlyText: React.FunctionComponent<IReadOnlyFieldProps> = (props
   const cutoff = (ellipsifyTextCharacters || 0) - 3;
 
   return (
-    <div className={`${showControlOnSide ? "flexBox" : ""} ${containerClassName ? containerClassName : ""}`}>
+    <div className={`${showControlOnSide ? "flexBox" : ""} ${containerClassName ?? ""}`}>
       <Label id={`${fieldName}-read-only`} className={classNameValue} title={value}>
         {value ? (
           <>

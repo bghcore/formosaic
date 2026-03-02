@@ -1,28 +1,20 @@
 import { IHookFieldSharedProps } from "@bghcore/dynamic-forms-core";
-import { ISliderProps, Slider } from "@fluentui/react";
+import { Slider } from "@fluentui/react-components";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
-interface IHookSliderProps extends ISliderProps {
+interface IHookSliderProps {
   max?: number;
+  min?: number;
+  step?: number;
 }
 
 const HookSlider = (props: IHookFieldSharedProps<IHookSliderProps>) => {
   const { fieldName, programName, entityType, entityId, value, readOnly, meta, error, setFieldValue } = props;
 
-  const [sliderValue, setSliderValue] = React.useState<number>(value as number);
-
-  React.useEffect(() => {
-    setSliderValue(value as number);
-  }, [value]);
-
-  const onChange = (val: number) => {
-    setSliderValue(val);
-  };
-
-  const onChanged = (event: MouseEvent | TouchEvent | KeyboardEvent, val: number) => {
-    setFieldValue(fieldName, val);
+  const onChange = (_: unknown, data: { value: number }) => {
+    setFieldValue(fieldName, data.value);
   };
 
   return readOnly ? (
@@ -30,11 +22,12 @@ const HookSlider = (props: IHookFieldSharedProps<IHookSliderProps>) => {
   ) : (
     <Slider
       className={FieldClassName("hook-slider", error)}
-      value={sliderValue}
-      onChanged={onChanged}
+      value={value as number}
       onChange={onChange}
+      max={meta?.max}
+      min={meta?.min}
+      step={meta?.step}
       data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
-      {...meta}
     />
   );
 };

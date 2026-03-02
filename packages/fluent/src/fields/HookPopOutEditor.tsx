@@ -1,18 +1,7 @@
 import { IHookFieldSharedProps, HookInlineFormStrings } from "@bghcore/dynamic-forms-core";
-import {
-  DefaultButton,
-  Dialog,
-  DialogFooter,
-  DialogType,
-  IconButton,
-  Modal,
-  PrimaryButton,
-  Stack,
-  TextField
-} from "@fluentui/react";
-import { useBoolean } from "@fluentui/react-hooks";
+import { Button, Textarea, Dialog, DialogSurface, DialogBody, DialogTitle, DialogContent, DialogActions } from "@fluentui/react-components";
+import { FullScreenMaximizeRegular, DismissRegular } from "@fluentui/react-icons";
 import React, { useState } from "react";
-import { FieldError } from "react-hook-form";
 import { ReadOnlyText } from "../components/ReadOnlyText";
 import { StatusMessage } from "../components/StatusMessage";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
@@ -24,69 +13,44 @@ interface IHookPopOutEditorProps {
   additionalInfo?: string;
   maxLimit?: number;
   saveCallback?: () => void;
-  renderExtraModalFooter?: () => JSX.Element;
+  renderExtraModalFooter?: () => React.ReactNode;
 }
 
 const HookPopOutEditor = (props: IHookFieldSharedProps<IHookPopOutEditorProps>) => {
   const {
-    error,
-    fieldName,
-    programName,
-    entityType,
-    entityId,
-    meta,
-    readOnly,
-    required,
-    savePending,
-    saving,
-    value,
-    label,
-    setFieldValue
+    error, fieldName, programName, entityType, entityId, meta, readOnly,
+    required, savePending, saving, value, label, setFieldValue
   } = props;
 
-  const {
-    openExpandedTextEditor: openExpandedEditor,
-    closeExpandedTextEditor,
-    unsavedChanges,
-    save,
-    dontSave,
-    expand,
-    saveChangesTo,
-    returnToEditing
-  } = HookInlineFormStrings;
-
   const [modalValue, setModalValue] = useState<string>();
-  const [modalVisible, { setTrue: showModal, setFalse: hideModal }] = useBoolean(false);
-  const [dialogVisible, { setTrue: showDialog, setFalse: hideDialog }] = useBoolean(false);
-  const [key, setKey] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [dialogVisible, setDialogVisible] = useState(false);
 
-  const onChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+  const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = event.target.value;
     modalVisible ? setModalValue(newValue) : setFieldValue(fieldName, newValue, false, 3000);
   };
 
   const onExpandButtonClick = () => {
-    showModal();
+    setModalVisible(true);
     setModalValue(value ? `${value}` : "");
   };
 
   const onSaveButtonClick = () => {
     setFieldValue(fieldName, modalValue, false);
-    if (dialogVisible || modalVisible) {
-      setKey(key + 1);
-      hideDialog();
-      hideModal();
-    }
+    setDialogVisible(false);
+    setModalVisible(false);
     meta?.saveCallback?.();
   };
 
   const onCancelButtonClick = () => {
     if (dialogVisible) {
-      hideDialog();
-      hideModal();
+      setDialogVisible(false);
+      setModalVisible(false);
     } else if (modalValue !== value) {
-      showDialog();
+      setDialogVisible(true);
     } else {
-      hideModal();
+      setModalVisible(false);
     }
   };
 
@@ -103,98 +67,77 @@ const HookPopOutEditor = (props: IHookFieldSharedProps<IHookPopOutEditorProps>) 
   return (
     <>
       <div className="hook-textarea">
-        <TextField
-          key={key}
-          onChange={onChange}
+        <Textarea
           className={FieldClassName("hook-text-area", error)}
-          resizable={false}
-          multiline
+          resize="none"
           autoComplete="off"
           value={modalVisible ? `${modalValue}` : value ? `${value}` : ""}
+          onChange={onChange}
           data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
-          {...meta}
+          rows={meta?.numberOfRows ?? 4}
         />
-        <DefaultButton
+        <Button
           className="expand-button"
-          iconProps={{ iconName: "FullScreen" }}
+          appearance="secondary"
+          icon={<FullScreenMaximizeRegular />}
           onClick={onExpandButtonClick}
-          ariaLabel={openExpandedEditor}
-          text={expand}
-          data-testid={`${GetFieldDataTestId(fieldName, programName, entityType, entityId)}-expand-input`}
-        />
+          aria-label={HookInlineFormStrings.openExpandedTextEditor}
+        >
+          {HookInlineFormStrings.expand}
+        </Button>
       </div>
-      <Modal
-        isOpen={modalVisible}
-        isBlocking={false}
-        containerClassName="hook-expanded-textarea"
-        onDismiss={onCancelButtonClick}
-      >
-        <Stack className="header-stack">
-          <div className="modal-header">
-            <label className="modal-title">
-              {label}
-              {required && <span className="required-indicator"> *</span>}
-            </label>
-            <IconButton
-              className="icon-button"
-              iconProps={{ iconName: "Cancel" }}
-              onClick={onCancelButtonClick}
-              ariaLabel={closeExpandedTextEditor}
-            />
-          </div>
-        </Stack>
-        <hr />
-        <div className="modal-body">
-          <TextField
-            onChange={onChange}
-            className={FieldClassName("hook-text-area", error)}
-            resizable={false}
-            multiline
-            autoComplete="off"
-            value={modalVisible ? `${modalValue}` : value ? `${value}` : ""}
-          />
-        </div>
-        <hr />
-        <div className="modal-footer">
-          {meta?.renderExtraModalFooter && <div className="custom-footer">{meta.renderExtraModalFooter()}</div>}
-          <div className="modal-footer-primary">
-            <div className="modal-footer-messages">
-              {savePending || saving ? (
-                <StatusMessage
-                  savePending={!error ? savePending : undefined}
-                  saving={saving}
-                  error={error}
-                />
-              ) : null}
-            </div>
-            <div className="modal-footer-actions">
-              <DefaultButton text={HookInlineFormStrings.cancel} onClick={onCancelButtonClick} />
-              <PrimaryButton
-                text={meta?.saveCallback ? save : HookInlineFormStrings.save}
-                disabled={!meta?.saveCallback && modalValue === value}
-                onClick={onSaveButtonClick}
-                data-testid={`${programName}-${entityType}-${entityId}-save-note`}
+
+      <Dialog open={modalVisible} onOpenChange={(_, data) => { if (!data.open) onCancelButtonClick(); }}>
+        <DialogSurface className="hook-expanded-textarea" style={{ maxWidth: "90vw", width: "800px" }}>
+          <DialogBody>
+            <DialogTitle
+              action={
+                <Button appearance="subtle" icon={<DismissRegular />} onClick={onCancelButtonClick}
+                  aria-label={HookInlineFormStrings.closeExpandedTextEditor} />
+              }
+            >
+              {label}{required && <span className="required-indicator"> *</span>}
+            </DialogTitle>
+            <DialogContent>
+              <Textarea
+                className={FieldClassName("hook-text-area", error)}
+                resize="vertical"
+                autoComplete="off"
+                value={modalVisible ? `${modalValue}` : value ? `${value}` : ""}
+                onChange={onChange}
+                rows={12}
+                style={{ width: "100%" }}
               />
-            </div>
-          </div>
-        </div>
-      </Modal>
-      <Dialog
-        hidden={!dialogVisible}
-        onDismiss={hideDialog}
-        dialogContentProps={{
-          type: DialogType.normal,
-          showCloseButton: true,
-          title: unsavedChanges,
-          closeButtonAriaLabel: returnToEditing,
-          subText: saveChangesTo(label)
-        }}
-        modalProps={{ isBlocking: true }}
-      >
-        <DialogFooter>
-          <PrimaryButton onClick={onSaveButtonClick} text={save} />
-          <DefaultButton onClick={onCancelButtonClick} text={dontSave} />
-        </DialogFooter>
+            </DialogContent>
+            <DialogActions>
+              {meta?.renderExtraModalFooter && <div className="custom-footer">{meta.renderExtraModalFooter()}</div>}
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                {(savePending || saving) && (
+                  <StatusMessage savePending={!error ? savePending : undefined} saving={saving} error={error} />
+                )}
+              </div>
+              <Button appearance="secondary" onClick={onCancelButtonClick}>{HookInlineFormStrings.cancel}</Button>
+              <Button appearance="primary" onClick={onSaveButtonClick}
+                disabled={!meta?.saveCallback && modalValue === (value as string)}
+                data-testid={`${programName}-${entityType}-${entityId}-save-note`}>
+                {meta?.saveCallback ? HookInlineFormStrings.save : HookInlineFormStrings.save}
+              </Button>
+            </DialogActions>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
+
+      <Dialog open={dialogVisible} onOpenChange={(_, data) => { if (!data.open) setDialogVisible(false); }}>
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>{HookInlineFormStrings.unsavedChanges}</DialogTitle>
+            <DialogContent>{HookInlineFormStrings.saveChangesTo(label)}</DialogContent>
+            <DialogActions>
+              <Button appearance="secondary" onClick={onCancelButtonClick}>{HookInlineFormStrings.dontSave}</Button>
+              <Button appearance="primary" onClick={onSaveButtonClick}>{HookInlineFormStrings.save}</Button>
+            </DialogActions>
+          </DialogBody>
+        </DialogSurface>
       </Dialog>
     </>
   );

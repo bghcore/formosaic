@@ -1,5 +1,6 @@
 import { HookInlineFormStrings, HookInlineFormConstants } from "@bghcore/dynamic-forms-core";
-import { IconButton, TextField, TooltipHost } from "@fluentui/react";
+import { Input, Button, Tooltip } from "@fluentui/react-components";
+import { CheckmarkRegular, DismissRegular, EditRegular, DeleteRegular } from "@fluentui/react-icons";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { GetFieldDataTestId, DocumentLinksStrings } from "../../helpers";
@@ -48,8 +49,8 @@ const DocumentLink = (props: IDocumentLinkProps) => {
     setEditingLink(addNewLink);
   }, [title, url, addNewLink]);
 
-  const onLinkTitleChange = (_: unknown, newValue?: string) => { setValue("title", newValue); trigger("title"); };
-  const onLinkUrlChange = (_: unknown, newValue?: string) => { setValue("url", newValue); trigger("url"); };
+  const onLinkTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => { setValue("title", e.target.value); trigger("title"); };
+  const onLinkUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => { setValue("url", e.target.value); trigger("url"); };
   const onEditDocumentLink = () => setEditingLink(true);
   const onCancelFormChanges = () => { reset(); setEditingLink(false); onCancelAddLink?.(); };
   const onDelete = () => onConfirmDeleteLink(index);
@@ -57,19 +58,23 @@ const DocumentLink = (props: IDocumentLinkProps) => {
   return editingLink ? (
     <div className="editing-link">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="header">
+        <div className="header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div className="header-label">
             {addNewLink ? add : edit} {DocumentLinksStrings.link}
           </div>
-          <div className="edit-mode-action-buttons">
-            <IconButton iconProps={{ iconName: "CheckMark", title: confirm }} ariaLabel={confirm} onClick={handleSubmit(onSubmit)} />
-            <IconButton iconProps={{ iconName: "Cancel", title: cancel }} ariaLabel={cancel} onClick={onCancelFormChanges} />
+          <div style={{ display: "flex", gap: "4px" }}>
+            <Button appearance="subtle" icon={<CheckmarkRegular />} aria-label={confirm} onClick={handleSubmit(onSubmit)} />
+            <Button appearance="subtle" icon={<DismissRegular />} aria-label={cancel} onClick={onCancelFormChanges} />
           </div>
         </div>
         <Controller name="title" control={control} rules={{ required: { value: true, message: HookInlineFormStrings.required } }}
           render={({ field, fieldState: { error } }) => (
-            <TextField label={linkTitleLabel} onChange={onLinkTitleChange} value={field.value} required errorMessage={error?.message}
-              data-testid={`${GetFieldDataTestId(fieldName, programName, entityType, entityId)}-link-title`} />
+            <div>
+              <label>{linkTitleLabel}</label>
+              <Input value={field.value} onChange={onLinkTitleChange} required
+                data-testid={`${GetFieldDataTestId(fieldName, programName, entityType, entityId)}-link-title`} />
+              {error && <span className="error-message">{error.message}</span>}
+            </div>
           )} />
         <Controller name="url" control={control}
           rules={{
@@ -77,18 +82,22 @@ const DocumentLink = (props: IDocumentLinkProps) => {
             pattern: { value: HookInlineFormConstants.urlRegex, message: HookInlineFormStrings.urlRequired }
           }}
           render={({ field, fieldState: { error } }) => (
-            <TextField label={linkUrlLabel} onChange={onLinkUrlChange} value={field.value} required errorMessage={error?.message}
-              data-testid={`${GetFieldDataTestId(fieldName, programName, entityType, entityId)}-link-url`} />
+            <div>
+              <label>{linkUrlLabel}</label>
+              <Input value={field.value} onChange={onLinkUrlChange} required
+                data-testid={`${GetFieldDataTestId(fieldName, programName, entityType, entityId)}-link-url`} />
+              {error && <span className="error-message">{error.message}</span>}
+            </div>
           )} />
       </form>
     </div>
-  ) : addNewLink ? (<></>) : (
-    <div className="document-link-item">
+  ) : addNewLink ? null : (
+    <div className="document-link-item" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
       <a className="link" href={url} target="_blank" rel="noopener noreferrer">{title}</a>
       {!readOnly && (
-        <div className="action-buttons">
-          <TooltipHost content={edit}><IconButton iconProps={{ iconName: "Edit" }} ariaLabel={edit} onClick={onEditDocumentLink} /></TooltipHost>
-          <TooltipHost content={deleteLabel}><IconButton iconProps={{ iconName: "Delete", className: "delete-icon" }} ariaLabel={deleteLabel} onClick={onDelete} /></TooltipHost>
+        <div style={{ display: "flex", gap: "2px" }}>
+          <Tooltip content={edit} relationship="label"><Button appearance="subtle" icon={<EditRegular />} aria-label={edit} onClick={onEditDocumentLink} /></Tooltip>
+          <Tooltip content={deleteLabel} relationship="label"><Button appearance="subtle" icon={<DeleteRegular />} aria-label={deleteLabel} onClick={onDelete} /></Tooltip>
         </div>
       )}
     </div>

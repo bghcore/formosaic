@@ -2,9 +2,7 @@ import { IHookFieldSharedProps } from "@bghcore/dynamic-forms-core";
 import React from "react";
 import { ReadOnlyText, IReadOnlyFieldProps } from "../../components/ReadOnlyText";
 
-interface IHookReadOnlyArrayProps extends IReadOnlyFieldProps {}
-
-const HookReadOnlyArray = (props: IHookFieldSharedProps<IHookReadOnlyArrayProps>) => {
+const HookReadOnlyArray = (props: IHookFieldSharedProps<IReadOnlyFieldProps>) => {
   const { fieldName, value, meta } = props;
   return (
     <>

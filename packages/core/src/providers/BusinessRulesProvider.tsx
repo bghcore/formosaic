@@ -31,7 +31,7 @@ export function UseBusinessRulesContext() {
 
 export const BusinessRulesProvider: React.FC<React.PropsWithChildren<{}>> = (
   props: React.PropsWithChildren<{}>
-): JSX.Element => {
+): React.JSX.Element => {
   const [businessRules, businessRulesDispatch] = React.useReducer(businessRulesReducer, defaultBusinessRulesState);
 
   const initBusinessRules = (

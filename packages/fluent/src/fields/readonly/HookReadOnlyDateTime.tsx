@@ -10,13 +10,11 @@ interface IHookReadOnlyDateTimeProps {
 const HookReadOnlyDateTime = (props: IHookFieldSharedProps<IHookReadOnlyDateTimeProps>) => {
   const { meta, value } = props;
   return (
-    <>
-      {value ? (
-        <span className="hook-read-only-date-time">
-          {formatDateTime(value as string, { hideTimestamp: meta?.hidetimeStamp })}
-        </span>
-      ) : <>-</>}
-    </>
+    <>{value ? (
+      <span className="hook-read-only-date-time">
+        {formatDateTime(value as string, { hideTimestamp: meta?.hidetimeStamp })}
+      </span>
+    ) : <>-</>}</>
   );
 };
 

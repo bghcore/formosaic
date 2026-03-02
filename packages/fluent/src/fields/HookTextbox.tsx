@@ -1,19 +1,20 @@
 import { IHookFieldSharedProps } from "@bghcore/dynamic-forms-core";
-import { ITextFieldProps, TextField } from "@fluentui/react";
+import { Input } from "@fluentui/react-components";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
-interface IHookTextboxProps extends ITextFieldProps {
+interface IHookTextboxProps {
   ellipsifyTextCharacters?: number;
   placeHolder?: string;
+  multiline?: boolean;
 }
 
 const HookTextbox = (props: IHookFieldSharedProps<IHookTextboxProps>) => {
   const { fieldName, programName, entityType, entityId, value, readOnly, meta, error, setFieldValue } = props;
 
-  const onChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
-    setFieldValue(fieldName, newValue, false, 3000);
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFieldValue(fieldName, event.target.value, false, 3000);
   };
 
   return readOnly ? (
@@ -23,13 +24,12 @@ const HookTextbox = (props: IHookFieldSharedProps<IHookTextboxProps>) => {
       ellipsifyTextCharacters={meta?.ellipsifyTextCharacters}
     />
   ) : (
-    <TextField
+    <Input
       className={FieldClassName("hook-textbox", error)}
       autoComplete="off"
-      value={value as string}
+      value={(value as string) ?? ""}
       onChange={onChange}
       data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
-      {...meta}
     />
   );
 };

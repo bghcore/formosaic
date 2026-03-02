@@ -1,16 +1,14 @@
 import { IHookFieldSharedProps, isNull } from "@bghcore/dynamic-forms-core";
-import { ITextFieldProps, TextField } from "@fluentui/react";
+import { Input } from "@fluentui/react-components";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
-interface IHookNumberProps extends ITextFieldProps {}
-
-const HookNumber = (props: IHookFieldSharedProps<IHookNumberProps>) => {
+const HookNumber = (props: IHookFieldSharedProps<{}>) => {
   const { fieldName, programName, entityType, entityId, value, readOnly, meta, error, setFieldValue } = props;
 
-  const onChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
-    const number = Number(newValue);
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const number = Number(event.target.value);
     if (!isNaN(number)) {
       setFieldValue(fieldName, number, false, 1500);
     }
@@ -19,13 +17,13 @@ const HookNumber = (props: IHookFieldSharedProps<IHookNumberProps>) => {
   return readOnly ? (
     <ReadOnlyText fieldName={fieldName} value={String(value)} />
   ) : (
-    <TextField
+    <Input
       className={FieldClassName("hook-number", error)}
       autoComplete="off"
+      type="number"
       value={!isNull(value) ? String(value) : ""}
       onChange={onChange}
       data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
-      {...meta}
     />
   );
 };

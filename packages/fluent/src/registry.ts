@@ -20,8 +20,8 @@ import HookReadOnlyRichText from "./fields/readonly/HookReadOnlyRichText";
 import HookReadOnlyWithButton from "./fields/readonly/HookReadOnlyWithButton";
 import React from "react";
 
-/** Creates the default Fluent UI field registry for use with InjectedHookFieldProvider */
-export function createFluentFieldRegistry(): Dictionary<JSX.Element> {
+/** Creates the default Fluent UI v9 field registry for use with InjectedHookFieldProvider */
+export function createFluentFieldRegistry(): Dictionary<React.JSX.Element> {
   return {
     [ComponentTypes.Textbox]: React.createElement(HookTextbox),
     [ComponentTypes.Number]: React.createElement(HookNumber),

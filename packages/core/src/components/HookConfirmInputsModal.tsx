@@ -17,7 +17,7 @@ interface IHookConfirmInputsModalProps {
   saveConfirmInputFields: () => void;
   cancelConfirmInputFields: () => void;
   /** Optional custom dialog renderer. If not provided, uses native <dialog>. */
-  renderDialog?: (props: { isOpen: boolean; onSave: () => void; onCancel: () => void; children: React.ReactNode }) => JSX.Element;
+  renderDialog?: (props: { isOpen: boolean; onSave: () => void; onCancel: () => void; children: React.ReactNode }) => React.JSX.Element;
 }
 
 const HookConfirmInputsModal = (props: IHookConfirmInputsModalProps) => {

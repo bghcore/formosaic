@@ -36,4 +36,4 @@ export type { IDocumentLink } from "./components/DocumentLinks/DocumentLinks";
 export { createFluentFieldRegistry } from "./registry";
 
 // Helpers
-export { FieldClassName, GetFieldDataTestId, onRenderDropdownItemWithIcon, formatDateTime, DocumentLinksStrings } from "./helpers";
+export { FieldClassName, GetFieldDataTestId, formatDateTime, DocumentLinksStrings } from "./helpers";

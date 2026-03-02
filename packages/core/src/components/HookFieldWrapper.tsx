@@ -18,7 +18,7 @@ interface IHookFieldWrapperProps {
   readonly containerClassName?: string;
   readonly additionalInfo?: string;
   readonly additionalInfoIcon?: string;
-  readonly additionalInfoComponent?: JSX.Element;
+  readonly additionalInfoComponent?: React.ReactNode;
   isManualSave?: boolean;
 }
 
@@ -46,7 +46,7 @@ export const HookFieldWrapper: React.FunctionComponent<React.PropsWithChildren<I
 
   const labelId = `${id}_label`;
   const errorMessageId = `${id}_error`;
-  const children = (Array.isArray(props.children) ? props.children : [props.children]) as React.ReactElement[];
+  const children = (Array.isArray(props.children) ? props.children : [props.children]) as React.ReactElement<Record<string, unknown>>[];
 
   return (
     <div

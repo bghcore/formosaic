@@ -14,8 +14,8 @@ export function UseInjectedHookFieldContext() {
 
 export const InjectedHookFieldProvider: React.FC<React.PropsWithChildren<{}>> = (
   props: React.PropsWithChildren<{}>
-): JSX.Element => {
-  const [injectedFields, setInjectedFields] = React.useState<Dictionary<JSX.Element>>(undefined as unknown as Dictionary<JSX.Element>);
+): React.JSX.Element => {
+  const [injectedFields, setInjectedFields] = React.useState<Dictionary<React.JSX.Element>>(undefined as unknown as Dictionary<React.JSX.Element>);
 
   const providerValue: IInjectedHookFieldProvider = {
     injectedFields,

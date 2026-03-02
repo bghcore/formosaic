@@ -7,9 +7,9 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
   "files": ["dist"],
@@ -24,10 +24,10 @@
     "react-hook-form": "^7.0.0"
   },
   "devDependencies": {
-    "react": "^18.0.0",
-    "react-hook-form": "^7.63.0",
-    "tsup": "^8.0.0",
-    "typescript": "^5.0.0",
-    "@types/react": "^18.0.0"
+    "react": "^19.2.4",
+    "react-hook-form": "^7.71.2",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "@types/react": "^19.2.14"
   }
 }
