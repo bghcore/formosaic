@@ -7,7 +7,10 @@ const InjectedHookFieldContext: React.Context<IInjectedHookFieldProvider> = Reac
 export function UseInjectedHookFieldContext() {
   const context = React.useContext(InjectedHookFieldContext);
   if (context === undefined) {
-    throw new Error("InjectedHookFieldContext must be used within InjectedHookFieldProvider");
+    throw new Error(
+      "UseInjectedHookFieldContext() was called outside of <InjectedHookFieldProvider>. " +
+      "Required hierarchy: <BusinessRulesProvider> > <InjectedHookFieldProvider> > <HookInlineForm>"
+    );
   }
   return context;
 }

@@ -88,8 +88,8 @@ const HookRenderField = (props: IRenderFieldProps) => {
                   }
                 : undefined,
             validate:
-              !isEmpty(validations) && validations.length > 0 && !isReadOnly
-                ? value => (value ? CheckFieldValidationRules(value, getValues(), validations) : undefined)
+              !isEmpty(validations) && validations!.length > 0 && !isReadOnly
+                ? value => (value ? CheckFieldValidationRules(value, getValues(), validations!) : undefined)
                 : undefined
           }}
           render={({
@@ -147,7 +147,12 @@ const HookRenderField = (props: IRenderFieldProps) => {
         />
       );
     } else {
-      setFieldComponent(<>Missing Component ({component})</>);
+      const available = !isEmpty(injectedFields) ? Object.keys(injectedFields).join(", ") : "none";
+      setFieldComponent(
+        <div style={{ color: "red", fontSize: "0.85em", padding: "4px" }}>
+          Missing component &quot;{component}&quot; for field &quot;{fieldName}&quot;. Available: [{available}]
+        </div>
+      );
     }
   }, [component, hidden, required, disabled, dropdownOptions, filterText, readOnly, softHidden]);
 

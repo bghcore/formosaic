@@ -30,6 +30,7 @@ export {
   GetFieldValue,
   SameFieldOrder,
   GetDefaultBusinessRules,
+  normalizeFieldConfig,
 } from "./helpers/BusinessRulesHelper";
 
 export {

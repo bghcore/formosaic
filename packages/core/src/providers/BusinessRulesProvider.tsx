@@ -24,7 +24,10 @@ const BusinessRulesContext: React.Context<IBusinessRulesProvider> = React.create
 export function UseBusinessRulesContext() {
   const context = React.useContext(BusinessRulesContext);
   if (context === undefined) {
-    throw new Error("BusinessRulesContext must be used within BusinessRulesProvider");
+    throw new Error(
+      "UseBusinessRulesContext() was called outside of <BusinessRulesProvider>. " +
+      "Required hierarchy: <BusinessRulesProvider> > <InjectedHookFieldProvider> > <HookInlineForm>"
+    );
   }
   return context;
 }
@@ -64,11 +67,11 @@ export const BusinessRulesProvider: React.FC<React.PropsWithChildren<{}>> = (
     fieldConfigs: Dictionary<IFieldConfig>
   ) => {
     if (
-      businessRules.configRules?.[configName]?.fieldRules[fieldName]?.dependentFields?.length > 0 ||
-      businessRules.configRules?.[configName]?.fieldRules[fieldName]?.dependsOnFields?.length > 0 ||
+      (businessRules.configRules?.[configName]?.fieldRules[fieldName]?.dependentFields?.length ?? 0) > 0 ||
+      (businessRules.configRules?.[configName]?.fieldRules[fieldName]?.dependsOnFields?.length ?? 0) > 0 ||
       businessRules.configRules?.[configName]?.fieldRules[fieldName]?.pivotalRootField ||
-      businessRules.configRules?.[configName]?.fieldRules[fieldName]?.comboDependentFields?.length > 0 ||
-      businessRules.configRules?.[configName]?.fieldRules[fieldName]?.dependentDropdownFields?.length > 0
+      (businessRules.configRules?.[configName]?.fieldRules[fieldName]?.comboDependentFields?.length ?? 0) > 0 ||
+      (businessRules.configRules?.[configName]?.fieldRules[fieldName]?.dependentDropdownFields?.length ?? 0) > 0
     ) {
       const pendingBusinessRules: IConfigBusinessRules = {
         fieldRules: {},

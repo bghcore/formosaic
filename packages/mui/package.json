@@ -1,11 +1,11 @@
 {
-  "name": "@bghcore/dynamic-forms-fluent",
+  "name": "@bghcore/dynamic-forms-mui",
   "version": "1.2.0",
-  "description": "Fluent UI v9 field components for @bghcore/dynamic-forms-core",
+  "description": "Material UI (MUI) field components for @bghcore/dynamic-forms-core",
   "repository": {
     "type": "git",
     "url": "https://github.com/bghcore/dynamic-react-business-forms.git",
-    "directory": "packages/fluent"
+    "directory": "packages/mui"
   },
   "homepage": "https://github.com/bghcore/dynamic-react-business-forms#readme",
   "bugs": {
@@ -14,11 +14,11 @@
   "keywords": [
     "react",
     "forms",
-    "fluent-ui",
+    "mui",
+    "material-ui",
     "dynamic-forms",
     "react-hook-form",
     "form-builder",
-    "fluentui",
     "field-components"
   ],
   "main": "dist/index.cjs",
@@ -42,15 +42,16 @@
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0",
     "react-hook-form": "^7.0.0",
-    "@fluentui/react-components": "^9.0.0",
-    "@bghcore/dynamic-forms-core": "^1.0.0"
+    "@mui/material": "^5.0.0 || ^6.0.0",
+    "@bghcore/dynamic-forms-core": "^1.1.0"
   },
   "devDependencies": {
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-hook-form": "^7.71.2",
-    "@fluentui/react-components": "^9.73.1",
-    "@fluentui/react-icons": "^2.0.320",
+    "@mui/material": "^6.4.11",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@bghcore/dynamic-forms-core": "*",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",

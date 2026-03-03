@@ -69,7 +69,7 @@ const HookConfirmInputsModal = (props: IHookConfirmInputsModalProps) => {
                   entityId={entityId}
                   entityType={entityType}
                   programName={programName}
-                  component={component}
+                  component={component ?? ""}
                   required
                   dropdownOptions={dropdownOptions}
                   validations={validations}

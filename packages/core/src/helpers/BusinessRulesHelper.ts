@@ -11,6 +11,24 @@ import { validateDependencyGraph } from "./DependencyGraphValidator";
 /** Type alias for field dependencies (was IDynamicDependencies from DynamicLayout) */
 type FieldDependencies = Dictionary<Dictionary<IFieldConfig>>;
 
+/**
+ * Normalizes field config by mapping deprecated `isReadonly` to `readOnly`.
+ * Emits a dev-mode warning when `isReadonly` is used.
+ */
+export const normalizeFieldConfig = (fieldName: string, config: IFieldConfig): IFieldConfig => {
+  if (config.isReadonly !== undefined && config.readOnly === undefined) {
+    try {
+      if (typeof globalThis !== "undefined" && (globalThis as Record<string, unknown>).__DEV__ !== false) {
+        console.warn(
+          `[dynamic-forms] Field "${fieldName}": "isReadonly" is deprecated. Use "readOnly" instead.`
+        );
+      }
+    } catch { /* ignore */ }
+    return { ...config, readOnly: config.isReadonly };
+  }
+  return config;
+};
+
 export const ProcessAllBusinessRules = (
   entityData: IEntityData,
   fieldConfigs: Dictionary<IFieldConfig>,
@@ -63,12 +81,12 @@ export const ProcessAllBusinessRules = (
       );
     }
 
-    if (configBusinessRules.fieldRules[fieldName].dropdownOptions?.length > 0) {
+    if ((configBusinessRules.fieldRules[fieldName]?.dropdownOptions?.length ?? 0) > 0) {
       configBusinessRules.fieldRules[fieldName].dropdownOptions = [
-        ...configBusinessRules.fieldRules[fieldName].dropdownOptions,
+        ...(configBusinessRules.fieldRules[fieldName].dropdownOptions ?? []),
         ...CheckDeprecatedDropdownOptions(
           fieldConfigs[fieldName],
-          configBusinessRules.fieldRules[fieldName].dropdownOptions,
+          configBusinessRules.fieldRules[fieldName].dropdownOptions ?? [],
           fieldValue
         )
       ];
@@ -93,9 +111,9 @@ export const ProcessFieldBusinessRule = (
   };
 
   if (fieldConfigs[fieldName]?.dependencies) {
-    Object.keys(fieldConfigs[fieldName]?.dependencies).forEach(businessValue => {
+    Object.keys(fieldConfigs[fieldName].dependencies!).forEach(businessValue => {
       if (`${fieldValue}` === `${businessValue}` && !businessRulesChanged) {
-        const dependentFields = fieldConfigs[fieldName].dependencies[businessValue];
+        const dependentFields = fieldConfigs[fieldName].dependencies![businessValue];
         if (targetField && currentBusinessRules.fieldRules?.[targetField] && dependentFields[targetField]) {
           newConfigBusinessRules.fieldRules[targetField] = ApplyBusinessRule(
             currentBusinessRules.fieldRules[targetField],
@@ -255,47 +273,48 @@ const ApplyBusinessRule = (
   updatedBusinessRule?: IFieldConfig,
   inProgressBusinessRule?: IBusinessRule
 ): IBusinessRule => {
+  if (!businessRule) return {} as IBusinessRule;
   return {
     ...businessRule,
     component: !isNull(updatedBusinessRule?.component)
-      ? updatedBusinessRule.component
+      ? updatedBusinessRule!.component
       : !isNull(inProgressBusinessRule?.component)
-      ? inProgressBusinessRule.component
+      ? inProgressBusinessRule!.component
       : businessRule.component,
     required: !isNull(updatedBusinessRule?.required)
-      ? updatedBusinessRule.required
+      ? updatedBusinessRule!.required
       : !isNull(inProgressBusinessRule?.required)
-      ? inProgressBusinessRule.required
+      ? inProgressBusinessRule!.required
       : businessRule.required,
     hidden: !isNull(updatedBusinessRule?.hidden)
-      ? updatedBusinessRule.hidden
+      ? updatedBusinessRule!.hidden
       : !isNull(inProgressBusinessRule?.hidden)
-      ? inProgressBusinessRule.hidden
+      ? inProgressBusinessRule!.hidden
       : businessRule.hidden,
     readOnly: !isNull(updatedBusinessRule?.isReadonly)
-      ? updatedBusinessRule.isReadonly
+      ? updatedBusinessRule!.isReadonly
       : !isNull(inProgressBusinessRule?.readOnly)
-      ? inProgressBusinessRule.readOnly
+      ? inProgressBusinessRule!.readOnly
       : businessRule.readOnly,
     validations: !isNull(updatedBusinessRule?.validations)
-      ? updatedBusinessRule.validations
+      ? updatedBusinessRule!.validations
       : !isNull(inProgressBusinessRule?.validations)
-      ? inProgressBusinessRule.validations
+      ? inProgressBusinessRule!.validations
       : businessRule.validations,
     valueFunction: !isNull(updatedBusinessRule?.isValueFunction)
-      ? `${updatedBusinessRule.value}`
+      ? `${updatedBusinessRule!.value}`
       : !isNull(inProgressBusinessRule?.valueFunction)
-      ? inProgressBusinessRule.valueFunction
+      ? inProgressBusinessRule!.valueFunction
       : businessRule.valueFunction,
     confirmInput: !isNull(updatedBusinessRule?.confirmInput)
-      ? updatedBusinessRule.confirmInput
+      ? updatedBusinessRule!.confirmInput
       : !isNull(inProgressBusinessRule?.confirmInput)
-      ? inProgressBusinessRule.confirmInput
+      ? inProgressBusinessRule!.confirmInput
       : businessRule.confirmInput,
     dropdownOptions: !isNull(updatedBusinessRule?.dropdownOptions)
-      ? [...updatedBusinessRule.dropdownOptions]
+      ? [...(updatedBusinessRule!.dropdownOptions ?? [])]
       : !isNull(inProgressBusinessRule?.dropdownOptions)
-      ? [...inProgressBusinessRule.dropdownOptions]
+      ? [...(inProgressBusinessRule!.dropdownOptions ?? [])]
       : businessRule.dropdownOptions
   };
 };
@@ -306,13 +325,13 @@ export const GetDefaultBusinessRules = (
 ): Dictionary<IBusinessRule> => {
   const defaultBusinessRules: Dictionary<IBusinessRule> = {};
   Object.keys(fieldConfigs).map(fieldName => {
-    const fieldConfig = fieldConfigs[fieldName];
+    const fieldConfig = normalizeFieldConfig(fieldName, fieldConfigs[fieldName]);
 
     defaultBusinessRules[fieldName] = {
       component: fieldConfig.component,
       required: fieldConfig.required,
       hidden: fieldConfig.hidden || fieldConfig.component === HookInlineFormConstants.dynamicFragment,
-      readOnly: areAllFieldsReadonly ? areAllFieldsReadonly : fieldConfig.isReadonly,
+      readOnly: areAllFieldsReadonly ? areAllFieldsReadonly : (fieldConfig.readOnly ?? fieldConfig.isReadonly),
       onlyOnCreate: fieldConfig.onlyOnCreate,
       onlyOnCreateValue: fieldConfig.onlyOnCreate && !fieldConfig.isValueFunction ? fieldConfig.value : undefined,
       defaultValue: fieldConfig.defaultValue,
@@ -335,30 +354,30 @@ export const GetDefaultBusinessRules = (
   });
 
   Object.keys(defaultBusinessRules).forEach(fieldName => {
-    defaultBusinessRules[fieldName].dependentFields.forEach(dependentField => {
+    defaultBusinessRules[fieldName].dependentFields?.forEach(dependentField => {
       if (defaultBusinessRules[dependentField]) {
-        defaultBusinessRules[dependentField].dependsOnFields.push(fieldName);
+        defaultBusinessRules[dependentField].dependsOnFields!.push(fieldName);
       }
     });
 
-    defaultBusinessRules[fieldName].orderDependentFields.forEach(orderDependentField => {
+    defaultBusinessRules[fieldName].orderDependentFields?.forEach(orderDependentField => {
       if (defaultBusinessRules[orderDependentField]) {
         defaultBusinessRules[orderDependentField].pivotalRootField = fieldName;
       }
     });
 
-    defaultBusinessRules[fieldName].comboDependsOnFields.forEach(dependsOnField => {
+    defaultBusinessRules[fieldName].comboDependsOnFields?.forEach(dependsOnField => {
       if (defaultBusinessRules[dependsOnField]) {
-        defaultBusinessRules[dependsOnField].comboDependentFields.push(fieldName);
+        defaultBusinessRules[dependsOnField].comboDependentFields!.push(fieldName);
       }
     });
 
-    defaultBusinessRules[fieldName].dependsOnDropdownFields.forEach(dependsOnDropdownField => {
+    defaultBusinessRules[fieldName].dependsOnDropdownFields?.forEach(dependsOnDropdownField => {
       if (
         defaultBusinessRules[dependsOnDropdownField] &&
-        defaultBusinessRules[dependsOnDropdownField].dependentDropdownFields.indexOf(fieldName) === -1
+        defaultBusinessRules[dependsOnDropdownField].dependentDropdownFields!.indexOf(fieldName) === -1
       ) {
-        defaultBusinessRules[dependsOnDropdownField].dependentDropdownFields.push(fieldName);
+        defaultBusinessRules[dependsOnDropdownField].dependentDropdownFields!.push(fieldName);
       }
     });
   });
@@ -418,7 +437,7 @@ export const ProcessComboFieldBusinessRule = (
     let rulesMet = true;
     Object.keys(fieldConfig.dependencyRules.rules).forEach(dependsOnFieldName => {
       const dependsOnFieldValue = GetFieldValue(entityData, dependsOnFieldName);
-      if (rulesMet && fieldConfig.dependencyRules.rules[dependsOnFieldName].indexOf(`${dependsOnFieldValue}`) === -1) {
+      if (rulesMet && fieldConfig.dependencyRules!.rules[dependsOnFieldName].indexOf(`${dependsOnFieldValue}`) === -1) {
         rulesMet = false;
       }
     });
@@ -450,7 +469,7 @@ export const ProcessDropdownOptions = (values: IDropdownOption[], fieldConfig: I
 
   if (fieldConfig && fieldConfig.meta && fieldConfig.meta.data) {
     dropdownOptions = dropdownOptions.map((option, index) => {
-      const iconConfig = (fieldConfig.meta.data as { icon: string; iconTitle: string }[])[index];
+      const iconConfig = (fieldConfig.meta!.data as { icon: string; iconTitle: string }[])[index];
       return {
         ...option,
         data: iconConfig
@@ -501,9 +520,9 @@ export const ProcessFieldDropdownValues = (
   const fieldValue = GetFieldValue(entityData, fieldName);
 
   if (fieldConfigs[fieldName]?.dropdownDependencies) {
-    Object.keys(fieldConfigs[fieldName].dropdownDependencies).forEach(businessValue => {
+    Object.keys(fieldConfigs[fieldName].dropdownDependencies!).forEach(businessValue => {
       if (`${fieldValue}` === `${businessValue}` && !businessRulesChanged) {
-        const dependentFields = fieldConfigs[fieldName].dropdownDependencies[businessValue];
+        const dependentFields = fieldConfigs[fieldName].dropdownDependencies![businessValue];
 
         Object.keys(dependentFields).forEach(dependentFieldName => {
           newConfigBusinessRules.fieldRules[dependentFieldName] = ApplyBusinessRule(
@@ -511,7 +530,7 @@ export const ProcessFieldDropdownValues = (
             {
               dropdownOptions: ProcessDropdownOptions(
                 [
-                  ...fieldConfigs[fieldName].dropdownDependencies[businessValue][dependentFieldName].map(value =>
+                  ...fieldConfigs[fieldName].dropdownDependencies![businessValue][dependentFieldName].map(value =>
                     setDropdownValue(value)
                   )
                 ],
@@ -521,12 +540,12 @@ export const ProcessFieldDropdownValues = (
             pendingBusinessRules?.[dependentFieldName]
           );
 
-          if (newConfigBusinessRules.fieldRules[dependentFieldName].dropdownOptions?.length > 0) {
+          if ((newConfigBusinessRules.fieldRules[dependentFieldName].dropdownOptions?.length ?? 0) > 0) {
             newConfigBusinessRules.fieldRules[dependentFieldName].dropdownOptions = [
-              ...newConfigBusinessRules.fieldRules[dependentFieldName].dropdownOptions,
+              ...(newConfigBusinessRules.fieldRules[dependentFieldName].dropdownOptions ?? []),
               ...CheckDeprecatedDropdownOptions(
                 fieldConfigs[dependentFieldName],
-                newConfigBusinessRules.fieldRules[dependentFieldName].dropdownOptions,
+                newConfigBusinessRules.fieldRules[dependentFieldName].dropdownOptions ?? [],
                 GetFieldValue(entityData, dependentFieldName)
               )
             ];

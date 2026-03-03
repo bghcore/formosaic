@@ -8,6 +8,7 @@
     "build": "npm run build --workspaces",
     "build:core": "npm run build --workspace=packages/core",
     "build:fluent": "npm run build --workspace=packages/fluent",
+    "build:mui": "npm run build --workspace=packages/mui",
     "clean": "rimraf packages/*/dist",
     "test": "vitest run",
     "test:watch": "vitest",

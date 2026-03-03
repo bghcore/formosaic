@@ -48,7 +48,7 @@ export const HookInlineFormFields = (props: IHookInlineFormFieldsProps) => {
 
   const collapsedClass = !isExpanded && (expandEnabled || expandEnabled === undefined) ? "collapsed" : "";
 
-  const fieldsToRender = GetFieldsToRender(fieldRenderLimit, fieldOrder, configRules?.fieldRules);
+  const fieldsToRender = GetFieldsToRender(fieldRenderLimit ?? 0, fieldOrder ?? [], configRules?.fieldRules);
 
   const loadingKey = `${programName}-${entityType}-${entityId}-form-loaded`;
 
@@ -64,7 +64,7 @@ export const HookInlineFormFields = (props: IHookInlineFormFieldsProps) => {
           const { fieldName, softHidden } = fieldToRender;
           if (configRules?.fieldRules[fieldName]) {
             const { component, hidden, required, readOnly, dropdownOptions, validations } = configRules?.fieldRules[fieldName];
-            const fieldConfig = fieldConfigs[fieldName];
+            const fieldConfig = fieldConfigs![fieldName];
             const { label, skipLayoutReadOnly, hideOnCreate, meta } = fieldConfig;
 
             return (
@@ -74,7 +74,7 @@ export const HookInlineFormFields = (props: IHookInlineFormFieldsProps) => {
                 entityId={entityId}
                 entityType={entityType}
                 programName={programName}
-                component={component}
+                component={component ?? ""}
                 hidden={hidden}
                 required={required}
                 readOnly={readOnly}
