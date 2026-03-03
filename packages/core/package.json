@@ -14,12 +14,25 @@
   "keywords": [
     "react",
     "forms",
-    "business-rules",
     "dynamic-forms",
-    "react-hook-form",
+    "business-rules",
     "form-builder",
+    "react-hook-form",
     "configuration-driven",
-    "declarative-forms"
+    "declarative-forms",
+    "json-forms",
+    "schema-forms",
+    "form-engine",
+    "conditional-logic",
+    "field-dependencies",
+    "form-validation",
+    "async-validation",
+    "wizard-form",
+    "multi-step-form",
+    "field-array",
+    "i18n-forms",
+    "zod",
+    "json-schema"
   ],
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -31,7 +44,7 @@
       "require": "./dist/index.cjs"
     }
   },
-  "files": ["dist", "README.md"],
+  "files": ["dist", "schemas", "README.md"],
   "license": "MIT",
   "sideEffects": false,
   "scripts": {

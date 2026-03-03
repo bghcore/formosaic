@@ -2,6 +2,21 @@
 
 A React library for rendering complex, configuration-driven forms with a built-in business rules engine. Define your forms as JSON configurations -- field definitions, dependency rules, dropdown options, ordering -- and the library handles rendering, validation, auto-save, and field interactions automatically.
 
+## When to Use This Library
+
+**Use this if you need:**
+- Forms defined as JSON/config objects, not JSX — field types, labels, validations, and dependencies declared as data
+- A business rules engine where field A changing to value X makes field B required, field C hidden, and field D's dropdown options change — all declared, not coded
+- Multi-step wizards with conditional step visibility and cross-step business rules
+- Auto-save with debounce, retry, and abort — not just "submit on click"
+- To swap UI libraries (Fluent UI, MUI, custom) without rewriting form logic
+
+**Don't use this if you need:**
+- Simple forms with 3-5 static fields — use react-hook-form directly
+- JSON Schema compliance — use [RJSF](https://github.com/rjsf-team/react-jsonschema-form)
+- A visual drag-and-drop form builder — use [SurveyJS](https://surveyjs.io) or [Formily](https://github.com/alibaba/formily)
+- Headless form state with zero opinions — use [TanStack Form](https://tanstack.com/form)
+
 ## Packages
 
 | Package | Description | Size |

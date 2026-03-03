@@ -15,11 +15,15 @@
     "react",
     "forms",
     "fluent-ui",
+    "fluentui",
+    "fluent-ui-v9",
     "dynamic-forms",
     "react-hook-form",
     "form-builder",
-    "fluentui",
-    "field-components"
+    "field-components",
+    "microsoft-fluent",
+    "office-ui",
+    "business-forms"
   ],
   "main": "dist/index.cjs",
   "module": "dist/index.js",

@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/bghcore/dynamic-react-business-forms/wizard-config.schema.json",
+  "title": "Dynamic Forms Wizard Configuration",
+  "description": "Schema for defining multi-step wizard configurations used by @bghcore/dynamic-forms-core. A wizard organizes form fields into sequential steps with optional conditional visibility and navigation controls.",
+  "type": "object",
+  "definitions": {
+    "WizardStepCondition": {
+      "type": "object",
+      "description": "Condition that determines whether a wizard step is visible. The step is shown only when the specified field's current value matches one of the provided values.",
+      "properties": {
+        "fieldName": {
+          "type": "string",
+          "description": "The name of the form field whose value determines this step's visibility."
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Array of acceptable values. The step is visible when the field's current value matches any value in this array."
+        }
+      },
+      "required": ["fieldName", "values"],
+      "additionalProperties": false
+    },
+    "WizardStep": {
+      "type": "object",
+      "description": "Configuration for a single step in the wizard. Each step groups a subset of form fields and is displayed as a distinct page or section in the wizard UI.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this step. Used internally for navigation state tracking and as a key for step-level operations."
+        },
+        "title": {
+          "type": "string",
+          "description": "Display title shown in the wizard step header and navigation breadcrumb/sidebar."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional descriptive text displayed below the step title. Provides additional context or instructions for the user about what this step covers."
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Array of field names to display in this step. Field names must match keys in the form's field configuration object. Fields are rendered in the order listed."
+        },
+        "visibleWhen": {
+          "$ref": "#/definitions/WizardStepCondition",
+          "description": "Optional condition that controls whether this step appears in the wizard. When omitted, the step is always visible. When specified, the step is only shown if the condition is met."
+        }
+      },
+      "required": ["id", "title", "fields"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "steps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/WizardStep"
+      },
+      "description": "Ordered array of wizard steps. Steps are displayed in the order defined here, subject to visibleWhen conditions. At least one step is required.",
+      "minItems": 1
+    },
+    "linearNavigation": {
+      "type": "boolean",
+      "description": "If true, the user must complete steps in order and cannot skip ahead. The 'next' button is the only way to advance. If false, users can freely navigate to any visible step via the step navigation UI.",
+      "default": false
+    },
+    "validateOnStepChange": {
+      "type": "boolean",
+      "description": "If true, all fields in the current step are validated before allowing navigation to the next step. Validation errors prevent the step transition and are displayed to the user.",
+      "default": false
+    },
+    "saveOnStepChange": {
+      "type": "boolean",
+      "description": "If true, the form auto-saves when the user navigates to a different step. This triggers the same save mechanism as the form's auto-save feature, persisting the current step's data before moving on.",
+      "default": false
+    }
+  },
+  "required": ["steps"],
+  "additionalProperties": false
+}

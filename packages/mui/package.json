@@ -16,10 +16,13 @@
     "forms",
     "mui",
     "material-ui",
+    "material-design",
     "dynamic-forms",
     "react-hook-form",
     "form-builder",
-    "field-components"
+    "field-components",
+    "mui-forms",
+    "business-forms"
   ],
   "main": "dist/index.cjs",
   "module": "dist/index.js",

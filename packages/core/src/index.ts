@@ -119,6 +119,9 @@ export type { IHookFormDevToolsProps } from "./components/HookFormDevTools";
 export { jsonSchemaToFieldConfig } from "./utils/jsonSchemaImport";
 export type { IJsonSchema, IJsonSchemaProperty } from "./utils/jsonSchemaImport";
 
+// Zod Schema Import
+export { zodSchemaToFieldConfig } from "./utils/zodSchemaImport";
+
 // Lazy Field Registry
 export { createLazyFieldRegistry } from "./utils/lazyFieldRegistry";
 

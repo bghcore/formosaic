@@ -15,3 +15,4 @@ export * from "./IOrderDependencies";
 export * from "./ILocaleStrings";
 export * from "./IWizardConfig";
 export * from "./IFieldArrayConfig";
+export * from "./TypedFieldConfig";
