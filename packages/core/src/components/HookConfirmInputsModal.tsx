@@ -20,6 +20,12 @@ interface IHookConfirmInputsModalProps {
   renderDialog?: (props: { isOpen: boolean; onSave: () => void; onCancel: () => void; children: React.ReactNode }) => React.JSX.Element;
 }
 
+/** Returns all focusable elements inside a container */
+function getFocusableElements(container: HTMLElement): HTMLElement[] {
+  const selector = 'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  return Array.from(container.querySelectorAll<HTMLElement>(selector));
+}
+
 const HookConfirmInputsModal = (props: IHookConfirmInputsModalProps) => {
   const {
     isOpen,
@@ -37,14 +43,69 @@ const HookConfirmInputsModal = (props: IHookConfirmInputsModalProps) => {
   const { businessRules } = UseBusinessRulesContext();
 
   const dialogRef = React.useRef<HTMLDialogElement>(null);
+  const previouslyFocusedRef = React.useRef<Element | null>(null);
+  const saveButtonRef = React.useRef<HTMLButtonElement>(null);
 
   React.useEffect(() => {
     if (isOpen && dialogRef.current && !dialogRef.current.open) {
+      // Save the currently focused element before opening
+      previouslyFocusedRef.current = document.activeElement;
       dialogRef.current.showModal();
+      // Focus the save button (first actionable button) when modal opens
+      if (saveButtonRef.current) {
+        saveButtonRef.current.focus();
+      }
     } else if (!isOpen && dialogRef.current?.open) {
       dialogRef.current.close();
+      // Restore focus to the previously focused element
+      if (previouslyFocusedRef.current && previouslyFocusedRef.current instanceof HTMLElement) {
+        previouslyFocusedRef.current.focus();
+      }
+      previouslyFocusedRef.current = null;
     }
   }, [isOpen]);
+
+  // Handle Escape key to close the modal (native <dialog> handles this for showModal,
+  // but we also need to run our cancel logic)
+  React.useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    const handleCancel = (e: Event) => {
+      e.preventDefault();
+      cancelConfirmInputFields();
+    };
+
+    dialog.addEventListener("cancel", handleCancel);
+    return () => {
+      dialog.removeEventListener("cancel", handleCancel);
+    };
+  }, [cancelConfirmInputFields]);
+
+  // Focus trap: wrap Tab navigation within the dialog
+  const handleKeyDown = React.useCallback((e: React.KeyboardEvent<HTMLDialogElement>) => {
+    if (e.key !== "Tab" || !dialogRef.current) return;
+
+    const focusableElements = getFocusableElements(dialogRef.current);
+    if (focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (e.shiftKey) {
+      // Shift+Tab: if on first element, wrap to last
+      if (document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      }
+    } else {
+      // Tab: if on last element, wrap to first
+      if (document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    }
+  }, []);
 
   const setValueFunctionFieldValue = (fieldName: string, fieldValue: unknown) => {
     trigger();
@@ -95,10 +156,15 @@ const HookConfirmInputsModal = (props: IHookConfirmInputsModalProps) => {
   }
 
   return (
-    <dialog ref={dialogRef} className="hook-inline-form-modal">
+    <dialog
+      ref={dialogRef}
+      className="hook-inline-form-modal"
+      aria-label={HookInlineFormStrings.confirm}
+      onKeyDown={handleKeyDown}
+    >
       {content}
       <div className="hook-inline-form-modal-actions">
-        <button onClick={saveConfirmInputFields}>{HookInlineFormStrings.save}</button>
+        <button ref={saveButtonRef} onClick={saveConfirmInputFields}>{HookInlineFormStrings.save}</button>
         <button onClick={cancelConfirmInputFields}>{HookInlineFormStrings.cancel}</button>
       </div>
     </dialog>

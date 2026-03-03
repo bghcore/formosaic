@@ -106,3 +106,23 @@ export { HookInlineFormFields } from "./components/HookInlineFormFields";
 export { HookFieldWrapper } from "./components/HookFieldWrapper";
 export { default as HookRenderField } from "./components/HookRenderField";
 export { default as HookConfirmInputsModal } from "./components/HookConfirmInputsModal";
+export { HookFormErrorBoundary } from "./components/HookFormErrorBoundary";
+
+// DevTools
+export { HookFormDevTools } from "./components/HookFormDevTools";
+export type { IHookFormDevToolsProps } from "./components/HookFormDevTools";
+
+// Schema Import
+export { jsonSchemaToFieldConfig } from "./utils/jsonSchemaImport";
+export type { IJsonSchema, IJsonSchemaProperty } from "./utils/jsonSchemaImport";
+
+// Lazy Field Registry
+export { createLazyFieldRegistry } from "./utils/lazyFieldRegistry";
+
+// Hooks
+export { useDraftPersistence } from "./hooks/useDraftPersistence";
+export type { IDraftPersistenceOptions, IDraftState, IUseDraftPersistenceResult } from "./hooks/useDraftPersistence";
+export { useBeforeUnload } from "./hooks/useBeforeUnload";
+
+// Form State Serialization
+export { serializeFormState, deserializeFormState } from "./utils/formStateSerialization";

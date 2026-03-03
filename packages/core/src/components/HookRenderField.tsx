@@ -2,7 +2,8 @@ import { isEmpty, isNull } from "../utils";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { ComponentTypes } from "../constants";
-import { CheckFieldValidationRules, ShowField } from "../helpers/HookInlineFormHelper";
+import { CheckFieldValidationRules, CheckAsyncFieldValidationRules, ShowField } from "../helpers/HookInlineFormHelper";
+import { getAsyncValidation } from "../helpers/ValidationRegistry";
 import { IDropdownOption } from "../types/IDropdownOption";
 import { UseInjectedHookFieldContext } from "../providers/InjectedHookFieldProvider";
 import { HookInlineFormStrings } from "../strings";
@@ -20,6 +21,7 @@ interface IRenderFieldProps {
   disabled?: boolean;
   dropdownOptions?: IDropdownOption[];
   validations?: string[];
+  asyncValidations?: string[];
   parentEntityId?: string;
   parentEntityType?: string;
   isManualSave?: boolean;
@@ -31,6 +33,27 @@ interface IRenderFieldProps {
   skipLayoutReadOnly?: boolean;
   hideOnCreate?: boolean;
   meta?: object;
+  /** Custom render function for the label area, passed through to HookFieldWrapper. */
+  renderLabel?: (props: {
+    id: string;
+    labelId: string;
+    label?: string;
+    required?: boolean;
+  }) => React.ReactNode;
+  /** Custom render function for the error/warning/saving display, passed through to HookFieldWrapper. */
+  renderError?: (props: {
+    id: string;
+    error?: import("react-hook-form").FieldError;
+    errorCount?: number;
+  }) => React.ReactNode;
+  /** Custom render function for the status area, passed through to HookFieldWrapper. */
+  renderStatus?: (props: {
+    id: string;
+    saving?: boolean;
+    savePending?: boolean;
+    errorCount?: number;
+    isManualSave?: boolean;
+  }) => React.ReactNode;
 }
 
 const HookRenderField = (props: IRenderFieldProps) => {
@@ -46,6 +69,7 @@ const HookRenderField = (props: IRenderFieldProps) => {
     disabled,
     dropdownOptions,
     validations,
+    asyncValidations,
     parentEntityId,
     parentEntityType,
     isManualSave,
@@ -57,25 +81,29 @@ const HookRenderField = (props: IRenderFieldProps) => {
     skipLayoutReadOnly,
     hideOnCreate,
     meta,
+    renderLabel,
+    renderError,
+    renderStatus,
   } = props;
 
   const { injectedFields } = UseInjectedHookFieldContext();
   const { control, getValues } = useFormContext();
-  const [FieldComponent, setFieldComponent] = React.useState<React.JSX.Element>(<></>);
 
   const isDisabled = disabled ?? false;
 
   const fieldNameConst = `${fieldName}` as const;
 
-  React.useEffect(() => {
+  const FieldComponent = React.useMemo(() => {
     const isReadOnly =
       readOnly || (isDisabled && (isNull(skipLayoutReadOnly) || (!isNull(skipLayoutReadOnly) && !skipLayoutReadOnly)));
 
     if ((isCreate && hideOnCreate) || hidden) {
-      setFieldComponent(<></>);
-    } else if (!isEmpty(injectedFields) && injectedFields[component]) {
+      return <></>;
+    }
+
+    if (!isEmpty(injectedFields) && injectedFields[component]) {
       const Comp = injectedFields[component];
-      setFieldComponent(
+      return (
         <Controller
           name={fieldNameConst}
           control={control}
@@ -87,10 +115,18 @@ const HookRenderField = (props: IRenderFieldProps) => {
                     message: HookInlineFormStrings.required
                   }
                 : undefined,
-            validate:
-              !isEmpty(validations) && validations!.length > 0 && !isReadOnly
-                ? value => (value ? CheckFieldValidationRules(value, getValues(), validations!) : undefined)
-                : undefined
+            validate: async (value) => {
+              // Sync first (fast fail)
+              if (!isEmpty(validations) && validations!.length > 0 && !isReadOnly && value) {
+                const syncError = CheckFieldValidationRules(value, getValues(), validations!);
+                if (syncError) return syncError;
+              }
+              // Async only if sync passed
+              if (!isEmpty(asyncValidations) && asyncValidations!.length > 0 && !isReadOnly && value) {
+                return CheckAsyncFieldValidationRules(value, getValues(), asyncValidations!);
+              }
+              return undefined;
+            }
           }}
           render={({
             field: { value },
@@ -117,6 +153,9 @@ const HookRenderField = (props: IRenderFieldProps) => {
                 savePending={savePending}
                 labelClassName="form-label"
                 isManualSave={isManualSave}
+                renderLabel={renderLabel}
+                renderError={renderError}
+                renderStatus={renderStatus}
               >
                 {React.cloneElement(Comp, {
                   fieldName,
@@ -146,15 +185,15 @@ const HookRenderField = (props: IRenderFieldProps) => {
           }}
         />
       );
-    } else {
-      const available = !isEmpty(injectedFields) ? Object.keys(injectedFields).join(", ") : "none";
-      setFieldComponent(
-        <div style={{ color: "red", fontSize: "0.85em", padding: "4px" }}>
-          Missing component &quot;{component}&quot; for field &quot;{fieldName}&quot;. Available: [{available}]
-        </div>
-      );
     }
-  }, [component, hidden, required, disabled, dropdownOptions, filterText, readOnly, softHidden]);
+
+    const available = !isEmpty(injectedFields) ? Object.keys(injectedFields).join(", ") : "none";
+    return (
+      <div style={{ color: "red", fontSize: "0.85em", padding: "4px" }}>
+        Missing component &quot;{component}&quot; for field &quot;{fieldName}&quot;. Available: [{available}]
+      </div>
+    );
+  }, [component, hidden, required, readOnly, disabled, dropdownOptions, softHidden, renderLabel, renderError, renderStatus]);
 
   return FieldComponent;
 };

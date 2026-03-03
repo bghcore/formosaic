@@ -48,6 +48,13 @@ export interface ICoreLocaleStrings {
   overview: string;
   by: string;
 
+  // Accessibility
+  filterFields: string;
+  saved: string;
+  saveFailed: string;
+  validating: string;
+  stepOf: (current: number, total: number) => string;
+
   // Dynamic functions
   saveChangesTo: (title: string) => string;
 
@@ -65,4 +72,13 @@ export interface ICoreLocaleStrings {
   mustBeANumber: string;
   mustBeBetween: (min: number, max: number) => string;
   thisFieldIsRequired: string;
+
+  // Reliability / save status
+  saveRetrying: string;
+  saveTimeout: string;
+
+  // Draft persistence
+  draftRecovered: string;
+  discardDraft: string;
+  unsavedChangesWarning: string;
 }

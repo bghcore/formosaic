@@ -27,12 +27,39 @@ interface IHookInlineFormProps extends IHookInlineFormSharedProps {
   defaultValues: IEntityData;
   isChildEntity?: boolean;
   saveData?: (entityData: IEntityData, dirtyFieldNames?: string[]) => Promise<IEntityData>;
+  /** Timeout in milliseconds for each save attempt. Defaults to 30000 (30 seconds). */
+  saveTimeoutMs?: number;
+  /** Maximum number of retry attempts on save failure. Defaults to 3. */
+  maxSaveRetries?: number;
   /** Render custom expand/collapse button. If not provided, uses a simple <button>. */
   renderExpandButton?: (props: { isExpanded: boolean; onToggle: () => void }) => React.JSX.Element;
   /** Render custom filter/search input. If not provided and enableFilter is true, renders a simple <input>. */
   renderFilterInput?: (props: { onChange: (value: string) => void }) => React.JSX.Element;
   /** Render custom confirm dialog. Passed to HookConfirmInputsModal. */
   renderDialog?: (props: { isOpen: boolean; onSave: () => void; onCancel: () => void; children: React.ReactNode }) => React.JSX.Element;
+  /** Form-level errors to display above the fields (e.g., server-side cross-field validation errors). */
+  formErrors?: string[];
+  /** Custom render function for field labels, passed through to HookFieldWrapper via HookInlineFormFields. */
+  renderLabel?: (props: {
+    id: string;
+    labelId: string;
+    label?: string;
+    required?: boolean;
+  }) => React.ReactNode;
+  /** Custom render function for field error display, passed through to HookFieldWrapper via HookInlineFormFields. */
+  renderError?: (props: {
+    id: string;
+    error?: import("react-hook-form").FieldError;
+    errorCount?: number;
+  }) => React.ReactNode;
+  /** Custom render function for field status area, passed through to HookFieldWrapper via HookInlineFormFields. */
+  renderStatus?: (props: {
+    id: string;
+    saving?: boolean;
+    savePending?: boolean;
+    errorCount?: number;
+    isManualSave?: boolean;
+  }) => React.ReactNode;
 }
 
 export const HookInlineForm: React.FC<IHookInlineFormProps> = (props: IHookInlineFormProps): React.JSX.Element => {
@@ -55,9 +82,15 @@ export const HookInlineForm: React.FC<IHookInlineFormProps> = (props: IHookInlin
     enableFilter,
     currentUserId,
     onSaveError,
+    saveTimeoutMs = 30000,
+    maxSaveRetries = 3,
     renderExpandButton,
     renderFilterInput,
-    renderDialog
+    renderDialog,
+    formErrors,
+    renderLabel,
+    renderError,
+    renderStatus,
   } = props;
 
   const saveData = props.saveData
@@ -71,10 +104,12 @@ export const HookInlineForm: React.FC<IHookInlineFormProps> = (props: IHookInlin
   const saveTimeoutDelay = React.useRef<number | undefined>(undefined);
   const saveTimeout = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const confirmInputModalProps = React.useRef<IConfirmInputModalProps | undefined>(undefined);
+  const saveAbortControllerRef = React.useRef<AbortController | undefined>(undefined);
   const [isExpanded, setIsExpanded] = React.useState<boolean>(false);
   const [expandEnabled, setExpandEnabled] = React.useState<boolean>();
   const [inputFieldsConfirmed, setInputFieldsConfirmed] = React.useState<boolean>(true);
   const [filterText, setFilterText] = React.useState<string>();
+  const [statusMessage, setStatusMessage] = React.useState<string>("");
 
   const formMethods = useForm({
     mode: "onChange",
@@ -178,13 +213,34 @@ export const HookInlineForm: React.FC<IHookInlineFormProps> = (props: IHookInlin
     }
   };
 
+  /** Focus the first field that has a validation error */
+  const focusFirstError = () => {
+    const currentErrors = formStateRef.current.errors;
+    const errorFieldNames = Object.keys(currentErrors);
+    if (errorFieldNames.length > 0) {
+      const firstErrorField = errorFieldNames[0];
+      const element =
+        document.getElementById(firstErrorField) ||
+        document.querySelector<HTMLElement>(`[name="${firstErrorField}"]`);
+      if (element && typeof element.focus === "function") {
+        element.focus();
+      }
+    }
+  };
+
   const validateAndSave = () => {
     const { dirtyFields } = formStateRef.current;
     const businessRules = businessRulesRef.current;
 
+    setStatusMessage(HookInlineFormStrings.validating);
     trigger().then((valid: boolean) => {
       if (!valid) {
         setIsExpanded(true);
+        setStatusMessage("");
+        // Focus the first field with an error after validation failure
+        requestAnimationFrame(() => {
+          focusFirstError();
+        });
       } else {
         const newConfirmInputModalProps: IConfirmInputModalProps | undefined =
           confirmInputModalProps.current === undefined
@@ -198,27 +254,66 @@ export const HookInlineForm: React.FC<IHookInlineFormProps> = (props: IHookInlin
         ) {
           confirmInputModalProps.current = newConfirmInputModalProps;
           setInputFieldsConfirmed(false);
+          setStatusMessage("");
         } else if (dirtyFields && Object.keys(dirtyFields).length > 0) {
+          setStatusMessage(HookInlineFormStrings.saving);
           handleSubmit(handleSave)();
           confirmInputModalProps.current = undefined;
+        } else {
+          setStatusMessage("");
         }
       }
     });
   };
 
   const handleSave = (data: IEntityData) => {
-    saveData(data, Object.keys(formStateRef.current.dirtyFields))
-      .then(updatedEntity => {
+    // Abort any previous in-flight save request
+    if (saveAbortControllerRef.current) {
+      saveAbortControllerRef.current.abort();
+    }
+    const abortController = new AbortController();
+    saveAbortControllerRef.current = abortController;
+
+    const dirtyFieldNames = Object.keys(formStateRef.current.dirtyFields);
+
+    const saveWithTimeoutAndRetry = async (attempt: number): Promise<void> => {
+      if (abortController.signal.aborted) return;
+
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error(HookInlineFormStrings.saveTimeout)), saveTimeoutMs);
+      });
+
+      try {
+        const updatedEntity = await Promise.race([
+          saveData(data, dirtyFieldNames),
+          timeoutPromise,
+        ]);
+
+        if (abortController.signal.aborted) return;
+
+        setStatusMessage(HookInlineFormStrings.saved);
         if (!isCreate) {
           handleDirtyFields(updatedEntity, data);
         }
-      })
-      .catch(error => {
-        Object.keys(formStateRef.current.dirtyFields).forEach(field => {
+      } catch (error) {
+        if (abortController.signal.aborted) return;
+
+        if (attempt < maxSaveRetries) {
+          const delay = Math.pow(2, attempt) * 1000; // 1s, 2s, 4s
+          await new Promise(resolve => setTimeout(resolve, delay));
+          if (abortController.signal.aborted) return;
+          return saveWithTimeoutAndRetry(attempt + 1);
+        }
+
+        setStatusMessage(HookInlineFormStrings.saveFailed);
+        dirtyFieldNames.forEach(field => {
           setError(field, { type: "custom", message: HookInlineFormStrings.saveError });
         });
         onSaveError?.(`${HookInlineFormStrings.saveError}${error ? `: ${error}` : ""}`);
-      });
+      }
+    };
+
+    saveWithTimeoutAndRetry(0);
   };
 
   const handleDirtyFields = (entity: IEntityData, data: IEntityData) => {
@@ -278,6 +373,27 @@ export const HookInlineForm: React.FC<IHookInlineFormProps> = (props: IHookInlin
         isSubmitSuccessful
       }}
     >
+      {/* Visually-hidden ARIA live region for form status announcements */}
+      <div
+        role="status"
+        aria-live="polite"
+        className="sr-only"
+        style={{
+          position: "absolute",
+          width: "1px",
+          height: "1px",
+          padding: 0,
+          margin: "-1px",
+          overflow: "hidden",
+          clip: "rect(0, 0, 0, 0)",
+          whiteSpace: "nowrap",
+          border: 0,
+        }}
+        data-testid="form-status-live-region"
+      >
+        {statusMessage}
+      </div>
+
       {enableFilter && (
         <div className="hook-inline-form-filter">
           {renderFilterInput ? (
@@ -285,11 +401,23 @@ export const HookInlineForm: React.FC<IHookInlineFormProps> = (props: IHookInlin
           ) : (
             <input
               type="text"
-              placeholder="Filter fields..."
+              placeholder={HookInlineFormStrings.filterFields}
+              aria-label={HookInlineFormStrings.filterFields}
               onChange={(e) => onFilterChange(e.target.value)}
               className="hook-inline-form-filter-input"
             />
           )}
+        </div>
+      )}
+      {formErrors && formErrors.length > 0 && (
+        <div className="hook-form-errors" role="alert" style={{
+          color: "var(--hook-form-error-color, #d13438)",
+          padding: "8px",
+          marginBottom: "8px"
+        }}>
+          {formErrors.map((err, i) => (
+            <div key={i} className="hook-form-error-item">{err}</div>
+          ))}
         </div>
       )}
       <div className="hook-inline-form-wrapper">
@@ -316,6 +444,9 @@ export const HookInlineForm: React.FC<IHookInlineFormProps> = (props: IHookInlin
                 : HookInlineFormConstants.defaultExpandCutoffCount
               : undefined
           }
+          renderLabel={renderLabel}
+          renderError={renderError}
+          renderStatus={renderStatus}
         />
 
         {expandEnabled && (

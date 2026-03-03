@@ -20,6 +20,27 @@ interface IHookFieldWrapperProps {
   readonly additionalInfoIcon?: string;
   readonly additionalInfoComponent?: React.ReactNode;
   isManualSave?: boolean;
+  /** Custom render function for the label area. Falls back to default label when not provided. */
+  renderLabel?: (props: {
+    id: string;
+    labelId: string;
+    label?: string;
+    required?: boolean;
+  }) => React.ReactNode;
+  /** Custom render function for the error/warning/saving display. Falls back to default when not provided. */
+  renderError?: (props: {
+    id: string;
+    error?: FieldError;
+    errorCount?: number;
+  }) => React.ReactNode;
+  /** Custom render function for the status area. Falls back to default when not provided. */
+  renderStatus?: (props: {
+    id: string;
+    saving?: boolean;
+    savePending?: boolean;
+    errorCount?: number;
+    isManualSave?: boolean;
+  }) => React.ReactNode;
 }
 
 export const HookFieldWrapper: React.FunctionComponent<React.PropsWithChildren<IHookFieldWrapperProps>> = React.memo((
@@ -41,31 +62,71 @@ export const HookFieldWrapper: React.FunctionComponent<React.PropsWithChildren<I
     containerClassName,
     additionalInfo,
     additionalInfoComponent,
-    isManualSave
+    isManualSave,
+    renderLabel,
+    renderError,
+    renderStatus,
   } = props;
 
   const labelId = `${id}_label`;
   const errorMessageId = `${id}_error`;
   const children = (Array.isArray(props.children) ? props.children : [props.children]) as React.ReactElement<Record<string, unknown>>[];
 
+  const defaultLabel = (
+    <div className={labelClassName || ""}>
+      <label id={labelId} className="field-label">
+        {label}
+        {required && <span className="required-indicator" style={{ color: "var(--hook-form-required-color, #d13438)" }}> *</span>}
+      </label>
+      {additionalInfoComponent}
+      {!additionalInfoComponent && additionalInfo && (
+        <span className="additional-info" title={additionalInfo}>
+          &#9432;
+        </span>
+      )}
+    </div>
+  );
+
+  const defaultErrorAndStatus = (
+    <div className="message">
+      {error ? (
+        <>
+          <span className="error-icon" aria-hidden="true" style={{ color: "var(--hook-form-error-color, #d13438)" }}>&#10006;</span>
+          <span className="error-message" id={id} role="alert" style={{ color: "var(--hook-form-error-color, #d13438)" }}>
+            {error.message || "Error"}
+          </span>
+        </>
+      ) : savePending ? (
+        <>
+          <span className="warning-icon" aria-hidden="true" style={{ color: "var(--hook-form-warning-color, #ffb900)" }}>&#9888;</span>
+          <span className="warning-message" id={id} role="alert" style={{ color: "var(--hook-form-warning-color, #ffb900)" }}>
+            {!isManualSave ? HookInlineFormStrings.autoSavePending : HookInlineFormStrings.savePending} (
+            {`${errorCount} ${HookInlineFormStrings.remaining}`})
+          </span>
+        </>
+      ) : saving ? (
+        <>
+          <span className="save-spinner" aria-hidden="true" style={{ color: "var(--hook-form-saving-color, #0078d4)" }}>&#8987;</span>
+          <span className="save-message" id={id} role="alert" style={{ color: "var(--hook-form-saving-color, #0078d4)" }}>
+            {HookInlineFormStrings.saving}
+          </span>
+        </>
+      ) : (
+        <></>
+      )}
+    </div>
+  );
+
   return (
     <div
       className={`form-field ${showControlonSide ? "flexBox" : ""} ${containerClassName || ""} ${
         saving ? "saving" : ""
       }`}
+      aria-busy={saving ? "true" : undefined}
     >
-      <div className={labelClassName || ""}>
-        <label id={labelId} className="field-label">
-          {label}
-          {required && <span className="required-indicator"> *</span>}
-        </label>
-        {additionalInfoComponent}
-        {!additionalInfoComponent && additionalInfo && (
-          <span className="additional-info" title={additionalInfo}>
-            &#9432;
-          </span>
-        )}
-      </div>
+      {renderLabel
+        ? renderLabel({ id: id || "", labelId, label, required })
+        : defaultLabel}
       <div className={`flexBox-Direction-column field-container ${fieldClassName || ""}`}>
         {children.map((child, index) => {
           if (child && child.props) {
@@ -91,33 +152,11 @@ export const HookFieldWrapper: React.FunctionComponent<React.PropsWithChildren<I
           }
         })}
       </div>
-      <div className="message">
-        {error ? (
-          <>
-            <span className="error-icon" aria-hidden="true">&#10006;</span>
-            <span className="error-message" id={id} role="alert">
-              {error.message || "Error"}
-            </span>
-          </>
-        ) : savePending ? (
-          <>
-            <span className="warning-icon" aria-hidden="true">&#9888;</span>
-            <span className="warning-message" id={id} role="alert">
-              {!isManualSave ? HookInlineFormStrings.autoSavePending : HookInlineFormStrings.savePending} (
-              {`${errorCount} ${HookInlineFormStrings.remaining}`})
-            </span>
-          </>
-        ) : saving ? (
-          <>
-            <span className="save-spinner" aria-hidden="true">&#8987;</span>
-            <span className="save-message" id={id} role="alert">
-              {HookInlineFormStrings.saving}
-            </span>
-          </>
-        ) : (
-          <></>
-        )}
-      </div>
+      {renderError
+        ? renderError({ id: id || "", error, errorCount })
+        : renderStatus
+          ? renderStatus({ id: id || "", saving, savePending, errorCount, isManualSave })
+          : defaultErrorAndStatus}
     </div>
   );
 });

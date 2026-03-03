@@ -1,0 +1,18 @@
+/**
+ * Optional CSS custom properties for @bghcore/dynamic-forms-core.
+ *
+ * Import this stylesheet in your application to get default theming:
+ *   import "@bghcore/dynamic-forms-core/src/styles.css";
+ *
+ * Override any variable on a parent element or :root to customize colors.
+ */
+:root {
+  --hook-form-error-color: #d13438;
+  --hook-form-warning-color: #ffb900;
+  --hook-form-saving-color: #0078d4;
+  --hook-form-label-color: #323130;
+  --hook-form-required-color: #d13438;
+  --hook-form-border-radius: 4px;
+  --hook-form-field-gap: 8px;
+  --hook-form-font-size: 14px;
+}

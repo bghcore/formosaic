@@ -4,6 +4,7 @@ import { GetFieldsToRender } from "../helpers/HookInlineFormHelper";
 import { IConfigBusinessRules } from "../types/IConfigBusinessRules";
 import { IFieldConfig } from "../types/IFieldConfig";
 import HookRenderField from "./HookRenderField";
+import { HookFormErrorBoundary } from "./HookFormErrorBoundary";
 
 interface IHookInlineFormFieldsProps {
   entityId?: string;
@@ -23,6 +24,27 @@ interface IHookInlineFormFieldsProps {
   isCreate?: boolean;
   filterText?: string;
   fieldRenderLimit?: number;
+  /** Custom render function for field labels, passed through to HookRenderField -> HookFieldWrapper. */
+  renderLabel?: (props: {
+    id: string;
+    labelId: string;
+    label?: string;
+    required?: boolean;
+  }) => React.ReactNode;
+  /** Custom render function for field error display, passed through to HookRenderField -> HookFieldWrapper. */
+  renderError?: (props: {
+    id: string;
+    error?: import("react-hook-form").FieldError;
+    errorCount?: number;
+  }) => React.ReactNode;
+  /** Custom render function for field status area, passed through to HookRenderField -> HookFieldWrapper. */
+  renderStatus?: (props: {
+    id: string;
+    saving?: boolean;
+    savePending?: boolean;
+    errorCount?: number;
+    isManualSave?: boolean;
+  }) => React.ReactNode;
 }
 
 export const HookInlineFormFields = (props: IHookInlineFormFieldsProps) => {
@@ -43,7 +65,10 @@ export const HookInlineFormFields = (props: IHookInlineFormFieldsProps) => {
     isManualSave,
     isCreate,
     filterText,
-    fieldRenderLimit
+    fieldRenderLimit,
+    renderLabel,
+    renderError,
+    renderStatus,
   } = props;
 
   const collapsedClass = !isExpanded && (expandEnabled || expandEnabled === undefined) ? "collapsed" : "";
@@ -63,35 +88,40 @@ export const HookInlineFormFields = (props: IHookInlineFormFieldsProps) => {
         {fieldsToRender?.map(fieldToRender => {
           const { fieldName, softHidden } = fieldToRender;
           if (configRules?.fieldRules[fieldName]) {
-            const { component, hidden, required, readOnly, dropdownOptions, validations } = configRules?.fieldRules[fieldName];
+            const { component, hidden, required, readOnly, dropdownOptions, validations, asyncValidations } = configRules?.fieldRules[fieldName];
             const fieldConfig = fieldConfigs![fieldName];
             const { label, skipLayoutReadOnly, hideOnCreate, meta } = fieldConfig;
 
             return (
-              <HookRenderField
-                key={`${fieldName}-${entityId}-form`}
-                fieldName={fieldName}
-                entityId={entityId}
-                entityType={entityType}
-                programName={programName}
-                component={component ?? ""}
-                hidden={hidden}
-                required={required}
-                readOnly={readOnly}
-                dropdownOptions={dropdownOptions}
-                validations={validations}
-                parentEntityId={parentEntityId}
-                parentEntityType={parentEntityType}
-                setFieldValue={setFieldValue}
-                isManualSave={isManualSave}
-                isCreate={isCreate}
-                filterText={filterText}
-                softHidden={softHidden}
-                label={label}
-                skipLayoutReadOnly={skipLayoutReadOnly}
-                hideOnCreate={hideOnCreate}
-                meta={meta}
-              />
+              <HookFormErrorBoundary key={`${fieldName}-${entityId}-form`}>
+                <HookRenderField
+                  fieldName={fieldName}
+                  entityId={entityId}
+                  entityType={entityType}
+                  programName={programName}
+                  component={component ?? ""}
+                  hidden={hidden}
+                  required={required}
+                  readOnly={readOnly}
+                  dropdownOptions={dropdownOptions}
+                  validations={validations}
+                  asyncValidations={asyncValidations}
+                  parentEntityId={parentEntityId}
+                  parentEntityType={parentEntityType}
+                  setFieldValue={setFieldValue}
+                  isManualSave={isManualSave}
+                  isCreate={isCreate}
+                  filterText={filterText}
+                  softHidden={softHidden}
+                  label={label}
+                  skipLayoutReadOnly={skipLayoutReadOnly}
+                  hideOnCreate={hideOnCreate}
+                  meta={meta}
+                  renderLabel={renderLabel}
+                  renderError={renderError}
+                  renderStatus={renderStatus}
+                />
+              </HookFormErrorBoundary>
             );
           } else {
             return <React.Fragment key={fieldName} />;

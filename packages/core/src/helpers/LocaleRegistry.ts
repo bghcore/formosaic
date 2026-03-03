@@ -50,6 +50,13 @@ const defaultStrings: ICoreLocaleStrings = {
   overview: "Overview",
   by: "by",
 
+  // Accessibility
+  filterFields: "Filter form fields",
+  saved: "Saved successfully",
+  saveFailed: "Save failed",
+  validating: "Validating...",
+  stepOf: (current: number, total: number) => `Step ${current} of ${total}`,
+
   // Dynamic functions
   saveChangesTo: (title: string) => `Do you want to save your changes to ${title}?`,
 
@@ -67,6 +74,15 @@ const defaultStrings: ICoreLocaleStrings = {
   mustBeANumber: "Must be a number",
   mustBeBetween: (min: number, max: number) => `Must be between ${min} and ${max}`,
   thisFieldIsRequired: "This field is required",
+
+  // Reliability / save status
+  saveRetrying: "Retrying save...",
+  saveTimeout: "Save timed out",
+
+  // Draft persistence
+  draftRecovered: "Draft recovered",
+  discardDraft: "Discard draft",
+  unsavedChangesWarning: "You have unsaved changes. Are you sure you want to leave?",
 };
 
 let currentLocale: ICoreLocaleStrings = { ...defaultStrings };
