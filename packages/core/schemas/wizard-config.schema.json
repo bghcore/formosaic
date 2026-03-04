@@ -5,23 +5,28 @@
   "description": "Schema for defining multi-step wizard configurations used by @bghcore/dynamic-forms-core. A wizard organizes form fields into sequential steps with optional conditional visibility and navigation controls.",
   "type": "object",
   "definitions": {
-    "WizardStepCondition": {
+    "ICondition": {
       "type": "object",
       "description": "Condition that determines whether a wizard step is visible. The step is shown only when the specified field's current value matches one of the provided values.",
       "properties": {
-        "fieldName": {
+        "field": {
           "type": "string",
           "description": "The name of the form field whose value determines this step's visibility."
         },
-        "values": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Array of acceptable values. The step is visible when the field's current value matches any value in this array."
+        "is": {
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "description": "The value or array of acceptable values. The step is visible when the field's current value matches any value in this set."
         }
       },
-      "required": ["fieldName", "values"],
+      "required": ["field", "is"],
       "additionalProperties": false
     },
     "WizardStep": {
@@ -48,7 +53,7 @@
           "description": "Array of field names to display in this step. Field names must match keys in the form's field configuration object. Fields are rendered in the order listed."
         },
         "visibleWhen": {
-          "$ref": "#/definitions/WizardStepCondition",
+          "$ref": "#/definitions/ICondition",
           "description": "Optional condition that controls whether this step appears in the wizard. When omitted, the step is always visible. When specified, the step is only shown if the condition is met."
         }
       },

@@ -32,11 +32,10 @@ setDate: () => new Date()
 ```json
 {
   "createdDate": {
-    "component": "DateControl",
+    "type": "DateControl",
     "label": "Created Date",
-    "isValueFunction": true,
-    "value": "setDate",
-    "onlyOnCreate": true,
+    "computedValue": "$fn.setDate()",
+    "computeOnCreateOnly": true,
     "readOnly": true
   }
 }
@@ -57,10 +56,9 @@ setDateIfNull: ({ fieldValue }) => fieldValue ? fieldValue : new Date()
 ```json
 {
   "firstContactDate": {
-    "component": "DateControl",
+    "type": "DateControl",
     "label": "First Contact Date",
-    "isValueFunction": true,
-    "value": "setDateIfNull"
+    "computedValue": "$fn.setDateIfNull()"
   }
 }
 ```
@@ -80,11 +78,10 @@ setLoggedInUser: ({ currentUserId }) => currentUserId ? { id: currentUserId } : 
 ```json
 {
   "createdBy": {
-    "component": "ReadOnly",
+    "type": "ReadOnly",
     "label": "Created By",
-    "isValueFunction": true,
-    "value": "setLoggedInUser",
-    "onlyOnCreate": true
+    "computedValue": "$fn.setLoggedInUser()",
+    "computeOnCreateOnly": true
   }
 }
 ```
@@ -105,11 +102,10 @@ inheritFromParent: ({ fieldName, parentEntity }) =>
 ```json
 {
   "programName": {
-    "component": "ReadOnly",
+    "type": "ReadOnly",
     "label": "Program",
-    "isValueFunction": true,
-    "value": "inheritFromParent",
-    "onlyOnCreate": true
+    "computedValue": "$fn.inheritFromParent()",
+    "computeOnCreateOnly": true
   }
 }
 ```
@@ -120,20 +116,18 @@ inheritFromParent: ({ fieldName, parentEntity }) =>
 
 ### Configuration
 
-Value functions are activated through two `IFieldConfig` properties working together:
-
-1. **`isValueFunction: true`** -- tells the engine that the `value` property contains a function name rather than a literal value.
-2. **`value: "functionName"`** -- the name of the registered value function to invoke.
+In v2, value functions are activated through the `computedValue` property using the `$fn.` prefix:
 
 ```json
 {
   "myField": {
-    "isValueFunction": true,
-    "value": "setDate",
-    "onlyOnCreate": true
+    "computedValue": "$fn.setDate()",
+    "computeOnCreateOnly": true
   }
 }
 ```
+
+The `$fn.functionName()` syntax tells the engine to look up `functionName` in the `ValueFunctionRegistry` and invoke it.
 
 ### Lifecycle / Trigger Points
 
@@ -143,19 +137,19 @@ Value functions execute at two distinct points:
 
 When a form is initialized in "create" mode, the engine calls `GetValueFunctionsOnCreate()` which collects all fields where:
 - `valueFunction` is set (non-empty)
-- `onlyOnCreate` is `true`
+- `computeOnCreateOnly` is `true`
 
 These functions run once during `InitOnCreateBusinessRules()` before the form renders, and their return values are set into the form via `setValue()`.
 
 #### 2. On Dependency Trigger
 
-When a field's value changes, the business rules engine evaluates dependent fields. If a dependent field has a value function and `onlyOnCreate` is **not** `true`, the function is re-executed with the updated context.
+When a field's value changes, the business rules engine evaluates dependent fields. If a dependent field has a value function and `computeOnCreateOnly` is **not** `true`, the function is re-executed with the updated context.
 
-This is handled by `GetValueFunctionsOnDirtyFields()`, which iterates through dirty field names, finds their dependent fields, and collects value functions to execute -- **excluding** any with `onlyOnCreate: true`.
+This is handled by `GetValueFunctionsOnDirtyFields()`, which iterates through dirty field names, finds their dependent fields, and collects value functions to execute -- **excluding** any with `computeOnCreateOnly: true`.
 
-### The `onlyOnCreate` Flag
+### The `computeOnCreateOnly` Flag
 
-| `onlyOnCreate` | Behavior |
+| `computeOnCreateOnly` | Behavior |
 |---|---|
 | `true` | Value function runs **only once** during form creation. It does not re-run when dependent fields change during editing. |
 | `false` / not set | Value function runs on creation **and** re-runs whenever a triggering dependency field changes. |
@@ -163,7 +157,7 @@ This is handled by `GetValueFunctionsOnDirtyFields()`, which iterates through di
 ### Execution Flow
 
 ```
-IFieldConfig { isValueFunction: true, value: "setDate", onlyOnCreate: true }
+IFieldConfig { computedValue: "$fn.setDate()", computeOnCreateOnly: true }
   |
   v
 Business Rules Engine extracts -> { fieldName: "createdDate", valueFunction: "setDate" }
@@ -238,7 +232,7 @@ type ValueFunction = (context: {
   fieldName: string;           // Name of the field this function is being executed for
   fieldValue?: SubEntityType;  // Current value of the field (may be undefined on create)
   parentEntity?: IEntityData;  // Parent entity data (if editing a child entity)
-  currentUserId?: string;      // Current user's UPN/ID from HookInlineForm props
+  currentUserId?: string;      // Current user's UPN/ID from DynamicForm props
 }) => SubEntityType;
 ```
 
@@ -270,10 +264,9 @@ Field config:
 ```json
 {
   "estimatedEndDate": {
-    "component": "DateControl",
+    "type": "DateControl",
     "label": "Estimated End Date",
-    "isValueFunction": true,
-    "value": "calculateEndDate",
+    "computedValue": "$fn.calculateEndDate()",
     "readOnly": true
   }
 }
@@ -311,19 +304,19 @@ function executeValueFunction(
 
 ## Value Functions vs Computed Values (computedValue)
 
-`dynamic-react-business-forms` has two mechanisms for deriving field values: **value functions** (imperative) and **computed values** (declarative). They serve different purposes and have different execution models.
+`dynamic-react-business-forms` has two mechanisms for deriving field values: **value functions** (imperative, via `$fn.` prefix) and **computed values** (declarative, via `$values.` expressions). They serve different purposes and have different execution models.
 
 ### Comparison Table
 
-| Aspect | Value Functions | Computed Values (`computedValue`) |
+| Aspect | Value Functions | Computed Value Expressions |
 |---|---|---|
 | **Definition style** | Imperative: named function registered in code | Declarative: expression string in JSON config |
-| **Config properties** | `isValueFunction: true` + `value: "functionName"` | `computedValue: "$values.qty * $values.price"` |
+| **Config syntax** | `computedValue: "$fn.functionName()"` | `computedValue: "$values.qty * $values.price"` |
 | **Registration** | `registerValueFunctions({ name: fn })` | None needed -- expression is evaluated inline |
 | **Access to data** | `fieldName`, `fieldValue`, `parentEntity`, `currentUserId` | All form field values via `$values.fieldName` syntax |
 | **Trigger mechanism** | Explicitly on create, or when dependency fields fire | Reactively when any referenced `$values.fieldName` changes |
 | **Execution timing** | During `InitOnCreateBusinessRules` or `GetValueFunctionsOnDirtyFields` | During dependency evaluation |
-| **`onlyOnCreate` support** | Yes -- can restrict to creation only | No -- always reactive |
+| **`computeOnCreateOnly` support** | Yes -- can restrict to creation only | No -- always reactive |
 | **Complexity** | Unlimited (full JavaScript/TypeScript) | Simple arithmetic and string expressions |
 | **Side effects** | Possible (but discouraged) | None -- pure expressions |
 | **Type safety** | Full TypeScript typing | String-based, no compile-time checking |
@@ -332,21 +325,20 @@ function executeValueFunction(
 
 - You need access to `currentUserId` or `parentEntity`.
 - The computation requires API calls, complex logic, or external dependencies.
-- You want the function to run only during entity creation (`onlyOnCreate: true`).
+- You want the function to run only during entity creation (`computeOnCreateOnly: true`).
 - The logic is reusable across multiple forms/fields.
 
 **Example:**
 ```json
 {
   "assignee": {
-    "isValueFunction": true,
-    "value": "setLoggedInUser",
-    "onlyOnCreate": true
+    "computedValue": "$fn.setLoggedInUser()",
+    "computeOnCreateOnly": true
   }
 }
 ```
 
-### When to Use Computed Values
+### When to Use Computed Value Expressions
 
 - The value is a simple arithmetic expression based on other form field values.
 - You want reactive updates whenever referenced fields change.
@@ -357,7 +349,7 @@ function executeValueFunction(
 ```json
 {
   "totalCost": {
-    "component": "Number",
+    "type": "Number",
     "label": "Total Cost",
     "readOnly": true,
     "computedValue": "$values.quantity * $values.unitPrice"
@@ -369,42 +361,27 @@ function executeValueFunction(
 
 A field should typically use one mechanism or the other, not both. If you need initial-value logic **and** reactive computation, consider:
 
-1. Use a value function with `onlyOnCreate: true` for the initial value.
+1. Use a value function with `computeOnCreateOnly: true` for the initial value.
 2. Use business rule dependencies to trigger recalculation when dependent fields change.
 
-Or use `computedValue` for reactive computation and `defaultValue` for the initial state.
+Or use a computed value expression for reactive computation and `defaultValue` for the initial state.
 
-### Static Values: `onlyOnCreateValue` and `defaultValue`
+### Static Values: `defaultValue`
 
 For simple static values that do not need functions:
 
-- **`onlyOnCreateValue`**: Set once on entity creation, not a function, just a literal value.
 - **`defaultValue`**: Applied whenever the field is visible and its value is `null`.
 
 ```json
 {
-  "status": {
-    "component": "Dropdown",
-    "label": "Status",
-    "onlyOnCreateValue": "Draft",
-    "dropdownOptions": [
-      { "key": "Draft", "text": "Draft" },
-      { "key": "Active", "text": "Active" }
-    ]
-  }
-}
-```
-
-```json
-{
   "priority": {
-    "component": "Dropdown",
+    "type": "Dropdown",
     "label": "Priority",
     "defaultValue": "Medium",
-    "dropdownOptions": [
-      { "key": "Low", "text": "Low" },
-      { "key": "Medium", "text": "Medium" },
-      { "key": "High", "text": "High" }
+    "options": [
+      { "value": "Low", "label": "Low" },
+      { "value": "Medium", "label": "Medium" },
+      { "value": "High", "label": "High" }
     ]
   }
 }

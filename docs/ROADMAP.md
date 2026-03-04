@@ -47,15 +47,14 @@ The library is split into two packages:
 - Unit tests for `BusinessRulesHelper.ts` (pure functions, highest value target)
 - Unit tests for `HookInlineFormHelper.ts` (validation, value functions, schema merging)
 - Unit tests for `ValidationRegistry` and `ValueFunctionRegistry`
-- Component tests for `HookInlineForm` with `@testing-library/react`
+- Component tests for `DynamicForm` with `@testing-library/react`
 - Component tests for individual field types in the fluent package
 - Integration tests for business rules cascading (combo rules, circular dependencies, revert-then-reapply)
 
 ### 2.2 Type Safety Improvements
 
 - Enable `strictNullChecks` and fix resulting type errors
-- Consolidate `isReadonly` -> `readOnly` in IFieldConfig
-- Tighten `meta` typing (remove `object`)
+- Tighten `config` typing (remove `object`)
 - Audit remaining `any` usage and replace with proper types
 
 ### 2.3 Documentation

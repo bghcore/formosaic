@@ -1,6 +1,6 @@
 # Field Types Reference
 
-This document provides a comprehensive reference for every component type supported by `dynamic-react-business-forms`. Component types are defined in `packages/core/src/constants.ts` as the `ComponentTypes` object, and each maps to a string key used in `IFieldConfig.component`.
+This document provides a comprehensive reference for every component type supported by `dynamic-react-business-forms`. Component types are defined in `packages/core/src/constants.ts` as the `ComponentTypes` object, and each maps to a string key used in `IFieldConfig.type`.
 
 There are **22 total component keys**: 13 editable, 6 read-only, and 3 structural/abstract types (Fragment, FieldArray, ChoiceSet).
 
@@ -10,7 +10,7 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 ### Editable Field Types
 
-| Component Key | Description | Value Type | Fluent UI Component | MUI Component | ReadOnly Mode? | Uses `dropdownOptions`? |
+| Component Key | Description | Value Type | Fluent UI Component | MUI Component | ReadOnly Mode? | Uses `options`? |
 |---|---|---|---|---|---|---|
 | `"Textbox"` | Single-line text input | `string` | `Input` | `TextField` | Yes | No |
 | `"Dropdown"` | Single-select dropdown | `string` | `Dropdown` + `Option` | `Select` + `MenuItem` | Yes | Yes |
@@ -20,7 +20,7 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 | `"DateControl"` | Date picker with clear button | `string` (ISO 8601) | `Input` (type="date") + `Button` | `TextField` (type="date") + `IconButton` | Yes | No |
 | `"Slider"` | Range slider input | `number` | `Slider` | `Slider` | Yes | No |
 | `"DynamicFragment"` | Hidden field (no visible UI) | `string` | `<input type="hidden">` | `<input type="hidden">` | No | No |
-| `"SimpleDropdown"` | Dropdown from simple string array in meta | `string` | `Dropdown` + `Option` | `Select` + `MenuItem` | Yes | No (uses `meta.dropdownOptions`) |
+| `"SimpleDropdown"` | Dropdown from simple string array in config | `string` | `Dropdown` + `Option` | `Select` + `MenuItem` | Yes | No (uses `config.options`) |
 | `"MultiSelectSearch"` | Searchable multi-select with free-form | `string[]` | `Combobox` (multiselect, freeform) + `Option` | `Autocomplete` (multiple, freeSolo) + `TextField` + `Chip` | Yes | Yes |
 | `"Textarea"` | Multi-line text with expand-to-modal | `string` | `Textarea` + `Dialog` | `TextField` (multiline) + `Dialog` | Yes | No |
 | `"DocumentLinks"` | CRUD list of URL links | `IDocumentLink[]` | Custom `DocumentLinks` component | Custom `DocumentLinks` with MUI `List`, `ListItem`, `Dialog` | Yes | No |
@@ -42,7 +42,7 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 | Component Key | Description | Notes |
 |---|---|---|
 | `"DynamicFragment"` | Hidden field | Renders as `<input type="hidden">`. No label/wrapper chrome. Used for tracking values that participate in business rules but have no visible UI. |
-| `"FieldArray"` | Repeating field group | Configured via `IFieldConfig.fieldArray`. See [FieldArray](#fieldarray) section. |
+| `"FieldArray"` | Repeating field group | Configured via `IFieldConfig.items`. See [FieldArray](#fieldarray) section. |
 | `"ChoiceSet"` | Custom choice component | No built-in implementation. Consumers must register their own component. See [ChoiceSet](#choiceset) section. |
 
 ---
@@ -62,9 +62,9 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Supports readOnly mode:** Yes -- renders `ReadOnlyText` with optional ellipsis truncation.
 
-**Uses dropdownOptions:** No
+**Uses options:** No
 
-**Meta properties:**
+**Config properties:**
 | Property | Type | Description |
 |---|---|---|
 | `ellipsifyTextCharacters` | `number` | Max characters before text is truncated with ellipsis (read-only mode only) |
@@ -75,11 +75,11 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 ```json
 {
   "title": {
-    "component": "Textbox",
+    "type": "Textbox",
     "label": "Title",
     "required": true,
-    "validations": ["Max150KbValidation"],
-    "meta": {
+    "validate": [{ "validator": "Max150KbValidation" }],
+    "config": {
       "ellipsifyTextCharacters": 100
     }
   }
@@ -92,18 +92,18 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Component key:** `"Dropdown"`
 
-**Description:** Renders a single-select dropdown populated from `dropdownOptions`. Automatically shows the selected option's display text. Supports auto-selecting when only one option exists.
+**Description:** Renders a single-select dropdown populated from `options`. Automatically shows the selected option's display text. Supports auto-selecting when only one option exists.
 
-**Value type:** `string` (the option key)
+**Value type:** `string` (the option value)
 
 **Fluent UI:** `Dropdown` + `Option` from `@fluentui/react-components`
 **MUI:** `FormControl` + `Select` + `MenuItem` from `@mui/material`
 
 **Supports readOnly mode:** Yes -- renders `ReadOnlyText`.
 
-**Uses dropdownOptions:** Yes
+**Uses options:** Yes
 
-**Meta properties:**
+**Config properties:**
 | Property | Type | Description |
 |---|---|---|
 | `placeHolder` | `string` | Placeholder text when no value is selected |
@@ -113,15 +113,15 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 ```json
 {
   "status": {
-    "component": "Dropdown",
+    "type": "Dropdown",
     "label": "Status",
     "required": true,
-    "dropdownOptions": [
-      { "key": "active", "text": "Active" },
-      { "key": "inactive", "text": "Inactive" },
-      { "key": "archived", "text": "Archived" }
+    "options": [
+      { "value": "active", "label": "Active" },
+      { "value": "inactive", "label": "Inactive" },
+      { "value": "archived", "label": "Archived" }
     ],
-    "meta": {
+    "config": {
       "setDefaultKeyIfOnlyOneOption": true
     }
   }
@@ -143,9 +143,9 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Supports readOnly mode:** Yes -- renders `ReadOnlyText` with `convertBooleanToYesOrNoText()` (displays "Yes", "No", or "-").
 
-**Uses dropdownOptions:** No
+**Uses options:** No
 
-**Meta properties:** None
+**Config properties:** None
 
 **Note:** Toggle fields skip the `required` validation -- setting `required: true` on a Toggle has no effect because `false` is a valid boolean value.
 
@@ -153,7 +153,7 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 ```json
 {
   "isPublished": {
-    "component": "Toggle",
+    "type": "Toggle",
     "label": "Published",
     "defaultValue": false
   }
@@ -175,18 +175,18 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Supports readOnly mode:** Yes -- renders `ReadOnlyText` with the number converted to string.
 
-**Uses dropdownOptions:** No
+**Uses options:** No
 
-**Meta properties:** None
+**Config properties:** None
 
 **Example config:**
 ```json
 {
   "quantity": {
-    "component": "Number",
+    "type": "Number",
     "label": "Quantity",
     "required": true,
-    "validations": ["CurrencyValidation"]
+    "validate": [{ "validator": "CurrencyValidation" }]
   }
 }
 ```
@@ -199,27 +199,27 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Description:** Renders a multi-select dropdown. Users can select multiple options from the list. Selected values are displayed as a comma-separated string.
 
-**Value type:** `string[]` (array of option keys)
+**Value type:** `string[]` (array of option values)
 
 **Fluent UI:** `Dropdown` (multiselect) + `Option` from `@fluentui/react-components`
 **MUI:** `FormControl` + `Select` (multiple) + `MenuItem` + `Chip` from `@mui/material`
 
 **Supports readOnly mode:** Yes -- Fluent renders a read-only multiselect dropdown; MUI renders `Chip` components.
 
-**Uses dropdownOptions:** Yes
+**Uses options:** Yes
 
-**Meta properties:** None
+**Config properties:** None
 
 **Example config:**
 ```json
 {
   "tags": {
-    "component": "Multiselect",
+    "type": "Multiselect",
     "label": "Tags",
-    "dropdownOptions": [
-      { "key": "frontend", "text": "Frontend" },
-      { "key": "backend", "text": "Backend" },
-      { "key": "devops", "text": "DevOps" }
+    "options": [
+      { "value": "frontend", "label": "Frontend" },
+      { "value": "backend", "label": "Backend" },
+      { "value": "devops", "label": "DevOps" }
     ]
   }
 }
@@ -240,15 +240,15 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Supports readOnly mode:** Yes -- displays formatted date or "-" if null.
 
-**Uses dropdownOptions:** No
+**Uses options:** No
 
-**Meta properties:** None
+**Config properties:** None
 
 **Example config:**
 ```json
 {
   "startDate": {
-    "component": "DateControl",
+    "type": "DateControl",
     "label": "Start Date",
     "required": true
   }
@@ -261,7 +261,7 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Component key:** `"Slider"`
 
-**Description:** Renders a range slider for numeric input. Configurable min, max, and step values via `meta`.
+**Description:** Renders a range slider for numeric input. Configurable min, max, and step values via `config`.
 
 **Value type:** `number`
 
@@ -270,9 +270,9 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Supports readOnly mode:** Yes -- renders `ReadOnlyText` with the number as string.
 
-**Uses dropdownOptions:** No
+**Uses options:** No
 
-**Meta properties:**
+**Config properties:**
 | Property | Type | Description |
 |---|---|---|
 | `min` | `number` | Minimum slider value |
@@ -283,9 +283,9 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 ```json
 {
   "confidence": {
-    "component": "Slider",
+    "type": "Slider",
     "label": "Confidence Level",
-    "meta": {
+    "config": {
       "min": 0,
       "max": 100,
       "step": 5
@@ -300,7 +300,7 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Component key:** `"DynamicFragment"`
 
-**Description:** A hidden field that renders as `<input type="hidden">`. Used for tracking values that participate in business rules (as dependency triggers or targets) but should not be displayed to the user. Unlike other fields, Fragment fields are rendered without the `HookFieldWrapper` chrome (no label, no error display).
+**Description:** A hidden field that renders as `<input type="hidden">`. Used for tracking values that participate in business rules (as dependency triggers or targets) but should not be displayed to the user. Unlike other fields, Fragment fields are rendered without the `FieldWrapper` chrome (no label, no error display).
 
 **Value type:** `string`
 
@@ -309,24 +309,30 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Supports readOnly mode:** No -- always renders as a hidden input.
 
-**Uses dropdownOptions:** No
+**Uses options:** No
 
-**Meta properties:** None
+**Config properties:** None
 
 **Example config:**
 ```json
 {
   "internalType": {
-    "component": "DynamicFragment",
+    "type": "DynamicFragment",
     "hidden": false,
-    "dependencies": {
-      "TypeA": {
-        "specialField": { "hidden": false, "required": true }
+    "rules": [
+      {
+        "when": { "field": "internalType", "is": "TypeA" },
+        "then": {
+          "specialField": { "hidden": false, "required": true }
+        }
       },
-      "TypeB": {
-        "specialField": { "hidden": true }
+      {
+        "when": { "field": "internalType", "is": "TypeB" },
+        "then": {
+          "specialField": { "hidden": true }
+        }
       }
-    }
+    ]
   }
 }
 ```
@@ -337,7 +343,7 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Component key:** `"SimpleDropdown"`
 
-**Description:** A simplified dropdown variant where options are provided as a flat string array in `meta.dropdownOptions` instead of the standard `IDropdownOption[]` structure. The option key and display text are the same value.
+**Description:** A simplified dropdown variant where options are provided as a flat string array in `config.options` instead of the standard `IOption[]` structure. The option value and display label are the same value.
 
 **Value type:** `string`
 
@@ -346,22 +352,22 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Supports readOnly mode:** Yes -- renders `ReadOnlyText`.
 
-**Uses dropdownOptions (standard):** No -- uses `meta.dropdownOptions` (a `string[]`) instead.
+**Uses options (standard):** No -- uses `config.options` (a `string[]`) instead.
 
-**Meta properties:**
+**Config properties:**
 | Property | Type | Description |
 |---|---|---|
-| `dropdownOptions` | `string[]` | Array of string values to use as both keys and display text |
+| `options` | `string[]` | Array of string values to use as both values and display labels |
 | `placeHolder` | `string` | Placeholder text |
 
 **Example config:**
 ```json
 {
   "priority": {
-    "component": "SimpleDropdown",
+    "type": "SimpleDropdown",
     "label": "Priority",
-    "meta": {
-      "dropdownOptions": ["Low", "Medium", "High", "Critical"]
+    "config": {
+      "options": ["Low", "Medium", "High", "Critical"]
     }
   }
 }
@@ -382,20 +388,20 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Supports readOnly mode:** Yes -- Fluent renders a read-only multiselect dropdown; MUI renders `Chip` components.
 
-**Uses dropdownOptions:** Yes
+**Uses options:** Yes
 
-**Meta properties:** None
+**Config properties:** None
 
 **Example config:**
 ```json
 {
   "skills": {
-    "component": "MultiSelectSearch",
+    "type": "MultiSelectSearch",
     "label": "Skills",
-    "dropdownOptions": [
-      { "key": "react", "text": "React" },
-      { "key": "typescript", "text": "TypeScript" },
-      { "key": "node", "text": "Node.js" }
+    "options": [
+      { "value": "react", "label": "React" },
+      { "value": "typescript", "label": "TypeScript" },
+      { "value": "node", "label": "Node.js" }
     ]
   }
 }
@@ -416,9 +422,9 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Supports readOnly mode:** Yes -- renders `ReadOnlyText` with optional ellipsis truncation.
 
-**Uses dropdownOptions:** No
+**Uses options:** No
 
-**Meta properties:**
+**Config properties:**
 | Property | Type | Description |
 |---|---|---|
 | `numberOfRows` | `number` | Number of visible rows in the inline textarea (default: 4) |
@@ -433,10 +439,10 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 ```json
 {
   "description": {
-    "component": "Textarea",
+    "type": "Textarea",
     "label": "Description",
-    "validations": ["Max150KbValidation"],
-    "meta": {
+    "validate": [{ "validator": "Max150KbValidation" }],
+    "config": {
       "numberOfRows": 6,
       "ellipsifyTextCharacters": 200
     }
@@ -459,15 +465,15 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Supports readOnly mode:** Yes -- renders links as clickable anchor tags without edit/delete controls.
 
-**Uses dropdownOptions:** No
+**Uses options:** No
 
-**Meta properties:** None
+**Config properties:** None
 
 **Example config:**
 ```json
 {
   "references": {
-    "component": "DocumentLinks",
+    "type": "DocumentLinks",
     "label": "Reference Links"
   }
 }
@@ -479,36 +485,36 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Component key:** `"StatusDropdown"`
 
-**Description:** A dropdown with color-coded status indicators. Each option displays a colored dot/circle next to the status text. Colors are configured via `meta.statusColors`, which maps option keys to CSS color strings.
+**Description:** A dropdown with color-coded status indicators. Each option displays a colored dot/circle next to the status text. Colors are configured via `config.statusColors`, which maps option values to CSS color strings.
 
-**Value type:** `string` (the option key)
+**Value type:** `string` (the option value)
 
 **Fluent UI:** `Dropdown` + `Option` + custom `StatusColor` component from `@fluentui/react-components`
 **MUI:** `FormControl` + `Select` + `MenuItem` + custom `StatusDot` inline component from `@mui/material`
 
 **Supports readOnly mode:** Yes -- renders the status color indicator plus `ReadOnlyText`.
 
-**Uses dropdownOptions:** Yes
+**Uses options:** Yes
 
-**Meta properties:**
+**Config properties:**
 | Property | Type | Description |
 |---|---|---|
 | `placeHolder` | `string` | Placeholder text |
-| `statusColors` | `Dictionary<string>` | Maps option keys to CSS color strings (e.g., `{ "active": "#0078D4", "inactive": "#A19F9D" }`) |
+| `statusColors` | `Dictionary<string>` | Maps option values to CSS color strings (e.g., `{ "active": "#0078D4", "inactive": "#A19F9D" }`) |
 
 **Example config:**
 ```json
 {
   "workflowStatus": {
-    "component": "StatusDropdown",
+    "type": "StatusDropdown",
     "label": "Workflow Status",
-    "dropdownOptions": [
-      { "key": "draft", "text": "Draft" },
-      { "key": "review", "text": "In Review" },
-      { "key": "approved", "text": "Approved" },
-      { "key": "rejected", "text": "Rejected" }
+    "options": [
+      { "value": "draft", "label": "Draft" },
+      { "value": "review", "label": "In Review" },
+      { "value": "approved", "label": "Approved" },
+      { "value": "rejected", "label": "Rejected" }
     ],
-    "meta": {
+    "config": {
       "statusColors": {
         "draft": "#8A8886",
         "review": "#0078D4",
@@ -532,13 +538,13 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Fluent UI / MUI:** `ReadOnlyText` component (shared helper)
 
-**Meta properties:** Inherits `IReadOnlyFieldProps` -- any additional props from the `ReadOnlyText` component.
+**Config properties:** Inherits `IReadOnlyFieldProps` -- any additional props from the `ReadOnlyText` component.
 
 **Example config:**
 ```json
 {
   "createdBy": {
-    "component": "ReadOnly",
+    "type": "ReadOnly",
     "label": "Created By"
   }
 }
@@ -556,13 +562,13 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Fluent UI / MUI:** `ReadOnlyText` mapped over the array
 
-**Meta properties:** Inherits `IReadOnlyFieldProps`.
+**Config properties:** Inherits `IReadOnlyFieldProps`.
 
 **Example config:**
 ```json
 {
   "assignees": {
-    "component": "ReadOnlyArray",
+    "type": "ReadOnlyArray",
     "label": "Assigned To"
   }
 }
@@ -580,7 +586,7 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Fluent UI / MUI:** `<span>` with `formatDateTime()` utility; displays "-" when value is null.
 
-**Meta properties:**
+**Config properties:**
 | Property | Type | Description |
 |---|---|---|
 | `isListView` | `boolean` | Reserved for list view formatting |
@@ -590,9 +596,9 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 ```json
 {
   "lastModified": {
-    "component": "ReadOnlyDateTime",
+    "type": "ReadOnlyDateTime",
     "label": "Last Modified",
-    "meta": {
+    "config": {
       "hidetimeStamp": false
     }
   }
@@ -611,7 +617,7 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Fluent UI / MUI:** `ReadOnlyText` with the computed sum as string
 
-**Meta properties:**
+**Config properties:**
 | Property | Type | Description |
 |---|---|---|
 | `dependencyFields` | `string[]` | Array of field names whose numeric values should be summed |
@@ -620,9 +626,9 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 ```json
 {
   "totalHours": {
-    "component": "ReadOnlyCumulativeNumber",
+    "type": "ReadOnlyCumulativeNumber",
     "label": "Total Hours",
-    "meta": {
+    "config": {
       "dependencyFields": ["mondayHours", "tuesdayHours", "wednesdayHours", "thursdayHours", "fridayHours"]
     }
   }
@@ -641,7 +647,7 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Fluent UI / MUI:** `<div>` with `dangerouslySetInnerHTML`
 
-**Meta properties:** None
+**Config properties:** None
 
 **Security note:** This component renders raw HTML. Ensure the source content is trusted or sanitized before use.
 
@@ -649,7 +655,7 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 ```json
 {
   "richDescription": {
-    "component": "ReadOnlyRichText",
+    "type": "ReadOnlyRichText",
     "label": "Description"
   }
 }
@@ -668,7 +674,7 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 **Fluent UI:** `ReadOnlyText` + `Button` from `@fluentui/react-components`
 **MUI:** `ReadOnlyText` + `Button` (variant="outlined", size="small") from `@mui/material`
 
-**Meta properties:**
+**Config properties:**
 | Property | Type | Description |
 |---|---|---|
 | `containerClassName` | `string` | CSS class name for the outer container |
@@ -679,9 +685,9 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 ```json
 {
   "externalId": {
-    "component": "ReadOnlyWithButton",
+    "type": "ReadOnlyWithButton",
     "label": "External ID",
-    "meta": {
+    "config": {
       "buttonText": "View in Portal",
       "onButtonClick": "handleViewInPortal"
     }
@@ -695,60 +701,38 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **Component key:** `"FieldArray"`
 
-**Description:** A repeating field group that allows users to add, remove, and optionally reorder rows of structured data. Each row contains its own set of sub-fields defined by the `fieldArray.itemFields` configuration. This is a structural type -- the actual sub-field rendering depends on the component types specified in `itemFields`.
+**Description:** A repeating field group that allows users to add, remove, and optionally reorder rows of structured data. Each row contains its own set of sub-fields defined by the `items` configuration. This is a structural type -- the actual sub-field rendering depends on the component types specified in `items`.
 
-**Value type:** `Array<Record<string, unknown>>` (array of objects, each matching the `itemFields` schema)
+**Value type:** `Array<Record<string, unknown>>` (array of objects, each matching the `items` schema)
 
-**Configuration:** Uses `IFieldConfig.fieldArray` instead of `meta`:
-
-```typescript
-interface IFieldArrayConfig {
-  itemFields: Record<string, {
-    component?: string;
-    required?: boolean;
-    label?: string;
-    validations?: string[];
-    dropdownOptions?: Array<{ key: string | number; text: string }>;
-  }>;
-  minItems?: number;
-  maxItems?: number;
-  defaultItem?: Record<string, unknown>;
-  reorderable?: boolean;
-}
-```
+**Configuration:** Uses `IFieldConfig.items`, `IFieldConfig.minItems`, and `IFieldConfig.maxItems`:
 
 | Property | Type | Description |
 |---|---|---|
-| `itemFields` | `Record<string, {...}>` | Sub-field definitions for each array item |
+| `items` | `Record<string, IFieldConfig>` | Sub-field definitions for each array item |
 | `minItems` | `number` | Minimum number of items allowed |
 | `maxItems` | `number` | Maximum number of items allowed |
-| `defaultItem` | `Record<string, unknown>` | Default values for newly added items |
-| `reorderable` | `boolean` | Whether items can be drag-reordered |
 
 **Example config:**
 ```json
 {
   "contacts": {
-    "component": "FieldArray",
+    "type": "FieldArray",
     "label": "Contacts",
-    "fieldArray": {
-      "itemFields": {
-        "name": { "component": "Textbox", "label": "Name", "required": true },
-        "email": { "component": "Textbox", "label": "Email", "validations": ["EmailValidation"] },
-        "role": {
-          "component": "Dropdown",
-          "label": "Role",
-          "dropdownOptions": [
-            { "key": "primary", "text": "Primary" },
-            { "key": "secondary", "text": "Secondary" }
-          ]
-        }
-      },
-      "minItems": 1,
-      "maxItems": 10,
-      "defaultItem": { "name": "", "email": "", "role": "primary" },
-      "reorderable": true
-    }
+    "items": {
+      "name": { "type": "Textbox", "label": "Name", "required": true },
+      "email": { "type": "Textbox", "label": "Email", "validate": [{ "validator": "EmailValidation" }] },
+      "role": {
+        "type": "Dropdown",
+        "label": "Role",
+        "options": [
+          { "value": "primary", "label": "Primary" },
+          { "value": "secondary", "label": "Secondary" }
+        ]
+      }
+    },
+    "minItems": 1,
+    "maxItems": 10
   }
 }
 ```
@@ -759,7 +743,7 @@ interface IFieldArrayConfig {
 
 **Component key:** `"ChoiceSet"`
 
-**Description:** An abstract component type with **no built-in implementation** in either the Fluent or MUI packages. Consumers must register their own component for this key via the `InjectedHookFieldProvider`. This is intended for custom choice/selection UI patterns that do not fit the standard Dropdown or MultiSelect models (e.g., radio button groups, card selectors, image pickers).
+**Description:** An abstract component type with **no built-in implementation** in either the Fluent or MUI packages. Consumers must register their own component for this key via the `InjectedFieldProvider`. This is intended for custom choice/selection UI patterns that do not fit the standard Dropdown or MultiSelect models (e.g., radio button groups, card selectors, image pickers).
 
 **Value type:** Determined by the consumer's implementation.
 
@@ -774,21 +758,21 @@ const registry = createFluentFieldRegistry();
 registry["ChoiceSet"] = <MyCustomChoiceSet />;
 
 // Use in the provider
-<InjectedHookFieldProvider injectedFields={registry}>
+<InjectedFieldProvider injectedFields={registry}>
   ...
-</InjectedHookFieldProvider>
+</InjectedFieldProvider>
 ```
 
 **Example config:**
 ```json
 {
   "severity": {
-    "component": "ChoiceSet",
+    "type": "ChoiceSet",
     "label": "Severity Level",
-    "dropdownOptions": [
-      { "key": "low", "text": "Low" },
-      { "key": "medium", "text": "Medium" },
-      { "key": "high", "text": "High" }
+    "options": [
+      { "value": "low", "label": "Low" },
+      { "value": "medium", "label": "Medium" },
+      { "value": "high", "label": "High" }
     ]
   }
 }
@@ -796,32 +780,32 @@ registry["ChoiceSet"] = <MyCustomChoiceSet />;
 
 ---
 
-## IDropdownOption Interface
+## IOption Interface
 
-All dropdown-based components (`Dropdown`, `Multiselect`, `MultiSelectSearch`, `StatusDropdown`) use the `IDropdownOption` interface for their options:
+All dropdown-based components (`Dropdown`, `Multiselect`, `MultiSelectSearch`, `StatusDropdown`) use the `IOption` interface for their options:
 
 ```typescript
-interface IDropdownOption {
-  key: string | number;   // Unique identifier, used as the stored value
-  text: string;           // Display text shown to the user
-  disabled?: boolean;     // If true, option is visible but not selectable
-  hidden?: boolean;       // If true, option is not rendered
-  selected?: boolean;     // Pre-selected state
-  title?: string;         // Tooltip text on hover
-  data?: unknown;         // Arbitrary data attached to the option
+interface IOption {
+  value: string | number;   // Unique identifier, used as the stored value
+  label: string;            // Display text shown to the user
+  disabled?: boolean;       // If true, option is visible but not selectable
+  hidden?: boolean;         // If true, option is not rendered
+  selected?: boolean;       // Pre-selected state
+  title?: string;           // Tooltip text on hover
+  data?: unknown;           // Arbitrary data attached to the option
 }
 ```
 
-**Defined in:** `packages/core/src/types/IDropdownOption.ts`
+**Defined in:** `packages/core/src/types/IOption.ts`
 
 ---
 
-## IHookFieldSharedProps Interface
+## IFieldProps Interface
 
-All field components receive their props via `IHookFieldSharedProps<T>`, which is passed through `React.cloneElement()` by `HookRenderField`:
+All field components receive their props via `IFieldProps<T>`, which is passed through `React.cloneElement()` by `RenderField`:
 
 ```typescript
-interface IHookFieldSharedProps<T> {
+interface IFieldProps<T> {
   fieldName?: string;              // The field's key name
   entityId?: string;               // ID of the entity being edited
   entityType?: string;             // Type of the entity
@@ -835,16 +819,16 @@ interface IHookFieldSharedProps<T> {
   saving?: boolean;                // Whether the field's value is currently being saved
   savePending?: boolean;           // Whether a save is pending (dirty + has errors)
   value?: unknown;                 // Current field value from react-hook-form
-  meta?: T;                        // Type-safe metadata (varies per component type)
-  dropdownOptions?: IDropdownOption[];  // Options for dropdown-based fields
-  validations?: string[];          // Validation function names
+  config?: T;                      // Type-safe configuration (varies per component type)
+  options?: IOption[];             // Options for dropdown-based fields
+  validate?: IValidationRule[];    // Validation rules
   label?: string;                  // Field label text
-  component?: string;              // Component type key
+  type?: string;                   // Component type key
   setFieldValue?: (fieldName: string, fieldValue: unknown, skipSave?: boolean, timeout?: number) => void;
 }
 ```
 
-**Defined in:** `packages/core/src/types/IHookFieldSharedProps.ts`
+**Defined in:** `packages/core/src/types/IFieldProps.ts`
 
 ---
 

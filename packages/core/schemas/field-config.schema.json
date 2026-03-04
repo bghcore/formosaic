@@ -10,7 +10,7 @@
   "definitions": {
     "ComponentType": {
       "type": "string",
-      "description": "UI component type key. Must match a registered component in InjectedHookFieldProvider.",
+      "description": "UI component type key. Must match a registered component in InjectedFieldProvider.",
       "enum": [
         "Textbox",
         "Dropdown",
@@ -37,18 +37,18 @@
         "Textarea"
       ]
     },
-    "DropdownOption": {
+    "Option": {
       "type": "object",
       "description": "A single option for Dropdown, StatusDropdown, Multiselect, or SimpleDropdown components.",
       "properties": {
-        "key": {
+        "value": {
           "oneOf": [
             { "type": "string" },
             { "type": "number" }
           ],
           "description": "Unique identifier for the option. Used as the stored value when this option is selected."
         },
-        "text": {
+        "label": {
           "type": "string",
           "description": "Display text shown to the user for this option."
         },
@@ -75,7 +75,7 @@
           "description": "Arbitrary data payload attached to this option, passed through to the field component."
         }
       },
-      "required": ["key", "text"],
+      "required": ["value", "label"],
       "additionalProperties": false
     },
     "DeprecatedOption": {
@@ -99,164 +99,106 @@
       "required": ["oldVal"],
       "additionalProperties": false
     },
-    "DependencyAndRules": {
+    "ICondition": {
       "type": "object",
-      "description": "AND-condition (combo) dependency rules. ALL rules must be satisfied simultaneously for the updatedConfig to be applied. This enables multi-field conditions like 'if status is Active AND type is Premium, then show field X'.",
+      "description": "A condition that matches when a field has a specific value or one of a set of values.",
       "properties": {
-        "updatedConfig": {
+        "field": {
+          "type": "string",
+          "description": "The name of the form field to check."
+        },
+        "is": {
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          ],
+          "description": "The value or array of acceptable values. The condition is met when the field's value matches any value in this set."
+        }
+      },
+      "required": ["field", "is"],
+      "additionalProperties": false
+    },
+    "ValidationRule": {
+      "type": "object",
+      "description": "A validation rule referencing a registered validator by name, with optional flags for async and cross-field behavior.",
+      "properties": {
+        "validator": {
+          "type": "string",
+          "description": "The name of the registered validator function."
+        },
+        "async": {
+          "type": "boolean",
+          "description": "If true, this validator is asynchronous and returns a Promise.",
+          "default": false
+        },
+        "crossField": {
+          "type": "boolean",
+          "description": "If true, this validator receives all form values, not just this field's value.",
+          "default": false
+        },
+        "debounceMs": {
+          "type": "number",
+          "description": "Debounce delay in milliseconds for async validators. Prevents excessive calls during rapid input.",
+          "minimum": 0
+        }
+      },
+      "required": ["validator"],
+      "additionalProperties": false
+    },
+    "Rule": {
+      "type": "object",
+      "description": "A declarative business rule that applies config changes to fields when conditions are met.",
+      "properties": {
+        "when": {
+          "oneOf": [
+            { "$ref": "#/definitions/ICondition" },
+            {
+              "type": "array",
+              "items": { "$ref": "#/definitions/ICondition" },
+              "description": "Array of conditions. ALL must be met (AND logic) for the rule to apply."
+            }
+          ],
+          "description": "Condition(s) that must be met for this rule to apply."
+        },
+        "then": {
           "type": "object",
-          "description": "Config overrides to apply to dependent fields when ALL rules are satisfied. Keys are field names, values are partial FieldConfig objects.",
+          "description": "Config overrides to apply to dependent fields when conditions are met. Keys are field names, values are partial FieldConfig objects.",
           "additionalProperties": {
             "$ref": "#/definitions/FieldConfig"
           }
         },
-        "rules": {
-          "type": "object",
-          "description": "Dictionary of field names to arrays of acceptable values. ALL entries must match their respective field's current value for the rule to trigger (AND logic).",
-          "additionalProperties": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Array of acceptable values for this field. The rule is satisfied if the field's current value matches any value in the array (OR within a single field, AND across fields)."
-          }
+        "order": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Field order to apply when the condition is met. Array of field names in desired order."
         }
       },
-      "required": ["updatedConfig", "rules"],
-      "additionalProperties": false
-    },
-    "OrderDependencies": {
-      "description": "Recursive order dependency structure. Maps a trigger field's value to either a flat array of field names (defining their order) or a nested OrderDependencies object for multi-level ordering.",
-      "oneOf": [
-        {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Flat list of field names defining the desired field order when the trigger value matches."
-        },
-        {
-          "$ref": "#/definitions/OrderDependencyMap"
-        }
-      ]
-    },
-    "OrderDependencyMap": {
-      "type": "object",
-      "description": "Maps trigger field values to OrderDependencies. Each key is a possible field value, and the value is either a field order array or a nested OrderDependencyMap for chained ordering.",
-      "additionalProperties": {
-        "$ref": "#/definitions/OrderDependencies"
-      }
-    },
-    "FieldArrayItemField": {
-      "type": "object",
-      "description": "Configuration for a single field within a FieldArray item row.",
-      "properties": {
-        "component": {
-          "$ref": "#/definitions/ComponentType",
-          "description": "UI component type for this sub-field within the array item."
-        },
-        "required": {
-          "type": "boolean",
-          "description": "Whether this sub-field is required within each array item.",
-          "default": false
-        },
-        "label": {
-          "type": "string",
-          "description": "Column header label for this sub-field in the array."
-        },
-        "validations": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Validation function names from the ValidationRegistry for this sub-field."
-        },
-        "dropdownOptions": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "key": {
-                "oneOf": [
-                  { "type": "string" },
-                  { "type": "number" }
-                ],
-                "description": "Unique identifier for the dropdown option."
-              },
-              "text": {
-                "type": "string",
-                "description": "Display text for the dropdown option."
-              }
-            },
-            "required": ["key", "text"],
-            "additionalProperties": false
-          },
-          "description": "Static dropdown options for this sub-field if it is a Dropdown or similar component."
-        }
-      },
-      "additionalProperties": false
-    },
-    "FieldArrayConfig": {
-      "type": "object",
-      "description": "Configuration for repeating field array (sub-form) behavior. Enables CRUD operations on an array of items, where each item contains the fields defined in itemFields.",
-      "properties": {
-        "itemFields": {
-          "type": "object",
-          "description": "Field configurations for each item in the array. Keys are field names within a single item row.",
-          "additionalProperties": {
-            "$ref": "#/definitions/FieldArrayItemField"
-          }
-        },
-        "minItems": {
-          "type": "number",
-          "description": "Minimum number of items required in the array. Validation will fail if fewer items exist.",
-          "minimum": 0
-        },
-        "maxItems": {
-          "type": "number",
-          "description": "Maximum number of items allowed in the array. The 'add' button is hidden when this limit is reached.",
-          "minimum": 1
-        },
-        "defaultItem": {
-          "type": "object",
-          "description": "Default values for a new item when the user clicks 'add'. Keys are field names, values are default values.",
-          "additionalProperties": true
-        },
-        "reorderable": {
-          "type": "boolean",
-          "description": "If true, items in the array can be reordered via drag-and-drop or up/down buttons.",
-          "default": false
-        }
-      },
-      "required": ["itemFields"],
       "additionalProperties": false
     },
     "FieldConfig": {
       "type": "object",
-      "description": "Static configuration for a single form field. This is the primary consumer-facing type used to define forms as JSON configuration. It controls the field's rendering, validation, dependencies, and business rule behavior. At runtime, field configs are processed into IBusinessRule objects by the business rules engine.",
+      "description": "Static configuration for a single form field. This is the primary consumer-facing type used to define forms as JSON configuration. It controls the field's rendering, validation, dependencies, and business rule behavior. At runtime, field configs are processed into IRuntimeFieldState objects by the business rules engine.",
       "properties": {
-        "component": {
+        "type": {
           "$ref": "#/definitions/ComponentType",
-          "description": "UI component type key (e.g., 'Textbox', 'Dropdown', 'Toggle'). Must match a registered component in InjectedHookFieldProvider. Can be overridden by dependency rules to swap a field's component type at runtime."
+          "description": "UI component type key (e.g., 'Textbox', 'Dropdown', 'Toggle'). Must match a registered component in InjectedFieldProvider. Can be overridden by rules to swap a field's component type at runtime."
         },
         "required": {
           "type": "boolean",
-          "description": "Whether the field is required for form submission. When true, the field displays a required indicator and validation prevents saving with an empty value. Can be toggled dynamically by dependency rules.",
+          "description": "Whether the field is required for form submission. When true, the field displays a required indicator and validation prevents saving with an empty value. Can be toggled dynamically by rules.",
           "default": false
         },
         "hidden": {
           "type": "boolean",
-          "description": "Whether the field is hidden from the form. Hidden fields are not rendered and their values are excluded from validation. Can be toggled dynamically by dependency rules.",
+          "description": "Whether the field is hidden from the form. Hidden fields are not rendered and their values are excluded from validation. Can be toggled dynamically by rules.",
           "default": false
         },
         "readOnly": {
           "type": "boolean",
-          "description": "Whether the field is read-only (rendered but not editable). The field displays its value using the read-only variant of its component. Preferred over the deprecated isReadonly property.",
-          "default": false
-        },
-        "isReadonly": {
-          "type": "boolean",
-          "description": "DEPRECATED: Use 'readOnly' instead. This property is mapped to readOnly during normalization and will be removed in a future version.",
+          "description": "Whether the field is read-only (rendered but not editable). The field displays its value using the read-only variant of its component.",
           "default": false
         },
         "disabled": {
@@ -266,91 +208,37 @@
         },
         "label": {
           "type": "string",
-          "description": "Display label for the field. Rendered by HookFieldWrapper above the field component. Also used for filter matching when the form supports field search."
+          "description": "Display label for the field. Rendered by FieldWrapper above the field component. Also used for filter matching when the form supports field search."
         },
-        "validations": {
+        "validate": {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "#/definitions/ValidationRule"
           },
-          "description": "Array of synchronous validation function names from the ValidationRegistry. Each function receives the field value and returns an error message string or undefined. Functions are executed in order; the first error returned is displayed."
-        },
-        "asyncValidations": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Array of asynchronous validation function names from the ValidationRegistry. Each function receives the field value and returns a Promise resolving to an error message string or undefined. Useful for server-side validation like uniqueness checks."
-        },
-        "asyncValidationDebounceMs": {
-          "type": "number",
-          "description": "Debounce delay in milliseconds for async validations. Prevents excessive server calls when the user is typing rapidly. Only applies to asyncValidations.",
-          "minimum": 0
-        },
-        "crossFieldValidations": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Array of cross-field validation function names. Unlike regular validations, these validators receive ALL form values as a parameter, enabling validation logic that depends on multiple fields (e.g., 'end date must be after start date')."
+          "description": "Array of validation rules. Each rule references a registered validator by name and can be flagged as async or cross-field."
         },
         "computedValue": {
           "type": "string",
-          "description": "Computed value expression evaluated reactively when dependencies change. Use $values.fieldName to reference other field values. Example: '$values.quantity * $values.unitPrice'. The result is set as this field's value automatically."
+          "description": "Computed value expression or value function reference. Use '$values.fieldName' syntax for reactive expressions (e.g., '$values.qty * $values.price'). Use '$fn.functionName()' syntax for value functions from the ValueFunctionRegistry."
         },
-        "dependencies": {
-          "type": "object",
-          "description": "Declarative dependency rules keyed by this field's value. When this field's value changes, the engine looks up the matching key and applies the config overrides to the specified dependent fields. Example: { 'Active': { 'endDate': { 'hidden': true } } } hides the endDate field when this field's value is 'Active'.",
-          "additionalProperties": {
-            "type": "object",
-            "description": "Dictionary of dependent field names to their config overrides for this trigger value.",
-            "additionalProperties": {
-              "$ref": "#/definitions/FieldConfig"
-            }
-          }
-        },
-        "dependencyRules": {
-          "$ref": "#/definitions/DependencyAndRules",
-          "description": "AND-condition dependency rules requiring multiple fields to match before applying config changes. All rules must be simultaneously satisfied for the updatedConfig to be applied."
-        },
-        "dropdownDependencies": {
-          "type": "object",
-          "description": "Dropdown filtering dependencies keyed by this field's value. When this field's value changes, dependent dropdown fields have their visible options filtered. Example: { 'US': { 'stateField': ['CA', 'NY', 'TX'] } } shows only CA, NY, TX options in the stateField dropdown when this field is 'US'.",
-          "additionalProperties": {
-            "type": "object",
-            "description": "Dictionary of dependent dropdown field names to their allowed option keys for this trigger value.",
-            "additionalProperties": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "Array of allowed dropdown option keys to show when the trigger value matches."
-            }
-          }
-        },
-        "dropdownOptions": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/DropdownOption"
-          },
-          "description": "Static dropdown options for Dropdown, StatusDropdown, SimpleDropdown, and Multiselect components. Each option has a key (stored value) and text (display value). Options can be filtered at runtime by dropdownDependencies."
-        },
-        "orderDependencies": {
-          "$ref": "#/definitions/OrderDependencyMap",
-          "description": "Order dependency rules that dynamically reorder fields based on another field's value. Maps trigger values to field name arrays defining the desired order. Supports nested/chained ordering via recursive OrderDependencyMap."
-        },
-        "onlyOnCreate": {
+        "computeOnCreateOnly": {
           "type": "boolean",
-          "description": "If true, this field's value function runs only during form creation (not when editing an existing entity). Used for fields like 'createdBy' or 'createdDate' that should only be set once.",
+          "description": "If true, the computed value runs only during form creation (not when editing an existing entity). Used for fields like 'createdBy' or 'createdDate' that should only be set once.",
           "default": false
         },
-        "onlyOnCreateValue": {
-          "oneOf": [
-            { "type": "string" },
-            { "type": "number" },
-            { "type": "boolean" }
-          ],
-          "description": "Static value to set during create mode when onlyOnCreate is true and isValueFunction is false. Provides a simple way to set a fixed value on creation without needing a value function."
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Rule"
+          },
+          "description": "Declarative business rules. Each rule specifies conditions (when) and field config overrides (then) or field ordering (order) to apply when conditions are met."
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Option"
+          },
+          "description": "Static dropdown options for Dropdown, StatusDropdown, SimpleDropdown, and Multiselect components. Each option has a value (stored value) and label (display value). Options can be filtered at runtime by rules."
         },
         "defaultValue": {
           "oneOf": [
@@ -358,7 +246,7 @@
             { "type": "number" },
             { "type": "boolean" }
           ],
-          "description": "Default value applied when the field becomes visible and its current value is null or undefined. Useful for pre-populating fields that are conditionally shown by dependency rules."
+          "description": "Default value applied when the field becomes visible and its current value is null or undefined. Useful for pre-populating fields that are conditionally shown by rules."
         },
         "confirmInput": {
           "type": "boolean",
@@ -375,22 +263,9 @@
           "description": "If true, the field ignores the layout-level disabled/readOnly override. This allows specific fields to remain editable even when the form is globally set to read-only (e.g., a status field on a locked record).",
           "default": false
         },
-        "isValueFunction": {
-          "type": "boolean",
-          "description": "If true, the 'value' property is treated as a value function name from the ValueFunctionRegistry rather than a literal value. The function is invoked at runtime to compute the field's value dynamically.",
-          "default": false
-        },
-        "value": {
-          "oneOf": [
-            { "type": "string" },
-            { "type": "number" },
-            { "type": "boolean" }
-          ],
-          "description": "Static value or value function name. When isValueFunction is false, this is a literal value assigned to the field. When isValueFunction is true, this is the name of a registered function in the ValueFunctionRegistry that computes the value at runtime."
-        },
-        "meta": {
+        "config": {
           "type": "object",
-          "description": "Arbitrary metadata passed through to the field component. Can contain any key-value pairs needed by custom field implementations (e.g., icons, sort settings, placeholder text, custom styling flags). The core engine does not interpret these values.",
+          "description": "Arbitrary configuration passed through to the field component. Can contain any key-value pairs needed by custom field implementations (e.g., icons, sort settings, placeholder text, custom styling flags). The core engine does not interpret these values.",
           "additionalProperties": {
             "oneOf": [
               { "type": "string" },
@@ -411,9 +286,22 @@
           },
           "description": "Deprecated dropdown option mappings for backward compatibility. When a field's current value matches an oldVal entry, the deprecated option is displayed as disabled with an info indicator, allowing users to see the old value and optionally migrate to the new one."
         },
-        "fieldArray": {
-          "$ref": "#/definitions/FieldArrayConfig",
-          "description": "Configuration for repeating field array (sub-form) behavior. Enables CRUD operations on an array of structured items. Only applicable when component is 'FieldArray'."
+        "items": {
+          "type": "object",
+          "description": "Field configurations for each item in a repeating field array. Keys are sub-field names within a single item row. Only applicable when type is 'FieldArray'.",
+          "additionalProperties": {
+            "$ref": "#/definitions/FieldConfig"
+          }
+        },
+        "minItems": {
+          "type": "number",
+          "description": "Minimum number of items required in a field array. Validation will fail if fewer items exist.",
+          "minimum": 0
+        },
+        "maxItems": {
+          "type": "number",
+          "description": "Maximum number of items allowed in a field array. The 'add' button is hidden when this limit is reached.",
+          "minimum": 1
         }
       },
       "additionalProperties": false

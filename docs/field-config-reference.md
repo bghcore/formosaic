@@ -2,7 +2,7 @@
 
 This is the complete reference for `IFieldConfig`, the primary consumer-facing type used to define forms as JSON configuration. Each form is defined as a `Dictionary<IFieldConfig>` (i.e., `Record<string, IFieldConfig>`) where the key is the field name and the value is its configuration.
 
-At runtime, field configs are processed into `IBusinessRule` objects by the business rules engine.
+At runtime, field configs are processed into `IRuntimeFieldState` objects by the business rules engine.
 
 ---
 
@@ -10,34 +10,26 @@ At runtime, field configs are processed into `IBusinessRule` objects by the busi
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `component` | `string` | `undefined` | UI component type key (e.g., `"Textbox"`, `"Dropdown"`, `"Toggle"`). Must match a registered component in `InjectedHookFieldProvider`. |
+| `type` | `string` | `undefined` | UI component type key (e.g., `"Textbox"`, `"Dropdown"`, `"Toggle"`). Must match a registered component in `InjectedFieldProvider`. |
 | `required` | `boolean` | `false` | Whether the field is required for form submission. Can be overridden by dependency rules. |
 | `hidden` | `boolean` | `false` | Whether the field is hidden (not rendered). Can be toggled by dependency rules. Hidden fields skip validation. |
-| `readOnly` | `boolean` | `false` | Whether the field is read-only (rendered but not editable). Preferred over `isReadonly`. |
-| `isReadonly` | `boolean` | `false` | **Deprecated.** Use `readOnly` instead. Maps to `readOnly` during normalization. Emits a console warning in dev mode. |
+| `readOnly` | `boolean` | `false` | Whether the field is read-only (rendered but not editable). |
 | `disabled` | `boolean` | `false` | Whether the field is disabled at the layout level. Affects the read-only calculation. |
-| `label` | `string` | `undefined` | Display label for the field. Used in `HookFieldWrapper` and filter matching. |
+| `label` | `string` | `undefined` | Display label for the field. Used in `FieldWrapper` and filter matching. |
 | `defaultValue` | `string \| number \| boolean` | `undefined` | Default value applied when the field is visible and its current value is null. |
-| `value` | `string \| number \| boolean \| Date` | `undefined` | Static value, or a value function name when `isValueFunction` is `true`. |
-| `isValueFunction` | `boolean` | `false` | If `true`, the `value` property is treated as a value function name from the `ValueFunctionRegistry`. |
-| `computedValue` | `string` | `undefined` | Expression string evaluated reactively on dependency changes. Uses `$values.fieldName` for references (see [Expression Engine Reference](./expression-syntax.md)). |
-| `onlyOnCreate` | `boolean` | `false` | If `true`, the field's value function runs only during create (not edit). |
-| `onlyOnCreateValue` | `string \| number \| boolean \| Date` | `undefined` | Static value to set during create when `onlyOnCreate` is `true` and `isValueFunction` is `false`. |
+| `computedValue` | `string` | `undefined` | Expression string evaluated reactively on dependency changes. Uses `$values.fieldName` for references (see [Expression Engine Reference](./expression-syntax.md)). Also supports value function syntax: `"$fn.functionName()"`. |
+| `computeOnCreateOnly` | `boolean` | `false` | If `true`, the computed value runs only during create (not edit). |
 | `confirmInput` | `boolean` | `false` | Whether changing fields that depend on this one triggers a confirmation modal before save. |
 | `hideOnCreate` | `boolean` | `false` | If `true`, the field is not rendered when the form is in create mode. |
 | `skipLayoutReadOnly` | `boolean` | `false` | If `true`, the field ignores the layout-level disabled/readOnly override. |
-| `dependencies` | `Dictionary<Dictionary<IFieldConfig>>` | `undefined` | Declarative dependency rules keyed by trigger field value. See [Dependencies](#dependencies) section. |
-| `dependencyRules` | `IDependencyAndRules` | `undefined` | AND-condition (combo) dependency rules requiring multiple fields to match before applying config changes. |
-| `dropdownDependencies` | `Dictionary<Dictionary<string[]>>` | `undefined` | Dropdown filtering dependencies keyed by trigger field value. See [Dropdown Dependencies](#dropdown-dependencies) section. |
-| `orderDependencies` | `OrderDependencyMap` | `undefined` | Order dependency rules that dynamically reorder fields based on another field's value. |
-| `validations` | `string[]` | `undefined` | Sync validation function names from the `ValidationRegistry`. |
-| `asyncValidations` | `string[]` | `undefined` | Async validation function names from the async `ValidationRegistry`. |
-| `asyncValidationDebounceMs` | `number` | `undefined` | Debounce delay in milliseconds for async validations. |
-| `crossFieldValidations` | `string[]` | `undefined` | Cross-field validation names. Validators receive all form values. |
-| `dropdownOptions` | `IDropdownOption[]` | `undefined` | Static dropdown options for Dropdown, StatusDropdown, and Multiselect components. |
+| `rules` | `IRule[]` | `undefined` | Declarative dependency rules. See [Rules](#rules) section. |
+| `validate` | `IValidationRule[]` | `undefined` | Validation rules (sync, async, and cross-field). See [Validation](#validation) section. |
+| `options` | `IOption[]` | `undefined` | Static dropdown options for Dropdown, StatusDropdown, and Multiselect components. |
 | `deprecatedDropdownOptions` | `IDeprecatedOption[]` | `undefined` | Deprecated dropdown option mappings for backward compatibility with old values. |
-| `meta` | `Dictionary<string \| boolean \| number \| string[] \| object>` | `undefined` | Arbitrary metadata passed through to the field component (e.g., icons, sort settings). |
-| `fieldArray` | `IFieldArrayConfig` | `undefined` | Configuration for repeating field array (sub-form) behavior. |
+| `config` | `Dictionary<string \| boolean \| number \| string[] \| object>` | `undefined` | Arbitrary configuration passed through to the field component (e.g., icons, sort settings). |
+| `items` | `Record<string, IFieldConfig>` | `undefined` | Field configs for repeating field array items. Each key is a sub-field name. |
+| `minItems` | `number` | `undefined` | Minimum number of items allowed in a field array. |
+| `maxItems` | `number` | `undefined` | Maximum number of items allowed in a field array. |
 
 ---
 
@@ -49,7 +41,7 @@ These are the most commonly used properties for defining a field.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `component` | `string` | The component type key. Must match a registered component. See [Built-in Component Types](#built-in-component-types). |
+| `type` | `string` | The component type key. Must match a registered component. See [Built-in Component Types](#built-in-component-types). |
 | `required` | `boolean` | Marks the field as required. The required indicator appears in the field wrapper. |
 | `hidden` | `boolean` | Hides the field entirely. Hidden fields are excluded from validation. |
 | `readOnly` | `boolean` | Renders the field but prevents editing. |
@@ -59,21 +51,21 @@ These are the most commonly used properties for defining a field.
 ```typescript
 const fieldConfigs = {
   title: {
-    component: "Textbox",
+    type: "Textbox",
     required: true,
     label: "Project Title",
   },
   status: {
-    component: "Dropdown",
+    type: "Dropdown",
     required: true,
     label: "Status",
-    dropdownOptions: [
-      { key: "Active", text: "Active" },
-      { key: "Inactive", text: "Inactive" },
+    options: [
+      { value: "Active", label: "Active" },
+      { value: "Inactive", label: "Inactive" },
     ],
   },
   notes: {
-    component: "Textarea",
+    type: "Textarea",
     label: "Notes",
     readOnly: false,
   },
@@ -82,65 +74,55 @@ const fieldConfigs = {
 
 ---
 
-### Dependencies
+### Rules
 
-Dependencies are the core mechanism for declarative business rules. When this field's value matches a dependency key, the specified config overrides are applied to the target fields.
-
-**Structure:** `Dictionary<Dictionary<IFieldConfig>>`
-
-```
-dependencies: {
-  [thisFieldValue: string]: {
-    [targetFieldName: string]: IFieldConfig  // Config overrides to apply
-  }
-}
-```
+Rules are the core mechanism for declarative business rules. They are defined as an `IRule[]` array on a field and express how this field's value affects other fields (or how multiple fields combine to affect this field).
 
 **Example: Simple value-based rules**
 
 ```typescript
 // On the "status" field config:
-dependencies: {
-  "Active": {                    // When "status" value is "Active"
-    "endDate": {                 // Apply these changes to "endDate"
-      hidden: true,              // Hide the endDate field
-    },
-    "assignee": {
-      required: true,            // Make assignee required
-    },
-  },
-  "Inactive": {                  // When "status" value is "Inactive"
-    "endDate": {
-      hidden: false,             // Show the endDate field
-      required: true,            // Make it required
-    },
-    "assignee": {
-      required: false,           // Assignee is no longer required
-      readOnly: true,            // Make it read-only
+rules: [
+  {
+    when: { field: "status", is: "Active" },
+    then: {
+      "endDate": { hidden: true },
+      "assignee": { required: true },
     },
   },
-}
+  {
+    when: { field: "status", is: "Inactive" },
+    then: {
+      "endDate": { hidden: false, required: true },
+      "assignee": { required: false, readOnly: true },
+    },
+  },
+]
 ```
 
 **Example: Component type swap**
 
 ```typescript
-dependencies: {
-  "Custom": {
-    "reason": {
-      component: "Textarea",     // Swap from Textbox to Textarea
+rules: [
+  {
+    when: { field: "reasonType", is: "Custom" },
+    then: {
+      "reason": { type: "Textarea" },
     },
   },
-  "Standard": {
-    "reason": {
-      component: "Dropdown",     // Swap to Dropdown
-      dropdownOptions: [
-        { key: "budgetCut", text: "Budget Cut" },
-        { key: "completed", text: "Completed" },
-      ],
+  {
+    when: { field: "reasonType", is: "Standard" },
+    then: {
+      "reason": {
+        type: "Dropdown",
+        options: [
+          { value: "budgetCut", label: "Budget Cut" },
+          { value: "completed", label: "Completed" },
+        ],
+      },
     },
   },
-}
+]
 ```
 
 **How value matching works:**
@@ -151,112 +133,91 @@ dependencies: {
 
 ---
 
-### Combo (AND) Dependency Rules
+### Combo (AND) Rules
 
-`dependencyRules` requires ALL referenced fields to have specific values before the rule is applied. This is placed on the **target** field (the field that changes), not on the trigger fields.
-
-**Structure: `IDependencyAndRules`**
-
-```typescript
-interface IDependencyAndRules {
-  /** Config overrides to apply when all rules are met. */
-  updatedConfig: Dictionary<IFieldConfig>;
-  /** Dictionary of field names to arrays of acceptable values (all must match). */
-  rules: Dictionary<string[]>;
-}
-```
+Combo rules require ALL referenced fields to have specific values before the rule is applied. These are placed on the **target** field (the field that changes), not on the trigger fields.
 
 **Example:**
 
 ```typescript
 // On the "specialApproval" field config:
-dependencyRules: {
-  rules: {
-    "status": ["Active"],           // status must be "Active"
-    "priority": ["High", "Critical"], // AND priority must be "High" or "Critical"
-  },
-  updatedConfig: {
-    "specialApproval": {            // Apply to self (or other fields)
-      hidden: false,
-      required: true,
+rules: [
+  {
+    when: [
+      { field: "status", is: ["Active"] },
+      { field: "priority", is: ["High", "Critical"] },
+    ],
+    then: {
+      "specialApproval": { hidden: false, required: true },
     },
   },
-}
+]
 ```
 
-When all conditions are met, the `updatedConfig` is applied. When any condition fails, the field reverts to its default config state.
+When all conditions are met, the `then` overrides are applied. When any condition fails, the field reverts to its default config state.
 
 ---
 
-### Dropdown Dependencies
+### Dropdown Filtering Rules
 
-`dropdownDependencies` filters the available dropdown options for dependent fields based on this field's value.
-
-**Structure:** `Dictionary<Dictionary<string[]>>`
-
-```
-dropdownDependencies: {
-  [thisFieldValue: string]: {
-    [targetDropdownField: string]: string[]  // Allowed option keys
-  }
-}
-```
+Rules can filter the available options for dependent dropdown fields based on this field's value.
 
 **Example:**
 
 ```typescript
 // On the "category" field config:
-dropdownDependencies: {
-  "Engineering": {
-    "subCategory": ["frontend", "backend", "devops", "qa"],
+rules: [
+  {
+    when: { field: "category", is: "Engineering" },
+    then: {
+      "subCategory": {
+        options: [
+          { value: "frontend", label: "Frontend" },
+          { value: "backend", label: "Backend" },
+          { value: "devops", label: "DevOps" },
+          { value: "qa", label: "QA" },
+        ],
+      },
+    },
   },
-  "Design": {
-    "subCategory": ["ux", "ui", "graphic", "motion"],
+  {
+    when: { field: "category", is: "Design" },
+    then: {
+      "subCategory": {
+        options: [
+          { value: "ux", label: "UX" },
+          { value: "ui", label: "UI" },
+          { value: "graphic", label: "Graphic" },
+          { value: "motion", label: "Motion" },
+        ],
+      },
+    },
   },
-  "Marketing": {
-    "subCategory": ["content", "seo", "social", "email"],
-  },
-}
+]
 ```
 
-When the "category" field value is "Engineering", the "subCategory" dropdown only shows options with keys "frontend", "backend", "devops", and "qa". Options are sorted alphabetically by default unless `meta.disableAlphabeticSort` is set to `true` on the target field.
+Options are sorted alphabetically by default unless `config.disableAlphabeticSort` is set to `true` on the target field.
 
 ---
 
-### Order Dependencies
+### Order Rules
 
-`orderDependencies` dynamically reorders fields based on a field's value. The field that has `orderDependencies` becomes the "pivotal root field" for ordering.
-
-**Structure: `OrderDependencyMap`**
-
-```typescript
-interface OrderDependencyMap {
-  [key: string]: string[] | OrderDependencyMap;  // Recursive: value-based or nested
-}
-```
+Order rules dynamically reorder fields based on a field's value.
 
 **Example: Simple reordering**
 
 ```typescript
 // On the "formType" field config:
-orderDependencies: {
-  "Simple": ["formType", "title", "description", "status"],
-  "Advanced": ["formType", "title", "priority", "assignee", "description", "startDate", "endDate", "status"],
-}
-```
-
-**Example: Nested (cascading) reordering**
-
-```typescript
-orderDependencies: {
-  "TypeA": {
-    "subType": {                  // Further branch on "subType" field value
-      "Sub1": ["field1", "field2", "field3"],
-      "Sub2": ["field1", "field3", "field2"],
-    },
+rules: [
+  {
+    when: { field: "formType", is: "Simple" },
+    order: ["formType", "title", "description", "status"],
   },
-  "TypeB": ["field3", "field1", "field2"],
-}
+  {
+    when: { field: "formType", is: "Advanced" },
+    order: ["formType", "title", "priority", "assignee", "description", "startDate", "endDate", "status"],
+  },
+]
 ```
 
 ---
@@ -265,24 +226,24 @@ orderDependencies: {
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `validations` | `string[]` | Sync validation function names from the `ValidationRegistry`. |
-| `asyncValidations` | `string[]` | Async validation function names (return `Promise`). |
-| `asyncValidationDebounceMs` | `number` | Debounce delay in ms for async validations (prevents rapid API calls). |
-| `crossFieldValidations` | `string[]` | Cross-field validation names. Validators receive all form values, not just this field's value. |
+| `validate` | `IValidationRule[]` | Array of validation rules. Each rule specifies a validator name and optional configuration. |
 
 ```typescript
 {
   email: {
-    component: "Textbox",
+    type: "Textbox",
     label: "Email",
-    validations: ["isValidEmail"],
-    asyncValidations: ["checkEmailUnique"],
-    asyncValidationDebounceMs: 500,
+    validate: [
+      { validator: "isValidEmail" },
+      { validator: "checkEmailUnique", async: true, debounceMs: 500 },
+    ],
   },
   endDate: {
-    component: "DateControl",
+    type: "DateControl",
     label: "End Date",
-    crossFieldValidations: ["endDateAfterStartDate"],
+    validate: [
+      { validator: "endDateAfterStartDate", crossField: true },
+    ],
   },
 }
 ```
@@ -290,23 +251,17 @@ orderDependencies: {
 Validation functions are registered via the pluggable `ValidationRegistry`:
 
 ```typescript
-import { registerValidations, registerAsyncValidations, registerCrossFieldValidations } from "@bghcore/dynamic-forms-core";
+import { registerValidators } from "@bghcore/dynamic-forms-core";
 
-registerValidations({
+registerValidators({
   isValidEmail: (value) => {
     if (!value) return undefined; // valid
     return /^[^@]+@[^@]+$/.test(String(value)) ? undefined : "Invalid email";
   },
-});
-
-registerAsyncValidations({
-  checkEmailUnique: async (value) => {
+  checkEmailUnique: async (value, entityData, signal) => {
     const exists = await api.checkEmail(value);
     return exists ? "Email already in use" : undefined;
   },
-});
-
-registerCrossFieldValidations({
   endDateAfterStartDate: (value, allValues) => {
     if (allValues.startDate && value && value <= allValues.startDate) {
       return "End date must be after start date";
@@ -333,18 +288,15 @@ The library also provides factory functions for common validations:
 | Property | Type | Description |
 |----------|------|-------------|
 | `defaultValue` | `string \| number \| boolean` | Applied when the field is visible and its current value is null. |
-| `value` | `string \| number \| boolean \| Date` | Static value or value function name (when `isValueFunction` is true). |
-| `isValueFunction` | `boolean` | Treats `value` as a function name from the `ValueFunctionRegistry`. |
-| `computedValue` | `string` | Expression string evaluated reactively. See [Expression Engine Reference](./expression-syntax.md). |
-| `onlyOnCreate` | `boolean` | Value function/value runs only during create mode. |
-| `onlyOnCreateValue` | `string \| number \| boolean \| Date` | Static value to set on create when `onlyOnCreate` is true and `isValueFunction` is false. |
+| `computedValue` | `string` | Expression string or value function reference (e.g., `"$fn.setDate()"`). See [Expression Engine Reference](./expression-syntax.md). |
+| `computeOnCreateOnly` | `boolean` | Computed value runs only during create mode. |
 
 **Example: Computed value**
 
 ```typescript
 {
   total: {
-    component: "Number",
+    type: "Number",
     label: "Total",
     readOnly: true,
     computedValue: "$values.quantity * $values.unitPrice",
@@ -357,11 +309,10 @@ The library also provides factory functions for common validations:
 ```typescript
 {
   createdBy: {
-    component: "ReadOnly",
+    type: "ReadOnly",
     label: "Created By",
-    isValueFunction: true,
-    value: "getCurrentUser",
-    onlyOnCreate: true,
+    computedValue: "$fn.getCurrentUser()",
+    computeOnCreateOnly: true,
   },
 }
 ```
@@ -370,12 +321,12 @@ The library also provides factory functions for common validations:
 
 ### Dropdown Options
 
-**`IDropdownOption` shape:**
+**`IOption` shape:**
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `key` | `string \| number` | Unique option identifier (the value stored in form data). |
-| `text` | `string` | Display text shown to the user. |
+| `value` | `string \| number` | Unique option identifier (the value stored in form data). |
+| `label` | `string` | Display text shown to the user. |
 | `disabled` | `boolean` | If true, the option is shown but not selectable. |
 | `hidden` | `boolean` | If true, the option is not shown. |
 | `selected` | `boolean` | If true, the option is pre-selected. |
@@ -385,13 +336,13 @@ The library also provides factory functions for common validations:
 ```typescript
 {
   priority: {
-    component: "Dropdown",
+    type: "Dropdown",
     label: "Priority",
-    dropdownOptions: [
-      { key: "Low", text: "Low" },
-      { key: "Medium", text: "Medium" },
-      { key: "High", text: "High" },
-      { key: "Critical", text: "Critical" },
+    options: [
+      { value: "Low", label: "Low" },
+      { value: "Medium", label: "Medium" },
+      { value: "High", label: "High" },
+      { value: "Critical", label: "Critical" },
     ],
   },
 }
@@ -410,11 +361,11 @@ Used for backward compatibility when dropdown option values change over time.
 ```typescript
 {
   status: {
-    component: "Dropdown",
+    type: "Dropdown",
     label: "Status",
-    dropdownOptions: [
-      { key: "Active", text: "Active" },
-      { key: "OnHold", text: "On Hold" },
+    options: [
+      { value: "Active", label: "Active" },
+      { value: "OnHold", label: "On Hold" },
     ],
     deprecatedDropdownOptions: [
       { oldVal: "InProgress", newVal: "Active" },
@@ -428,23 +379,23 @@ If a field's current value matches `oldVal`, the deprecated option is shown as d
 
 ---
 
-### Rendering Metadata
+### Rendering Configuration
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `meta` | `Dictionary<string \| boolean \| number \| string[] \| object>` | Arbitrary metadata passed to the field component. |
+| `config` | `Dictionary<string \| boolean \| number \| string[] \| object>` | Arbitrary configuration passed to the field component. |
 | `hideOnCreate` | `boolean` | Field is not rendered in create mode. |
 | `skipLayoutReadOnly` | `boolean` | Field ignores layout-level disabled/readOnly. |
 | `confirmInput` | `boolean` | Triggers a confirmation modal when dependents change. |
 
-The `meta` property is a flexible bag for component-specific configuration:
+The `config` property is a flexible bag for component-specific configuration:
 
 ```typescript
 {
   description: {
-    component: "PopOutEditor",
+    type: "PopOutEditor",
     label: "Description",
-    meta: {
+    config: {
       maxSize: 150,              // Passed to component for size limit
       disableAlphabeticSort: true, // Used by dropdown processing
       data: [                    // Icon config for StatusDropdown
@@ -460,60 +411,36 @@ The `meta` property is a flexible bag for component-specific configuration:
 
 ### Field Arrays
 
-The `fieldArray` property configures repeating sub-form behavior using `IFieldArrayConfig`.
+Field arrays use `items`, `minItems`, and `maxItems` directly on the field config.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `itemFields` | `Record<string, {...}>` | Field configs for each item. Keys are field names within an item. |
+| `items` | `Record<string, IFieldConfig>` | Field configs for each item. Keys are field names within an item. |
 | `minItems` | `number` | Minimum number of items allowed. |
 | `maxItems` | `number` | Maximum number of items allowed. |
-| `defaultItem` | `Record<string, unknown>` | Default values for new items. |
-| `reorderable` | `boolean` | Whether items can be reordered by the user. |
-
-Each entry in `itemFields` supports:
-
-| Property | Type |
-|----------|------|
-| `component` | `string` |
-| `required` | `boolean` |
-| `label` | `string` |
-| `validations` | `string[]` |
-| `dropdownOptions` | `Array<{ key: string \| number; text: string }>` |
 
 ```typescript
 {
   contacts: {
-    component: "FieldArray",
+    type: "FieldArray",
     label: "Contacts",
-    fieldArray: {
-      itemFields: {
-        name: { component: "Textbox", label: "Name", required: true },
-        email: { component: "Textbox", label: "Email", validations: ["isValidEmail"] },
-        role: {
-          component: "Dropdown",
-          label: "Role",
-          dropdownOptions: [
-            { key: "primary", text: "Primary" },
-            { key: "secondary", text: "Secondary" },
-          ],
-        },
+    items: {
+      name: { type: "Textbox", label: "Name", required: true },
+      email: { type: "Textbox", label: "Email", validate: [{ validator: "isValidEmail" }] },
+      role: {
+        type: "Dropdown",
+        label: "Role",
+        options: [
+          { value: "primary", label: "Primary" },
+          { value: "secondary", label: "Secondary" },
+        ],
       },
-      minItems: 1,
-      maxItems: 5,
-      defaultItem: { name: "", email: "", role: "primary" },
-      reorderable: true,
     },
+    minItems: 1,
+    maxItems: 5,
   },
 }
 ```
-
----
-
-### Deprecated Properties
-
-| Property | Replacement | Notes |
-|----------|-------------|-------|
-| `isReadonly` | `readOnly` | Automatically mapped during normalization. Emits a console warning in dev mode when `__DEV__` is not `false`. |
 
 ---
 
@@ -549,23 +476,21 @@ These are the component type keys available from the `ComponentTypes` constant:
 
 ---
 
-## Runtime Rule State (IBusinessRule)
+## Runtime Rule State (IRuntimeFieldState)
 
-After processing, each `IFieldConfig` becomes an `IBusinessRule` at runtime. Components read the rule state to determine behavior.
+After processing, each `IFieldConfig` becomes an `IRuntimeFieldState` at runtime. Components read the rule state to determine behavior.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `component` | `string` | UI component type to render (may be swapped by rules). |
+| `type` | `string` | UI component type to render (may be swapped by rules). |
 | `required` | `boolean` | Whether the field is required. |
 | `hidden` | `boolean` | Whether the field is hidden. Hidden fields skip validation. |
 | `readOnly` | `boolean` | Whether the field is read-only. |
-| `validations` | `string[]` | Active sync validation function names. |
-| `asyncValidations` | `string[]` | Active async validation function names. |
+| `validate` | `IValidationRule[]` | Active validation rules. |
 | `valueFunction` | `string` | Value function name to execute on dependency trigger. |
 | `confirmInput` | `boolean` | Whether changes trigger a confirmation modal. |
-| `dropdownOptions` | `IDropdownOption[]` | Currently available dropdown options (may be filtered by rules). |
-| `onlyOnCreate` | `boolean` | Whether the value function only runs on create. |
-| `onlyOnCreateValue` | `string \| number \| boolean \| Date` | Static value to set on create. |
+| `options` | `IOption[]` | Currently available dropdown options (may be filtered by rules). |
+| `computeOnCreateOnly` | `boolean` | Whether the computed value only runs on create. |
 | `defaultValue` | `string \| number \| boolean \| Date` | Default value when field value is null. |
 | `dependentFields` | `string[]` | Fields that this field's value changes affect (forward dependencies). |
 | `dependsOnFields` | `string[]` | Fields whose values affect this field (reverse dependencies). |
@@ -579,7 +504,7 @@ After processing, each `IFieldConfig` becomes an `IBusinessRule` at runtime. Com
 
 ---
 
-## IHookFieldSharedProps
+## IFieldProps
 
 This is the props contract injected into every field component via `React.cloneElement`. All injected field components receive these props.
 
@@ -598,9 +523,9 @@ This is the props contract injected into every field component via `React.cloneE
 | `saving` | `boolean` | Whether the form is currently saving. |
 | `savePending` | `boolean` | Whether a save is pending. |
 | `value` | `unknown` | Current field value. |
-| `meta` | `T` | Arbitrary metadata from the field config. |
-| `dropdownOptions` | `IDropdownOption[]` | Available dropdown options. |
-| `validations` | `string[]` | Active validation function names. |
+| `config` | `T` | Arbitrary configuration from the field config. |
+| `options` | `IOption[]` | Available dropdown options. |
+| `validate` | `IValidationRule[]` | Active validation rules. |
 | `label` | `string` | The field's display label. |
-| `component` | `string` | The component type key. |
+| `type` | `string` | The component type key. |
 | `setFieldValue` | `(fieldName, fieldValue, skipSave?, timeout?) => void` | Function to programmatically set another field's value. |

@@ -1,6 +1,6 @@
 # @bghcore/dynamic-forms-core
 
-UI-library agnostic business rules engine and form orchestration for configuration-driven React forms. Built for React — works with any component library (Fluent UI, MUI, Ant Design, or your own). Define forms as JSON -- field definitions, dependency rules, dropdown options, ordering -- and the library handles rendering, validation, auto-save, and field interactions automatically.
+UI-library agnostic business rules engine and form orchestration for configuration-driven React forms. Built for React -- works with any component library (Fluent UI, MUI, Ant Design, or your own). Define forms as JSON -- field definitions, dependency rules, dropdown options, ordering -- and the library handles rendering, validation, auto-save, and field interactions automatically.
 
 ## Install
 
@@ -14,28 +14,28 @@ Peer dependencies: `react` (18 or 19), `react-hook-form` (v7)
 
 ```tsx
 import {
-  BusinessRulesProvider,
-  InjectedHookFieldProvider,
-  HookInlineForm,
+  RulesEngineProvider,
+  InjectedFieldProvider,
+  DynamicForm,
 } from "@bghcore/dynamic-forms-core";
 
 const fieldConfigs = {
-  name: { component: "Textbox", label: "Name", required: true },
+  name: { type: "Textbox", label: "Name", required: true },
   status: {
-    component: "Dropdown",
+    type: "Dropdown",
     label: "Status",
-    dropdownOptions: [
-      { key: "Active", text: "Active" },
-      { key: "Inactive", text: "Inactive" },
+    options: [
+      { value: "Active", label: "Active" },
+      { value: "Inactive", label: "Inactive" },
     ],
   },
 };
 
 function App() {
   return (
-    <BusinessRulesProvider>
-      <InjectedHookFieldProvider>
-        <HookInlineForm
+    <RulesEngineProvider>
+      <InjectedFieldProvider>
+        <DynamicForm
           configName="myForm"
           programName="myApp"
           fieldConfigs={fieldConfigs}
@@ -45,8 +45,8 @@ function App() {
             return data;
           }}
         />
-      </InjectedHookFieldProvider>
-    </BusinessRulesProvider>
+      </InjectedFieldProvider>
+    </RulesEngineProvider>
   );
 }
 ```
@@ -57,7 +57,7 @@ You'll also need a UI adapter to provide field components. See:
 
 ## Business Rules Engine
 
-Rules are **declarative** -- defined as data in `IFieldConfig.dependencies`, not imperative code.
+Rules are **declarative** -- defined as data in `IFieldConfig.rules`, not imperative code.
 
 When a field value changes, the engine:
 
@@ -87,7 +87,7 @@ import {
   createRequiredIfValidation,
 } from "@bghcore/dynamic-forms-core";
 
-registerValidations({
+registerValidators({
   MinLength3: createMinLengthValidation(3),
   Max100Chars: createMaxLengthValidation(100),
   Score1to10: createNumericRangeValidation(1, 10),
@@ -99,9 +99,9 @@ registerValidations({
 ### Async Validators
 
 ```tsx
-import { registerAsyncValidations } from "@bghcore/dynamic-forms-core";
+import { registerValidators } from "@bghcore/dynamic-forms-core";
 
-registerAsyncValidations({
+registerValidators({
   CheckUniqueEmail: async (value, entityData, signal) => {
     const res = await fetch(`/api/check?email=${value}`, { signal });
     const { exists } = await res.json();
@@ -110,7 +110,7 @@ registerAsyncValidations({
 });
 ```
 
-Reference in field configs via `asyncValidations: ["CheckUniqueEmail"]`.
+Reference in field configs via `validate: [{ validator: "CheckUniqueEmail", async: true }]`.
 
 ### Config Validation
 
@@ -124,14 +124,14 @@ const errors = validateFieldConfigs(fieldConfigs, registeredComponentTypes);
 ## Multi-Step Wizard
 
 ```tsx
-import { HookWizardForm } from "@bghcore/dynamic-forms-core";
+import { WizardForm } from "@bghcore/dynamic-forms-core";
 
-<HookWizardForm
+<WizardForm
   wizardConfig={{
     steps: [
       { id: "basics", title: "Basics", fields: ["name", "type"] },
       { id: "details", title: "Details", fields: ["description"],
-        visibleWhen: { fieldName: "type", values: ["bug"] } },
+        visibleWhen: { field: "type", is: ["bug"] } },
     ],
     validateOnStepChange: true,
   }}
@@ -151,15 +151,14 @@ All fields stay in a single `react-hook-form` context. Steps just control which 
 ## Field Arrays
 
 ```tsx
-import { HookFieldArray } from "@bghcore/dynamic-forms-core";
+import { FieldArray } from "@bghcore/dynamic-forms-core";
 
-<HookFieldArray
+<FieldArray
   fieldName="contacts"
   config={{
-    itemFields: { name: { component: "Textbox", label: "Name" } },
+    items: { name: { type: "Textbox", label: "Name" } },
     minItems: 1,
     maxItems: 5,
-    defaultItem: { name: "" },
   }}
   renderItem={(fieldNames, index, remove) => (
     <div>
@@ -186,19 +185,19 @@ registerLocale({
 });
 ```
 
-All strings in `HookInlineFormStrings` and validation error messages resolve through the locale registry.
+All strings in `FormStrings` and validation error messages resolve through the locale registry.
 
 ## Manual Save vs Auto-Save
 
 ```tsx
-// Auto-save (default) — saves on every field change with debounce
-<HookInlineForm saveData={async (data) => data} />
+// Auto-save (default) -- saves on every field change with debounce
+<DynamicForm saveData={async (data) => data} />
 
-// Manual save — shows Save/Cancel buttons, no auto-save
-<HookInlineForm isManualSave={true} saveData={async (data) => data} />
+// Manual save -- shows Save/Cancel buttons, no auto-save
+<DynamicForm isManualSave={true} saveData={async (data) => data} />
 
 // Manual save with custom buttons
-<HookInlineForm
+<DynamicForm
   isManualSave={true}
   renderSaveButton={({ onSave, isDirty, isSubmitting }) => (
     <button onClick={onSave} disabled={!isDirty || isSubmitting}>Submit</button>
@@ -208,12 +207,12 @@ All strings in `HookInlineFormStrings` and validation error messages resolve thr
 
 ## Error Boundary
 
-Each field is individually wrapped in `HookFormErrorBoundary` so one crashing field does not take down the entire form:
+Each field is individually wrapped in `FormErrorBoundary` so one crashing field does not take down the entire form:
 
 ```tsx
-import { HookFormErrorBoundary } from "@bghcore/dynamic-forms-core";
+import { FormErrorBoundary } from "@bghcore/dynamic-forms-core";
 
-<HookFormErrorBoundary
+<FormErrorBoundary
   fallback={(error, resetErrorBoundary) => (
     <div>
       <p>Field crashed: {error.message}</p>
@@ -223,21 +222,21 @@ import { HookFormErrorBoundary } from "@bghcore/dynamic-forms-core";
   onError={(error, errorInfo) => logError(error)}
 >
   <MyField />
-</HookFormErrorBoundary>
+</FormErrorBoundary>
 ```
 
 Built into the core rendering pipeline automatically.
 
 ## Save Reliability
 
-HookInlineForm includes robust save handling:
+DynamicForm includes robust save handling:
 
 - **AbortController** cancels previous in-flight saves when a new save triggers
 - **Configurable timeout** via `saveTimeoutMs` prop (default 30 seconds)
 - **Retry with exponential backoff** via `maxSaveRetries` prop (default 3 retries)
 
 ```tsx
-<HookInlineForm
+<DynamicForm
   saveTimeoutMs={15000}
   maxSaveRetries={5}
   saveData={async (data) => { /* ... */ }}
@@ -248,7 +247,7 @@ HookInlineForm includes robust save handling:
 
 Built-in accessibility features:
 
-- **Focus trap** in `HookConfirmInputsModal` (Tab wraps, Escape closes, focus restored on close)
+- **Focus trap** in `ConfirmInputsModal` (Tab wraps, Escape closes, focus restored on close)
 - **Focus-to-first-error** on validation failure
 - **ARIA live regions** -- `<div role="status" aria-live="polite">` announces saving/saved/error
 - **aria-label** on filter inputs, **aria-busy** on fields during save
@@ -279,10 +278,10 @@ Includes `serializeFormState` / `deserializeFormState` utilities for Date-safe J
 
 ### Render Props
 
-Customize field chrome via render props on `HookFieldWrapper`:
+Customize field chrome via render props on `FieldWrapper`:
 
 ```tsx
-<HookFieldWrapper
+<FieldWrapper
   renderLabel={(label, required) => <CustomLabel text={label} required={required} />}
   renderError={(error) => <CustomError message={error} />}
   renderStatus={(status) => <CustomStatus type={status} />}
@@ -311,7 +310,7 @@ Import the optional `styles.css` and override CSS custom properties:
 Display a form-level error banner for cross-field validation:
 
 ```tsx
-<HookInlineForm
+<DynamicForm
   formErrors={["End date must be after start date"]}
   /* ... */
 />
@@ -322,9 +321,9 @@ Display a form-level error banner for cross-field validation:
 Collapsible dev-only panel showing business rules, form values, errors, and the dependency graph:
 
 ```tsx
-import { HookFormDevTools } from "@bghcore/dynamic-forms-core";
+import { FormDevTools } from "@bghcore/dynamic-forms-core";
 
-<HookFormDevTools
+<FormDevTools
   configName="myForm"
   configRules={businessRules}
   formValues={formValues}
@@ -373,8 +372,8 @@ const UserSchema = z.object({
 });
 
 const fieldConfigs = zodSchemaToFieldConfig(UserSchema);
-// Maps: ZodString→Textbox, ZodNumber→Number, ZodBoolean→Toggle,
-//       ZodEnum→Dropdown, ZodDate→DateControl, ZodArray→Multiselect
+// Maps: ZodString->Textbox, ZodNumber->Number, ZodBoolean->Toggle,
+//       ZodEnum->Dropdown, ZodDate->DateControl, ZodArray->Multiselect
 // Detects .email() and .url() checks for automatic validation
 ```
 
@@ -388,20 +387,23 @@ Use `defineFieldConfigs()` to get compile-time verification that dependency targ
 import { defineFieldConfigs } from "@bghcore/dynamic-forms-core";
 
 const configs = defineFieldConfigs({
-  name: { component: "Textbox", label: "Name", required: true },
+  name: { type: "Textbox", label: "Name", required: true },
   status: {
-    component: "Dropdown",
+    type: "Dropdown",
     label: "Status",
-    dropdownOptions: [
-      { key: "Active", text: "Active" },
-      { key: "Inactive", text: "Inactive" },
+    options: [
+      { value: "Active", label: "Active" },
+      { value: "Inactive", label: "Inactive" },
     ],
-    dependencies: {
-      Active: {
-        name: { required: true },  // TypeScript verifies "name" exists
-        // typo: { required: true },  // ERROR: "typo" is not a field name
+    rules: [
+      {
+        when: { field: "status", is: "Active" },
+        then: {
+          name: { required: true },  // TypeScript verifies "name" exists
+          // typo: { required: true },  // ERROR: "typo" is not a field name
+        },
       },
-    },
+    ],
   },
 });
 ```
@@ -436,13 +438,13 @@ setInjectedFields(lazyFields);
 ## Architecture
 
 ```
-<BusinessRulesProvider>          -- Owns rule state via useReducer (memoized)
-  <InjectedHookFieldProvider>    -- Component injection registry (memoized)
-    <HookInlineForm>             -- Form state (react-hook-form), auto-save with retry, business rules
-      <HookInlineFormFields>     -- Renders ordered field list
-        <HookFormErrorBoundary>  -- Per-field error boundary (crash isolation)
-          <HookRenderField>      -- Per-field: Controller + component lookup (useMemo)
-            <HookFieldWrapper>   -- Label, error, saving status (React.memo, render props)
+<RulesEngineProvider>            -- Owns rule state via useReducer (memoized)
+  <InjectedFieldProvider>        -- Component injection registry (memoized)
+    <DynamicForm>                -- Form state (react-hook-form), auto-save with retry, business rules
+      <FormFields>               -- Renders ordered field list
+        <FormErrorBoundary>      -- Per-field error boundary (crash isolation)
+          <RenderField>          -- Per-field: Controller + component lookup (useMemo)
+            <FieldWrapper>       -- Label, error, saving status (React.memo, render props)
               <InjectedField />  -- Your UI component via cloneElement
 ```
 

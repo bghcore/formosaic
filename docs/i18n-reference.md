@@ -56,10 +56,10 @@ registerLocale({ cancel: "Cancelar" });
 
 | Key | Type | Default (English) | Used In |
 |-----|------|-------------------|---------|
-| `autoSavePending` | `string` | `"AutoSave Pending, please check for errors..."` | HookFieldWrapper status display |
-| `savePending` | `string` | `"Save Pending, please check for errors..."` | HookFieldWrapper status display |
-| `saving` | `string` | `"Saving..."` | HookFieldWrapper, HookInlineForm save indicator |
-| `saveError` | `string` | `"Error saving form"` | HookFieldWrapper, error display |
+| `autoSavePending` | `string` | `"AutoSave Pending, please check for errors..."` | FieldWrapper status display |
+| `savePending` | `string` | `"Save Pending, please check for errors..."` | FieldWrapper status display |
+| `saving` | `string` | `"Saving..."` | FieldWrapper, DynamicForm save indicator |
+| `saveError` | `string` | `"Error saving form"` | FieldWrapper, error display |
 
 ### Actions
 
@@ -81,7 +81,7 @@ registerLocale({ cancel: "Cancelar" });
 
 | Key | Type | Default (English) | Used In |
 |-----|------|-------------------|---------|
-| `required` | `string` | `"Required"` | HookFieldWrapper required indicator |
+| `required` | `string` | `"Required"` | FieldWrapper required indicator |
 | `remaining` | `string` | `"remaining"` | Character count display |
 | `na` | `string` | `"N/A"` | Empty value display |
 | `unknown` | `string` | `"Unknown"` | Unknown value fallback |
@@ -204,32 +204,32 @@ LocaleRegistry (currentLocale)   <-- Merges overrides with English defaults
 getLocaleString(key)              <-- Returns current locale value for a key
         |
         v
-HookInlineFormStrings             <-- ES getter properties that call getLocaleString()
-        |                             (e.g., HookInlineFormStrings.required)
+FormStrings                       <-- ES getter properties that call getLocaleString()
+        |                             (e.g., FormStrings.required)
         v
-Form Components                   <-- Read strings from HookInlineFormStrings
-  - HookFieldWrapper              <-- required label, error messages, save status
-  - HookInlineForm                <-- saving status, action buttons
-  - HookConfirmInputsModal        <-- confirm/cancel labels
+Form Components                   <-- Read strings from FormStrings
+  - FieldWrapper                  <-- required label, error messages, save status
+  - DynamicForm                   <-- saving status, action buttons
+  - ConfirmInputsModal            <-- confirm/cancel labels
   - Field components (via props)  <-- validation error messages
 ```
 
 ### Step-by-step:
 
 1. **Validators** in the `ValidationRegistry` return error messages. Built-in validators use `getLocaleString()` to get the current locale's error text.
-2. **HookFieldWrapper** displays field chrome (labels, error messages, save status) using `HookInlineFormStrings`.
-3. **HookInlineFormStrings** is an object with ES `get` accessors. Each property calls `getLocaleString(key)` on access, so it always reflects the latest registered locale.
+2. **FieldWrapper** displays field chrome (labels, error messages, save status) using `FormStrings`.
+3. **FormStrings** is an object with ES `get` accessors. Each property calls `getLocaleString(key)` on access, so it always reflects the latest registered locale.
 4. **`registerLocale()`** merges the provided partial locale into the current locale object. Unspecified keys retain their English default values.
 
 ### Backward Compatibility
 
-`HookInlineFormStrings` maintains backward compatibility with code that reads string properties directly:
+`FormStrings` maintains backward compatibility with code that reads string properties directly:
 
 ```typescript
-import { HookInlineFormStrings } from "@bghcore/dynamic-forms-core";
+import { FormStrings } from "@bghcore/dynamic-forms-core";
 
 // This still works and automatically reflects locale overrides:
-const label = HookInlineFormStrings.required; // "Obligatoire" if French locale registered
+const label = FormStrings.required; // "Obligatoire" if French locale registered
 ```
 
 ---

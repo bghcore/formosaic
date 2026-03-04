@@ -104,35 +104,35 @@ The following `Math` functions are available in the execution context:
 ```typescript
 const fieldConfigs = {
   quantity: {
-    component: "Number",
+    type: "Number",
     label: "Quantity",
     required: true,
   },
   unitPrice: {
-    component: "Number",
+    type: "Number",
     label: "Unit Price",
     required: true,
   },
   subtotal: {
-    component: "Number",
+    type: "Number",
     label: "Subtotal",
     readOnly: true,
     computedValue: "$values.quantity * $values.unitPrice",
   },
   tax: {
-    component: "Number",
+    type: "Number",
     label: "Tax",
     readOnly: true,
     computedValue: "Math.round($values.subtotal * 0.08 * 100) / 100",
   },
   total: {
-    component: "Number",
+    type: "Number",
     label: "Total",
     readOnly: true,
     computedValue: "$values.subtotal + $values.tax",
   },
   fullName: {
-    component: "ReadOnly",
+    type: "ReadOnly",
     label: "Full Name",
     computedValue: "$values.firstName + \" \" + $values.lastName",
   },
@@ -208,7 +208,7 @@ const invalid = evaluateExpression(
 
 | Limitation | Workaround |
 |-----------|------------|
-| No custom function calls (only `Math.*`) | Use value functions (`isValueFunction: true`) for complex logic |
+| No custom function calls (only `Math.*`) | Use value functions (`computedValue: "$fn.name()"`) for complex logic |
 | No variable declarations (`let`, `const`, `var`) | Keep expressions as single return expressions |
 | No loops (`for`, `while`) | Use value functions for iterative calculations |
 | No `if`/`else` statements | Use the ternary operator `? :` instead |

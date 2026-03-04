@@ -37,9 +37,9 @@ After completing the initial 6 phases, here's where we stand vs competitors:
 
 ## Phase 7: Reliability + Async Integration (v1.3.0)
 
-**Why:** The async validation framework exists but isn't wired to HookRenderField — it's dead code. No error boundary means a single field crash takes down the entire form. No save timeout means hung requests freeze the UI. These are production blockers.
+**Why:** The async validation framework exists but isn't wired to RenderField -- it's dead code. No error boundary means a single field crash takes down the entire form. No save timeout means hung requests freeze the UI. These are production blockers.
 
-### 7A. Wire async validation into HookRenderField
+### 7A. Wire async validation into RenderField
 
 - Compose sync + async in Controller `validate` prop
 - Sync validators run first (fast fail), async only if sync passes
@@ -48,31 +48,31 @@ After completing the initial 6 phases, here's where we stand vs competitors:
 - Show "Validating..." indicator while async runs
 
 **Files to modify:**
-- `HookRenderField.tsx` — add async validate composition
-- `HookFieldWrapper.tsx` — add validating state display
+- `RenderField.tsx` -- add async validate composition
+- `FieldWrapper.tsx` -- add validating state display
 
 ### 7B. Error boundary component
 
-- Create `HookFormErrorBoundary` wrapping the form tree
+- Create `FormErrorBoundary` wrapping the form tree
 - `componentDidCatch` calls an `onError` callback prop
 - Fallback UI shows error message with "Retry" button
-- Wrap `HookRenderField` individually so one field crash doesn't kill the whole form
+- Wrap `RenderField` individually so one field crash doesn't kill the whole form
 
 **Files to create:**
-- `components/HookFormErrorBoundary.tsx`
+- `components/FormErrorBoundary.tsx`
 
 **Files to modify:**
-- `components/HookInlineFormFields.tsx` — wrap each field in error boundary
+- `components/FormFields.tsx` -- wrap each field in error boundary
 
 ### 7C. Save reliability
 
-- Add `AbortController` to `saveData` calls — cancel previous in-flight save when new save triggers
-- Add configurable timeout (default 30s) — reject promise if save takes too long
+- Add `AbortController` to `saveData` calls -- cancel previous in-flight save when new save triggers
+- Add configurable timeout (default 30s) -- reject promise if save takes too long
 - Add retry with exponential backoff (1s, 2s, 4s, max 3 attempts)
 - Add `onSaveRetry` callback so consumers can show "Retrying..." UI
 
 **Files to modify:**
-- `components/HookInlineForm.tsx`
+- `components/DynamicForm.tsx`
 
 ### Verification
 - Test: async validation runs after sync passes, cancels on re-type
@@ -89,13 +89,13 @@ After completing the initial 6 phases, here's where we stand vs competitors:
 ### 8A. Keyboard navigation
 
 - Tab through all form fields (already works via native HTML)
-- Escape to close `HookConfirmInputsModal`
+- Escape to close `ConfirmInputsModal`
 - Enter to submit from within modal
 - Arrow keys in wizard step navigation
 
 ### 8B. Focus management
 
-- Focus trap inside `HookConfirmInputsModal` when open
+- Focus trap inside `ConfirmInputsModal` when open
 - Restore focus to triggering element when modal closes
 - Move focus to first error field on validation failure
 - Announce field count/progress to screen readers
@@ -134,7 +134,7 @@ After completing the initial 6 phases, here's where we stand vs competitors:
 ### 9B. beforeunload protection
 
 - Warn user on page navigation when form has unsaved changes
-- `useBeforeUnload` hook integrated into `HookInlineForm`
+- `useBeforeUnload` hook integrated into `DynamicForm`
 - Configurable via `warnOnUnsavedChanges` prop
 
 ### 9C. Form state serialization
@@ -144,9 +144,9 @@ After completing the initial 6 phases, here's where we stand vs competitors:
 - Safe for localStorage (no circular refs, no functions)
 
 ### Verification
-- Test: fill form, close tab, reopen — draft recovered
-- Test: fill form, navigate away — browser warns
-- Test: save successfully — draft cleared
+- Test: fill form, close tab, reopen -- draft recovered
+- Test: fill form, navigate away -- browser warns
+- Test: save successfully -- draft cleared
 
 ---
 
@@ -154,11 +154,11 @@ After completing the initial 6 phases, here's where we stand vs competitors:
 
 **Why:** Consumers can't customize labels, error messages, or status indicators without replacing entire components. Fluent and MUI adapters handle field inputs, but the wrapper chrome (labels, errors, icons) is hardcoded HTML in core.
 
-### 10A. Render props for HookFieldWrapper
+### 10A. Render props for FieldWrapper
 
-- `renderLabel?: (props) => ReactNode` — custom label rendering
-- `renderError?: (props) => ReactNode` — custom error display
-- `renderStatus?: (props) => ReactNode` — custom saving/pending display
+- `renderLabel?: (props) => ReactNode` -- custom label rendering
+- `renderError?: (props) => ReactNode` -- custom error display
+- `renderStatus?: (props) => ReactNode` -- custom saving/pending display
 - Falls back to current HTML when render props not provided (backwards compat)
 
 ### 10B. CSS custom properties
@@ -169,7 +169,7 @@ After completing the initial 6 phases, here's where we stand vs competitors:
 
 ### 10C. Form-level error display
 
-- Add `formErrors` prop to `HookInlineForm` for server-side cross-field errors
+- Add `formErrors` prop to `DynamicForm` for server-side cross-field errors
 - Render form-level error banner above fields
 - Support both field-level and form-level errors simultaneously
 
@@ -194,7 +194,7 @@ After completing the initial 6 phases, here's where we stand vs competitors:
 
 ### 11B. Form DevTools component
 
-- `HookFormDevTools` component — collapsible panel showing:
+- `FormDevTools` component -- collapsible panel showing:
   - Current business rules state per field
   - Dependency graph (text-based)
   - Form values, dirty fields, errors
@@ -204,11 +204,11 @@ After completing the initial 6 phases, here's where we stand vs competitors:
 
 ### 11C. JSON Schema import utility
 
-- `jsonSchemaToFieldConfig(schema)` — converts JSON Schema to `Dictionary<IFieldConfig>`
-- Maps `type: "string"` → `Textbox`, `type: "boolean"` → `Toggle`, etc.
-- Maps `enum` → `Dropdown` with options
-- Maps `format: "email"` → `validations: ["EmailValidation"]`
-- Maps `required` array → `required: true` per field
+- `jsonSchemaToFieldConfig(schema)` -- converts JSON Schema to `Dictionary<IFieldConfig>`
+- Maps `type: "string"` to `Textbox`, `type: "boolean"` to `Toggle`, etc.
+- Maps `enum` to `Dropdown` with options
+- Maps `format: "email"` to `validate: [{ validator: "EmailValidation" }]`
+- Maps `required` array to `required: true` per field
 
 ### Verification
 - Playground deploys to GitHub Pages
@@ -223,12 +223,12 @@ After completing the initial 6 phases, here's where we stand vs competitors:
 
 ### 12A. Virtual scrolling for large forms
 
-- Integrate `react-window` (or similar) into `HookInlineFormFields`
+- Integrate `react-window` (or similar) into `FormFields`
 - Only render fields in the visible viewport + buffer
 - Maintain scroll position during business rule updates
 - Opt-in via `virtualizeFields` prop (default false for backwards compat)
 
-### 12B. Optimize HookRenderField re-renders
+### 12B. Optimize RenderField re-renders
 
 - Reduce useEffect dependency array from 8 items to critical-only
 - Memoize Controller render callback
@@ -251,12 +251,12 @@ After completing the initial 6 phases, here's where we stand vs competitors:
 
 | Phase | Version | Effort | Impact | Priority |
 |-------|---------|--------|--------|----------|
-| 7: Reliability + Async | v1.3.0 | ~1.5 weeks | Critical — production blockers | **P0** |
-| 8: Accessibility | v1.4.0 | ~2 weeks | High — enterprise compliance | **P0** |
-| 9: Persistence + Drafts | v1.5.0 | ~1 week | High — differentiator | **P1** |
-| 10: Theming + Customization | v1.6.0 | ~1 week | Medium — DX improvement | **P1** |
-| 11: Developer Experience | v1.7.0 | ~3 weeks | High — adoption + marketing | **P1** |
-| 12: Performance | v1.8.0 | ~2 weeks | Medium — large form support | **P2** |
+| 7: Reliability + Async | v1.3.0 | ~1.5 weeks | Critical -- production blockers | **P0** |
+| 8: Accessibility | v1.4.0 | ~2 weeks | High -- enterprise compliance | **P0** |
+| 9: Persistence + Drafts | v1.5.0 | ~1 week | High -- differentiator | **P1** |
+| 10: Theming + Customization | v1.6.0 | ~1 week | Medium -- DX improvement | **P1** |
+| 11: Developer Experience | v1.7.0 | ~3 weeks | High -- adoption + marketing | **P1** |
+| 12: Performance | v1.8.0 | ~2 weeks | Medium -- large form support | **P2** |
 
 **Parallelizable:** Phases 7+8 can run in parallel. Phases 9+10 can run in parallel. Phase 11 depends on 7-10 being stable. Phase 12 is independent.
 
@@ -273,5 +273,5 @@ After completing the initial 6 phases, here's where we stand vs competitors:
 | JSON Schema compliance | RJSF owns this; we offer a JSON Schema *import* utility instead |
 | Offline queue/sync | SurveyJS owns this; draft persistence covers 90% of the use case |
 | Form analytics dashboard | Better done as a separate product/service, not a library feature |
-| PDF/CSV export | Orthogonal concern — consumers use their own export tools |
+| PDF/CSV export | Orthogonal concern -- consumers use their own export tools |
 | Undo/redo | Nice-to-have but low ROI; react-hook-form doesn't support it natively |

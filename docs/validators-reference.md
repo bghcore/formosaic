@@ -8,7 +8,7 @@ All validation infrastructure is in `packages/core/src/helpers/ValidationRegistr
 
 ## Built-in Sync Validators
 
-These validators are registered by default and can be referenced by name in `IFieldConfig.validations`:
+These validators are registered by default and can be referenced by name in `IFieldConfig.validate`:
 
 | Name | Checks | Error Message | Skips Empty |
 |---|---|---|---|
@@ -32,9 +32,9 @@ Validates against the regex `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`. Catches missing `@` 
 ```json
 {
   "email": {
-    "component": "Textbox",
+    "type": "Textbox",
     "label": "Email Address",
-    "validations": ["EmailValidation"]
+    "validate": [{ "validator": "EmailValidation" }]
   }
 }
 ```
@@ -45,9 +45,9 @@ Validates against `/^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/`. Supports internationa
 ```json
 {
   "phone": {
-    "component": "Textbox",
+    "type": "Textbox",
     "label": "Phone Number",
-    "validations": ["PhoneNumberValidation"]
+    "validate": [{ "validator": "PhoneNumberValidation" }]
   }
 }
 ```
@@ -58,9 +58,9 @@ Parses the string value as an integer and checks that it falls within the range 
 ```json
 {
   "yearFounded": {
-    "component": "Textbox",
+    "type": "Textbox",
     "label": "Year Founded",
-    "validations": ["YearValidation"]
+    "validate": [{ "validator": "YearValidation" }]
   }
 }
 ```
@@ -71,22 +71,22 @@ Calculates the byte size of the string value using `new Blob([value]).size` and 
 ```json
 {
   "description": {
-    "component": "Textarea",
+    "type": "Textarea",
     "label": "Description",
-    "validations": ["Max150KbValidation"]
+    "validate": [{ "validator": "Max150KbValidation" }]
   }
 }
 ```
 
 #### isValidUrl
-Tests the value against the regex `/(http(s?)):\/\//i` (defined in `HookInlineFormConstants.urlRegex`). Requires the string to begin with `http://` or `https://`.
+Tests the value against the regex `/(http(s?)):\/\//i` (defined in `FormConstants.urlRegex`). Requires the string to begin with `http://` or `https://`.
 
 ```json
 {
   "websiteUrl": {
-    "component": "Textbox",
+    "type": "Textbox",
     "label": "Website URL",
-    "validations": ["isValidUrl"]
+    "validate": [{ "validator": "isValidUrl" }]
   }
 }
 ```
@@ -97,9 +97,9 @@ Validates against `/[^a-zA-Z0-9\s\-_.]/`. Rejects the value if any character out
 ```json
 {
   "projectCode": {
-    "component": "Textbox",
+    "type": "Textbox",
     "label": "Project Code",
-    "validations": ["NoSpecialCharactersValidation"]
+    "validate": [{ "validator": "NoSpecialCharactersValidation" }]
   }
 }
 ```
@@ -110,9 +110,9 @@ Validates against `/^-?\d{1,}(\.\d{1,2})?$/`. Accepts integers and decimals with
 ```json
 {
   "amount": {
-    "component": "Number",
+    "type": "Number",
     "label": "Amount",
-    "validations": ["CurrencyValidation"]
+    "validate": [{ "validator": "CurrencyValidation" }]
   }
 }
 ```
@@ -123,9 +123,9 @@ Only applies to array values. Iterates through the array and checks for duplicat
 ```json
 {
   "tags": {
-    "component": "Multiselect",
+    "type": "Multiselect",
     "label": "Tags",
-    "validations": ["UniqueInArrayValidation"]
+    "validate": [{ "validator": "UniqueInArrayValidation" }]
   }
 }
 ```
@@ -134,11 +134,11 @@ Only applies to array values. Iterates through the array and checks for duplicat
 
 ## Factory Validators
 
-Factory functions create parameterized validators. These must be registered at startup using `registerValidations()`.
+Factory functions create parameterized validators. These must be registered at startup using `registerValidators()`.
 
 ### createMinLengthValidation(min: number)
 
-**Signature:** `(min: number) => ValidationFunction`
+**Signature:** `(min: number) => ValidatorFn`
 
 Creates a validator that checks whether the string value has at least `min` characters.
 
@@ -148,9 +148,9 @@ Creates a validator that checks whether the string value has at least `min` char
 
 **Example:**
 ```typescript
-import { registerValidations, createMinLengthValidation } from "@bghcore/dynamic-forms-core";
+import { registerValidators, createMinLengthValidation } from "@bghcore/dynamic-forms-core";
 
-registerValidations({
+registerValidators({
   MinLength5: createMinLengthValidation(5),
   MinLength10: createMinLengthValidation(10),
 });
@@ -159,9 +159,9 @@ registerValidations({
 ```json
 {
   "password": {
-    "component": "Textbox",
+    "type": "Textbox",
     "label": "Password",
-    "validations": ["MinLength10"]
+    "validate": [{ "validator": "MinLength10" }]
   }
 }
 ```
@@ -170,7 +170,7 @@ registerValidations({
 
 ### createMaxLengthValidation(max: number)
 
-**Signature:** `(max: number) => ValidationFunction`
+**Signature:** `(max: number) => ValidatorFn`
 
 Creates a validator that checks whether the string value has at most `max` characters.
 
@@ -180,9 +180,9 @@ Creates a validator that checks whether the string value has at most `max` chara
 
 **Example:**
 ```typescript
-import { registerValidations, createMaxLengthValidation } from "@bghcore/dynamic-forms-core";
+import { registerValidators, createMaxLengthValidation } from "@bghcore/dynamic-forms-core";
 
-registerValidations({
+registerValidators({
   MaxLength50: createMaxLengthValidation(50),
   MaxLength255: createMaxLengthValidation(255),
 });
@@ -191,9 +191,9 @@ registerValidations({
 ```json
 {
   "title": {
-    "component": "Textbox",
+    "type": "Textbox",
     "label": "Title",
-    "validations": ["MaxLength255"]
+    "validate": [{ "validator": "MaxLength255" }]
   }
 }
 ```
@@ -202,7 +202,7 @@ registerValidations({
 
 ### createNumericRangeValidation(min: number, max: number)
 
-**Signature:** `(min: number, max: number) => ValidationFunction`
+**Signature:** `(min: number, max: number) => ValidatorFn`
 
 Creates a validator that checks whether the value (parsed as a number) falls within the specified range. Returns `"Must be a number"` if the value cannot be parsed.
 
@@ -212,9 +212,9 @@ Creates a validator that checks whether the value (parsed as a number) falls wit
 
 **Example:**
 ```typescript
-import { registerValidations, createNumericRangeValidation } from "@bghcore/dynamic-forms-core";
+import { registerValidators, createNumericRangeValidation } from "@bghcore/dynamic-forms-core";
 
-registerValidations({
+registerValidators({
   PercentageRange: createNumericRangeValidation(0, 100),
   AgeRange: createNumericRangeValidation(0, 150),
 });
@@ -223,9 +223,9 @@ registerValidations({
 ```json
 {
   "completionPercent": {
-    "component": "Number",
+    "type": "Number",
     "label": "Completion %",
-    "validations": ["PercentageRange"]
+    "validate": [{ "validator": "PercentageRange" }]
   }
 }
 ```
@@ -234,7 +234,7 @@ registerValidations({
 
 ### createPatternValidation(regex: RegExp, message: string)
 
-**Signature:** `(regex: RegExp, message: string) => ValidationFunction`
+**Signature:** `(regex: RegExp, message: string) => ValidatorFn`
 
 Creates a validator that tests the string value against a custom regex. Returns the provided message if the pattern does not match.
 
@@ -244,9 +244,9 @@ Creates a validator that tests the string value against a custom regex. Returns 
 
 **Example:**
 ```typescript
-import { registerValidations, createPatternValidation } from "@bghcore/dynamic-forms-core";
+import { registerValidators, createPatternValidation } from "@bghcore/dynamic-forms-core";
 
-registerValidations({
+registerValidators({
   AlphaOnly: createPatternValidation(/^[a-zA-Z]+$/, "Only letters are allowed"),
   USZipCode: createPatternValidation(/^\d{5}(-\d{4})?$/, "Invalid US ZIP code"),
 });
@@ -255,9 +255,9 @@ registerValidations({
 ```json
 {
   "zipCode": {
-    "component": "Textbox",
+    "type": "Textbox",
     "label": "ZIP Code",
-    "validations": ["USZipCode"]
+    "validate": [{ "validator": "USZipCode" }]
   }
 }
 ```
@@ -266,7 +266,7 @@ registerValidations({
 
 ### createRequiredIfValidation(dependentFieldName: string, dependentFieldValues: string[])
 
-**Signature:** `(dependentFieldName: string, dependentFieldValues: string[]) => ValidationFunction`
+**Signature:** `(dependentFieldName: string, dependentFieldValues: string[]) => ValidatorFn`
 
 Creates a cross-field-aware sync validator that makes the current field required conditionally. The field is required only if the specified dependent field's value matches one of the provided values.
 
@@ -274,13 +274,13 @@ Creates a cross-field-aware sync validator that makes the current field required
 
 **Skips empty:** No -- the point of this validator is to enforce presence when conditions are met. Returns `undefined` if the condition is not met or `entityData` is not available.
 
-**Note:** This validator receives `entityData` (all form values) as the second argument via the `ValidationFunction` signature.
+**Note:** This validator receives `entityData` (all form values) as the second argument via the `ValidatorFn` signature.
 
 **Example:**
 ```typescript
-import { registerValidations, createRequiredIfValidation } from "@bghcore/dynamic-forms-core";
+import { registerValidators, createRequiredIfValidation } from "@bghcore/dynamic-forms-core";
 
-registerValidations({
+registerValidators({
   RequiredIfStatusActive: createRequiredIfValidation("status", ["Active", "InProgress"]),
   RequiredIfTypeExternal: createRequiredIfValidation("partnerType", ["External"]),
 });
@@ -289,9 +289,9 @@ registerValidations({
 ```json
 {
   "externalPartnerName": {
-    "component": "Textbox",
+    "type": "Textbox",
     "label": "Partner Name",
-    "validations": ["RequiredIfTypeExternal"]
+    "validate": [{ "validator": "RequiredIfTypeExternal" }]
   }
 }
 ```
@@ -305,9 +305,9 @@ Async validators are used for server-side validation (e.g., uniqueness checks, A
 ### Registration
 
 ```typescript
-import { registerAsyncValidations, AsyncValidationFunction } from "@bghcore/dynamic-forms-core";
+import { registerValidators, ValidatorFn } from "@bghcore/dynamic-forms-core";
 
-const checkUniqueEmail: AsyncValidationFunction = async (value, entityData, signal) => {
+const checkUniqueEmail: ValidatorFn = async (value, entityData, signal) => {
   if (!value || typeof value !== "string") return undefined;
 
   const response = await fetch(`/api/check-email?email=${encodeURIComponent(value)}`, {
@@ -320,7 +320,7 @@ const checkUniqueEmail: AsyncValidationFunction = async (value, entityData, sign
   return result.exists ? "This email is already in use" : undefined;
 };
 
-registerAsyncValidations({
+registerValidators({
   UniqueEmailCheck: checkUniqueEmail,
 });
 ```
@@ -328,11 +328,11 @@ registerAsyncValidations({
 ### Function Signature
 
 ```typescript
-type AsyncValidationFunction = (
+type ValidatorFn = (
   value: unknown,
   entityData?: IEntityData,
   signal?: AbortSignal
-) => Promise<string | undefined>;
+) => string | undefined | Promise<string | undefined>;
 ```
 
 - **`value`**: The current field value.
@@ -344,7 +344,7 @@ type AsyncValidationFunction = (
 The `signal` parameter enables cancellation of in-flight async validations when the user changes the field value before the previous validation completes. Always check `signal?.aborted` after `await` calls to avoid stale results:
 
 ```typescript
-const validateWithApi: AsyncValidationFunction = async (value, entityData, signal) => {
+const validateWithApi: ValidatorFn = async (value, entityData, signal) => {
   if (!value) return undefined;
 
   const response = await fetch(`/api/validate?v=${value}`, { signal });
@@ -361,15 +361,16 @@ const validateWithApi: AsyncValidationFunction = async (value, entityData, signa
 
 ### Debounce Behavior
 
-Use `IFieldConfig.asyncValidationDebounceMs` to debounce async validation triggering:
+Use `debounceMs` in the validation rule to debounce async validation triggering:
 
 ```json
 {
   "username": {
-    "component": "Textbox",
+    "type": "Textbox",
     "label": "Username",
-    "asyncValidations": ["CheckUsernameAvailable"],
-    "asyncValidationDebounceMs": 500
+    "validate": [
+      { "validator": "CheckUsernameAvailable", "async": true, "debounceMs": 500 }
+    ]
   }
 }
 ```
@@ -378,7 +379,7 @@ When the user types, async validation is deferred for the specified number of mi
 
 ### Execution Order
 
-In `HookRenderField`, validation runs in sequence within the `Controller`'s `rules.validate` function:
+In `RenderField`, validation runs in sequence within the `Controller`'s `rules.validate` function:
 
 1. **Sync validators** run first (fast fail). If any sync validator returns an error, async validators are **skipped**.
 2. **Async validators** run only after all sync validators pass. They run sequentially (not in parallel), stopping at the first error.
@@ -388,26 +389,24 @@ In `HookRenderField`, validation runs in sequence within the `Controller`'s `rul
 
 | Property | Type | Description |
 |---|---|---|
-| `asyncValidations` | `string[]` | Array of async validator names registered via `registerAsyncValidations()` |
-| `asyncValidationDebounceMs` | `number` | Debounce delay in milliseconds before triggering async validation |
+| `validate` | `IValidationRule[]` | Array of validation rules. Set `async: true` for async validators, `crossField: true` for cross-field validators. |
 
 ### Full Example: Server-Side Uniqueness Check
 
 ```typescript
 import {
-  registerValidations,
-  registerAsyncValidations,
+  registerValidators,
   createMinLengthValidation,
-  AsyncValidationFunction,
+  ValidatorFn,
 } from "@bghcore/dynamic-forms-core";
 
 // Register sync validators first (fast fail)
-registerValidations({
+registerValidators({
   MinLength3: createMinLengthValidation(3),
 });
 
 // Register async validator
-const checkUsernameAvailable: AsyncValidationFunction = async (value, entityData, signal) => {
+const checkUsernameAvailable: ValidatorFn = async (value, entityData, signal) => {
   if (!value || typeof value !== "string" || value.length < 3) return undefined;
 
   try {
@@ -424,7 +423,7 @@ const checkUsernameAvailable: AsyncValidationFunction = async (value, entityData
   }
 };
 
-registerAsyncValidations({
+registerValidators({
   CheckUsernameAvailable: checkUsernameAvailable,
 });
 ```
@@ -433,12 +432,14 @@ Field config:
 ```json
 {
   "username": {
-    "component": "Textbox",
+    "type": "Textbox",
     "label": "Username",
     "required": true,
-    "validations": ["MinLength3", "NoSpecialCharactersValidation"],
-    "asyncValidations": ["CheckUsernameAvailable"],
-    "asyncValidationDebounceMs": 500
+    "validate": [
+      { "validator": "MinLength3" },
+      { "validator": "NoSpecialCharactersValidation" },
+      { "validator": "CheckUsernameAvailable", "async": true, "debounceMs": 500 }
+    ]
   }
 }
 ```
@@ -452,11 +453,11 @@ Cross-field validators receive all form values and can validate relationships be
 ### Registration
 
 ```typescript
-import { registerCrossFieldValidations, CrossFieldValidationFunction } from "@bghcore/dynamic-forms-core";
+import { registerValidators, ValidatorFn } from "@bghcore/dynamic-forms-core";
 
-const dateRangeValidation: CrossFieldValidationFunction = (values, fieldName) => {
-  const startDate = values["startDate"] as string;
-  const endDate = values["endDate"] as string;
+const dateRangeValidation: ValidatorFn = (value, allValues) => {
+  const startDate = allValues?.["startDate"] as string;
+  const endDate = allValues?.["endDate"] as string;
 
   if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
     return "End date must be after start date";
@@ -464,9 +465,9 @@ const dateRangeValidation: CrossFieldValidationFunction = (values, fieldName) =>
   return undefined;
 };
 
-const passwordConfirmation: CrossFieldValidationFunction = (values, fieldName) => {
-  const password = values["password"] as string;
-  const confirmPassword = values["confirmPassword"] as string;
+const passwordConfirmation: ValidatorFn = (value, allValues) => {
+  const password = allValues?.["password"] as string;
+  const confirmPassword = allValues?.["confirmPassword"] as string;
 
   if (password && confirmPassword && password !== confirmPassword) {
     return "Passwords do not match";
@@ -474,42 +475,30 @@ const passwordConfirmation: CrossFieldValidationFunction = (values, fieldName) =
   return undefined;
 };
 
-registerCrossFieldValidations({
+registerValidators({
   DateRangeCheck: dateRangeValidation,
   PasswordMatch: passwordConfirmation,
 });
 ```
 
-### Function Signature
-
-```typescript
-type CrossFieldValidationFunction = (
-  values: IEntityData,
-  fieldName: string
-) => string | undefined;
-```
-
-- **`values`**: All current form values (`Record<string, unknown>`).
-- **`fieldName`**: The name of the field being validated. Useful for writing generic validators that need to know which field they are attached to.
-
 ### How They Differ from Regular Validators
 
 | Aspect | Regular Validators | Cross-Field Validators |
 |---|---|---|
-| Input | Single field value | All form values + field name |
-| Config key | `validations` | `crossFieldValidations` |
+| Input | Single field value | All form values via `entityData` parameter |
+| Config | `{ validator: "name" }` | `{ validator: "name", crossField: true }` |
 | Scope | Own field only | Full form context |
-| Async support | Yes (separate registry) | No (sync only) |
-| Registration | `registerValidations()` | `registerCrossFieldValidations()` |
+| Async support | Yes | No (sync only) |
+| Registration | `registerValidators()` | `registerValidators()` (same registry) |
 
 ### Field Config Property
 
 ```json
 {
   "endDate": {
-    "component": "DateControl",
+    "type": "DateControl",
     "label": "End Date",
-    "crossFieldValidations": ["DateRangeCheck"]
+    "validate": [{ "validator": "DateRangeCheck", "crossField": true }]
   }
 }
 ```
@@ -517,10 +506,10 @@ type CrossFieldValidationFunction = (
 ### Example: Date Range Validation
 
 ```typescript
-const dateRangeValidation: CrossFieldValidationFunction = (values, fieldName) => {
+const dateRangeValidation: ValidatorFn = (value, allValues) => {
   // This validator is placed on "endDate" but reads "startDate"
-  const startDate = values["startDate"] as string;
-  const endDate = values["endDate"] as string;
+  const startDate = allValues?.["startDate"] as string;
+  const endDate = allValues?.["endDate"] as string;
 
   if (!startDate || !endDate) return undefined;
 
@@ -535,10 +524,10 @@ const dateRangeValidation: CrossFieldValidationFunction = (values, fieldName) =>
 ### Example: Conditional Sum Limit
 
 ```typescript
-const budgetLimitValidation: CrossFieldValidationFunction = (values, fieldName) => {
-  const hardware = (values["hardwareBudget"] as number) || 0;
-  const software = (values["softwareBudget"] as number) || 0;
-  const totalBudget = (values["totalBudget"] as number) || 0;
+const budgetLimitValidation: ValidatorFn = (value, allValues) => {
+  const hardware = (allValues?.["hardwareBudget"] as number) || 0;
+  const software = (allValues?.["softwareBudget"] as number) || 0;
+  const totalBudget = (allValues?.["totalBudget"] as number) || 0;
 
   if (hardware + software > totalBudget) {
     return `Combined budget ($${hardware + software}) exceeds total budget ($${totalBudget})`;
@@ -557,16 +546,16 @@ const budgetLimitValidation: CrossFieldValidationFunction = (values, fieldName) 
 A sync validator is a function that takes a value and optional entity data, and returns `undefined` for valid or a `string` error message for invalid.
 
 ```typescript
-import { registerValidations, ValidationFunction } from "@bghcore/dynamic-forms-core";
+import { registerValidators, ValidatorFn } from "@bghcore/dynamic-forms-core";
 
 // Simple value-only validator
-const noWhitespace: ValidationFunction = (value) => {
+const noWhitespace: ValidatorFn = (value) => {
   if (!value || typeof value !== "string") return undefined;
   return /\s/.test(value) ? "Value must not contain whitespace" : undefined;
 };
 
 // Validator using entity data (cross-field awareness in a sync validator)
-const greaterThanMinimum: ValidationFunction = (value, entityData) => {
+const greaterThanMinimum: ValidatorFn = (value, entityData) => {
   if (value == null || value === "") return undefined;
   const num = Number(value);
   const minimum = Number(entityData?.["minimumValue"]) || 0;
@@ -574,7 +563,7 @@ const greaterThanMinimum: ValidationFunction = (value, entityData) => {
   return num <= minimum ? `Must be greater than ${minimum}` : undefined;
 };
 
-registerValidations({
+registerValidators({
   NoWhitespace: noWhitespace,
   GreaterThanMinimum: greaterThanMinimum,
 });
@@ -585,9 +574,9 @@ registerValidations({
 An async validator returns a `Promise<string | undefined>`. Always handle the `AbortSignal` parameter.
 
 ```typescript
-import { registerAsyncValidations, AsyncValidationFunction } from "@bghcore/dynamic-forms-core";
+import { registerValidators, ValidatorFn } from "@bghcore/dynamic-forms-core";
 
-const validatePostalCode: AsyncValidationFunction = async (value, entityData, signal) => {
+const validatePostalCode: ValidatorFn = async (value, entityData, signal) => {
   if (!value || typeof value !== "string") return undefined;
 
   const country = entityData?.["country"] as string;
@@ -604,7 +593,7 @@ const validatePostalCode: AsyncValidationFunction = async (value, entityData, si
   }
 };
 
-registerAsyncValidations({
+registerValidators({
   ValidatePostalCode: validatePostalCode,
 });
 ```
@@ -622,10 +611,14 @@ A field can specify multiple validators. They run in order; the first error is d
 ```json
 {
   "projectId": {
-    "component": "Textbox",
+    "type": "Textbox",
     "label": "Project ID",
     "required": true,
-    "validations": ["NoSpecialCharactersValidation", "MinLength5", "MaxLength20"]
+    "validate": [
+      { "validator": "NoSpecialCharactersValidation" },
+      { "validator": "MinLength5" },
+      { "validator": "MaxLength20" }
+    ]
   }
 }
 ```
@@ -637,19 +630,10 @@ Multiple errors are concatenated: `"Error 1 & Error 2"`.
 ### Registration API Reference
 
 ```typescript
-// Sync validators
-function registerValidations(custom: Record<string, ValidationFunction>): void;
-function getValidation(name: string): ValidationFunction | undefined;
-function getValidationRegistry(): Record<string, ValidationFunction>;
-
-// Async validators
-function registerAsyncValidations(custom: Record<string, AsyncValidationFunction>): void;
-function getAsyncValidation(name: string): AsyncValidationFunction | undefined;
-function getAsyncValidationRegistry(): Record<string, AsyncValidationFunction>;
-
-// Cross-field validators
-function registerCrossFieldValidations(custom: Record<string, CrossFieldValidationFunction>): void;
-function getCrossFieldValidation(name: string): CrossFieldValidationFunction | undefined;
+// Unified validator registration (sync, async, and cross-field)
+function registerValidators(custom: Record<string, ValidatorFn>): void;
+function getValidator(name: string): ValidatorFn | undefined;
+function getValidationRegistry(): Record<string, ValidatorFn>;
 ```
 
-**Important:** `registerValidations()`, `registerAsyncValidations()`, and `registerCrossFieldValidations()` **merge** into the existing registry -- they do not replace it. Call them at application startup before rendering any forms. Registering a name that already exists overwrites the previous validator for that name.
+**Important:** `registerValidators()` **merges** into the existing registry -- it does not replace it. Call it at application startup before rendering any forms. Registering a name that already exists overwrites the previous validator for that name.

@@ -10,12 +10,12 @@ The core package (`@bghcore/dynamic-forms-core`) handles form state, business ru
 
 ```
 @bghcore/dynamic-forms-core
-  -> HookRenderField looks up injectedFields[componentType]
-  -> React.cloneElement(element, IHookFieldSharedProps)
+  -> RenderField looks up injectedFields[componentType]
+  -> React.cloneElement(element, IFieldProps)
   -> Your field component receives props and renders UI
 ```
 
-Every field component receives `IHookFieldSharedProps<T>` via `React.cloneElement`. You do not need to declare these props yourself -- they are passed automatically by the core rendering pipeline.
+Every field component receives `IFieldProps<T>` via `React.cloneElement`. You do not need to declare these props yourself -- they are passed automatically by the core rendering pipeline.
 
 ## Step-by-Step Guide
 
@@ -68,7 +68,7 @@ packages/my-adapter/
     "react-dom": "^18.0.0 || ^19.0.0",
     "react-hook-form": "^7.0.0",
     "my-ui-library": "^X.0.0",
-    "@bghcore/dynamic-forms-core": "^1.1.0"
+    "@bghcore/dynamic-forms-core": "^2.0.0"
   }
 }
 ```
@@ -100,12 +100,12 @@ export default defineConfig({
 });
 ```
 
-### 4. Understand IHookFieldSharedProps
+### 4. Understand IFieldProps
 
 Every field component receives these props (from `@bghcore/dynamic-forms-core`):
 
 ```ts
-interface IHookFieldSharedProps<T> {
+interface IFieldProps<T> {
   fieldName?: string;          // Field identifier
   entityId?: string;           // Entity ID for test IDs
   entityType?: string;         // Entity type for test IDs
@@ -119,11 +119,11 @@ interface IHookFieldSharedProps<T> {
   saving?: boolean;            // Whether form is currently saving
   savePending?: boolean;       // Whether a save is pending
   value?: unknown;             // Current field value
-  meta?: T;                    // Component-specific metadata
-  dropdownOptions?: IDropdownOption[];  // Options for select fields
-  validations?: string[];      // Validation rule keys
+  config?: T;                  // Component-specific configuration
+  options?: IOption[];         // Options for select fields
+  validate?: IValidationRule[];// Validation rules
   label?: string;              // Field label text
-  component?: string;          // Component type string
+  type?: string;               // Component type string
   setFieldValue?: (            // Callback to update value
     fieldName: string,
     fieldValue: unknown,
@@ -138,10 +138,10 @@ interface IHookFieldSharedProps<T> {
 Each field component follows this pattern:
 
 ```tsx
-import { IHookFieldSharedProps } from "@bghcore/dynamic-forms-core";
+import { IFieldProps } from "@bghcore/dynamic-forms-core";
 import React from "react";
 
-const HookMyField = (props: IHookFieldSharedProps<IMyFieldMeta>) => {
+const HookMyField = (props: IFieldProps<IMyFieldConfig>) => {
   const { fieldName, value, readOnly, error, setFieldValue } = props;
 
   const onChange = (newValue: string) => {
@@ -172,8 +172,8 @@ Important patterns:
 - **Use `setFieldValue`** to report value changes -- this triggers auto-save and business rules
 - **The `timeout` parameter** on `setFieldValue` controls auto-save debounce (e.g., 3000ms for text, 0 for dropdowns)
 - **Cast `value`** to the appropriate type (it comes as `unknown`)
-- **Use `meta`** for component-specific configuration passed via `IFieldConfig.meta`
-- **Use `dropdownOptions`** for select-type fields -- it provides `{ key, text, disabled? }[]`
+- **Use `config`** for component-specific configuration passed via `IFieldConfig.config`
+- **Use `options`** for select-type fields -- it provides `{ value, label, disabled? }[]`
 
 ### 6. Implement the Registry
 
@@ -219,16 +219,16 @@ The following 19 component types should be implemented for a complete adapter:
 | `Textbox` | Single-line text input | `string` |
 | `Number` | Numeric input | `number` |
 | `Toggle` | Boolean switch | `boolean` |
-| `Dropdown` | Single-select from `dropdownOptions` | `string` |
-| `MultiSelect` | Multi-select from `dropdownOptions` | `string[]` |
+| `Dropdown` | Single-select from `options` | `string` |
+| `MultiSelect` | Multi-select from `options` | `string[]` |
 | `DateControl` | Date picker | `string` (ISO) |
-| `Slider` | Range slider (uses `meta.min`, `meta.max`, `meta.step`) | `number` |
+| `Slider` | Range slider (uses `config.min`, `config.max`, `config.step`) | `number` |
 | `DynamicFragment` | Hidden field (form state only) | any |
-| `SimpleDropdown` | Single-select from `meta.dropdownOptions` (string array) | `string` |
-| `MultiSelectSearch` | Searchable multi-select from `dropdownOptions` | `string[]` |
+| `SimpleDropdown` | Single-select from `config.options` (string array) | `string` |
+| `MultiSelectSearch` | Searchable multi-select from `options` | `string[]` |
 | `Textarea` | Multi-line text with expand-to-dialog | `string` |
 | `DocumentLinks` | Link title/URL CRUD | `{ title: string; url: string }[]` |
-| `StatusDropdown` | Single-select with color indicators (uses `meta.statusColors`) | `string` |
+| `StatusDropdown` | Single-select with color indicators (uses `config.statusColors`) | `string` |
 
 **6 Read-Only Fields:**
 
@@ -237,20 +237,20 @@ The following 19 component types should be implemented for a complete adapter:
 | `ReadOnly` | Plain text display | `string` |
 | `ReadOnlyArray` | Array of text values | `string[]` |
 | `ReadOnlyDateTime` | Formatted date/time | `string` (ISO) |
-| `ReadOnlyCumulativeNumber` | Computed sum (uses `meta.dependencyFields`) | computed `number` |
+| `ReadOnlyCumulativeNumber` | Computed sum (uses `config.dependencyFields`) | computed `number` |
 | `ReadOnlyRichText` | Rendered HTML content | `string` (HTML) |
-| `ReadOnlyWithButton` | Text with action button (uses `meta.buttonText`, `meta.onButtonClick`) | `string` |
+| `ReadOnlyWithButton` | Text with action button (uses `config.buttonText`, `config.onButtonClick`) | `string` |
 
 ### 8. Consumer Usage
 
 Consumers wire up the adapter like this:
 
 ```tsx
-import { BusinessRulesProvider, InjectedHookFieldProvider, UseInjectedHookFieldContext, HookInlineForm } from "@bghcore/dynamic-forms-core";
+import { RulesEngineProvider, InjectedFieldProvider, UseInjectedFieldContext, DynamicForm } from "@bghcore/dynamic-forms-core";
 import { createMyAdapterFieldRegistry } from "@bghcore/dynamic-forms-my-adapter";
 
 function FieldRegistrar({ children }) {
-  const { setInjectedFields } = UseInjectedHookFieldContext();
+  const { setInjectedFields } = UseInjectedFieldContext();
   useEffect(() => {
     setInjectedFields(createMyAdapterFieldRegistry());
   }, []);
@@ -260,13 +260,13 @@ function FieldRegistrar({ children }) {
 function App() {
   return (
     <MyUIThemeProvider>
-      <BusinessRulesProvider>
-        <InjectedHookFieldProvider>
+      <RulesEngineProvider>
+        <InjectedFieldProvider>
           <FieldRegistrar>
-            <HookInlineForm {...formProps} />
+            <DynamicForm {...formProps} />
           </FieldRegistrar>
-        </InjectedHookFieldProvider>
-      </BusinessRulesProvider>
+        </InjectedFieldProvider>
+      </RulesEngineProvider>
     </MyUIThemeProvider>
   );
 }

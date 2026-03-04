@@ -10,13 +10,13 @@ These are genuinely good engineering decisions, not participation trophies.
 
 ### The rules engine is the real deal
 
-Most "dynamic form" libraries are just conditional rendering with extra steps. This is an actual rules engine with a dependency graph, bidirectional edges, a revert-then-reapply evaluation cycle, combo (AND) conditions, and cascading updates. The two-pass graph construction in `GetDefaultBusinessRules` -- forward edges first, reverse edges second -- is the kind of approach that comes from understanding the problem deeply, not from copying a tutorial.
+Most "dynamic form" libraries are just conditional rendering with extra steps. This is an actual rules engine with a dependency graph, bidirectional edges, a revert-then-reapply evaluation cycle, combo (AND) conditions, and cascading updates. The two-pass graph construction in `buildDefaultFieldStates` -- forward edges first, reverse edges second -- is the kind of approach that comes from understanding the problem deeply, not from copying a tutorial.
 
-The decision to make rules declarative (data in `IFieldConfig.dependencies`) instead of imperative (`if/else` spaghetti) is the single best architectural choice in the project. It means rules are serializable, inspectable, and could be driven by a visual editor. Most engineers don't make this leap.
+The decision to make rules declarative (data in `IFieldConfig.rules`) instead of imperative (`if/else` spaghetti) is the single best architectural choice in the project. It means rules are serializable, inspectable, and could be driven by a visual editor. Most engineers don't make this leap.
 
 ### Component injection was the right abstraction
 
-You could have hardcoded a giant switch statement in `HookRenderField`. Instead, you built an injection system where field components are registered at runtime via context and looked up by key. This makes the library extensible without forking and lets consumers swap out any field type. That's library-grade thinking.
+You could have hardcoded a giant switch statement in `RenderField`. Instead, you built an injection system where field components are registered at runtime via context and looked up by key. This makes the library extensible without forking and lets consumers swap out any field type. That's library-grade thinking.
 
 ### The clean two-package split
 
@@ -24,11 +24,11 @@ The restructure into `core` (no UI dependency) and `fluent` (Fluent UI implement
 
 ### Pluggable registries for validation and value functions
 
-Converting the hardcoded `switch/case` statements into `ValidationRegistry` and `ValueFunctionRegistry` was a significant improvement. Consumers can now extend the library's capabilities without modifying source code. Built-in validators ship as defaults, and custom ones can be added via `registerValidations()` and `registerValueFunctions()`.
+Converting the hardcoded `switch/case` statements into `ValidationRegistry` and `ValueFunctionRegistry` was a significant improvement. Consumers can now extend the library's capabilities without modifying source code. Built-in validators ship as defaults, and custom ones can be added via `registerValidators()` and `registerValueFunctions()`.
 
-### The `IHookFieldSharedProps<T>` contract
+### The `IFieldProps<T>` contract
 
-Having a single, generic interface that all field types conform to is harder than it sounds. It means any field is interchangeable, the rendering pipeline doesn't need to know about specific field internals, and consumers building custom fields have a clear contract. The generic `meta` prop was the right escape hatch for field-specific config.
+Having a single, generic interface that all field types conform to is harder than it sounds. It means any field is interchangeable, the rendering pipeline doesn't need to know about specific field internals, and consumers building custom fields have a clear contract. The generic `config` prop was the right escape hatch for field-specific configuration.
 
 ### Pure helper separation
 
@@ -56,7 +56,7 @@ This is the single highest-priority gap remaining.
 
 For forms with 10-20 fields, none of this matters. For forms with 50+ fields or rapid field changes, it will:
 
-**No memoization on context values.** The `BusinessRulesProvider` creates a new object literal for its context value on every render. Every consumer of this context re-renders on every provider render, even if the business rules didn't change. Wrapping this in `useMemo` and the functions in `useCallback` would fix it.
+**No memoization on context values.** The `RulesEngineProvider` creates a new object literal for its context value on every render. Every consumer of this context re-renders on every provider render, even if the business rules didn't change. Wrapping this in `useMemo` and the functions in `useCallback` would fix it.
 
 **`CombineBusinessRules` mutates in place.** This function takes an existing rules object and mutates it directly. Besides being inconsistent with the otherwise immutable approach, it makes it impossible to do reference equality checks for render optimization.
 
@@ -65,7 +65,7 @@ For forms with 10-20 fields, none of this matters. For forms with 50+ fields or 
 There's no consistent approach to errors:
 
 - If a `configName` doesn't exist in `businessRules.configRules`, the code accesses `.fieldRules` on `undefined` and throws with an unhelpful stack trace.
-- If an injected field component isn't found, the user sees "Missing Component ({component})" rendered inline -- but there's no console warning or development-mode error.
+- If an injected field component isn't found, the user sees "Missing Component ({type})" rendered inline -- but there's no console warning or development-mode error.
 - The auto-save flow has `.finally()` before `.catch()` in the promise chain, which means cleanup runs before error handling.
 - There's no validation that the configs passed to `initBusinessRules` are well-formed.
 
@@ -73,7 +73,7 @@ For a published library, consumers need clear error messages that tell them what
 
 ### The `Dictionary` and naming inconsistencies
 
-While the `Dictionary<T>` type has been consolidated into a local utility, the `isReadonly` vs `readOnly` naming inconsistency in `IFieldConfig` still exists (acknowledged with a TODO but never fixed). Accumulated inconsistency makes the codebase harder to navigate and refactor.
+While the `Dictionary<T>` type has been consolidated into a local utility, accumulated inconsistency makes the codebase harder to navigate and refactor.
 
 ### Hardcoded English strings
 
@@ -99,10 +99,10 @@ The v0.1.0 restructure addressed several major problems:
 
 Despite the remaining issues, the core patterns are sound:
 
-1. **Declarative business rules** via `IFieldConfig.dependencies` -- this is the core value proposition
+1. **Declarative business rules** via `IFieldConfig.rules` -- this is the core value proposition
 2. **The revert-then-reapply evaluation cycle** -- it's correct and handles edge cases
 3. **Component injection via context** -- the right extensibility model
-4. **`IHookFieldSharedProps<T>` as the field contract** -- keeps fields interchangeable
+4. **`IFieldProps<T>` as the field contract** -- keeps fields interchangeable
 5. **`BusinessRulesHelper.ts` as pure functions** -- right separation from React
 6. **`useReducer` for rules state** -- appropriate for complex state transitions
 7. **Auto-save with debounce** -- good UX pattern, well-implemented
@@ -118,7 +118,7 @@ Despite the remaining issues, the core patterns are sound:
 |---|---|---|
 | Architecture & design | A | Declarative rules engine, component injection, config-driven rendering, clean package split -- all correct choices |
 | Business rules engine | A- | Comprehensive, correct evaluation cycle. Loses points for mutation in CombineBusinessRules and string-based function dispatch |
-| Type system | B+ | Strict mode, low `any` usage, good generics. Loses points for isReadonly/readOnly duplication |
+| Type system | B+ | Strict mode, low `any` usage, good generics |
 | Code organization | A- | Clean two-package monorepo, consistent naming, focused modules. Minor naming inconsistencies remain |
 | Separation of concerns | A- | Core/UI split is clean. Providers are well-separated. Library boundary is well-defined |
 | Performance | C | No memoization, mutation in CombineBusinessRules. Fine for small forms, will hurt at scale |
