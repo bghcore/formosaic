@@ -1,6 +1,7 @@
 import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { IFieldConfig } from "../types/IFieldConfig";
+import { FormStrings } from "../strings";
 
 export interface IFieldArrayProps {
   fieldName: string;
@@ -31,9 +32,9 @@ export const FieldArray: React.FC<IFieldArrayProps> = (props) => {
   );
 
   return (
-    <div className="field-array">
+    <div className="field-array" role="group" aria-label={config.label || fieldName}>
       {fields.map((field, index) => (
-        <div key={field.id} className="field-array-item">
+        <div key={field.id} className="field-array-item" role="group" aria-label={FormStrings.itemOfTotal(index + 1, fields.length, config.label || fieldName)}>
           {renderItem(
             itemFieldNames.map(name => `${fieldName}.${index}.${name}`),
             index,

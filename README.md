@@ -1,29 +1,32 @@
 # Dynamic React Business Forms
 
-A React library for rendering complex, configuration-driven forms with a built-in business rules engine. Define your forms as JSON configurations -- field definitions, dependency rules, dropdown options, ordering -- and the library handles rendering, validation, auto-save, and field interactions automatically.
+A React library for rendering complex, configuration-driven forms with a built-in rules engine. Define your forms as a single `IFormConfig` JSON object -- field definitions, declarative rules with rich conditions, validation, ordering -- and the library handles rendering, validation, auto-save, and field interactions automatically.
 
 ## When to Use This Library
 
 **Use this if you need:**
-- Forms defined as JSON/config objects, not JSX — field types, labels, validations, and dependencies declared as data
-- A business rules engine where field A changing to value X makes field B required, field C hidden, and field D's dropdown options change — all declared, not coded
-- Multi-step wizards with conditional step visibility and cross-step business rules
-- Auto-save with debounce, retry, and abort — not just "submit on click"
-- To swap UI libraries (Fluent UI, MUI, custom) without rewriting form logic
+- Forms defined as JSON/config objects, not JSX -- field types, labels, validations, and rules declared as data
+- A rules engine where field A changing to value X makes field B required, field C hidden, and field D's dropdown options change -- all declared, not coded
+- Multi-step wizards with conditional step visibility and cross-step rules
+- Auto-save with debounce, retry, and abort -- not just "submit on click"
+- To swap UI libraries (Fluent UI, MUI, headless HTML, custom) without rewriting form logic
+- A visual drag-and-drop form builder for non-technical users
 
 **Don't use this if you need:**
-- Simple forms with 3-5 static fields — use react-hook-form directly
-- JSON Schema compliance — use [RJSF](https://github.com/rjsf-team/react-jsonschema-form)
-- A visual drag-and-drop form builder — use [SurveyJS](https://surveyjs.io) or [Formily](https://github.com/alibaba/formily)
-- Headless form state with zero opinions — use [TanStack Form](https://tanstack.com/form)
+- Simple forms with 3-5 static fields -- use react-hook-form directly
+- JSON Schema compliance -- use [RJSF](https://github.com/rjsf-team/react-jsonschema-form)
+- Headless form state with zero opinions -- use [TanStack Form](https://tanstack.com/form)
 
 ## Packages
 
 | Package | Description | Size |
 |---------|-------------|------|
-| [`@bghcore/dynamic-forms-core`](./packages/core) | Business rules engine, form orchestration, validation, i18n, wizard, field arrays, error boundaries, draft persistence, devtools. UI-library agnostic (React + react-hook-form only, no UI library dependency). | ~108 KB ESM |
-| [`@bghcore/dynamic-forms-fluent`](./packages/fluent) | Fluent UI v9 field components (19 field types). | ~40 KB ESM |
-| [`@bghcore/dynamic-forms-mui`](./packages/mui) | Material UI (MUI) field components (19 field types). | ~39 KB ESM |
+| [`@bghcore/dynamic-forms-core`](./packages/core) | UI-agnostic rules engine, form orchestration, validation, analytics, devtools. React + react-hook-form only, no UI library dependency. | ~114 KB ESM |
+| [`@bghcore/dynamic-forms-fluent`](./packages/fluent) | Fluent UI v9 field components (19 field types). | ~39 KB ESM |
+| [`@bghcore/dynamic-forms-mui`](./packages/mui) | Material UI field components (19 field types). | ~39 KB ESM |
+| [`@bghcore/dynamic-forms-headless`](./packages/headless) | Unstyled semantic HTML field components (19 field types). | ~36 KB ESM |
+| [`@bghcore/dynamic-forms-designer`](./packages/designer) | Visual drag-and-drop form builder with rule editor and JSON export. | ~65 KB ESM |
+| [`@bghcore/dynamic-forms-examples`](./packages/examples) | 3 example apps (login+MFA, checkout wizard, data entry). | -- |
 
 ## Quick Start
 
@@ -33,61 +36,54 @@ npm install @bghcore/dynamic-forms-core @bghcore/dynamic-forms-fluent
 
 # Or with MUI
 npm install @bghcore/dynamic-forms-core @bghcore/dynamic-forms-mui @mui/material @emotion/react @emotion/styled
+
+# Or headless (no UI framework)
+npm install @bghcore/dynamic-forms-core @bghcore/dynamic-forms-headless
 ```
 
 ```tsx
 import {
-  BusinessRulesProvider,
-  InjectedHookFieldProvider,
-  UseInjectedHookFieldContext,
-  HookInlineForm,
+  RulesEngineProvider,
+  InjectedFieldProvider,
+  DynamicForm,
 } from "@bghcore/dynamic-forms-core";
 import { createFluentFieldRegistry } from "@bghcore/dynamic-forms-fluent";
 // Or: import { createMuiFieldRegistry } from "@bghcore/dynamic-forms-mui";
-import { useEffect } from "react";
+// Or: import { createHeadlessFieldRegistry } from "@bghcore/dynamic-forms-headless";
 
-// Register field components (swap adapters by changing one import)
-function FieldRegistrar({ children }: { children: React.ReactNode }) {
-  const { setInjectedFields } = UseInjectedHookFieldContext();
-  useEffect(() => {
-    setInjectedFields(createFluentFieldRegistry());
-  }, []);
-  return <>{children}</>;
-}
-
-function App() {
-  const fieldConfigs = {
-    name: { component: "Textbox", label: "Name", required: true },
+const formConfig = {
+  version: 2 as const,
+  fields: {
+    name: { type: "Textbox", label: "Name", required: true },
     status: {
-      component: "Dropdown",
+      type: "Dropdown",
       label: "Status",
-      dropdownOptions: [
-        { key: "Active", text: "Active" },
-        { key: "Inactive", text: "Inactive" },
+      options: [
+        { value: "Active", label: "Active" },
+        { value: "Inactive", label: "Inactive" },
       ],
     },
-    notes: { component: "Textarea", label: "Notes" },
-  };
+    notes: { type: "Textarea", label: "Notes" },
+  },
+  fieldOrder: ["name", "status", "notes"],
+};
 
-  const defaultValues = { name: "", status: "Active", notes: "" };
-
+function App() {
   return (
-    <BusinessRulesProvider>
-      <InjectedHookFieldProvider>
-        <FieldRegistrar>
-          <HookInlineForm
-            configName="myForm"
-            programName="myApp"
-            fieldConfigs={fieldConfigs}
-            defaultValues={defaultValues}
-            saveData={async (data) => {
-              console.log("Saving:", data);
-              return data;
-            }}
-          />
-        </FieldRegistrar>
-      </InjectedHookFieldProvider>
-    </BusinessRulesProvider>
+    <RulesEngineProvider>
+      <InjectedFieldProvider injectedFields={createFluentFieldRegistry()}>
+        <DynamicForm
+          configName="myForm"
+          programName="myApp"
+          formConfig={formConfig}
+          defaultValues={{ name: "", status: "Active", notes: "" }}
+          saveData={async (data) => {
+            console.log("Saving:", data);
+            return data;
+          }}
+        />
+      </InjectedFieldProvider>
+    </RulesEngineProvider>
   );
 }
 ```
@@ -96,109 +92,163 @@ function App() {
 
 ### Configuration-Driven Forms
 
-Every form is defined by a dictionary of `IFieldConfig` objects. Each config specifies:
+Every form is defined by an `IFormConfig` object containing a dictionary of `IFieldConfig` entries. Each config specifies:
 
-- **`component`** -- Which field type to render (`"Textbox"`, `"Dropdown"`, `"Toggle"`, etc.)
+- **`type`** -- Which field type to render (`"Textbox"`, `"Dropdown"`, `"Toggle"`, etc.)
 - **`label`** -- Display label
 - **`required`** / **`hidden`** / **`readOnly`** -- Default field states
-- **`dependencies`** -- Business rules that change other fields based on this field's value
-- **`dependencyRules`** -- AND-condition rules across multiple fields
-- **`dropdownDependencies`** -- Dropdown options that change based on other fields
-- **`orderDependencies`** -- Dynamic field ordering rules
-- **`validations`** -- Sync validation function names from the registry
-- **`asyncValidations`** -- Async validation function names (server-side checks)
-- **`value`** + **`isValueFunction`** -- Computed values on create/change
-- **`fieldArray`** -- Repeating section configuration (min/max items, item fields)
+- **`rules`** -- Declarative rules with rich conditions (`when`/`then`/`else`) that change field states based on other field values
+- **`options`** -- Dropdown/select options as `{ value, label }` pairs
+- **`validate`** -- Validation rules referencing the unified validator registry
+- **`computedValue`** -- Expressions like `"$values.qty * $values.price"` or `"$fn.calculateTotal()"`
+- **`items`** -- Field array item definitions (full `IFieldConfig` per item field)
+- **`config`** -- Arbitrary metadata passed through to the field component
 
 ### Business Rules Engine
 
-Rules are **declarative** -- defined as data, not imperative code. When a field value changes, the engine:
+Rules are **declarative** -- defined as `IRule[]` on each field config, not imperative code. Each rule has a `when` condition, a `then` effect, and an optional `else` effect.
 
-1. Reverts previously applied rules on dependent fields
-2. Re-evaluates which rules match the new value
-3. Applies new rules (required, hidden, readOnly, component swap, validations, etc.)
-4. Processes combo (AND) rules across multiple fields
-5. Updates dropdown options based on dependency rules
-6. Reorders fields if order dependencies are defined
+When a field value changes, the engine:
+
+1. Identifies transitively affected fields via the dependency graph
+2. Re-evaluates rules for affected fields only (incremental evaluation)
+3. Resolves conflicts via priority (higher priority rule wins)
+4. Applies effects (required, hidden, readOnly, component swap, options, validation, computed value)
+5. Dispatches to the rules engine reducer for React re-render
 
 The engine includes **circular dependency detection** via Kahn's algorithm and **config validation** for dev-mode diagnostics.
 
+**15 condition operators:** `equals`, `notEquals`, `greaterThan`, `lessThan`, `greaterThanOrEqual`, `lessThanOrEqual`, `contains`, `notContains`, `startsWith`, `endsWith`, `in`, `notIn`, `isEmpty`, `isNotEmpty`, `matches`
+
+**Logical operators:** `and`, `or`, `not` (composable condition trees)
+
 ```tsx
-const fieldConfigs = {
-  type: {
-    component: "Dropdown",
-    label: "Type",
-    dropdownOptions: [
-      { key: "bug", text: "Bug" },
-      { key: "feature", text: "Feature" },
-    ],
-    // When type="bug", make severity required and visible
-    dependencies: {
-      bug: {
-        severity: { required: true, hidden: false },
-      },
-      feature: {
-        severity: { hidden: true },
-      },
+const formConfig = {
+  version: 2 as const,
+  fields: {
+    type: {
+      type: "Dropdown",
+      label: "Type",
+      options: [
+        { value: "bug", label: "Bug" },
+        { value: "feature", label: "Feature" },
+      ],
+      rules: [
+        {
+          when: { field: "type", operator: "equals", value: "bug" },
+          then: { severity: { required: true, hidden: false } },
+          else: { severity: { hidden: true } },
+          priority: 1,
+        },
+      ],
+    },
+    severity: {
+      type: "Dropdown",
+      label: "Severity",
+      hidden: true,
+      options: [
+        { value: "low", label: "Low" },
+        { value: "high", label: "High" },
+      ],
     },
   },
-  severity: {
-    component: "Dropdown",
-    label: "Severity",
-    hidden: true, // hidden by default, shown by business rule
-    dropdownOptions: [
-      { key: "low", text: "Low" },
-      { key: "high", text: "High" },
-    ],
-  },
+  fieldOrder: ["type", "severity"],
 };
+```
+
+#### Compound Conditions
+
+Combine conditions with `and`, `or`, and `not`:
+
+```tsx
+rules: [
+  {
+    when: {
+      operator: "and",
+      conditions: [
+        { field: "type", operator: "equals", value: "bug" },
+        { field: "priority", operator: "greaterThanOrEqual", value: 3 },
+      ],
+    },
+    then: { assignee: { required: true } },
+  },
+]
+```
+
+#### Computed Values
+
+Use `computedValue` with `$values`, `$fn`, and `$parent` expressions:
+
+```tsx
+fields: {
+  qty: { type: "Number", label: "Quantity" },
+  price: { type: "Number", label: "Unit Price" },
+  total: {
+    type: "ReadOnly",
+    label: "Total",
+    computedValue: "$values.qty * $values.price",
+  },
+  createdDate: {
+    type: "ReadOnly",
+    label: "Created",
+    computedValue: "$fn.setDate()",
+  },
+}
 ```
 
 ### Multi-Step Wizard
 
-Split forms into wizard steps with conditional visibility and validation:
+Split forms into wizard steps with conditional visibility and per-step validation:
 
 ```tsx
-import { HookWizardForm } from "@bghcore/dynamic-forms-core";
+import { WizardForm } from "@bghcore/dynamic-forms-core";
 
-const wizardConfig = {
-  steps: [
-    { id: "basics", title: "Basic Info", fields: ["name", "type"] },
-    { id: "details", title: "Details", fields: ["severity", "description"],
-      visibleWhen: { fieldName: "type", values: ["bug"] } },
-    { id: "review", title: "Review", fields: ["notes"] },
-  ],
-  validateOnStepChange: true,
+const formConfig = {
+  version: 2 as const,
+  fields: { /* ... */ },
+  wizard: {
+    steps: [
+      { id: "basics", title: "Basic Info", fields: ["name", "type"] },
+      {
+        id: "details",
+        title: "Details",
+        fields: ["severity", "description"],
+        visibleWhen: { field: "type", operator: "equals", value: "bug" },
+      },
+      { id: "review", title: "Review", fields: ["notes"] },
+    ],
+    validateOnStepChange: true,
+  },
 };
 
-<HookWizardForm
-  wizardConfig={wizardConfig}
+<WizardForm
+  wizardConfig={formConfig.wizard}
   entityData={formValues}
-  fieldRules={businessRules}
-  errors={formErrors}
-  renderStepContent={(fields) => <MyFieldRenderer fields={fields} />}
+  renderStepContent={(fields) => <FieldRenderer fields={fields} />}
   renderStepNavigation={({ goNext, goPrev, canGoNext, canGoPrev }) => (
-    <div>
+    <nav>
       <button onClick={goPrev} disabled={!canGoPrev}>Back</button>
       <button onClick={goNext} disabled={!canGoNext}>Next</button>
-    </div>
+    </nav>
   )}
 />
 ```
+
+All fields stay in a single `react-hook-form` context. Steps control which fields are visible. Cross-step rules work automatically.
 
 ### Field Arrays (Repeating Sections)
 
 Add "add another" patterns for addresses, line items, etc.:
 
 ```tsx
-import { HookFieldArray } from "@bghcore/dynamic-forms-core";
+import { FieldArray } from "@bghcore/dynamic-forms-core";
 
-<HookFieldArray
+<FieldArray
   fieldName="contacts"
   config={{
-    itemFields: {
-      name: { component: "Textbox", label: "Name", required: true },
-      email: { component: "Textbox", label: "Email", validations: ["EmailValidation"] },
+    items: {
+      name: { type: "Textbox", label: "Name", required: true },
+      email: { type: "Textbox", label: "Email", validate: [{ name: "email" }] },
     },
     minItems: 1,
     maxItems: 5,
@@ -207,7 +257,7 @@ import { HookFieldArray } from "@bghcore/dynamic-forms-core";
   renderItem={(fieldNames, index, remove) => (
     <div key={index}>
       {/* fieldNames = ["contacts.0.name", "contacts.0.email"] */}
-      <MyFieldRenderer fields={fieldNames} />
+      <FieldRenderer fields={fieldNames} />
       <button onClick={remove}>Remove</button>
     </div>
   )}
@@ -224,45 +274,71 @@ The library uses a component injection system for field rendering. Core provides
 ```tsx
 // Use built-in Fluent UI fields
 import { createFluentFieldRegistry } from "@bghcore/dynamic-forms-fluent";
-setInjectedFields(createFluentFieldRegistry());
 
 // Or use MUI fields (swap with one line)
 import { createMuiFieldRegistry } from "@bghcore/dynamic-forms-mui";
-setInjectedFields(createMuiFieldRegistry());
+
+// Or use headless semantic HTML fields
+import { createHeadlessFieldRegistry } from "@bghcore/dynamic-forms-headless";
+
+// Pass via the injectedFields prop
+<InjectedFieldProvider injectedFields={createFluentFieldRegistry()}>
 
 // Or mix in custom fields
-setInjectedFields({
+<InjectedFieldProvider injectedFields={{
   ...createFluentFieldRegistry(),
   MyCustomField: <MyCustomField />,
-});
+}}>
 ```
 
 ### Pluggable Validation
 
-15 built-in validators plus support for custom sync and async validators:
+14 built-in validators plus support for custom sync, async, and cross-field validators via the unified `registerValidators()` API:
 
 ```tsx
 import {
-  registerValidations,
-  registerAsyncValidations,
+  registerValidators,
   createMinLengthValidation,
   createPatternValidation,
 } from "@bghcore/dynamic-forms-core";
 
-// Use built-in factory validators
-registerValidations({
+// Register built-in factory validators
+registerValidators({
   MinLength5: createMinLengthValidation(5),
   AlphaOnly: createPatternValidation(/^[a-zA-Z]+$/, "Letters only"),
 });
 
 // Add async validators (e.g., server-side uniqueness check)
-registerAsyncValidations({
+registerValidators({
   CheckUniqueEmail: async (value, entityData, signal) => {
     const response = await fetch(`/api/check-email?email=${value}`, { signal });
     const { exists } = await response.json();
     return exists ? "Email already in use" : undefined;
   },
 });
+```
+
+Reference validators in field configs:
+
+```tsx
+fields: {
+  email: {
+    type: "Textbox",
+    label: "Email",
+    validate: [
+      { name: "email" },
+      { name: "CheckUniqueEmail", async: true, debounceMs: 500 },
+    ],
+  },
+  username: {
+    type: "Textbox",
+    label: "Username",
+    validate: [
+      { name: "minLength", params: { min: 3 } },
+      { name: "AlphaOnly" },
+    ],
+  },
+}
 ```
 
 Built-in validators: `EmailValidation`, `PhoneNumberValidation`, `YearValidation`, `Max150KbValidation`, `Max32KbValidation`, `isValidUrl`, `NoSpecialCharactersValidation`, `CurrencyValidation`, `UniqueInArrayValidation` + factory functions: `createMinLengthValidation`, `createMaxLengthValidation`, `createNumericRangeValidation`, `createPatternValidation`, `createRequiredIfValidation`
@@ -284,6 +360,58 @@ registerLocale({
 });
 ```
 
+### Analytics and Telemetry
+
+Track form lifecycle events via `IAnalyticsCallbacks` in form settings:
+
+```tsx
+const formConfig: IFormConfig = {
+  version: 2,
+  fields: { /* ... */ },
+  settings: {
+    analytics: {
+      onFieldFocus: (fieldName) => console.log("Focus:", fieldName),
+      onFieldBlur: (fieldName, timeSpentMs) => console.log("Blur:", fieldName, timeSpentMs),
+      onFieldChange: (fieldName, oldValue, newValue) => console.log("Change:", fieldName),
+      onValidationError: (fieldName, errors) => console.log("Validation:", fieldName, errors),
+      onFormSubmit: (values, durationMs) => console.log("Submit:", durationMs, "ms"),
+      onFormAbandonment: (filledFields, emptyRequired) => console.log("Abandoned:", emptyRequired),
+      onWizardStepChange: (from, to) => console.log("Step:", from, "->", to),
+      onRuleTriggered: (event) => console.log("Rule:", event),
+    },
+  },
+};
+```
+
+The `useFormAnalytics` hook wraps these callbacks into stable, memoized functions with automatic timing (field focus duration, form completion time).
+
+### FormDevTools
+
+A collapsible dev-only panel with 7 tabs for debugging form state at runtime:
+
+| Tab | Description |
+|-----|-------------|
+| **Rules** | Current runtime state of every field (type, required, hidden, readOnly, active rules) |
+| **Values** | Live JSON dump of all form values |
+| **Errors** | Current validation errors |
+| **Graph** | Text representation of the dependency graph |
+| **Perf** | Per-field render counts, hot field detection, total form renders (via `RenderTracker`) |
+| **Deps** | Sortable dependency table with effect types, cycle detection |
+| **Timeline** | Chronological event log with filtering (via `EventTimeline`) |
+
+```tsx
+import { FormDevTools } from "@bghcore/dynamic-forms-core";
+
+<FormDevTools
+  configName="myForm"
+  formState={runtimeFormState}
+  formValues={formValues}
+  formErrors={formErrors}
+  dirtyFields={dirtyFields}
+  enabled={process.env.NODE_ENV === "development"}
+/>
+```
+
 ### Config Validation (Dev Mode)
 
 Catch configuration errors early:
@@ -291,19 +419,19 @@ Catch configuration errors early:
 ```tsx
 import { validateFieldConfigs } from "@bghcore/dynamic-forms-core";
 
-const errors = validateFieldConfigs(fieldConfigs, new Set(["Textbox", "Dropdown"]));
+const errors = validateFieldConfigs(fieldConfigs, registeredComponentTypes);
 // Returns: missing dependency targets, unregistered components,
 // unregistered validators, circular dependencies, missing dropdown options
 ```
 
 ### Error Boundary
 
-Each field is individually wrapped in a `HookFormErrorBoundary` so a single field crash does not take down the entire form:
+Each field is individually wrapped in a `FormErrorBoundary` so a single field crash does not take down the entire form:
 
 ```tsx
-import { HookFormErrorBoundary } from "@bghcore/dynamic-forms-core";
+import { FormErrorBoundary } from "@bghcore/dynamic-forms-core";
 
-<HookFormErrorBoundary
+<FormErrorBoundary
   fallback={(error, resetErrorBoundary) => (
     <div>
       <p>Field failed to render: {error.message}</p>
@@ -313,7 +441,7 @@ import { HookFormErrorBoundary } from "@bghcore/dynamic-forms-core";
   onError={(error, errorInfo) => console.error("Field error:", error)}
 >
   <MyField />
-</HookFormErrorBoundary>
+</FormErrorBoundary>
 ```
 
 This is built into the core rendering pipeline -- you do not need to add it yourself unless you want custom error handling.
@@ -323,25 +451,25 @@ This is built into the core rendering pipeline -- you do not need to add it your
 By default, forms auto-save on every field change (debounced). Set `isManualSave={true}` for explicit save control:
 
 ```tsx
-// Auto-save (default) — saves on every field change with debounce
-<HookInlineForm
+// Auto-save (default) -- saves on every field change with debounce
+<DynamicForm
   configName="myForm"
-  fieldConfigs={fieldConfigs}
+  formConfig={formConfig}
   defaultValues={defaultValues}
   saveData={async (data) => { await api.save(data); return data; }}
 />
 
-// Manual save — shows Save/Cancel buttons, no auto-save
-<HookInlineForm
+// Manual save -- shows Save/Cancel buttons, no auto-save
+<DynamicForm
   configName="myForm"
-  fieldConfigs={fieldConfigs}
+  formConfig={formConfig}
   defaultValues={defaultValues}
   isManualSave={true}
   saveData={async (data) => { await api.save(data); return data; }}
 />
 
 // Manual save with custom button
-<HookInlineForm
+<DynamicForm
   isManualSave={true}
   renderSaveButton={({ onSave, isDirty, isSubmitting }) => (
     <button onClick={onSave} disabled={!isDirty || isSubmitting}>
@@ -354,14 +482,14 @@ By default, forms auto-save on every field change (debounced). Set `isManualSave
 
 ### Save Reliability
 
-HookInlineForm now includes robust save handling:
+DynamicForm includes robust save handling:
 
 - **AbortController** cancels previous in-flight saves when a new save is triggered
 - **Configurable timeout** via `saveTimeoutMs` prop (default 30 seconds)
 - **Retry with exponential backoff** via `maxSaveRetries` prop (default 3 retries)
 
 ```tsx
-<HookInlineForm
+<DynamicForm
   saveTimeoutMs={15000}   // 15 second timeout
   maxSaveRetries={5}      // Retry up to 5 times with exponential backoff
   saveData={async (data) => { /* ... */ }}
@@ -370,9 +498,9 @@ HookInlineForm now includes robust save handling:
 
 ### Accessibility
 
-Built-in accessibility features (Phase 8):
+Built-in accessibility features:
 
-- **Focus trap** in `HookConfirmInputsModal` -- Tab key wraps within modal, Escape closes, focus restored on close
+- **Focus trap** in `ConfirmInputsModal` -- Tab key wraps within modal, Escape closes, focus restored on close
 - **Focus-to-first-error** on validation failure -- automatically focuses the first field with an error
 - **ARIA live regions** -- `<div role="status" aria-live="polite">` announces saving/saved/error status to screen readers
 - **aria-label** on filter inputs, **aria-busy** on fields during save
@@ -400,19 +528,19 @@ function MyForm() {
   // Warn user before leaving page with unsaved changes
   useBeforeUnload(isDirty, "You have unsaved changes.");
 
-  return <HookInlineForm /* ... */ />;
+  return <DynamicForm /* ... */ />;
 }
 ```
 
 Includes `serializeFormState` / `deserializeFormState` utilities for Date-safe JSON round-trips.
 
-### Theming & Customization
+### Theming and Customization
 
 Customize field chrome without replacing components:
 
 ```tsx
-// Render props on HookFieldWrapper
-<HookFieldWrapper
+// Render props on FieldWrapper
+<FieldWrapper
   renderLabel={(label, required) => <MyCustomLabel text={label} isRequired={required} />}
   renderError={(error) => <MyCustomError message={error} />}
   renderStatus={(status) => <MyCustomStatus type={status} />}
@@ -434,31 +562,69 @@ CSS custom properties for global theming (import optional `styles.css`):
 }
 ```
 
-Form-level error banner via `formErrors` prop on `HookInlineForm`:
+Form-level error banner via `formErrors` prop on `DynamicForm`:
 
 ```tsx
-<HookInlineForm
+<DynamicForm
   formErrors={["End date must be after start date"]}
   /* ... */
 />
 ```
 
-### DevTools
+### Headless Adapter
 
-A collapsible dev-only panel for debugging form state, business rules, errors, and the dependency graph:
+The headless package renders all 19 field types using native HTML elements with `data-field-type` and `data-field-state` attributes for CSS targeting. No UI framework required.
 
 ```tsx
-import { HookFormDevTools } from "@bghcore/dynamic-forms-core";
+import { createHeadlessFieldRegistry } from "@bghcore/dynamic-forms-headless";
+import "@bghcore/dynamic-forms-headless/styles.css"; // optional minimal styles
 
-<HookFormDevTools
-  configName="myForm"
-  configRules={businessRules}
-  formValues={formValues}
-  formErrors={formErrors}
-  dirtyFields={dirtyFields}
-  enabled={process.env.NODE_ENV === "development"}
-/>
+<InjectedFieldProvider injectedFields={createHeadlessFieldRegistry()}>
 ```
+
+Style with Tailwind CSS, your own stylesheet, or CSS custom properties:
+
+```css
+[data-field-type="Textbox"] input {
+  @apply w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+         focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200;
+}
+
+[data-field-state="error"] input {
+  @apply border-red-500;
+}
+```
+
+See the [headless package README](./packages/headless/README.md) for full details.
+
+### Visual Form Builder
+
+The designer package provides a drag-and-drop form builder that exports valid `IFormConfig` v2 JSON:
+
+```tsx
+import { DesignerProvider, FormDesigner } from "@bghcore/dynamic-forms-designer";
+import "@bghcore/dynamic-forms-designer/dist/styles.css";
+
+function Builder() {
+  return (
+    <DesignerProvider>
+      <FormDesigner style={{ height: "100vh" }} />
+    </DesignerProvider>
+  );
+}
+```
+
+Features: field palette, drag-and-drop canvas, property editor, rule builder (full v2 condition system), wizard configurator, live JSON preview, import/export, undo/redo.
+
+Use `useDesigner()` to access the exported config programmatically. See the [designer package README](./packages/designer/README.md) for full details.
+
+### SSR / Next.js
+
+All core components are SSR-safe. Browser-only API access (`localStorage`, `document.activeElement`, `window.addEventListener`) is guarded behind `typeof` checks or confined to `useEffect` callbacks.
+
+For Next.js App Router, add `"use client"` to files containing form components. Server-fetched data can be passed as props across the client boundary.
+
+See the [SSR / Next.js integration guide](./docs/ssr-guide.md) for full setup instructions covering App Router, Pages Router, draft persistence, lazy loading, and common pitfalls.
 
 ### JSON Schema Import
 
@@ -479,6 +645,32 @@ const fieldConfigs = jsonSchemaToFieldConfig({
 // Result: Dictionary<IFieldConfig> with Textbox, Number, and Dropdown fields
 ```
 
+### Zod Schema Import
+
+Convert Zod object schemas to field configs without adding zod as a dependency:
+
+```tsx
+import { zodSchemaToFieldConfig } from "@bghcore/dynamic-forms-core";
+import { z } from "zod";
+
+const UserSchema = z.object({
+  name: z.string().min(1),
+  age: z.number().min(0),
+  active: z.boolean(),
+  role: z.enum(["admin", "user", "guest"]),
+  email: z.string().email(),
+  startDate: z.date(),
+  tags: z.array(z.string()),
+});
+
+const fieldConfigs = zodSchemaToFieldConfig(UserSchema);
+// Maps: ZodString->Textbox, ZodNumber->Number, ZodBoolean->Toggle,
+//       ZodEnum->Dropdown, ZodDate->DateControl, ZodArray->Multiselect
+// Detects .email() and .url() checks for automatic validation
+```
+
+No `zod` peer dependency is required. If you do not use Zod, this function is tree-shaken out of your bundle.
+
 ### Lazy Field Registry
 
 Load field components on demand using React.lazy for bundle optimization:
@@ -492,12 +684,12 @@ const lazyFields = createLazyFieldRegistry({
   // Components are loaded only when first rendered
 });
 
-setInjectedFields(lazyFields);
+<InjectedFieldProvider injectedFields={lazyFields}>
 ```
 
 ## Available Field Types
 
-All 19 field types are available in both the Fluent UI and MUI adapters:
+All 19 field types are available in the Fluent UI, MUI, and headless adapters:
 
 ### Editable Fields
 
@@ -510,7 +702,7 @@ All 19 field types are available in both the Fluent UI and MUI adapters:
 | `Multiselect` | Multi-select dropdown |
 | `DateControl` | Date picker with clear button |
 | `Slider` | Numeric slider |
-| `SimpleDropdown` | Dropdown from string array in meta |
+| `SimpleDropdown` | Dropdown from string array in config |
 | `MultiSelectSearch` | Searchable multi-select |
 | `Textarea` | Multiline text with expand-to-modal |
 | `DocumentLinks` | URL link CRUD |
@@ -532,23 +724,23 @@ All 19 field types are available in both the Fluent UI and MUI adapters:
 ## Architecture
 
 ```
-<BusinessRulesProvider>          -- Owns rule state via useReducer (memoized)
-  <InjectedHookFieldProvider>    -- Component injection registry (memoized)
-    <HookInlineForm>             -- Form state (react-hook-form), auto-save, business rules
-      <HookInlineFormFields>     -- Renders ordered field list
-        <HookFormErrorBoundary>  -- Per-field error boundary (crash isolation)
-          <HookRenderField>      -- Per-field: Controller + component lookup (useMemo)
-            <HookFieldWrapper>   -- Label, error, saving status (React.memo)
-              <InjectedField />  -- Your UI component via cloneElement
+<RulesEngineProvider>           -- Owns rule state via useReducer (memoized)
+  <InjectedFieldProvider>       -- Component injection registry (memoized)
+    <DynamicForm>               -- Form state (react-hook-form), auto-save with retry, rules
+      <FormFields>              -- Renders ordered field list
+        <FormErrorBoundary>     -- Per-field error boundary (crash isolation)
+          <RenderField>         -- Per-field: Controller + component lookup (useMemo)
+            <FieldWrapper>      -- Label, error, saving status (React.memo, render props)
+              <InjectedField /> -- Your UI component via cloneElement
 ```
 
 ## Building a Custom UI Adapter
 
 See [docs/creating-an-adapter.md](./docs/creating-an-adapter.md) for a complete guide. The short version:
 
-1. Create field components that accept `IHookFieldSharedProps<T>`
+1. Create field components that accept `IFieldProps<T>`
 2. Build a registry mapping `ComponentTypes` to your field elements
-3. Pass the registry via `setInjectedFields()`
+3. Pass the registry via the `injectedFields` prop on `InjectedFieldProvider`
 
 ## Development
 
@@ -563,11 +755,22 @@ npm run build
 npm run build:core
 npm run build:fluent
 npm run build:mui
+npm run build:headless
 
 # Run tests
 npm run test
 npm run test:watch
 npm run test:coverage
+
+# Run end-to-end tests
+npm run test:e2e
+
+# Run benchmarks
+npm run bench
+
+# Storybook
+npm run storybook
+npm run build-storybook
 
 # Clean build output
 npm run clean
@@ -577,12 +780,19 @@ npm run clean
 
 ```
 packages/
-  core/     -- @bghcore/dynamic-forms-core (React + react-hook-form only)
-  fluent/   -- @bghcore/dynamic-forms-fluent (Fluent UI v9 adapter)
-  mui/      -- @bghcore/dynamic-forms-mui (Material UI adapter)
+  core/       -- @bghcore/dynamic-forms-core (React + react-hook-form only)
+  fluent/     -- @bghcore/dynamic-forms-fluent (Fluent UI v9 adapter)
+  mui/        -- @bghcore/dynamic-forms-mui (Material UI adapter)
+  headless/   -- @bghcore/dynamic-forms-headless (semantic HTML adapter)
+  designer/   -- @bghcore/dynamic-forms-designer (visual form builder)
+  examples/   -- 3 example apps (login+MFA, checkout wizard, data entry)
+e2e/          -- Playwright end-to-end tests
+benchmarks/   -- Vitest benchmarks for rules engine performance
+stories/      -- Storybook stories for field components
 docs/
-  FINDINGS.md              -- Codebase analysis and strategic plan
   creating-an-adapter.md   -- Guide for building custom UI adapters
+  ssr-guide.md             -- SSR / Next.js integration guide
+  ACCESSIBILITY.md         -- Accessibility documentation
 ```
 
 ## License

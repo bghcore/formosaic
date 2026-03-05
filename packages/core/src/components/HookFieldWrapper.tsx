@@ -42,9 +42,9 @@ export const FieldWrapper: React.FunctionComponent<React.PropsWithChildren<IFiel
 
   const defaultLabel = (
     <div className={labelClassName || ""}>
-      <label id={labelId} className="field-label">
+      <label id={labelId} htmlFor={id} className="field-label">
         {label}
-        {required && <span className="required-indicator" style={{ color: "var(--form-required-color, #d13438)" }}> *</span>}
+        {required && <><span className="required-indicator" aria-hidden="true" style={{ color: "var(--form-required-color, #d13438)" }}> *</span><span className="sr-only" style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0, 0, 0, 0)", whiteSpace: "nowrap", border: 0 }}> (required)</span></>}
       </label>
       {additionalInfoComponent}
       {!additionalInfoComponent && additionalInfo && (
@@ -58,21 +58,21 @@ export const FieldWrapper: React.FunctionComponent<React.PropsWithChildren<IFiel
       {error ? (
         <>
           <span className="error-icon" aria-hidden="true" style={{ color: "var(--form-error-color, #d13438)" }}>&#10006;</span>
-          <span className="error-message" id={id} role="alert" style={{ color: "var(--form-error-color, #d13438)" }}>
+          <span className="error-message" id={errorMessageId} role="alert" style={{ color: "var(--form-error-color, #d13438)" }}>
             {error.message || "Error"}
           </span>
         </>
       ) : savePending ? (
         <>
           <span className="warning-icon" aria-hidden="true" style={{ color: "var(--form-warning-color, #ffb900)" }}>&#9888;</span>
-          <span className="warning-message" id={id} role="alert" style={{ color: "var(--form-warning-color, #ffb900)" }}>
+          <span className="warning-message" id={errorMessageId} role="status" style={{ color: "var(--form-warning-color, #ffb900)" }}>
             {!isManualSave ? FormStrings.autoSavePending : FormStrings.savePending} ({`${errorCount} ${FormStrings.remaining}`})
           </span>
         </>
       ) : saving ? (
         <>
           <span className="save-spinner" aria-hidden="true" style={{ color: "var(--form-saving-color, #0078d4)" }}>&#8987;</span>
-          <span className="save-message" id={id} role="alert" style={{ color: "var(--form-saving-color, #0078d4)" }}>
+          <span className="save-message" id={errorMessageId} role="status" style={{ color: "var(--form-saving-color, #0078d4)" }}>
             {FormStrings.saving}
           </span>
         </>
@@ -90,17 +90,16 @@ export const FieldWrapper: React.FunctionComponent<React.PropsWithChildren<IFiel
         {children.map((child, index) => {
           if (child && child.props) {
             const childProps: Record<string, unknown> = {
-              "aria-labelledby": ariaLabel ? "" : labelId,
-              "aria-label": ariaLabel || "",
+              id,
+              "aria-labelledby": ariaLabel ? undefined : labelId,
+              "aria-label": ariaLabel || undefined,
               "aria-required": required,
               "aria-invalid": !!error,
               "aria-describedby": errorMessageId,
               key: index,
               className: child.props.className,
             };
-            if (!ariaDescription || (ariaDescription && error)) {
-              delete childProps["aria-description"];
-            } else {
+            if (ariaDescription && !error) {
               childProps["aria-description"] = ariaDescription;
             }
             return index === 0 ? React.cloneElement(child, childProps) : React.cloneElement(child, { key: index });

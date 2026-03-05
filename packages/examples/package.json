@@ -1,0 +1,28 @@
+{
+  "name": "@bghcore/dynamic-forms-examples",
+  "version": "2.0.1",
+  "private": true,
+  "description": "Example apps demonstrating @bghcore/dynamic-forms-core",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-hook-form": "^7.71.2",
+    "@bghcore/dynamic-forms-core": "*",
+    "@bghcore/dynamic-forms-mui": "*",
+    "@mui/material": "^6.4.11",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.5.2",
+    "typescript": "^5.9.3",
+    "vite": "^6.3.5"
+  }
+}

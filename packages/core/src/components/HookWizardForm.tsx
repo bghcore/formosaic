@@ -30,12 +30,14 @@ export interface IWizardFormProps {
   renderStepNavigation?: (props: IWizardNavigationProps) => React.ReactNode;
   renderStepHeader?: (props: IWizardStepHeaderProps) => React.ReactNode;
   onStepChange?: (fromIndex: number, toIndex: number) => void;
+  /** Analytics callback for wizard step changes. */
+  onAnalyticsStepChange?: (fromStep: number, toStep: number) => void;
 }
 
 export const WizardForm: React.FC<IWizardFormProps> = (props) => {
   const {
     wizardConfig, entityData, fieldStates, errors,
-    renderStepContent, renderStepNavigation, renderStepHeader, onStepChange,
+    renderStepContent, renderStepNavigation, renderStepHeader, onStepChange, onAnalyticsStepChange,
   } = props;
 
   const [currentStepIndex, setCurrentStepIndex] = React.useState(0);
@@ -58,8 +60,9 @@ export const WizardForm: React.FC<IWizardFormProps> = (props) => {
       const prevIndex = currentStepIndex;
       setCurrentStepIndex(index);
       onStepChange?.(prevIndex, index);
+      onAnalyticsStepChange?.(prevIndex, index);
     }
-  }, [visibleSteps.length, currentStepIndex, wizardConfig.validateOnStepChange, errors, currentStep, onStepChange]);
+  }, [visibleSteps.length, currentStepIndex, wizardConfig.validateOnStepChange, errors, currentStep, onStepChange, onAnalyticsStepChange]);
 
   const goNext = React.useCallback(() => { if (canGoNext) goToStep(currentStepIndex + 1); }, [canGoNext, currentStepIndex, goToStep]);
   const goPrev = React.useCallback(() => { if (canGoPrev) goToStep(currentStepIndex - 1); }, [canGoPrev, currentStepIndex, goToStep]);
@@ -71,7 +74,7 @@ export const WizardForm: React.FC<IWizardFormProps> = (props) => {
   if (!currentStep) return null;
 
   return (
-    <div className="wizard-form">
+    <div className="wizard-form" role="group" aria-label={FormStrings.formWizard}>
       <div role="status" aria-live="polite" className="sr-only" style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0, 0, 0, 0)", whiteSpace: "nowrap", border: 0 }} data-testid="wizard-step-live-region">
         {stepAnnouncement}
       </div>

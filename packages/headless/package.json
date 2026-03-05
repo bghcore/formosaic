@@ -1,0 +1,61 @@
+{
+  "name": "@bghcore/dynamic-forms-headless",
+  "version": "2.0.1",
+  "description": "Headless (unstyled) semantic HTML field components for @bghcore/dynamic-forms-core",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bghcore/dynamic-react-business-forms.git",
+    "directory": "packages/headless"
+  },
+  "homepage": "https://github.com/bghcore/dynamic-react-business-forms#readme",
+  "bugs": {
+    "url": "https://github.com/bghcore/dynamic-react-business-forms/issues"
+  },
+  "keywords": [
+    "react",
+    "forms",
+    "headless",
+    "unstyled",
+    "semantic-html",
+    "dynamic-forms",
+    "react-hook-form",
+    "form-builder",
+    "field-components",
+    "tailwind",
+    "business-forms"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": ["dist", "README.md"],
+  "license": "MIT",
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup && node -e \"require('fs').copyFileSync('src/styles.css','dist/styles.css')\"",
+    "clean": "rimraf dist"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "react-hook-form": "^7.0.0",
+    "@bghcore/dynamic-forms-core": "^2.0.0"
+  },
+  "devDependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-hook-form": "^7.71.2",
+    "@bghcore/dynamic-forms-core": "*",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3"
+  }
+}

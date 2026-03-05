@@ -8,7 +8,9 @@ import { IValidationRule } from "../types/IValidationRule";
 import { IRuntimeFieldState } from "../types/IRuntimeFieldState";
 import { UseInjectedFieldContext } from "../providers/InjectedHookFieldProvider";
 import { FormStrings } from "../strings";
+import { IFormAnalytics } from "../hooks/useFormAnalytics";
 import { FieldWrapper } from "./HookFieldWrapper";
+import { trackRender } from "../helpers/RenderTracker";
 
 interface IRenderFieldProps {
   fieldName: string;
@@ -39,6 +41,7 @@ interface IRenderFieldProps {
   renderLabel?: (props: { id: string; labelId: string; label?: string; required?: boolean }) => React.ReactNode;
   renderError?: (props: { id: string; error?: import("react-hook-form").FieldError; errorCount?: number }) => React.ReactNode;
   renderStatus?: (props: { id: string; saving?: boolean; savePending?: boolean; errorCount?: number; isManualSave?: boolean }) => React.ReactNode;
+  analytics?: IFormAnalytics;
 }
 
 const RenderField = (props: IRenderFieldProps) => {
@@ -49,11 +52,14 @@ const RenderField = (props: IRenderFieldProps) => {
     setFieldValue, isCreate, filterText, softHidden,
     label, skipLayoutReadOnly, hideOnCreate, config,
     description, placeholder, helpText,
-    renderLabel, renderError, renderStatus,
+    renderLabel, renderError, renderStatus, analytics,
   } = props;
 
   const { injectedFields } = UseInjectedFieldContext();
   const { control, getValues } = useFormContext();
+  const previousValueRef = React.useRef<unknown>(undefined);
+
+  trackRender(fieldName);
 
   const isDisabled = disabled ?? false;
   const fieldNameConst = `${fieldName}` as const;
@@ -90,6 +96,13 @@ const RenderField = (props: IRenderFieldProps) => {
             const errorCount = errors ? Object.keys(errors).length : 0;
             const saving = isDirty && (isSubmitting || isSubmitSuccessful);
             const savePending = isDirty && errorCount > 0 && !isSubmitting && !isSubmitSuccessful;
+            if (error && analytics) {
+              analytics.trackValidationError(fieldName, [error.message || "Error"]);
+            }
+            if (previousValueRef.current !== undefined && previousValueRef.current !== value && analytics) {
+              analytics.trackFieldChange(fieldName, previousValueRef.current, value);
+            }
+            previousValueRef.current = value;
             return type === "DynamicFragment" ? (
               <>{React.cloneElement(Comp, { value })}</>
             ) : ShowField(filterText, value, label) && !softHidden ? (
@@ -129,6 +142,8 @@ const RenderField = (props: IRenderFieldProps) => {
                   placeholder,
                   helpText,
                   setFieldValue,
+                  onFocus: analytics ? () => analytics.trackFieldFocus(fieldName) : undefined,
+                  onBlur: analytics ? () => analytics.trackFieldBlur(fieldName) : undefined,
                 })}
               </FieldWrapper>
             ) : <></>;

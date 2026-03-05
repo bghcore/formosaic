@@ -1,0 +1,211 @@
+{/* stories/GettingStarted.mdx */}
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Getting Started" />
+
+# Dynamic React Business Forms
+
+A React library for rendering complex, configuration-driven forms with a built-in rules engine.
+Forms are defined as a single `IFormConfig` JSON object and the library handles rendering,
+validation, auto-save, and field interactions automatically.
+
+## Packages
+
+| Package | Description |
+| --- | --- |
+| `@bghcore/dynamic-forms-core` | UI-agnostic rules engine and form orchestration (React + react-hook-form) |
+| `@bghcore/dynamic-forms-fluent` | Fluent UI v9 field component implementations |
+| `@bghcore/dynamic-forms-mui` | Material UI (MUI) field component implementations |
+
+## Installation
+
+```bash
+npm install @bghcore/dynamic-forms-core @bghcore/dynamic-forms-fluent
+npm install react react-dom react-hook-form @fluentui/react-components
+```
+
+## Quick Start
+
+### 1. Set Up Providers
+
+Two context providers must wrap your form tree:
+
+```tsx
+import { RulesEngineProvider, InjectedFieldProvider } from "@bghcore/dynamic-forms-core";
+import { FluentProvider, webLightTheme } from "@fluentui/react-components";
+
+function App() {
+  return (
+    <FluentProvider theme={webLightTheme}>
+      <RulesEngineProvider>
+        <InjectedFieldProvider>
+          {/* Your form goes here */}
+        </InjectedFieldProvider>
+      </RulesEngineProvider>
+    </FluentProvider>
+  );
+}
+```
+
+### 2. Register Field Components
+
+Use `createFluentFieldRegistry()` to register all built-in Fluent UI fields:
+
+```tsx
+import { UseInjectedFieldContext } from "@bghcore/dynamic-forms-core";
+import { createFluentFieldRegistry } from "@bghcore/dynamic-forms-fluent";
+import { useEffect } from "react";
+
+function FormContainer() {
+  const { setInjectedFields } = UseInjectedFieldContext();
+
+  useEffect(() => {
+    setInjectedFields(createFluentFieldRegistry());
+  }, []);
+
+  return <DynamicForm {...formProps} />;
+}
+```
+
+### 3. Define a Form Config
+
+Create an `IFormConfig` object with your field definitions:
+
+```typescript
+import type { IFormConfig } from "@bghcore/dynamic-forms-core";
+
+const myFormConfig: IFormConfig = {
+  version: 2,
+  fields: {
+    name: {
+      type: "Textbox",
+      required: true,
+      label: "Name",
+    },
+    status: {
+      type: "Dropdown",
+      required: true,
+      label: "Status",
+      options: [
+        { value: "Active", label: "Active" },
+        { value: "Inactive", label: "Inactive" },
+      ],
+    },
+    isActive: {
+      type: "Toggle",
+      required: false,
+      label: "Active",
+    },
+  },
+  fieldOrder: ["name", "status", "isActive"],
+  settings: {
+    manualSave: true,
+  },
+};
+```
+
+### 4. Render the Form
+
+```tsx
+import { DynamicForm } from "@bghcore/dynamic-forms-core";
+
+<DynamicForm
+  configName="my-form"
+  entityId="123"
+  entityType="contact"
+  programName="app"
+  formConfig={myFormConfig}
+  defaultValues={{ name: "", status: "", isActive: false }}
+  isManualSave={true}
+  saveData={async (data) => {
+    console.log("Saving:", data);
+    return data;
+  }}
+/>
+```
+
+## Rules Engine
+
+Fields can declare **rules** that react to other field values:
+
+```typescript
+{
+  status: {
+    type: "Dropdown",
+    label: "Status",
+    options: [
+      { value: "Active", label: "Active" },
+      { value: "Inactive", label: "Inactive" },
+    ],
+    rules: [
+      {
+        id: "show-priority",
+        when: { field: "status", operator: "equals", value: "Active" },
+        then: { fields: { priority: { required: true, hidden: false } } },
+        else: { fields: { priority: { required: false, hidden: true } } },
+      },
+    ],
+  },
+  priority: {
+    type: "Dropdown",
+    label: "Priority",
+    hidden: true,
+    options: [
+      { value: "High", label: "High" },
+      { value: "Low", label: "Low" },
+    ],
+  },
+}
+```
+
+### Condition Operators
+
+| Operator | Description |
+| --- | --- |
+| `equals` / `notEquals` | Exact value match |
+| `greaterThan` / `lessThan` | Numeric comparison |
+| `greaterThanOrEqual` / `lessThanOrEqual` | Numeric comparison (inclusive) |
+| `contains` / `notContains` | Substring or array member check |
+| `startsWith` / `endsWith` | String prefix/suffix |
+| `in` / `notIn` | Value in array |
+| `isEmpty` / `isNotEmpty` | Null/empty check |
+| `matches` | Regex pattern |
+
+### Logical Operators
+
+Conditions can be composed with `and`, `or`, and `not`:
+
+```typescript
+when: {
+  operator: "and",
+  conditions: [
+    { field: "status", operator: "equals", value: "Active" },
+    { field: "type", operator: "equals", value: "Bug" },
+  ],
+}
+```
+
+## Available Field Types
+
+### Editable Fields
+- **Textbox** -- Single-line text input
+- **Textarea** -- Multi-line text with pop-out editor
+- **Number** -- Numeric input
+- **Dropdown** -- Single-select with `IOption[]`
+- **SimpleDropdown** -- Single-select with `string[]` in config
+- **Multiselect** -- Multi-select dropdown
+- **MultiSelectSearch** -- Searchable multi-select
+- **StatusDropdown** -- Dropdown with color indicators
+- **Toggle** -- Boolean switch
+- **Slider** -- Range slider
+- **DateControl** -- Date picker
+- **DocumentLinks** -- URL link list with CRUD
+- **DynamicFragment** -- Hidden value holder
+
+### Read-Only Fields
+- **ReadOnly** -- Plain text display
+- **ReadOnlyArray** -- Array of text values
+- **ReadOnlyDateTime** -- Formatted date/time
+- **ReadOnlyCumulativeNumber** -- Computed sum of fields
+- **ReadOnlyRichText** -- HTML content display
+- **ReadOnlyWithButton** -- Text with action button

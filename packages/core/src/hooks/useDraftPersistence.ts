@@ -35,6 +35,14 @@ function getStorageKey(formId: string, prefix: string): string {
   return `${prefix}${formId}`;
 }
 
+function getStorage(): Storage | undefined {
+  try {
+    return typeof localStorage !== "undefined" ? localStorage : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 /**
  * Hook that persists form draft state to localStorage on a configurable interval.
  *
@@ -62,11 +70,13 @@ export function useDraftPersistence(options: IDraftPersistenceOptions): IUseDraf
 
   const saveDraft = useCallback(() => {
     try {
+      const storage = getStorage();
+      if (!storage) return;
       const draftState: IDraftState = {
         data: dataRef.current,
         timestamp: Date.now(),
       };
-      localStorage.setItem(storageKey, serializeFormState(draftState as unknown as IEntityData));
+      storage.setItem(storageKey, serializeFormState(draftState as unknown as IEntityData));
       setHasDraft(true);
     } catch {
       // localStorage may throw in private browsing or when quota is exceeded
@@ -75,7 +85,9 @@ export function useDraftPersistence(options: IDraftPersistenceOptions): IUseDraf
 
   const recoverDraft = useCallback((): IDraftState | null => {
     try {
-      const stored = localStorage.getItem(storageKey);
+      const storage = getStorage();
+      if (!storage) return null;
+      const stored = storage.getItem(storageKey);
       if (!stored) return null;
       const parsed = deserializeFormState(stored) as unknown as IDraftState;
       return parsed;
@@ -86,7 +98,9 @@ export function useDraftPersistence(options: IDraftPersistenceOptions): IUseDraf
 
   const clearDraft = useCallback(() => {
     try {
-      localStorage.removeItem(storageKey);
+      const storage = getStorage();
+      if (!storage) return;
+      storage.removeItem(storageKey);
       setHasDraft(false);
     } catch {
       // localStorage may throw in private browsing
@@ -97,7 +111,9 @@ export function useDraftPersistence(options: IDraftPersistenceOptions): IUseDraf
   useEffect(() => {
     if (!enabled) return;
     try {
-      const stored = localStorage.getItem(storageKey);
+      const storage = getStorage();
+      if (!storage) { setHasDraft(false); return; }
+      const stored = storage.getItem(storageKey);
       setHasDraft(stored !== null);
     } catch {
       setHasDraft(false);

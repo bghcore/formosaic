@@ -54,6 +54,7 @@ function App() {
 You'll also need a UI adapter to provide field components. See:
 - [`@bghcore/dynamic-forms-fluent`](https://www.npmjs.com/package/@bghcore/dynamic-forms-fluent) -- Fluent UI v9
 - [`@bghcore/dynamic-forms-mui`](https://www.npmjs.com/package/@bghcore/dynamic-forms-mui) -- Material UI
+- [`@bghcore/dynamic-forms-headless`](https://www.npmjs.com/package/@bghcore/dynamic-forms-headless) -- Unstyled semantic HTML (Tailwind-friendly)
 
 ## Business Rules Engine
 
@@ -316,22 +317,59 @@ Display a form-level error banner for cross-field validation:
 />
 ```
 
+## Analytics & Telemetry
+
+Opt-in form lifecycle tracking via `IAnalyticsCallbacks` in form settings:
+
+```tsx
+const formConfig: IFormConfig = {
+  version: 2,
+  fields: { /* ... */ },
+  settings: {
+    analytics: {
+      onFieldFocus: (fieldName) => telemetry.track("focus", { fieldName }),
+      onFieldBlur: (fieldName, timeSpentMs) => telemetry.track("blur", { fieldName, timeSpentMs }),
+      onFieldChange: (fieldName, oldValue, newValue) => telemetry.track("change", { fieldName }),
+      onValidationError: (fieldName, errors) => telemetry.track("validation_error", { fieldName, errors }),
+      onFormSubmit: (values, durationMs) => telemetry.track("submit", { durationMs }),
+      onFormAbandonment: (filledFields, emptyRequired) => telemetry.track("abandoned", { filledFields }),
+      onWizardStepChange: (fromStep, toStep) => telemetry.track("step", { fromStep, toStep }),
+      onRuleTriggered: (event) => telemetry.track("rule", event),
+    },
+  },
+};
+```
+
+All callbacks are optional. Zero overhead when not provided. See [docs/analytics-telemetry.md](https://github.com/bghcore/dynamic-react-business-forms/blob/main/docs/analytics-telemetry.md).
+
 ## DevTools
 
-Collapsible dev-only panel showing business rules, form values, errors, and the dependency graph:
+Collapsible dev-only panel with 7 tabs: **Rules**, **Values**, **Errors**, **Graph**, **Perf**, **Deps**, **Timeline**.
 
 ```tsx
 import { FormDevTools } from "@bghcore/dynamic-forms-core";
 
 <FormDevTools
   configName="myForm"
-  configRules={businessRules}
+  formState={rulesState}
   formValues={formValues}
   formErrors={formErrors}
   dirtyFields={dirtyFields}
   enabled={process.env.NODE_ENV === "development"}
 />
 ```
+
+| Tab | Shows |
+|-----|-------|
+| Rules | Per-field runtime state (type, required, hidden, readOnly, active rules) |
+| Values | Live form values as JSON |
+| Errors | Current validation errors |
+| Graph | Dependency graph as text |
+| Perf | Per-field render counts, hot field detection via `RenderTracker` |
+| Deps | Dependency adjacency table, color-coded by effect type, cycle detection |
+| Timeline | Chronological event log via `EventTimeline`, filterable by field name |
+
+See [docs/performance-debugging.md](https://github.com/bghcore/dynamic-react-business-forms/blob/main/docs/performance-debugging.md).
 
 ## JSON Schema Import
 
@@ -447,6 +485,10 @@ setInjectedFields(lazyFields);
             <FieldWrapper>       -- Label, error, saving status (React.memo, render props)
               <InjectedField />  -- Your UI component via cloneElement
 ```
+
+## SSR / Next.js
+
+All core components are SSR-safe with proper `typeof window` guards. See [docs/ssr-guide.md](https://github.com/bghcore/dynamic-react-business-forms/blob/main/docs/ssr-guide.md) for Next.js App Router and Pages Router integration guides.
 
 ## Building a Custom UI Adapter
 

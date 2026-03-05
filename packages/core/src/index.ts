@@ -134,6 +134,8 @@ export { createLazyFieldRegistry } from "./utils/lazyFieldRegistry";
 export { useDraftPersistence } from "./hooks/useDraftPersistence";
 export type { IDraftPersistenceOptions, IDraftState, IUseDraftPersistenceResult } from "./hooks/useDraftPersistence";
 export { useBeforeUnload } from "./hooks/useBeforeUnload";
+export { useFormAnalytics } from "./hooks/useFormAnalytics";
+export type { IFormAnalytics } from "./hooks/useFormAnalytics";
 
 // Form State Serialization
 export { serializeFormState, deserializeFormState } from "./utils/formStateSerialization";
@@ -151,3 +153,21 @@ export {
   isRuleTracingEnabled,
 } from "./helpers/RuleTracer";
 export type { IRuleTraceEvent } from "./helpers/RuleTracer";
+
+// Render Tracking
+export {
+  trackRender,
+  flushRenderCycle,
+  getRenderCounts,
+  getLastRenderedFields,
+  getTotalFormRenders,
+  resetRenderTracker,
+} from "./helpers/RenderTracker";
+
+// Event Timeline
+export {
+  logEvent,
+  getTimeline,
+  clearTimeline,
+} from "./helpers/EventTimeline";
+export type { ITimelineEvent, TimelineEventType } from "./helpers/EventTimeline";

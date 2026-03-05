@@ -113,11 +113,11 @@ const ConfirmInputsModal = (props: IConfirmInputsModalProps) => {
   }
 
   return (
-    <dialog ref={dialogRef} className="dynamic-form-modal" aria-label={FormStrings.confirm} onKeyDown={handleKeyDown}>
+    <dialog ref={dialogRef} className="dynamic-form-modal" role="dialog" aria-modal="true" aria-label={FormStrings.confirm} onKeyDown={handleKeyDown}>
       {content}
       <div className="dynamic-form-modal-actions">
-        <button ref={saveButtonRef} onClick={saveConfirmInputFields}>{FormStrings.save}</button>
-        <button onClick={cancelConfirmInputFields}>{FormStrings.cancel}</button>
+        <button type="button" ref={saveButtonRef} onClick={saveConfirmInputFields}>{FormStrings.save}</button>
+        <button type="button" onClick={cancelConfirmInputFields}>{FormStrings.cancel}</button>
       </div>
     </dialog>
   );

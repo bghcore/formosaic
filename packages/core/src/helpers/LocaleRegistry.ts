@@ -56,6 +56,8 @@ const defaultStrings: ICoreLocaleStrings = {
   saveFailed: "Save failed",
   validating: "Validating...",
   stepOf: (current: number, total: number) => `Step ${current} of ${total}`,
+  formWizard: "Form wizard",
+  itemOfTotal: (index: number, total: number, label: string) => `${label} item ${index} of ${total}`,
 
   // Dynamic functions
   saveChangesTo: (title: string) => `Do you want to save your changes to ${title}?`,

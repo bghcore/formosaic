@@ -4,10 +4,13 @@
 
 A React library for rendering complex, configuration-driven forms with a built-in rules engine. Forms are defined as a single `IFormConfig` JSON object (field definitions, rules with rich conditions, validation, ordering) and the library handles rendering, validation, auto-save, and field interactions automatically.
 
-Published as three npm packages:
+Published as six npm packages:
 - `@bghcore/dynamic-forms-core` -- UI-library agnostic rules engine and form orchestration (React + react-hook-form only)
 - `@bghcore/dynamic-forms-fluent` -- Fluent UI v9 field component implementations
 - `@bghcore/dynamic-forms-mui` -- Material UI (MUI) field component implementations
+- `@bghcore/dynamic-forms-headless` -- Unstyled semantic HTML field implementations (no UI framework dependency)
+- `@bghcore/dynamic-forms-designer` -- Visual drag-and-drop form builder that outputs IFormConfig v2
+- `@bghcore/dynamic-forms-examples` -- 3 example apps (login+MFA, checkout wizard, data entry)
 
 ## Architecture
 
@@ -140,6 +143,8 @@ packages/
         WizardHelper.ts          -- getVisibleSteps, getStepFields, validateStepFields
         FieldHelper.ts           -- SortOptions utility
         RuleTracer.ts            -- Rule evaluation tracing/debugging
+        RenderTracker.ts         -- Per-field render count tracking for DevTools Perf tab
+        EventTimeline.ts         -- Chronological event log for DevTools Timeline tab
       types/
         IFormConfig.ts           -- IFormConfig, IFormSettings
         IFieldConfig.ts          -- IFieldConfig (v2 schema)
@@ -154,6 +159,7 @@ packages/
         IWizardConfig.ts         -- IWizardStep, IWizardConfig (condition-based visibility)
         ILocaleStrings.ts        -- ICoreLocaleStrings (~50 keys)
         TypedFieldConfig.ts      -- defineFormConfig() type-safe builder
+        IAnalyticsCallbacks.ts    -- Analytics/telemetry callback interface (8 event hooks)
         IConfirmInputModalProps.ts, IFieldToRender.ts, IHookInlineFormSharedProps.ts
       providers/
         BusinessRulesProvider.tsx -- RulesEngineProvider (useReducer + memoized)
@@ -163,6 +169,7 @@ packages/
       hooks/
         useDraftPersistence.ts   -- Auto-save form state to localStorage
         useBeforeUnload.ts       -- Browser warning on unsaved changes
+        useFormAnalytics.ts      -- Analytics callback wrapper hook (IFormAnalytics)
       utils/
         index.ts                 -- isEmpty, isNull, deepCopy, Dictionary, etc.
         formStateSerialization.ts -- Date-safe JSON round-trip
@@ -184,24 +191,54 @@ packages/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, HookFormLoading)
       fields/ (13 editable + 6 read-only, accept IFieldProps, using @mui/material)
+
+  headless/                      -- @bghcore/dynamic-forms-headless
+    src/
+      index.ts, registry.ts, helpers.ts
+      components/ (ReadOnlyText, StatusMessage, HookFormLoading)
+      fields/ (13 editable + 6 read-only, semantic HTML, data-* attributes, ARIA)
+      styles.css (optional CSS custom properties)
+
+  designer/                      -- @bghcore/dynamic-forms-designer
+    src/
+      types/ (IDesignerState, IDesignerAction)
+      state/ (designerReducer, DesignerProvider, useDesigner)
+      components/ (FormDesigner, FieldPalette, FormCanvas, FieldConfigPanel,
+                   RuleBuilder, ConfigPreview, WizardConfigurator, ImportExport)
+      styles.css
+
+  examples/                      -- @bghcore/dynamic-forms-examples
+    src/
+      login-mfa/ (conditional MFA fields, dynamic labels)
+      checkout/ (wizard, dropdown dependencies, payment branching)
+      data-entry/ (field arrays, computed values, cross-field validation)
+
+e2e/                             -- Playwright E2E tests (54 tests, 7 specs)
+benchmarks/                      -- Performance benchmark suite (vitest bench)
+stories/                         -- Storybook stories (64 stories + MDX docs)
 ```
 
 ## Build & Dev
 
 ```bash
-npm run build            # Build all packages (core, fluent, mui)
+npm run build            # Build all packages
 npm run build:core       # Build core package only
 npm run build:fluent     # Build fluent package only
 npm run build:mui        # Build MUI package only
+npm run build:headless   # Build headless package only
 npm run clean            # Remove all dist/ directories
-npm run test             # Run all tests (vitest)
+npm run test             # Run all tests (vitest, 515 tests)
 npm run test:watch       # Run tests in watch mode
 npm run test:coverage    # Run tests with coverage report
+npm run test:e2e         # Run Playwright E2E tests (54 tests)
+npm run bench            # Run performance benchmarks
+npm run storybook        # Start Storybook dev server
+npm run build-storybook  # Build static Storybook
 ```
 
 **Build output per package:** `dist/index.js` (CJS), `dist/index.mjs` (ESM), `dist/index.d.ts` (types)
 
-**Monorepo:** npm workspaces with `packages/core`, `packages/fluent`, `packages/mui`
+**Monorepo:** npm workspaces with `packages/core`, `packages/fluent`, `packages/mui`, `packages/headless`, `packages/designer`, `packages/examples`
 
 ## Tech Stack
 
@@ -210,7 +247,9 @@ npm run test:coverage    # Run tests with coverage report
 - **Fluent UI v9** (`@fluentui/react-components`) for UI components (fluent package)
 - **MUI v5/v6** (`@mui/material`) for UI components (mui package)
 - **TypeScript** with `strict: true`
-- **Vitest** for testing (478 tests across 24 files)
+- **Vitest** for testing (515 tests across 25 files)
+- **Playwright** for E2E testing (54 tests across 7 specs)
+- **Storybook 10** for visual component documentation (64 stories)
 - **tsup** for bundling (CJS + ESM + .d.ts)
 - **npm workspaces** for monorepo management
 

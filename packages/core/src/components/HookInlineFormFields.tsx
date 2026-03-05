@@ -2,6 +2,7 @@ import React from "react";
 import { GetFieldsToRender } from "../helpers/HookInlineFormHelper";
 import { IRuntimeFormState } from "../types/IRuntimeFieldState";
 import { IFieldConfig } from "../types/IFieldConfig";
+import { IFormAnalytics } from "../hooks/useFormAnalytics";
 import RenderField from "./HookRenderField";
 import { FormErrorBoundary } from "./HookFormErrorBoundary";
 
@@ -26,6 +27,7 @@ interface IFormFieldsProps {
   renderLabel?: (props: { id: string; labelId: string; label?: string; required?: boolean }) => React.ReactNode;
   renderError?: (props: { id: string; error?: import("react-hook-form").FieldError; errorCount?: number }) => React.ReactNode;
   renderStatus?: (props: { id: string; saving?: boolean; savePending?: boolean; errorCount?: number; isManualSave?: boolean }) => React.ReactNode;
+  analytics?: IFormAnalytics;
 }
 
 export const FormFields = (props: IFormFieldsProps) => {
@@ -33,7 +35,7 @@ export const FormFields = (props: IFormFieldsProps) => {
     entityId, entityType, programName, parentEntityId, parentEntityType,
     isExpanded, expandEnabled, fieldOrder, inPanel, collapsedMaxHeight,
     formState, fields, setFieldValue, isManualSave, isCreate, filterText,
-    fieldRenderLimit, renderLabel, renderError, renderStatus,
+    fieldRenderLimit, renderLabel, renderError, renderStatus, analytics,
   } = props;
 
   const collapsedClass = !isExpanded && (expandEnabled || expandEnabled === undefined) ? "collapsed" : "";
@@ -84,6 +86,7 @@ export const FormFields = (props: IFormFieldsProps) => {
                 renderLabel={renderLabel}
                 renderError={renderError}
                 renderStatus={renderStatus}
+                analytics={analytics}
               />
             </FormErrorBoundary>
           );

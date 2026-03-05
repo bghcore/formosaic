@@ -5,6 +5,68 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2026-03-05
+
+Major release: new packages, tooling, and ecosystem expansion.
+
+### Added
+
+- **`@bghcore/dynamic-forms-headless`** -- New unstyled adapter with all 19 field types using semantic HTML only. No UI framework dependency. `data-field-type` and `data-field-state` attributes for CSS targeting. Includes optional CSS custom properties and Tailwind CSS integration guide. (~36KB ESM)
+- **`@bghcore/dynamic-forms-designer`** -- Visual drag-and-drop form builder that outputs `IFormConfig` v2 JSON. Components: FieldPalette, FormCanvas, FieldConfigPanel, RuleBuilder (all 15 operators + AND/OR/NOT), WizardConfigurator, ConfigPreview, ImportExport. Undo/redo with 50-snapshot stack. HTML5 native drag-and-drop. (~65KB ESM)
+- **`@bghcore/dynamic-forms-examples`** -- Three complete example apps: Login+MFA (conditional visibility, dynamic labels), E-Commerce Checkout (wizard, dropdown dependencies, payment branching), Data Entry (field arrays, computed values, cross-field validation). Vite + React 19 + MUI.
+- **Form analytics/telemetry** -- `IAnalyticsCallbacks` interface with 8 optional lifecycle callbacks (onFieldFocus, onFieldBlur, onFieldChange, onValidationError, onFormSubmit, onFormAbandonment, onWizardStepChange, onRuleTriggered). `useFormAnalytics` hook with memoized wrappers, focus time tracking, and form duration calculation. Zero overhead when not configured.
+- **FormDevTools: Performance tab** -- Per-field render count tracking via `RenderTracker` helper. Highlights "hot" fields rendering >1.5x average. Reset and refresh controls.
+- **FormDevTools: Dependency Graph tab** -- Visual adjacency table showing field dependencies. Color-coded by effect type (hidden/required/readOnly/options). Sortable by name or dependency count. Cycle detection.
+- **FormDevTools: Timeline tab** -- Chronological event log via `EventTimeline` helper. Events: field_change, rule_evaluated, validation_run, form_submit. Filterable, clearable, capped at 500 events.
+- **`IFieldEffect.label`** -- Rules can now dynamically change field labels via the `label` property in rule effects.
+- **`InjectedFieldProvider` `injectedFields` prop** -- Field registry can now be passed directly as a prop instead of requiring `setInjectedFields()` in a child component.
+- **Storybook 10** -- 64 stories covering all 19 field types (editable + read-only states), composite components (DynamicForm, WizardForm, FieldArray, FormDevTools), and a Getting Started MDX docs page.
+- **Playwright E2E tests** -- 54 tests across 7 spec files: basic form, rules engine, validation, wizard navigation, field arrays, draft recovery, keyboard navigation. Includes Vite test app and page object pattern.
+- **Performance benchmarks** -- vitest bench suite with 5 benchmark files: rule engine (10-500 fields), condition evaluator (15 operators, nested trees), validation throughput, expression engine, and bundle size tracking. Config generators for N-field forms.
+- **CI/CD pipeline** -- GitHub Actions with matrix CI (Node 18+20), test + coverage artifacts, publish workflow with workflow_dispatch, dry-run mode, OIDC provenance, and GitHub Release creation.
+- **WCAG 2.1 AA accessibility audit** -- 8 core component files fixed (label association, ARIA roles, focus management, screen reader text). 15 new accessibility tests. `docs/ACCESSIBILITY.md` compliance document.
+- **SSR compatibility** -- 3 core files fixed with typeof window/document guards. `docs/ssr-guide.md` covering Next.js App Router and Pages Router setup.
+- 22 new analytics tests (515 total core tests passing)
+
+## [2.0.0] - 2026-03-04
+
+Complete schema redesign with unified rules engine. All v1 names kept as deprecated aliases.
+
+### Added
+
+- **`IFormConfig` v2 schema** -- Versioned wrapper: `{ version: 2, fields, fieldOrder, wizard, settings }`
+- **Unified rules engine** -- `IFieldConfig.rules: IRule[]` replaces dependencies, dependencyRules, dropdownDependencies, orderDependencies
+- **Rich conditions** -- `ICondition = IFieldCondition | ILogicalCondition` with 15 operators (equals, notEquals, greaterThan, lessThan, contains, notContains, startsWith, endsWith, in, notIn, isEmpty, isNotEmpty, matches, greaterThanOrEqual, lessThanOrEqual) + AND/OR/NOT logical composition
+- **Rule effects** -- `IFieldEffect` with required, hidden, readOnly, component, options, validate, computedValue, fieldOrder, fields (cross-field)
+- **Priority-based conflict resolution** -- Higher priority rule wins when multiple rules affect the same field
+- **Incremental evaluation** -- `evaluateAffectedFields()` only re-evaluates transitively affected fields on change
+- **Dependency graph** -- `buildDependencyGraph()` with topological sort for evaluation ordering
+- **Computed values** -- `computedValue: "$fn.name()"` or `"$values.qty * $values.price"` replaces `isValueFunction` + `value`
+- **Unified validation** -- `validate: IValidationRule[]` with `{ name, params, message, async, debounceMs, when }` replaces separate sync/async systems
+- **`ConditionEvaluator`** -- `evaluateCondition()` with all 15 operators + nested AND/OR/NOT
+
+### Changed
+
+- **Component renames** (old names kept as deprecated aliases):
+  - `DynamicForm` (was `HookInlineForm`)
+  - `FormFields` (was `HookInlineFormFields`)
+  - `RenderField` (was `HookRenderField`)
+  - `FieldWrapper` (was `HookFieldWrapper`)
+  - `WizardForm` (was `HookWizardForm`)
+  - `FieldArray` (was `HookFieldArray`)
+  - `RulesEngineProvider` (was `BusinessRulesProvider`)
+  - `InjectedFieldProvider` (was `InjectedHookFieldProvider`)
+- **Field config keys**: `type` (was `component`), `options` (was `dropdownOptions`), `validate` (was `validations`), `config` (was `meta`)
+- **Option format**: `{ value, label }` (was `{ key, text }`)
+- **Type renames**: `IFieldProps` (was `IHookFieldSharedProps`), `IRuntimeFieldState` (was `IBusinessRule`), `IRulesEngineAction` (was `IBusinessRuleAction`)
+
+### Removed
+
+- `helpers/BusinessRulesHelper.ts` (replaced by RuleEngine + ConditionEvaluator)
+- `types/IBusinessRule.ts`, `IBusinessRuleAction.ts`, `IBusinessRuleActionKeys.ts`, `IBusinessRulesState.ts`
+- `types/IConfigBusinessRules.ts`, `IDropdownOption.ts`, `IOrderDependencies.ts`, `IFieldArrayConfig.ts`
+- `types/IExecuteValueFunction.ts`, `IHookFieldSharedProps.ts`, `IHookPerson.ts`
+
 ## [1.5.1] - 2026-03-03
 
 ### Fixed

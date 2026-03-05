@@ -5,6 +5,7 @@ import { IRuntimeFieldState, IRuntimeFormState } from "../types/IRuntimeFieldSta
 import { IEntityData } from "../utils";
 import { evaluateCondition, extractConditionDependencies } from "./ConditionEvaluator";
 import { extractExpressionDependencies } from "./ExpressionEngine";
+import { logEvent } from "./EventTimeline";
 
 /**
  * Builds the dependency graph from field configs.
@@ -179,6 +180,7 @@ export function evaluateAllRules(
     if (!config?.rules) continue;
 
     const ruleResults = evaluateFieldRules(config.rules, values);
+    logEvent("rule_evaluated", fieldName, `${config.rules.length} rule(s) evaluated`);
 
     // Apply self-effects
     applyEffectToState(fieldStates, fieldName, ruleResults.selfEffect);
@@ -211,6 +213,7 @@ export function evaluateAffectedFields(
 ): IRuntimeFormState {
   // Find all transitively affected fields
   const affected = getTransitivelyAffectedFields(changedField, currentState.fieldStates);
+  logEvent("field_change", changedField, `${affected.size} affected field(s)`);
   if (affected.size === 0) {
     return currentState;
   }

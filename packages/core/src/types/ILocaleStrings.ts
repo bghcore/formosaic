@@ -54,6 +54,8 @@ export interface ICoreLocaleStrings {
   saveFailed: string;
   validating: string;
   stepOf: (current: number, total: number) => string;
+  formWizard: string;
+  itemOfTotal: (index: number, total: number, label: string) => string;
 
   // Dynamic functions
   saveChangesTo: (title: string) => string;

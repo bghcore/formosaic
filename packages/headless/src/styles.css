@@ -1,0 +1,450 @@
+/* ==========================================================================
+   @bghcore/dynamic-forms-headless — Default Styles
+
+   These styles provide a minimal, functional baseline. They are completely
+   optional and designed to be overridden by your own CSS or utility classes.
+
+   All values use CSS custom properties for easy theming.
+   ========================================================================== */
+
+:root {
+  --df-font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --df-font-size: 0.875rem;
+  --df-line-height: 1.5;
+  --df-color-text: #1a1a1a;
+  --df-color-text-muted: #6b7280;
+  --df-color-bg: #ffffff;
+  --df-color-border: #d1d5db;
+  --df-color-border-focus: #2563eb;
+  --df-color-error: #dc2626;
+  --df-color-warning: #d97706;
+  --df-color-success: #16a34a;
+  --df-color-primary: #2563eb;
+  --df-color-primary-text: #ffffff;
+  --df-border-radius: 4px;
+  --df-spacing-xs: 0.25rem;
+  --df-spacing-sm: 0.5rem;
+  --df-spacing-md: 0.75rem;
+  --df-spacing-lg: 1rem;
+  --df-transition: 150ms ease;
+}
+
+/* ---------- Base input styles ---------- */
+
+.df-textbox,
+.df-number,
+.df-dropdown,
+.df-simple-dropdown,
+.df-date-control__input,
+.df-document-links__url-input,
+.df-document-links__text-input,
+.df-multi-select-search__input,
+.df-textarea__input,
+.df-textarea-dialog__input,
+.df-status-dropdown__select,
+.df-multiselect {
+  font-family: var(--df-font-family);
+  font-size: var(--df-font-size);
+  line-height: var(--df-line-height);
+  color: var(--df-color-text);
+  background-color: var(--df-color-bg);
+  border: 1px solid var(--df-color-border);
+  border-radius: var(--df-border-radius);
+  padding: var(--df-spacing-sm) var(--df-spacing-md);
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color var(--df-transition), box-shadow var(--df-transition);
+}
+
+.df-textbox:focus,
+.df-number:focus,
+.df-dropdown:focus,
+.df-simple-dropdown:focus,
+.df-date-control__input:focus,
+.df-document-links__url-input:focus,
+.df-document-links__text-input:focus,
+.df-multi-select-search__input:focus,
+.df-textarea__input:focus,
+.df-textarea-dialog__input:focus,
+.df-status-dropdown__select:focus,
+.df-multiselect:focus {
+  outline: none;
+  border-color: var(--df-color-border-focus);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* ---------- Error state ---------- */
+
+[data-field-state="error"] .df-textbox,
+[data-field-state="error"] .df-number,
+[data-field-state="error"] .df-dropdown,
+[data-field-state="error"] .df-simple-dropdown,
+[data-field-state="error"] .df-date-control__input,
+[data-field-state="error"] .df-textarea__input,
+[data-field-state="error"] .df-status-dropdown__select,
+[data-field-state="error"] .df-multiselect,
+[data-field-state="error"].df-textbox,
+[data-field-state="error"].df-number,
+[data-field-state="error"].df-dropdown,
+[data-field-state="error"].df-simple-dropdown,
+[data-field-state="error"].df-multiselect {
+  border-color: var(--df-color-error);
+}
+
+/* ---------- Toggle ---------- */
+
+.df-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--df-spacing-sm);
+  cursor: pointer;
+}
+
+.df-toggle__input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--df-color-primary);
+}
+
+/* ---------- Slider ---------- */
+
+.df-slider {
+  display: flex;
+  align-items: center;
+  gap: var(--df-spacing-sm);
+}
+
+.df-slider__input {
+  flex: 1;
+  accent-color: var(--df-color-primary);
+}
+
+.df-slider__value {
+  font-size: var(--df-font-size);
+  font-variant-numeric: tabular-nums;
+  min-width: 2em;
+  text-align: center;
+}
+
+/* ---------- Date control ---------- */
+
+.df-date-control {
+  display: flex;
+  align-items: center;
+  gap: var(--df-spacing-xs);
+}
+
+.df-date-control__clear {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: var(--df-color-text-muted);
+  padding: var(--df-spacing-xs);
+  line-height: 1;
+}
+
+.df-date-control__clear:hover {
+  color: var(--df-color-error);
+}
+
+/* ---------- Textarea ---------- */
+
+.df-textarea {
+  display: flex;
+  flex-direction: column;
+  gap: var(--df-spacing-xs);
+}
+
+.df-textarea__input {
+  resize: vertical;
+}
+
+.df-textarea__expand {
+  align-self: flex-end;
+  background: none;
+  border: 1px solid var(--df-color-border);
+  border-radius: var(--df-border-radius);
+  padding: var(--df-spacing-xs) var(--df-spacing-sm);
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--df-color-text-muted);
+}
+
+.df-textarea__expand:hover {
+  border-color: var(--df-color-border-focus);
+  color: var(--df-color-text);
+}
+
+/* ---------- Textarea dialog ---------- */
+
+.df-textarea-dialog,
+.df-confirm-dialog {
+  border: 1px solid var(--df-color-border);
+  border-radius: var(--df-border-radius);
+  padding: var(--df-spacing-lg);
+  max-width: 90vw;
+  width: 800px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+.df-textarea-dialog::backdrop,
+.df-confirm-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.df-textarea-dialog__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--df-spacing-md);
+}
+
+.df-textarea-dialog__title {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.df-textarea-dialog__close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--df-color-text-muted);
+  line-height: 1;
+}
+
+.df-textarea-dialog__input {
+  width: 100%;
+  min-height: 200px;
+}
+
+.df-textarea-dialog__footer,
+.df-confirm-dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--df-spacing-sm);
+  margin-top: var(--df-spacing-md);
+}
+
+/* ---------- Multi-select search ---------- */
+
+.df-multi-select-search {
+  display: flex;
+  flex-direction: column;
+  gap: var(--df-spacing-xs);
+}
+
+.df-multi-select-search__options {
+  border: 1px solid var(--df-color-border);
+  border-radius: var(--df-border-radius);
+  padding: var(--df-spacing-sm);
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 0;
+}
+
+.df-multi-select-search__option {
+  display: flex;
+  align-items: center;
+  gap: var(--df-spacing-sm);
+  padding: var(--df-spacing-xs) 0;
+  cursor: pointer;
+}
+
+/* ---------- Document links ---------- */
+
+.df-document-links__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.df-document-links__item {
+  display: flex;
+  align-items: center;
+  gap: var(--df-spacing-sm);
+  padding: var(--df-spacing-xs) 0;
+}
+
+.df-document-links__delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--df-color-error);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.df-document-links__add {
+  display: flex;
+  gap: var(--df-spacing-sm);
+  margin-top: var(--df-spacing-sm);
+  flex-wrap: wrap;
+}
+
+.df-document-links__url-input,
+.df-document-links__text-input {
+  flex: 1;
+  min-width: 150px;
+}
+
+/* ---------- Status dropdown ---------- */
+
+.df-status-dropdown {
+  display: flex;
+  align-items: center;
+  gap: var(--df-spacing-sm);
+}
+
+.df-status-dropdown__indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.df-status-dropdown__select {
+  flex: 1;
+}
+
+/* ---------- Read-only fields ---------- */
+
+.df-read-only-text {
+  font-family: var(--df-font-family);
+  font-size: var(--df-font-size);
+  color: var(--df-color-text);
+}
+
+.df-read-only-array {
+  list-style: disc;
+  margin: 0;
+  padding-left: var(--df-spacing-lg);
+}
+
+.df-read-only-with-button {
+  display: flex;
+  align-items: center;
+  gap: var(--df-spacing-sm);
+}
+
+.df-read-only-rich-text {
+  font-family: var(--df-font-family);
+  font-size: var(--df-font-size);
+  line-height: var(--df-line-height);
+}
+
+/* ---------- Buttons ---------- */
+
+.df-btn {
+  font-family: var(--df-font-family);
+  font-size: var(--df-font-size);
+  padding: var(--df-spacing-sm) var(--df-spacing-md);
+  border-radius: var(--df-border-radius);
+  cursor: pointer;
+  border: 1px solid var(--df-color-border);
+  background: var(--df-color-bg);
+  color: var(--df-color-text);
+  transition: background var(--df-transition), border-color var(--df-transition);
+}
+
+.df-btn:hover {
+  border-color: var(--df-color-border-focus);
+}
+
+.df-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.df-btn--primary {
+  background: var(--df-color-primary);
+  border-color: var(--df-color-primary);
+  color: var(--df-color-primary-text);
+}
+
+.df-btn--primary:hover {
+  filter: brightness(1.1);
+}
+
+.df-btn--secondary {
+  background: transparent;
+}
+
+/* ---------- Status message ---------- */
+
+.df-status-message {
+  font-family: var(--df-font-family);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: var(--df-spacing-xs);
+}
+
+.df-status-error {
+  color: var(--df-color-error);
+}
+
+.df-status-warning {
+  color: var(--df-color-warning);
+}
+
+.df-status-saving {
+  color: var(--df-color-text-muted);
+}
+
+/* ---------- Form loading skeleton ---------- */
+
+.df-form-loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--df-spacing-md);
+}
+
+.df-form-loading__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--df-spacing-xs);
+}
+
+.df-skeleton {
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: df-shimmer 1.5s infinite;
+  border-radius: var(--df-border-radius);
+}
+
+.df-skeleton--label {
+  height: 14px;
+}
+
+.df-skeleton--input {
+  height: 32px;
+}
+
+@keyframes df-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ---------- Required indicator ---------- */
+
+.df-required-indicator {
+  color: var(--df-color-error);
+}
+
+/* ---------- Screen reader only ---------- */
+
+.df-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

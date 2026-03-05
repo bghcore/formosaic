@@ -1,5 +1,6 @@
 import { IFieldConfig } from "./IFieldConfig";
 import { IWizardConfig } from "./IWizardConfig";
+import { IAnalyticsCallbacks } from "./IAnalyticsCallbacks";
 
 /**
  * Top-level form configuration (v2 schema).
@@ -34,4 +35,6 @@ export interface IFormSettings {
   collapsedMaxHeight?: number;
   /** Enable field filter/search input. */
   enableFilter?: boolean;
+  /** Analytics/telemetry callbacks for form lifecycle events. */
+  analytics?: IAnalyticsCallbacks;
 }

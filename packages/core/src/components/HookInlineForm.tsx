@@ -20,6 +20,7 @@ import { IFormConfig } from "../types/IFormConfig";
 import { IHookInlineFormSharedProps } from "../types/IHookInlineFormSharedProps";
 import { UseRulesEngineContext } from "../providers/BusinessRulesProvider";
 import { FormStrings } from "../strings";
+import { useFormAnalytics } from "../hooks/useFormAnalytics";
 import ConfirmInputsModal from "./HookConfirmInputsModal";
 import { FormFields } from "./HookInlineFormFields";
 
@@ -84,6 +85,7 @@ export const DynamicForm: React.FC<IDynamicFormProps> = (props: IDynamicFormProp
   const effectiveSaveTimeout = formSettings?.saveTimeoutMs ?? saveTimeoutMs;
   const effectiveMaxRetries = formSettings?.maxSaveRetries ?? maxSaveRetries;
   const effectiveExpandCutoff = formSettings?.expandCutoffCount ?? expandCutoffCount;
+  const analytics = useFormAnalytics(formSettings?.analytics);
 
   const saveData = props.saveData
     ? props.saveData
@@ -170,6 +172,7 @@ export const DynamicForm: React.FC<IDynamicFormProps> = (props: IDynamicFormProp
   };
 
   const focusFirstError = () => {
+    if (typeof document === "undefined") return;
     const currentErrors = formStateRef.current.errors;
     const errorFieldNames = Object.keys(currentErrors);
     if (errorFieldNames.length > 0) {
@@ -193,7 +196,7 @@ export const DynamicForm: React.FC<IDynamicFormProps> = (props: IDynamicFormProp
       if (!valid) {
         setIsExpanded(true);
         setStatusMessage("");
-        requestAnimationFrame(() => focusFirstError());
+        (typeof requestAnimationFrame !== "undefined" ? requestAnimationFrame : setTimeout)(() => focusFirstError());
       } else {
         const newConfirmInputModalProps = confirmInputModalProps.current === undefined
           ? GetConfirmInputModalProps(Object.keys(dirtyFields), cfg?.fieldStates ?? {})
@@ -229,6 +232,7 @@ export const DynamicForm: React.FC<IDynamicFormProps> = (props: IDynamicFormProp
         const updatedEntity = await Promise.race([saveData(data, dirtyFieldNames), timeoutPromise]);
         if (abortController.signal.aborted) return;
         setStatusMessage(FormStrings.saved);
+        analytics.trackFormSubmit(data as Record<string, unknown>);
         if (!isCreate) handleDirtyFields(updatedEntity, data);
       } catch (error) {
         if (abortController.signal.aborted) return;
@@ -320,10 +324,11 @@ export const DynamicForm: React.FC<IDynamicFormProps> = (props: IDynamicFormProp
           renderLabel={renderLabel}
           renderError={renderError}
           renderStatus={renderStatus}
+          analytics={analytics}
         />
         {expandEnabled && (
           renderExpandButton ? renderExpandButton({ isExpanded, onToggle: () => setIsExpanded(!isExpanded) }) : (
-            <button className="expand-button" onClick={() => setIsExpanded(!isExpanded)} data-testid={`${programName}-${entityType}-${entityId}-expand-form`}>
+            <button className="expand-button" onClick={() => setIsExpanded(!isExpanded)} aria-expanded={isExpanded} data-testid={`${programName}-${entityType}-${entityId}-expand-form`}>
               {isExpanded ? FormStrings.seeLess : FormStrings.expand}
             </button>
           )

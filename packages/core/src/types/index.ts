@@ -29,3 +29,6 @@ export * from "./IFieldToRender";
 
 // Form shared props
 export * from "./IHookInlineFormSharedProps";
+
+// Analytics
+export * from "./IAnalyticsCallbacks";

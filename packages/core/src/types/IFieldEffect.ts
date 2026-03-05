@@ -14,6 +14,8 @@ export interface IFieldEffect {
   hidden?: boolean;
   /** Override readOnly state */
   readOnly?: boolean;
+  /** Override field label */
+  label?: string;
   /** Swap the component type */
   component?: string;
   /** Replace dropdown options */

@@ -44,6 +44,8 @@ export const FormStrings = {
   get saveFailed() { return getLocaleString("saveFailed"); },
   get validating() { return getLocaleString("validating"); },
   get stepOf() { return getLocaleString("stepOf"); },
+  get formWizard() { return getLocaleString("formWizard"); },
+  get itemOfTotal() { return getLocaleString("itemOfTotal"); },
   get saveChangesTo() { return getLocaleString("saveChangesTo"); },
   get draftRecovered() { return getLocaleString("draftRecovered"); },
   get discardDraft() { return getLocaleString("discardDraft"); },

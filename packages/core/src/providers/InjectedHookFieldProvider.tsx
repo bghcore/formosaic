@@ -17,11 +17,17 @@ export function UseInjectedFieldContext() {
 }
 
 
-export const InjectedFieldProvider: React.FC<React.PropsWithChildren<{}>> = (
-  props: React.PropsWithChildren<{}>
+interface InjectedFieldProviderProps {
+  /** Optional initial field registry. If provided, fields are set immediately. */
+  injectedFields?: Record<string, React.JSX.Element>;
+  children?: React.ReactNode;
+}
+
+export const InjectedFieldProvider: React.FC<InjectedFieldProviderProps> = (
+  props: InjectedFieldProviderProps
 ): React.JSX.Element => {
   const [injectedFields, setInjectedFields] = React.useState<Record<string, React.JSX.Element>>(
-    undefined as unknown as Record<string, React.JSX.Element>
+    (props.injectedFields ?? undefined) as unknown as Record<string, React.JSX.Element>
   );
 
   const providerValue: IInjectedFieldProvider = React.useMemo(() => ({

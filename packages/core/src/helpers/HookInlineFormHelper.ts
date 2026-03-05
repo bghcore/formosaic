@@ -9,6 +9,7 @@ import { evaluateAllRules } from "./RuleEngine";
 import { runSyncValidations, runValidations, IValidationContext } from "./ValidationRegistry";
 import { executeValueFunction } from "./ValueFunctionRegistry";
 import { evaluateExpression } from "./ExpressionEngine";
+import { logEvent } from "./EventTimeline";
 
 export const GetChildEntity = (
   entityId?: string,
@@ -126,7 +127,9 @@ export const CheckFieldValidationRules = (
 ): string | undefined => {
   if (!state.validate || state.validate.length === 0) return undefined;
   const context: IValidationContext = { fieldName, values: entityData };
-  return runSyncValidations(value, state.validate, context);
+  const result = runSyncValidations(value, state.validate, context);
+  logEvent("validation_run", fieldName, result ? `failed: ${result}` : "passed");
+  return result;
 };
 
 export const CheckAsyncFieldValidationRules = async (

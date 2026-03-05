@@ -1,0 +1,19 @@
+{
+  "name": "benchmarks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "bench": "vitest bench --config=vitest.config.ts",
+    "bench:rule-engine": "vitest bench --config=vitest.config.ts suites/rule-engine.bench.ts",
+    "bench:condition": "vitest bench --config=vitest.config.ts suites/condition-evaluator.bench.ts",
+    "bench:validation": "vitest bench --config=vitest.config.ts suites/validation.bench.ts",
+    "bench:expression": "vitest bench --config=vitest.config.ts suites/expression-engine.bench.ts",
+    "bench:bundle": "vitest bench --config=vitest.config.ts suites/bundle-size.bench.ts",
+    "report": "tsx run.ts"
+  },
+  "devDependencies": {
+    "vitest": "^4.0.18",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "declaration": false,
+    "strict": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "@bghcore/dynamic-forms-core": ["../../packages/core/src"],
+      "@bghcore/dynamic-forms-fluent": ["../../packages/fluent/src"]
+    }
+  },
+  "include": ["src/**/*"]
+}
