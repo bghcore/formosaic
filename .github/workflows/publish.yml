@@ -11,6 +11,8 @@ on:
           - core
           - fluent
           - mui
+          - headless
+          - designer
       dry-run:
         description: Dry run (skip actual publish)
         required: false
@@ -22,6 +24,8 @@ on:
       - "core-v*"
       - "fluent-v*"
       - "mui-v*"
+      - "headless-v*"
+      - "designer-v*"
 
 jobs:
   publish:
@@ -65,8 +69,16 @@ jobs:
             VERSION="${TAG#mui-v}"
             WORKSPACE="packages/mui"
             PKG_NAME="@bghcore/dynamic-forms-mui"
+          elif [[ "$TAG" == headless-v* ]]; then
+            VERSION="${TAG#headless-v}"
+            WORKSPACE="packages/headless"
+            PKG_NAME="@bghcore/dynamic-forms-headless"
+          elif [[ "$TAG" == designer-v* ]]; then
+            VERSION="${TAG#designer-v}"
+            WORKSPACE="packages/designer"
+            PKG_NAME="@bghcore/dynamic-forms-designer"
           elif [[ "$TAG" == v* ]]; then
-            # v* tag publishes all three packages
+            # v* tag publishes all five packages
             VERSION="${TAG#v}"
             WORKSPACE="all"
             PKG_NAME="all"
@@ -137,6 +149,8 @@ jobs:
           npm publish --workspace packages/core --access public --provenance
           npm publish --workspace packages/fluent --access public --provenance
           npm publish --workspace packages/mui --access public --provenance
+          npm publish --workspace packages/headless --access public --provenance
+          npm publish --workspace packages/designer --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
