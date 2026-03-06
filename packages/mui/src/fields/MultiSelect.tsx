@@ -19,7 +19,7 @@ const MultiSelect = (props: IFieldProps<{}>) => {
   return readOnly ? (
     <>
       {value && (value as string[]).length > 0 ? (
-        <Box className="hook-multi-select-read-only" sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+        <Box className="fe-multi-select-read-only" sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
           {(value as string[]).map(v => (
             <Chip key={v} label={v} size="small" />
           ))}
@@ -29,7 +29,7 @@ const MultiSelect = (props: IFieldProps<{}>) => {
   ) : (
     <FormControl fullWidth size="small" error={!!error} required={required}>
       <Select
-        className={FieldClassName("hook-multi-select", error)}
+        className={FieldClassName("fe-multi-select", error)}
         multiple
         value={selectedOptions}
         onChange={onChange}

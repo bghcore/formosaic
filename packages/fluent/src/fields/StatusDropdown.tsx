@@ -7,12 +7,12 @@ import StatusColor from "../components/StatusDropdown/StatusColor";
 import StatusDropdown from "../components/StatusDropdown/StatusDropdown";
 import { FieldClassName } from "../helpers";
 
-export interface IHookStatusDropdownProps {
+export interface IStatusDropdownProps {
   placeHolder?: string;
   statusColors?: Dictionary<string>;
 }
 
-const StatusDropdownField = (props: IFieldProps<IHookStatusDropdownProps>) => {
+const StatusDropdownField = (props: IFieldProps<IStatusDropdownProps>) => {
   const { fieldName, programName, entityType, entityId, value, readOnly, error, config, options, setFieldValue } = props;
 
   const onOptionSelect = (_: unknown, data: OptionOnSelectData) => {
@@ -20,13 +20,13 @@ const StatusDropdownField = (props: IFieldProps<IHookStatusDropdownProps>) => {
   };
 
   return readOnly ? (
-    <div className="hook-read-only-status-dropdown" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+    <div className="fe-read-only-status-dropdown" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
       <StatusColor statusColors={config?.statusColors as Dictionary<string>} status={value as string} />
       <ReadOnlyText fieldName={fieldName} value={value as string} />
     </div>
   ) : (
     <StatusDropdown
-      className={FieldClassName("hook-status-dropdown", error)}
+      className={FieldClassName("fe-status-dropdown", error)}
       fieldName={fieldName}
       programName={programName}
       entityType={entityType}

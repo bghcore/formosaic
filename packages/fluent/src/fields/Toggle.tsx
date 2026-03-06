@@ -15,7 +15,7 @@ const Toggle = (props: IFieldProps<{}>) => {
     <ReadOnlyText fieldName={fieldName} value={convertBooleanToYesOrNoText(value as boolean)} />
   ) : (
     <Switch
-      className="hook-toggle"
+      className="fe-toggle"
       checked={value as boolean}
       onChange={onChange}
       aria-invalid={!!error}

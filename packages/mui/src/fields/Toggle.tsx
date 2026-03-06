@@ -15,7 +15,7 @@ const Toggle = (props: IFieldProps<{}>) => {
     <ReadOnlyText fieldName={fieldName} value={convertBooleanToYesOrNoText(value as boolean)} />
   ) : (
     <FormControlLabel
-      className="hook-toggle"
+      className="fe-toggle"
       control={
         <Switch
           checked={value as boolean}

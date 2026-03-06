@@ -21,7 +21,7 @@ interface IDocumentLinkProps {
   onConfirmDeleteLink?: (index: number) => void;
 }
 
-interface IHookDocumentLink {
+interface IDocumentLinkItem {
   title: string;
   url: string;
 }
@@ -40,7 +40,7 @@ const DocumentLink = (props: IDocumentLinkProps) => {
     defaultValues: { title: addNewLink ? "" : title, url: addNewLink ? "" : url }
   });
 
-  const onSubmit = (data: IHookDocumentLink) => {
+  const onSubmit = (data: IDocumentLinkItem) => {
     saveLinks({ title: data.title, url: data.url }, addNewLink, index);
     setEditingLink(false);
   };

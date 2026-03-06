@@ -35,12 +35,12 @@ const StatusDropdown = (props: IFieldProps<IStatusDropdownProps>) => {
   };
 
   return readOnly ? (
-    <div className="hook-read-only-status-dropdown" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+    <div className="fe-read-only-status-dropdown" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
       <StatusDot color={statusColors && value ? statusColors[value as string] : undefined} />
       <ReadOnlyText fieldName={fieldName} value={value as string} />
     </div>
   ) : (
-    <div className={FieldClassName("hook-status-dropdown", error)} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+    <div className={FieldClassName("fe-status-dropdown", error)} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
       <StatusDot color={statusColors && value ? statusColors[value as string] : undefined} />
       <FormControl fullWidth size="small" error={!!error}>
         <Select

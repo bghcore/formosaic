@@ -12,7 +12,7 @@ const ReadOnlyDateTime = (props: IFieldProps<IReadOnlyDateTimeProps>) => {
   const { config, value } = props;
   return (
     <>{value ? (
-      <Typography variant="body2" className="hook-read-only-date-time" component="span">
+      <Typography variant="body2" className="fe-read-only-date-time" component="span">
         {formatDateTime(value as string, { hideTimestamp: config?.hidetimeStamp })}
       </Typography>
     ) : <>-</>}</>

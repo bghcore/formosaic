@@ -3,13 +3,13 @@ import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
-interface IHookSliderProps {
+interface ISliderProps {
   max?: number;
   min?: number;
   step?: number;
 }
 
-const Slider = (props: IFieldProps<IHookSliderProps>) => {
+const Slider = (props: IFieldProps<ISliderProps>) => {
   const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, setFieldValue } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -4,13 +4,13 @@ import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
-interface IHookSliderProps {
+interface ISliderProps {
   max?: number;
   min?: number;
   step?: number;
 }
 
-const SliderField = (props: IFieldProps<IHookSliderProps>) => {
+const SliderField = (props: IFieldProps<ISliderProps>) => {
   const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, setFieldValue } = props;
 
   const onChange = (_: unknown, data: { value: number }) => {
@@ -21,7 +21,7 @@ const SliderField = (props: IFieldProps<IHookSliderProps>) => {
     <ReadOnlyText fieldName={fieldName} value={String(value)} />
   ) : (
     <Slider
-      className={FieldClassName("hook-slider", error)}
+      className={FieldClassName("fe-slider", error)}
       value={(value as number) ?? 0}
       onChange={onChange}
       max={config?.max}

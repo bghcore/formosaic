@@ -5,7 +5,7 @@ import { FieldWrapper } from "../../components/FieldWrapper";
 import { FormProvider, useForm } from "react-hook-form";
 import { FormEngine } from "../../components/InlineForm";
 import { RulesEngineProvider } from "../../providers/BusinessRulesProvider";
-import { InjectedFieldProvider } from "../../providers/InjectedHookFieldProvider";
+import { InjectedFieldProvider } from "../../providers/InjectedFieldProvider";
 
 /** A minimal FormProvider wrapper for FieldWrapper tests */
 const FormProviderWrapper: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {

@@ -302,7 +302,7 @@ export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps):
         </div>
       )}
       {formErrors && formErrors.length > 0 && (
-        <div className="form-errors" role="alert" style={{ color: "var(--form-error-color, #d13438)", padding: "8px", marginBottom: "8px" }}>
+        <div className="form-errors" role="alert" style={{ color: "var(--fe-error-color, #d13438)", padding: "8px", marginBottom: "8px" }}>
           {formErrors.map((err, i) => (<div key={i} className="form-error-item">{err}</div>))}
         </div>
       )}

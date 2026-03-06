@@ -21,7 +21,7 @@ const Slider = (props: IFieldProps<ISliderProps>) => {
     <ReadOnlyText fieldName={fieldName} value={String(value)} />
   ) : (
     <MuiSlider
-      className={FieldClassName("hook-slider", error)}
+      className={FieldClassName("fe-slider", error)}
       value={(value as number) ?? 0}
       onChange={onChange}
       max={config?.max}

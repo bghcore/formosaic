@@ -25,7 +25,7 @@ const Textbox = (props: IFieldProps<ITextboxProps>) => {
     />
   ) : (
     <TextField
-      className={FieldClassName("hook-textbox", error)}
+      className={FieldClassName("fe-textbox", error)}
       autoComplete="off"
       value={(value as string) ?? ""}
       onChange={onChange}

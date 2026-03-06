@@ -1,5 +1,5 @@
 import React from "react";
-import { IInjectedFieldProvider } from "./IInjectedHookFieldProvider";
+import { IInjectedFieldProvider } from "./IInjectedFieldProvider";
 
 const InjectedFieldContext: React.Context<IInjectedFieldProvider> = React.createContext(
   undefined as unknown as IInjectedFieldProvider

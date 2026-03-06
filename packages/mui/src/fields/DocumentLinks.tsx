@@ -170,7 +170,7 @@ const DocumentLinks = (props: IFieldProps<{}>) => {
   const links = value as IDocumentLink[];
 
   return (
-    <div className={FieldClassName("hook-document-links", readOnly ? undefined : error)}>
+    <div className={FieldClassName("fe-document-links", readOnly ? undefined : error)}>
       <List disablePadding>
         {links?.length > 0 ? links.map((link, index) => (
           <DocumentLinkItem

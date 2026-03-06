@@ -19,7 +19,7 @@ const MultiSelect = (props: IFieldProps<{}>) => {
     <>
       {value && (value as string[]).length > 0 ? (
         <Dropdown
-          className="hook-multi-select-read-only"
+          className="fe-multi-select-read-only"
           multiselect
           value={(value as string[]).join(", ")}
           selectedOptions={value as string[]}
@@ -32,7 +32,7 @@ const MultiSelect = (props: IFieldProps<{}>) => {
     </>
   ) : (
     <Dropdown
-      className={FieldClassName("hook-multi-select", error)}
+      className={FieldClassName("fe-multi-select", error)}
       multiselect
       value={selectedOptions.join(", ")}
       selectedOptions={selectedOptions}

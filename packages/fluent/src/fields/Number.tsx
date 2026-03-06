@@ -18,7 +18,7 @@ const NumberField = (props: IFieldProps<{}>) => {
     <ReadOnlyText fieldName={fieldName} value={String(value)} />
   ) : (
     <Input
-      className={FieldClassName("hook-number", error)}
+      className={FieldClassName("fe-number", error)}
       autoComplete="off"
       type="number"
       value={!isNull(value) ? String(value) : ""}

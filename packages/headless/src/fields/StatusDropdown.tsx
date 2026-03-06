@@ -3,12 +3,12 @@ import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
-export interface IHookStatusDropdownProps {
+export interface IStatusDropdownProps {
   placeHolder?: string;
   statusColors?: Dictionary<string>;
 }
 
-const StatusDropdown = (props: IFieldProps<IHookStatusDropdownProps>) => {
+const StatusDropdown = (props: IFieldProps<IStatusDropdownProps>) => {
   const { fieldName, programName, entityType, entityId, value, readOnly, error, required, config, options, placeholder, setFieldValue } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

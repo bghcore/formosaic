@@ -21,7 +21,7 @@ const MultiSelectSearch = (props: IFieldProps<{}>) => {
   return readOnly ? (
     <>
       {value && (value as string[]).length > 0 ? (
-        <Box className="hook-multi-select-search-read-only" sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+        <Box className="fe-multi-select-search-read-only" sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
           {(value as string[]).map(v => (
             <Chip key={v} label={v} size="small" />
           ))}
@@ -30,7 +30,7 @@ const MultiSelectSearch = (props: IFieldProps<{}>) => {
     </>
   ) : (
     <Autocomplete
-      className={FieldClassName("hook-multi-select-search", error)}
+      className={FieldClassName("fe-multi-select-search", error)}
       multiple
       freeSolo
       aria-required={required}

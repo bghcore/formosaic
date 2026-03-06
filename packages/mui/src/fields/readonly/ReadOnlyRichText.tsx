@@ -5,7 +5,7 @@ const ReadOnlyRichText = (props: IFieldProps<{}>) => {
   const { value } = props;
   return (
     <div
-      className="hook-read-only-rich-text-editor"
+      className="fe-read-only-rich-text-editor"
       dangerouslySetInnerHTML={{ __html: value as string || "" }}
     />
   );

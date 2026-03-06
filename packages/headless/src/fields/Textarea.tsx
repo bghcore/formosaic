@@ -4,7 +4,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { StatusMessage } from "../components/StatusMessage";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
-interface IHookTextareaProps {
+interface ITextareaProps {
   autoAdjustHeight?: boolean;
   numberOfRows?: number;
   ellipsifyTextCharacters?: number;
@@ -14,7 +14,7 @@ interface IHookTextareaProps {
   renderExtraModalFooter?: () => React.ReactNode;
 }
 
-const Textarea = (props: IFieldProps<IHookTextareaProps>) => {
+const Textarea = (props: IFieldProps<ITextareaProps>) => {
   const {
     error, fieldName, programName, entityType, entityId, config, readOnly,
     required, savePending, saving, value, label, setFieldValue

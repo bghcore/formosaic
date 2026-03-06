@@ -16,7 +16,7 @@ const MultiSelectSearch = (props: IFieldProps<{}>) => {
     <>
       {value && (value as string[]).length > 0 ? (
         <Dropdown
-          className="hook-multi-select-search-read-only"
+          className="fe-multi-select-search-read-only"
           multiselect
           value={(value as string[]).join(", ")}
           selectedOptions={value as string[]}
@@ -29,7 +29,7 @@ const MultiSelectSearch = (props: IFieldProps<{}>) => {
     </>
   ) : (
     <Combobox
-      className={FieldClassName("hook-multi-select-search", error)}
+      className={FieldClassName("fe-multi-select-search", error)}
       multiselect
       freeform
       value={undefined}

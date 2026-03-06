@@ -18,9 +18,9 @@ export {
 export {
   InjectedFieldProvider,
   UseInjectedFieldContext,
-} from "./providers/InjectedHookFieldProvider";
+} from "./providers/InjectedFieldProvider";
 export type { IRulesEngineProvider } from "./providers/IBusinessRulesProvider";
-export type { IInjectedFieldProvider } from "./providers/IInjectedHookFieldProvider";
+export type { IInjectedFieldProvider } from "./providers/IInjectedFieldProvider";
 
 // Rule Engine
 export {

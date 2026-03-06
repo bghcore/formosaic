@@ -5,12 +5,12 @@ import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
-interface IHookDropdownProps {
+interface IDropdownProps {
   placeHolder?: string;
   setDefaultKeyIfOnlyOneOption?: boolean;
 }
 
-const DropdownField = (props: IFieldProps<IHookDropdownProps>) => {
+const DropdownField = (props: IFieldProps<IDropdownProps>) => {
   const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, placeholder, options, setFieldValue } = props;
 
   const onOptionSelect = (_: unknown, data: OptionOnSelectData) => {
@@ -29,7 +29,7 @@ const DropdownField = (props: IFieldProps<IHookDropdownProps>) => {
     <ReadOnlyText fieldName={fieldName} value={value as string} />
   ) : (
     <Dropdown
-      className={FieldClassName("hook-dropdown", error)}
+      className={FieldClassName("fe-dropdown", error)}
       value={selectedText ?? ""}
       selectedOptions={value ? [String(value)] : []}
       onOptionSelect={onOptionSelect}

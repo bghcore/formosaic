@@ -28,7 +28,7 @@ const Dropdown = (props: IFieldProps<IDropdownProps>) => {
   ) : (
     <FormControl fullWidth size="small" error={!!error} required={required}>
       <Select
-        className={FieldClassName("hook-dropdown", error)}
+        className={FieldClassName("fe-dropdown", error)}
         value={value ? String(value) : ""}
         onChange={onChange}
         displayEmpty

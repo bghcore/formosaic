@@ -1,7 +1,7 @@
 "use client";
 
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
-import { BusinessRulesProvider, InjectedHookFieldProvider } from "@form-eng/core";
+import { RulesEngineProvider, InjectedFieldProvider } from "@form-eng/core";
 
 const theme = createTheme({
   palette: {
@@ -15,11 +15,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <BusinessRulesProvider>
-            <InjectedHookFieldProvider>
+          <RulesEngineProvider>
+            <InjectedFieldProvider>
               {children}
-            </InjectedHookFieldProvider>
-          </BusinessRulesProvider>
+            </InjectedFieldProvider>
+          </RulesEngineProvider>
         </ThemeProvider>
       </body>
     </html>

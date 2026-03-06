@@ -3,12 +3,12 @@ import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
-interface IHookSimpleDropdownProps {
+interface ISimpleDropdownProps {
   dropdownOptions?: string[];
   placeHolder?: string;
 }
 
-const SimpleDropdown = (props: IFieldProps<IHookSimpleDropdownProps>) => {
+const SimpleDropdown = (props: IFieldProps<ISimpleDropdownProps>) => {
   const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, placeholder, setFieldValue } = props;
 
   const simpleOptions = config?.dropdownOptions ?? [];

@@ -67,9 +67,9 @@ const PopOutEditor = (props: IFieldProps<IPopOutEditorProps>) => {
 
   return (
     <>
-      <div className="hook-textarea">
+      <div className="fe-textarea">
         <TextField
-          className={FieldClassName("hook-text-area", error)}
+          className={FieldClassName("fe-text-area", error)}
           autoComplete="off"
           multiline
           rows={config?.numberOfRows ?? 4}
@@ -115,7 +115,7 @@ const PopOutEditor = (props: IFieldProps<IPopOutEditorProps>) => {
         </DialogTitle>
         <DialogContent>
           <TextField
-            className={FieldClassName("hook-text-area", error)}
+            className={FieldClassName("fe-text-area", error)}
             autoComplete="off"
             multiline
             rows={12}

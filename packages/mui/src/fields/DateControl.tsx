@@ -22,15 +22,15 @@ const DateControl = (props: IFieldProps<{}>) => {
   return readOnly ? (
     <>
       {value ? (
-        <span className="hook-read-only-date">{formatDateTime(value as string, { hideTimestamp: true })}</span>
+        <span className="fe-read-only-date">{formatDateTime(value as string, { hideTimestamp: true })}</span>
       ) : (
         <>-</>
       )}
     </>
   ) : (
-    <div className="hook-date-control-container" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+    <div className="fe-date-control-container" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
       <TextField
-        className={FieldClassName("hook-date-control", error)}
+        className={FieldClassName("fe-date-control", error)}
         type="date"
         value={dateInputValue}
         onChange={onChange}

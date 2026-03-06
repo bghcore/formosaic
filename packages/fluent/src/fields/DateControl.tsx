@@ -23,15 +23,15 @@ const DateControl = (props: IFieldProps<{}>) => {
   return readOnly ? (
     <>
       {value ? (
-        <span className="hook-read-only-date">{formatDateTime(value as string, { hideTimestamp: true })}</span>
+        <span className="fe-read-only-date">{formatDateTime(value as string, { hideTimestamp: true })}</span>
       ) : (
         <>-</>
       )}
     </>
   ) : (
-    <div className="hook-date-control-container" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+    <div className="fe-date-control-container" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
       <Input
-        className={FieldClassName("hook-date-control", error)}
+        className={FieldClassName("fe-date-control", error)}
         type="date"
         value={dateInputValue}
         onChange={onChange}
@@ -47,7 +47,7 @@ const DateControl = (props: IFieldProps<{}>) => {
         aria-label={`${fieldName} ${FormStrings.clear}`}
       />
       {error?.message && (
-        <span className="hook-date-control-error" role="alert" style={{ color: "var(--colorPaletteRedForeground1, #bc2f32)", fontSize: "12px" }}>
+        <span className="fe-date-control-error" role="alert" style={{ color: "var(--colorPaletteRedForeground1, #bc2f32)", fontSize: "12px" }}>
           {error.message}
         </span>
       )}

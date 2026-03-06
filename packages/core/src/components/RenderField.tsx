@@ -6,7 +6,7 @@ import { CheckFieldValidationRules, CheckAsyncFieldValidationRules, ShowField } 
 import { IOption } from "../types/IOption";
 import { IValidationRule } from "../types/IValidationRule";
 import { IRuntimeFieldState } from "../types/IRuntimeFieldState";
-import { UseInjectedFieldContext } from "../providers/InjectedHookFieldProvider";
+import { UseInjectedFieldContext } from "../providers/InjectedFieldProvider";
 import { FormStrings } from "../strings";
 import { IFormAnalytics } from "../hooks/useFormAnalytics";
 import { FieldWrapper } from "./FieldWrapper";

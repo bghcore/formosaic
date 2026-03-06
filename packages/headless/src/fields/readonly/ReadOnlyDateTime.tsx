@@ -2,12 +2,12 @@ import { IFieldProps } from "@form-eng/core";
 import React from "react";
 import { formatDateTime } from "../../helpers";
 
-interface IHookReadOnlyDateTimeProps {
+interface IReadOnlyDateTimeProps {
   isListView?: boolean;
   hidetimeStamp?: boolean;
 }
 
-const ReadOnlyDateTime = (props: IFieldProps<IHookReadOnlyDateTimeProps>) => {
+const ReadOnlyDateTime = (props: IFieldProps<IReadOnlyDateTimeProps>) => {
   const { config, value } = props;
 
   if (!value) {

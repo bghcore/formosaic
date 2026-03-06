@@ -35,7 +35,7 @@ const DocumentLinksField = (props: IFieldProps<{}>) => {
       programName={programName}
       entityType={entityType}
       entityId={entityId}
-      className="hook-document-links"
+      className="fe-document-links"
       links={value as IDocumentLink[]}
       readOnly
     />
@@ -45,7 +45,7 @@ const DocumentLinksField = (props: IFieldProps<{}>) => {
       programName={programName}
       entityType={entityType}
       entityId={entityId}
-      className={FieldClassName("hook-document-links", error)}
+      className={FieldClassName("fe-document-links", error)}
       links={value as IDocumentLink[]}
       onUpdateLinks={onUpdateLinks}
       onDeleteLink={onDeleteLink}

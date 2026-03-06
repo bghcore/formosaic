@@ -6,7 +6,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { StatusMessage } from "../components/StatusMessage";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
-interface IHookPopOutEditorProps {
+interface IPopOutEditorProps {
   autoAdjustHeight?: boolean;
   numberOfRows?: number;
   ellipsifyTextCharacters?: number;
@@ -16,7 +16,7 @@ interface IHookPopOutEditorProps {
   renderExtraModalFooter?: () => React.ReactNode;
 }
 
-const PopOutEditor = (props: IFieldProps<IHookPopOutEditorProps>) => {
+const PopOutEditor = (props: IFieldProps<IPopOutEditorProps>) => {
   const {
     error, fieldName, programName, entityType, entityId, config, readOnly,
     required, savePending, saving, value, label, setFieldValue
@@ -66,9 +66,9 @@ const PopOutEditor = (props: IFieldProps<IHookPopOutEditorProps>) => {
 
   return (
     <>
-      <div className="hook-textarea">
+      <div className="fe-textarea">
         <Textarea
-          className={FieldClassName("hook-text-area", error)}
+          className={FieldClassName("fe-text-area", error)}
           resize="none"
           autoComplete="off"
           value={modalVisible ? `${modalValue}` : value ? `${value}` : ""}
@@ -88,7 +88,7 @@ const PopOutEditor = (props: IFieldProps<IHookPopOutEditorProps>) => {
       </div>
 
       <Dialog open={modalVisible} onOpenChange={(_, data) => { if (!data.open) onCancelButtonClick(); }}>
-        <DialogSurface className="hook-expanded-textarea" style={{ maxWidth: "90vw", width: "800px" }}>
+        <DialogSurface className="fe-expanded-textarea" style={{ maxWidth: "90vw", width: "800px" }}>
           <DialogBody>
             <DialogTitle
               action={
@@ -100,7 +100,7 @@ const PopOutEditor = (props: IFieldProps<IHookPopOutEditorProps>) => {
             </DialogTitle>
             <DialogContent>
               <Textarea
-                className={FieldClassName("hook-text-area", error)}
+                className={FieldClassName("fe-text-area", error)}
                 resize="vertical"
                 autoComplete="off"
                 value={modalVisible ? `${modalValue}` : value ? `${value}` : ""}
