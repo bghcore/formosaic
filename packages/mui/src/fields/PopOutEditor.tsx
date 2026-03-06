@@ -1,4 +1,4 @@
-import { IFieldProps, FormStrings } from "@form-engine/core";
+import { IFieldProps, FormStrings } from "@form-eng/core";
 import {
   TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton,
 } from "@mui/material";

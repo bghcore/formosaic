@@ -1,6 +1,6 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { FormDevTools, IRuntimeFormState } from "@form-engine/core";
+import { FormDevTools, IRuntimeFormState } from "@form-eng/core";
 
 /**
  * **FormDevTools** is a developer panel that shows the current rules engine state,

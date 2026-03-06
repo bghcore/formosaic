@@ -1,10 +1,10 @@
-# @form-engine/core
+# @form-eng/core
 
 > UI-library agnostic React library for rendering configuration-driven forms with a built-in rules engine. Depends only on React and react-hook-form.
 
 - Docs: [README](https://github.com/bghcore/form-engine/tree/main/packages/core/README.md)
 - Agent instructions: [AGENTS.md](https://github.com/bghcore/form-engine/tree/main/packages/core/AGENTS.md)
-- npm: [@form-engine/core](https://www.npmjs.com/package/@form-engine/core)
+- npm: [@form-eng/core](https://www.npmjs.com/package/@form-eng/core)
 - License: MIT
 
 ## API Surface
@@ -166,8 +166,8 @@ import {
   InjectedFieldProvider,
   FormEngine,
   IFormConfig,
-} from "@form-engine/core";
-import { createFluentFieldRegistry } from "@form-engine/fluent";
+} from "@form-eng/core";
+import { createFluentFieldRegistry } from "@form-eng/fluent";
 
 const formConfig: IFormConfig = {
   version: 2,
@@ -254,7 +254,7 @@ rules: [
 ### Validation (Unified Registry)
 
 ```tsx
-import { registerValidators } from "@form-engine/core";
+import { registerValidators } from "@form-eng/core";
 
 registerValidators({
   uniqueUsername: async (value, entityData, signal) => {
@@ -280,7 +280,7 @@ const formConfig: IFormConfig = {
 ### i18n / Localization
 
 ```tsx
-import { registerLocale } from "@form-engine/core";
+import { registerLocale } from "@form-eng/core";
 
 registerLocale({
   saving: "Enregistrement...",
@@ -294,7 +294,7 @@ registerLocale({
 ### Wizard Form
 
 ```tsx
-import { WizardForm, IFormConfig } from "@form-engine/core";
+import { WizardForm, IFormConfig } from "@form-eng/core";
 
 const formConfig: IFormConfig = {
   version: 2,
@@ -359,7 +359,7 @@ const formConfig: IFormConfig = {
 ### Error Boundary
 
 ```tsx
-import { FormErrorBoundary } from "@form-engine/core";
+import { FormErrorBoundary } from "@form-eng/core";
 
 <FormErrorBoundary
   fallback={(error, resetErrorBoundary) => (
@@ -382,7 +382,7 @@ import {
   useBeforeUnload,
   serializeFormState,
   deserializeFormState,
-} from "@form-engine/core";
+} from "@form-eng/core";
 
 function MyForm() {
   const { hasDraft, draftData, clearDraft } = useDraftPersistence({
@@ -404,7 +404,7 @@ function MyForm() {
 ### DevTools
 
 ```tsx
-import { FormDevTools } from "@form-engine/core";
+import { FormDevTools } from "@form-eng/core";
 
 <FormDevTools
   configName="orderForm"
@@ -420,7 +420,7 @@ import { FormDevTools } from "@form-engine/core";
 ### Analytics
 
 ```tsx
-import { useFormAnalytics, IAnalyticsCallbacks } from "@form-engine/core";
+import { useFormAnalytics, IAnalyticsCallbacks } from "@form-eng/core";
 
 const callbacks: IAnalyticsCallbacks = {
   onFieldChange: (fieldName, oldValue, newValue) => track("field_change", { fieldName }),
@@ -435,7 +435,7 @@ const analytics = useFormAnalytics(callbacks);
 ### JSON Schema Import
 
 ```tsx
-import { jsonSchemaToFieldConfig } from "@form-engine/core";
+import { jsonSchemaToFieldConfig } from "@form-eng/core";
 
 const fieldConfigs = jsonSchemaToFieldConfig({
   type: "object",
@@ -453,7 +453,7 @@ const fieldConfigs = jsonSchemaToFieldConfig({
 ### Lazy Field Registry
 
 ```tsx
-import { createLazyFieldRegistry } from "@form-engine/core";
+import { createLazyFieldRegistry } from "@form-eng/core";
 
 const lazyFields = createLazyFieldRegistry({
   Textbox: () => import("./fields/HookTextbox"),
@@ -467,7 +467,7 @@ setInjectedFields(lazyFields);
 ### Zod Schema Import
 
 ```tsx
-import { zodSchemaToFieldConfig } from "@form-engine/core";
+import { zodSchemaToFieldConfig } from "@form-eng/core";
 import { z } from "zod";
 
 const UserSchema = z.object({

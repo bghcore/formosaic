@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
-import { BusinessRulesProvider, InjectedHookFieldProvider } from "@form-engine/core";
+import { BusinessRulesProvider, InjectedHookFieldProvider } from "@form-eng/core";
 import App from "./App";
 
 const theme = createTheme();

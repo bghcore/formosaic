@@ -5,8 +5,8 @@ import {
   FieldArray,
   UseInjectedFieldContext,
   IFieldConfig,
-} from "@form-engine/core";
-import { createFluentFieldRegistry } from "@form-engine/fluent";
+} from "@form-eng/core";
+import { createFluentFieldRegistry } from "@form-eng/fluent";
 import { Button, Input } from "@fluentui/react-components";
 
 /**

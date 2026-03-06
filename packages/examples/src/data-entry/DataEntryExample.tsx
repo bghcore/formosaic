@@ -5,8 +5,8 @@ import {
   InjectedFieldProvider,
   FormEngine,
   registerValueFunctions,
-} from "@form-engine/core";
-import { createMuiFieldRegistry } from "@form-engine/mui";
+} from "@form-eng/core";
+import { createMuiFieldRegistry } from "@form-eng/mui";
 import { dataEntryFormConfig } from "./dataEntryConfig";
 
 // Register custom value function for summing line item totals

@@ -1,12 +1,12 @@
-# @form-engine/mui
+# @form-eng/mui
 
-> Material UI (MUI) field components for @form-engine/core. Provides 13 editable and 6 read-only field types plus a one-line registry setup.
+> Material UI (MUI) field components for @form-eng/core. Provides 13 editable and 6 read-only field types plus a one-line registry setup.
 
 - Docs: [README](https://github.com/bghcore/form-engine/tree/main/packages/mui/README.md)
 - Agent instructions: [AGENTS.md](https://github.com/bghcore/form-engine/tree/main/packages/mui/AGENTS.md)
-- npm: [@form-engine/mui](https://www.npmjs.com/package/@form-engine/mui)
+- npm: [@form-eng/mui](https://www.npmjs.com/package/@form-eng/mui)
 - License: MIT
-- Peer dependencies: `react`, `react-dom`, `react-hook-form`, `@mui/material` (v5 or v6), `@form-engine/core`
+- Peer dependencies: `react`, `react-dom`, `react-hook-form`, `@mui/material` (v5 or v6), `@form-eng/core`
 - Required runtime dependencies: `@emotion/react`, `@emotion/styled` (MUI peer deps)
 
 ## API Surface
@@ -64,8 +64,8 @@ import {
   InjectedFieldProvider,
   FormEngine,
   IFormConfig,
-} from "@form-engine/core";
-import { createMuiFieldRegistry } from "@form-engine/mui";
+} from "@form-eng/core";
+import { createMuiFieldRegistry } from "@form-eng/mui";
 
 const theme = createTheme();
 

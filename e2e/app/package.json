@@ -8,8 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@form-engine/core": "*",
-    "@form-engine/fluent": "*",
+    "@form-eng/core": "*",
+    "@form-eng/fluent": "*",
     "@fluentui/react-components": "^9.54.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

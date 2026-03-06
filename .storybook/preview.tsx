@@ -8,7 +8,7 @@ import {
 import {
   RulesEngineProvider,
   InjectedFieldProvider,
-} from "@form-engine/core";
+} from "@form-eng/core";
 
 /** Wraps every story with Fluent UI theming + the required library providers */
 const withProviders: Decorator = (Story, context) => {

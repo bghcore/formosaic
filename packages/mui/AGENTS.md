@@ -1,15 +1,15 @@
-# AGENTS.md -- @form-engine/mui
+# AGENTS.md -- @form-eng/mui
 
 ## Package Purpose
 
-Material UI (MUI) field component implementations for `@form-engine/core`. Provides 13 editable and 6 read-only field types, plus a one-line registry setup via `createMuiFieldRegistry()`.
+Material UI (MUI) field component implementations for `@form-eng/core`. Provides 13 editable and 6 read-only field types, plus a one-line registry setup via `createMuiFieldRegistry()`.
 
 ## Critical Constraints
 
 - **MUI v5 or v6 only.** Use `@mui/material` components. Do NOT import from `@material-ui/core` (v4).
 - **`@emotion/react` and `@emotion/styled` are required peer dependencies** of MUI -- consumers must install them.
 - **All field components receive `IFieldProps<T>`** via `React.cloneElement` -- this is the contract with core's `RenderField`.
-- **Import core types from `@form-engine/core`**, not from relative paths into the core package.
+- **Import core types from `@form-eng/core`**, not from relative paths into the core package.
 - **Use `React.JSX.Element`** not bare `JSX.Element` for return types.
 
 ## Key Files
@@ -52,7 +52,7 @@ Material UI (MUI) field component implementations for `@form-engine/core`. Provi
 ## Field Component Pattern
 
 ```tsx
-import { IFieldProps } from "@form-engine/core";
+import { IFieldProps } from "@form-eng/core";
 import { TextField } from "@mui/material";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";

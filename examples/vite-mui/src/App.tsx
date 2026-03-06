@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Container, Typography, Tabs, Tab, Box, Paper } from "@mui/material";
-import { UseInjectedFieldContext, FormEngine } from "@form-engine/core";
-import { createMuiFieldRegistry } from "@form-engine/mui";
+import { UseInjectedFieldContext, FormEngine } from "@form-eng/core";
+import { createMuiFieldRegistry } from "@form-eng/mui";
 import { basicFormConfig, basicDefaults } from "./configs/basicForm";
 import { businessRulesConfig, businessRulesDefaults } from "./configs/businessRulesForm";
 import { zodExampleConfig, zodExampleDefaults } from "./configs/zodForm";

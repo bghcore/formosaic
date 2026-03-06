@@ -203,7 +203,7 @@ If the named function is not found in the registry, it returns `undefined`.
 Use `registerValueFunctions()` to add custom value functions:
 
 ```typescript
-import { registerValueFunctions, ValueFunction } from "@form-engine/core";
+import { registerValueFunctions, ValueFunction } from "@form-eng/core";
 
 const calculateFullName: ValueFunction = ({ fieldName, fieldValue, parentEntity, currentUserId }) => {
   // Access other entity values through parentEntity or use your own logic
@@ -241,7 +241,7 @@ type ValueFunction = (context: {
 ### Example: Custom Computed Value
 
 ```typescript
-import { registerValueFunctions, ValueFunction } from "@form-engine/core";
+import { registerValueFunctions, ValueFunction } from "@form-eng/core";
 
 const calculateEndDate: ValueFunction = ({ fieldValue, parentEntity }) => {
   const startDate = parentEntity?.["startDate"] as string;

@@ -1,4 +1,4 @@
-import { IFieldProps, FormStrings, FormConstants } from "@form-engine/core";
+import { IFieldProps, FormStrings, FormConstants } from "@form-eng/core";
 import {
   Button, IconButton, TextField, Dialog, DialogTitle, DialogContent, DialogActions,
   List, ListItem, ListItemText, Tooltip, Typography,

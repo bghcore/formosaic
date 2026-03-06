@@ -1,14 +1,14 @@
-# @form-engine/fluent
+# @form-eng/fluent
 
-Fluent UI v9 field components for [`@form-engine/core`](https://www.npmjs.com/package/@form-engine/core). Provides 13 editable and 6 read-only field types that plug into the core form engine.
+Fluent UI v9 field components for [`@form-eng/core`](https://www.npmjs.com/package/@form-eng/core). Provides 13 editable and 6 read-only field types that plug into the core form engine.
 
 ## Install
 
 ```bash
-npm install @form-engine/core @form-engine/fluent
+npm install @form-eng/core @form-eng/fluent
 ```
 
-Peer dependencies: `react`, `react-dom`, `react-hook-form`, `@fluentui/react-components`, `@form-engine/core`
+Peer dependencies: `react`, `react-dom`, `react-hook-form`, `@fluentui/react-components`, `@form-eng/core`
 
 ## Quick Start
 
@@ -18,8 +18,8 @@ import {
   InjectedFieldProvider,
   UseInjectedFieldContext,
   FormEngine,
-} from "@form-engine/core";
-import { createFluentFieldRegistry } from "@form-engine/fluent";
+} from "@form-eng/core";
+import { createFluentFieldRegistry } from "@form-eng/fluent";
 import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 import { useEffect } from "react";
 
@@ -98,7 +98,7 @@ function App() {
 `createFluentFieldRegistry()` returns a `Dictionary<JSX.Element>` mapping all component keys to their Fluent UI implementations. You can extend or override individual fields:
 
 ```tsx
-import { createFluentFieldRegistry } from "@form-engine/fluent";
+import { createFluentFieldRegistry } from "@form-eng/fluent";
 
 const fields = {
   ...createFluentFieldRegistry(),
@@ -119,7 +119,7 @@ The package also exports supporting components:
 
 ## Works with Core v1.3.0
 
-When paired with `@form-engine/core` v1.3.0+, you automatically get:
+When paired with `@form-eng/core` v1.3.0+, you automatically get:
 
 - **Error boundary** -- each field is individually wrapped in `FormErrorBoundary`, so one crashing field does not take down the form
 - **Save reliability** -- AbortController cancels in-flight saves, configurable timeout and retry with exponential backoff

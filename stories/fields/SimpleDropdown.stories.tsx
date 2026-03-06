@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import SimpleDropdown from "@form-engine/fluent/fields/SimpleDropdown";
+import SimpleDropdown from "@form-eng/fluent/fields/SimpleDropdown";
 import { FormDecorator, createFieldProps } from "../helpers";
 
 /**

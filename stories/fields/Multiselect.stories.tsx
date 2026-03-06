@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import MultiSelect from "@form-engine/fluent/fields/MultiSelect";
+import MultiSelect from "@form-eng/fluent/fields/MultiSelect";
 import { FormDecorator, createFieldProps } from "../helpers";
 
 /**

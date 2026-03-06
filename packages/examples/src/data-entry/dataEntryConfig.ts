@@ -1,4 +1,4 @@
-import { IFormConfig } from "@form-engine/core";
+import { IFormConfig } from "@form-eng/core";
 
 /**
  * Data Entry Configuration

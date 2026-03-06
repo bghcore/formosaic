@@ -4,8 +4,8 @@ import {
   RulesEngineProvider,
   InjectedFieldProvider,
   FormEngine,
-} from "@form-engine/core";
-import { createMuiFieldRegistry } from "@form-engine/mui";
+} from "@form-eng/core";
+import { createMuiFieldRegistry } from "@form-eng/mui";
 import { loginMfaFormConfig } from "./loginMfaConfig";
 
 /**

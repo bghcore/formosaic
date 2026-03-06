@@ -1,7 +1,7 @@
 {
-  "name": "@form-engine/mui",
+  "name": "@form-eng/mui",
   "version": "1.0.0",
-  "description": "Material UI (MUI) field components for @form-engine/core",
+  "description": "Material UI (MUI) field components for @form-eng/core",
   "repository": {
     "type": "git",
     "url": "https://github.com/bghcore/form-engine.git",
@@ -49,7 +49,7 @@
     "react-dom": "^18.0.0 || ^19.0.0",
     "react-hook-form": "^7.0.0",
     "@mui/material": "^5.0.0 || ^6.0.0",
-    "@form-engine/core": "^1.0.0"
+    "@form-eng/core": "^1.0.0"
   },
   "devDependencies": {
     "react": "^19.2.4",
@@ -58,7 +58,7 @@
     "@mui/material": "^6.4.11",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@form-engine/core": "*",
+    "@form-eng/core": "*",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "@types/react": "^19.2.14",

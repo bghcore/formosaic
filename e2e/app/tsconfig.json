@@ -11,8 +11,8 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "paths": {
-      "@form-engine/core": ["../../packages/core/src"],
-      "@form-engine/fluent": ["../../packages/fluent/src"]
+      "@form-eng/core": ["../../packages/core/src"],
+      "@form-eng/fluent": ["../../packages/fluent/src"]
     }
   },
   "include": ["src/**/*"]

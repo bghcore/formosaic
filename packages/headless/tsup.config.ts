@@ -10,7 +10,7 @@ export default defineConfig({
     "react",
     "react-dom",
     "react-hook-form",
-    "@form-engine/core",
+    "@form-eng/core",
   ],
   jsx: "automatic",
 });

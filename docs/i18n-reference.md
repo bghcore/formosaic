@@ -1,6 +1,6 @@
 # i18n / Localization Reference
 
-The @form-engine/core package uses a locale registry to manage all user-facing strings. All strings default to English and can be partially or fully overridden for other languages.
+The @form-eng/core package uses a locale registry to manage all user-facing strings. All strings default to English and can be partially or fully overridden for other languages.
 
 ---
 
@@ -12,7 +12,7 @@ import {
   getLocaleString,
   resetLocale,
   getCurrentLocale,
-} from "@form-engine/core";
+} from "@form-eng/core";
 
 // Register a partial locale override (unset keys fall back to English defaults)
 registerLocale({
@@ -226,7 +226,7 @@ Form Components                   <-- Read strings from FormStrings
 `FormStrings` maintains backward compatibility with code that reads string properties directly:
 
 ```typescript
-import { FormStrings } from "@form-engine/core";
+import { FormStrings } from "@form-eng/core";
 
 // This still works and automatically reflects locale overrides:
 const label = FormStrings.required; // "Obligatoire" if French locale registered
@@ -237,7 +237,7 @@ const label = FormStrings.required; // "Obligatoire" if French locale registered
 ## Full Locale Override Example
 
 ```typescript
-import { registerLocale } from "@form-engine/core";
+import { registerLocale } from "@form-eng/core";
 
 // Spanish locale (complete override)
 registerLocale({
@@ -332,7 +332,7 @@ registerLocale({
 Use `resetLocale()` in test setup/teardown to ensure clean state:
 
 ```typescript
-import { registerLocale, resetLocale, getLocaleString } from "@form-engine/core";
+import { registerLocale, resetLocale, getLocaleString } from "@form-eng/core";
 
 beforeEach(() => {
   resetLocale();

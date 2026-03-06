@@ -148,7 +148,7 @@ Creates a validator that checks whether the string value has at least `min` char
 
 **Example:**
 ```typescript
-import { registerValidators, createMinLengthValidation } from "@form-engine/core";
+import { registerValidators, createMinLengthValidation } from "@form-eng/core";
 
 registerValidators({
   MinLength5: createMinLengthValidation(5),
@@ -180,7 +180,7 @@ Creates a validator that checks whether the string value has at most `max` chara
 
 **Example:**
 ```typescript
-import { registerValidators, createMaxLengthValidation } from "@form-engine/core";
+import { registerValidators, createMaxLengthValidation } from "@form-eng/core";
 
 registerValidators({
   MaxLength50: createMaxLengthValidation(50),
@@ -212,7 +212,7 @@ Creates a validator that checks whether the value (parsed as a number) falls wit
 
 **Example:**
 ```typescript
-import { registerValidators, createNumericRangeValidation } from "@form-engine/core";
+import { registerValidators, createNumericRangeValidation } from "@form-eng/core";
 
 registerValidators({
   PercentageRange: createNumericRangeValidation(0, 100),
@@ -244,7 +244,7 @@ Creates a validator that tests the string value against a custom regex. Returns 
 
 **Example:**
 ```typescript
-import { registerValidators, createPatternValidation } from "@form-engine/core";
+import { registerValidators, createPatternValidation } from "@form-eng/core";
 
 registerValidators({
   AlphaOnly: createPatternValidation(/^[a-zA-Z]+$/, "Only letters are allowed"),
@@ -278,7 +278,7 @@ Creates a cross-field-aware sync validator that makes the current field required
 
 **Example:**
 ```typescript
-import { registerValidators, createRequiredIfValidation } from "@form-engine/core";
+import { registerValidators, createRequiredIfValidation } from "@form-eng/core";
 
 registerValidators({
   RequiredIfStatusActive: createRequiredIfValidation("status", ["Active", "InProgress"]),
@@ -305,7 +305,7 @@ Async validators are used for server-side validation (e.g., uniqueness checks, A
 ### Registration
 
 ```typescript
-import { registerValidators, ValidatorFn } from "@form-engine/core";
+import { registerValidators, ValidatorFn } from "@form-eng/core";
 
 const checkUniqueEmail: ValidatorFn = async (value, entityData, signal) => {
   if (!value || typeof value !== "string") return undefined;
@@ -398,7 +398,7 @@ import {
   registerValidators,
   createMinLengthValidation,
   ValidatorFn,
-} from "@form-engine/core";
+} from "@form-eng/core";
 
 // Register sync validators first (fast fail)
 registerValidators({
@@ -453,7 +453,7 @@ Cross-field validators receive all form values and can validate relationships be
 ### Registration
 
 ```typescript
-import { registerValidators, ValidatorFn } from "@form-engine/core";
+import { registerValidators, ValidatorFn } from "@form-eng/core";
 
 const dateRangeValidation: ValidatorFn = (value, allValues) => {
   const startDate = allValues?.["startDate"] as string;
@@ -546,7 +546,7 @@ const budgetLimitValidation: ValidatorFn = (value, allValues) => {
 A sync validator is a function that takes a value and optional entity data, and returns `undefined` for valid or a `string` error message for invalid.
 
 ```typescript
-import { registerValidators, ValidatorFn } from "@form-engine/core";
+import { registerValidators, ValidatorFn } from "@form-eng/core";
 
 // Simple value-only validator
 const noWhitespace: ValidatorFn = (value) => {
@@ -574,7 +574,7 @@ registerValidators({
 An async validator returns a `Promise<string | undefined>`. Always handle the `AbortSignal` parameter.
 
 ```typescript
-import { registerValidators, ValidatorFn } from "@form-engine/core";
+import { registerValidators, ValidatorFn } from "@form-eng/core";
 
 const validatePostalCode: ValidatorFn = async (value, entityData, signal) => {
   if (!value || typeof value !== "string") return undefined;

@@ -1,7 +1,7 @@
 "use client";
 
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
-import { BusinessRulesProvider, InjectedHookFieldProvider } from "@form-engine/core";
+import { BusinessRulesProvider, InjectedHookFieldProvider } from "@form-eng/core";
 
 const theme = createTheme({
   palette: {

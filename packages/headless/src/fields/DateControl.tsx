@@ -1,4 +1,4 @@
-import { IFieldProps, FormStrings } from "@form-engine/core";
+import { IFieldProps, FormStrings } from "@form-eng/core";
 import React from "react";
 import { GetFieldDataTestId, getFieldState, formatDateTime } from "../helpers";
 

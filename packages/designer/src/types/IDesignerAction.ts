@@ -4,7 +4,7 @@ import type {
   IFormSettings,
   IRule,
   IWizardConfig,
-} from "@form-engine/core";
+} from "@form-eng/core";
 
 /** All designer action types */
 export enum DesignerActionType {

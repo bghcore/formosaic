@@ -5,7 +5,7 @@ import type {
   IFieldCondition,
   ILogicalCondition,
   IFieldEffect,
-} from "@form-engine/core";
+} from "@form-eng/core";
 import { useDesigner } from "../state/useDesigner";
 
 /** All field condition operators */

@@ -21,11 +21,11 @@ const config: StorybookConfig = {
         ...config.resolve,
         alias: {
           ...config.resolve?.alias,
-          "@form-engine/core": resolve(
+          "@form-eng/core": resolve(
             __dirname_,
             "../packages/core/src"
           ),
-          "@form-engine/fluent": resolve(
+          "@form-eng/fluent": resolve(
             __dirname_,
             "../packages/fluent/src"
           ),

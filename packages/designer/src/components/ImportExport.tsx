@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef } from "react";
-import type { IFormConfig } from "@form-engine/core";
+import type { IFormConfig } from "@form-eng/core";
 import { useDesigner } from "../state/useDesigner";
 
 export function ImportExport() {

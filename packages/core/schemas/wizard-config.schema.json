@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://github.com/bghcore/form-engine/wizard-config.schema.json",
   "title": "Dynamic Forms Wizard Configuration",
-  "description": "Schema for defining multi-step wizard configurations used by @form-engine/core. A wizard organizes form fields into sequential steps with optional conditional visibility and navigation controls.",
+  "description": "Schema for defining multi-step wizard configurations used by @form-eng/core. A wizard organizes form fields into sequential steps with optional conditional visibility and navigation controls.",
   "type": "object",
   "definitions": {
     "ICondition": {

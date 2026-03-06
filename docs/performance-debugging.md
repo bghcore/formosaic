@@ -1,6 +1,6 @@
 # Performance Debugging & DevTools
 
-Last updated: 2026-03-05 | Applies to: `@form-engine/core` v2.0.x
+Last updated: 2026-03-05 | Applies to: `@form-eng/core` v2.0.x
 
 This guide covers the FormDevTools component and the underlying performance and event-tracing APIs. It is written for developers building forms with the form-engine library who need to diagnose render performance issues, inspect rule evaluation behavior, or trace field-level events during development.
 
@@ -29,7 +29,7 @@ The first four tabs (Rules, Values, Errors, Graph) display runtime field state f
 Import `FormDevTools` from the core package and render it alongside your form. The component accepts the same state objects your form already has access to:
 
 ```tsx
-import { FormDevTools } from "@form-engine/core";
+import { FormDevTools } from "@form-eng/core";
 
 <FormDevTools
   configName="myForm"
@@ -82,7 +82,7 @@ The Perf tab shows per-field render counts tracked by the `RenderTracker` module
 `flushRenderCycle()` snapshots the pending set into `lastRenderedFields` and resets the pending set. This function is exported but **not called automatically** by any built-in component. To get accurate "Last Cycle" data, you must call `flushRenderCycle()` yourself, typically in a `useEffect` inside your form wrapper:
 
 ```tsx
-import { flushRenderCycle } from "@form-engine/core";
+import { flushRenderCycle } from "@form-eng/core";
 
 function MyFormWrapper(props) {
   React.useEffect(() => {
@@ -225,7 +225,7 @@ import {
   getLastRenderedFields,
   getTotalFormRenders,
   resetRenderTracker,
-} from "@form-engine/core";
+} from "@form-eng/core";
 ```
 
 | Function | Signature | Description |
@@ -246,8 +246,8 @@ import {
   logEvent,
   getTimeline,
   clearTimeline,
-} from "@form-engine/core";
-import type { ITimelineEvent, TimelineEventType } from "@form-engine/core";
+} from "@form-eng/core";
+import type { ITimelineEvent, TimelineEventType } from "@form-eng/core";
 ```
 
 | Function | Signature | Description |
@@ -272,7 +272,7 @@ interface ITimelineEvent {
 ### Example: Custom Event Logging
 
 ```tsx
-import { logEvent } from "@form-engine/core";
+import { logEvent } from "@form-eng/core";
 
 // Log a form submission event (not logged automatically)
 function handleSubmit(values: Record<string, unknown>) {
@@ -284,7 +284,7 @@ function handleSubmit(values: Record<string, unknown>) {
 ### Example: Render Count Assertions in Tests
 
 ```tsx
-import { getRenderCounts, resetRenderTracker } from "@form-engine/core";
+import { getRenderCounts, resetRenderTracker } from "@form-eng/core";
 
 beforeEach(() => {
   resetRenderTracker();
@@ -300,7 +300,7 @@ test("changing status field does not re-render unrelated fields", () => {
 ### Example: Timeline Assertions in Tests
 
 ```tsx
-import { getTimeline, clearTimeline } from "@form-engine/core";
+import { getTimeline, clearTimeline } from "@form-eng/core";
 
 beforeEach(() => {
   clearTimeline();
@@ -328,8 +328,8 @@ import {
   disableRuleTracing,
   getRuleTraceLog,
   clearRuleTraceLog,
-} from "@form-engine/core";
-import type { IRuleTraceEvent } from "@form-engine/core";
+} from "@form-eng/core";
+import type { IRuleTraceEvent } from "@form-eng/core";
 ```
 
 | Function | Description |

@@ -1,8 +1,8 @@
 /**
- * Optional CSS custom properties for @form-engine/core.
+ * Optional CSS custom properties for @form-eng/core.
  *
  * Import this stylesheet in your application to get default theming:
- *   import "@form-engine/core/src/styles.css";
+ *   import "@form-eng/core/src/styles.css";
  *
  * Override any variable on a parent element or :root to customize colors.
  */

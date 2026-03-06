@@ -1,14 +1,14 @@
-# @form-engine/mui
+# @form-eng/mui
 
-Material UI (MUI) field components for [`@form-engine/core`](https://www.npmjs.com/package/@form-engine/core). Provides 13 editable and 6 read-only field types that plug into the core form engine.
+Material UI (MUI) field components for [`@form-eng/core`](https://www.npmjs.com/package/@form-eng/core). Provides 13 editable and 6 read-only field types that plug into the core form engine.
 
 ## Install
 
 ```bash
-npm install @form-engine/core @form-engine/mui @mui/material @emotion/react @emotion/styled
+npm install @form-eng/core @form-eng/mui @mui/material @emotion/react @emotion/styled
 ```
 
-Peer dependencies: `react`, `react-dom`, `react-hook-form`, `@mui/material`, `@form-engine/core`
+Peer dependencies: `react`, `react-dom`, `react-hook-form`, `@mui/material`, `@form-eng/core`
 
 ## Quick Start
 
@@ -18,8 +18,8 @@ import {
   InjectedFieldProvider,
   UseInjectedFieldContext,
   FormEngine,
-} from "@form-engine/core";
-import { createMuiFieldRegistry } from "@form-engine/mui";
+} from "@form-eng/core";
+import { createMuiFieldRegistry } from "@form-eng/mui";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { useEffect } from "react";
 
@@ -100,7 +100,7 @@ function App() {
 `createMuiFieldRegistry()` returns a `Dictionary<JSX.Element>` mapping all component keys to their MUI implementations. You can extend or override individual fields:
 
 ```tsx
-import { createMuiFieldRegistry } from "@form-engine/mui";
+import { createMuiFieldRegistry } from "@form-eng/mui";
 
 const fields = {
   ...createMuiFieldRegistry(),
@@ -121,7 +121,7 @@ The package also exports supporting components:
 
 ## Works with Core v1.3.0
 
-When paired with `@form-engine/core` v1.3.0+, you automatically get:
+When paired with `@form-eng/core` v1.3.0+, you automatically get:
 
 - **Error boundary** -- each field is individually wrapped in `FormErrorBoundary`, so one crashing field does not take down the form
 - **Save reliability** -- AbortController cancels in-flight saves, configurable timeout and retry with exponential backoff

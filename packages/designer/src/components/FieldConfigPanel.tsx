@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
-import { ComponentTypes } from "@form-engine/core";
-import type { IOption, IValidationRule } from "@form-engine/core";
+import { ComponentTypes } from "@form-eng/core";
+import type { IOption, IValidationRule } from "@form-eng/core";
 import { useDesigner } from "../state/useDesigner";
 
 /** All available component types */

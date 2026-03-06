@@ -1,6 +1,6 @@
 # SSR / Next.js Integration Guide
 
-This guide covers server-side rendering (SSR) compatibility for `@form-engine/core` and the UI adapter packages (`@form-engine/fluent`, `@form-engine/mui`).
+This guide covers server-side rendering (SSR) compatibility for `@form-eng/core` and the UI adapter packages (`@form-eng/fluent`, `@form-eng/mui`).
 
 ## SSR Compatibility Status
 
@@ -38,8 +38,8 @@ import {
   FormEngine,
   RulesEngineProvider,
   InjectedFieldProvider,
-} from "@form-engine/core";
-import { fluentFieldRegistry } from "@form-engine/fluent";
+} from "@form-eng/core";
+import { fluentFieldRegistry } from "@form-eng/fluent";
 
 const formConfig = {
   version: 2 as const,
@@ -95,8 +95,8 @@ export default async function Page() {
 ```tsx
 "use client";
 
-import { FormEngine, useDraftPersistence, RulesEngineProvider, InjectedFieldProvider } from "@form-engine/core";
-import { fluentFieldRegistry } from "@form-engine/fluent";
+import { FormEngine, useDraftPersistence, RulesEngineProvider, InjectedFieldProvider } from "@form-eng/core";
+import { fluentFieldRegistry } from "@form-eng/fluent";
 
 export function MyFormWithDrafts({ defaultValues }: { defaultValues: Record<string, unknown> }) {
   const { recoverDraft, clearDraft, hasDraft } = useDraftPersistence({
@@ -141,8 +141,8 @@ import {
   FormEngine,
   RulesEngineProvider,
   InjectedFieldProvider,
-} from "@form-engine/core";
-import { fluentFieldRegistry } from "@form-engine/fluent";
+} from "@form-eng/core";
+import { fluentFieldRegistry } from "@form-eng/fluent";
 import type { GetServerSideProps } from "next";
 
 interface Props {
@@ -306,8 +306,8 @@ To verify your form renders without errors during SSR, you can test with `render
 
 ```tsx
 import { renderToString } from "react-dom/server";
-import { RulesEngineProvider, InjectedFieldProvider, FormEngine } from "@form-engine/core";
-import { fluentFieldRegistry } from "@form-engine/fluent";
+import { RulesEngineProvider, InjectedFieldProvider, FormEngine } from "@form-eng/core";
+import { fluentFieldRegistry } from "@form-eng/fluent";
 
 test("form renders without errors during SSR", () => {
   const html = renderToString(

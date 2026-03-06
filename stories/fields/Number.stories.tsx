@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import NumberField from "@form-engine/fluent/fields/Number";
+import NumberField from "@form-eng/fluent/fields/Number";
 import { FormDecorator, createFieldProps } from "../helpers";
 
 /**

@@ -1,8 +1,8 @@
 {
-  "name": "@form-engine/examples",
+  "name": "@form-eng/examples",
   "version": "1.0.0",
   "private": true,
-  "description": "Example apps demonstrating @form-engine/core",
+  "description": "Example apps demonstrating @form-eng/core",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -12,8 +12,8 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-hook-form": "^7.71.2",
-    "@form-engine/core": "*",
-    "@form-engine/mui": "*",
+    "@form-eng/core": "*",
+    "@form-eng/mui": "*",
     "@mui/material": "^6.4.11",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0"

@@ -1,6 +1,6 @@
 # Form Analytics & Telemetry
 
-The core package (`@form-engine/core`) provides an opt-in analytics system for tracking form lifecycle events. When analytics callbacks are provided in form settings, events such as field focus, blur, change, validation errors, form submission, abandonment, wizard step navigation, and rule evaluation are automatically tracked with zero configuration beyond supplying the callbacks.
+The core package (`@form-eng/core`) provides an opt-in analytics system for tracking form lifecycle events. When analytics callbacks are provided in form settings, events such as field focus, blur, change, validation errors, form submission, abandonment, wizard step navigation, and rule evaluation are automatically tracked with zero configuration beyond supplying the callbacks.
 
 All analytics infrastructure lives in two files:
 
@@ -16,7 +16,7 @@ All analytics infrastructure lives in two files:
 Add an `analytics` object to `IFormSettings` inside your `IFormConfig`. Each callback is optional -- provide only the events you care about.
 
 ```tsx
-import { IFormConfig } from "@form-engine/core";
+import { IFormConfig } from "@form-eng/core";
 
 const formConfig: IFormConfig = {
   version: 2,
@@ -163,7 +163,7 @@ Fired when the user navigates away from the page while there are unsaved changes
 **Important:** The `useBeforeUnload` hook fires a generic `onAbandonment` callback with no arguments. The consumer is responsible for wrapping the analytics callback with the field data:
 
 ```tsx
-import { useBeforeUnload, useFormAnalytics } from "@form-engine/core";
+import { useBeforeUnload, useFormAnalytics } from "@form-eng/core";
 
 // In your form wrapper component:
 const analytics = useFormAnalytics(formConfig.settings?.analytics);
@@ -217,10 +217,10 @@ Fired when a rule is evaluated. The event contains:
 
 ## useFormAnalytics Hook
 
-Defined in `packages/core/src/hooks/useFormAnalytics.ts`. Exported from `@form-engine/core`.
+Defined in `packages/core/src/hooks/useFormAnalytics.ts`. Exported from `@form-eng/core`.
 
 ```typescript
-import { useFormAnalytics, IFormAnalytics } from "@form-engine/core";
+import { useFormAnalytics, IFormAnalytics } from "@form-eng/core";
 
 const analytics: IFormAnalytics = useFormAnalytics(callbacks);
 ```
@@ -312,7 +312,7 @@ useBeforeUnload
 
 ```typescript
 import { appInsights } from "./telemetryClient"; // Your configured AI instance
-import { IAnalyticsCallbacks } from "@form-engine/core";
+import { IAnalyticsCallbacks } from "@form-eng/core";
 
 const analyticsCallbacks: IAnalyticsCallbacks = {
   onFieldFocus: (fieldName) => {
@@ -365,7 +365,7 @@ const analyticsCallbacks: IAnalyticsCallbacks = {
 Collect analytics in memory and flush periodically or on form submit:
 
 ```typescript
-import { IAnalyticsCallbacks } from "@form-engine/core";
+import { IAnalyticsCallbacks } from "@form-eng/core";
 
 interface IFieldInteraction {
   fieldName: string;
@@ -439,7 +439,7 @@ const formConfig: IFormConfig = {
 Track which fields users complete and where they drop off:
 
 ```typescript
-import { IAnalyticsCallbacks } from "@form-engine/core";
+import { IAnalyticsCallbacks } from "@form-eng/core";
 
 function createCompletionTracker(
   formName: string,

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import MultiSelectSearch from "@form-engine/fluent/fields/MultiSelectSearch";
+import MultiSelectSearch from "@form-eng/fluent/fields/MultiSelectSearch";
 import { FormDecorator, createFieldProps } from "../helpers";
 
 /**

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import Toggle from "@form-engine/fluent/fields/Toggle";
+import Toggle from "@form-eng/fluent/fields/Toggle";
 import { FormDecorator, createFieldProps } from "../helpers";
 
 /**

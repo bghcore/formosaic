@@ -2,7 +2,7 @@ import type {
   IFieldConfig,
   IWizardConfig,
   IFormSettings,
-} from "@form-engine/core";
+} from "@form-eng/core";
 
 /** Designer state managed by useReducer */
 export interface IDesignerState {

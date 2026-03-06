@@ -1,11 +1,11 @@
-# @form-engine/core
+# @form-eng/core
 
 UI-library agnostic business rules engine and form orchestration for configuration-driven React forms. Built for React -- works with any component library (Fluent UI, MUI, Ant Design, or your own). Define forms as JSON -- field definitions, dependency rules, dropdown options, ordering -- and the library handles rendering, validation, auto-save, and field interactions automatically.
 
 ## Install
 
 ```bash
-npm install @form-engine/core
+npm install @form-eng/core
 ```
 
 Peer dependencies: `react` (18 or 19), `react-hook-form` (v7)
@@ -17,7 +17,7 @@ import {
   RulesEngineProvider,
   InjectedFieldProvider,
   FormEngine,
-} from "@form-engine/core";
+} from "@form-eng/core";
 
 const fieldConfigs = {
   name: { type: "Textbox", label: "Name", required: true },
@@ -52,9 +52,9 @@ function App() {
 ```
 
 You'll also need a UI adapter to provide field components. See:
-- [`@form-engine/fluent`](https://www.npmjs.com/package/@form-engine/fluent) -- Fluent UI v9
-- [`@form-engine/mui`](https://www.npmjs.com/package/@form-engine/mui) -- Material UI
-- [`@form-engine/headless`](https://www.npmjs.com/package/@form-engine/headless) -- Unstyled semantic HTML (Tailwind-friendly)
+- [`@form-eng/fluent`](https://www.npmjs.com/package/@form-eng/fluent) -- Fluent UI v9
+- [`@form-eng/mui`](https://www.npmjs.com/package/@form-eng/mui) -- Material UI
+- [`@form-eng/headless`](https://www.npmjs.com/package/@form-eng/headless) -- Unstyled semantic HTML (Tailwind-friendly)
 
 ## Business Rules Engine
 
@@ -86,7 +86,7 @@ import {
   createNumericRangeValidation,
   createPatternValidation,
   createRequiredIfValidation,
-} from "@form-engine/core";
+} from "@form-eng/core";
 
 registerValidators({
   MinLength3: createMinLengthValidation(3),
@@ -100,7 +100,7 @@ registerValidators({
 ### Async Validators
 
 ```tsx
-import { registerValidators } from "@form-engine/core";
+import { registerValidators } from "@form-eng/core";
 
 registerValidators({
   CheckUniqueEmail: async (value, entityData, signal) => {
@@ -116,7 +116,7 @@ Reference in field configs via `validate: [{ validator: "CheckUniqueEmail", asyn
 ### Config Validation
 
 ```tsx
-import { validateFieldConfigs } from "@form-engine/core";
+import { validateFieldConfigs } from "@form-eng/core";
 
 const errors = validateFieldConfigs(fieldConfigs, registeredComponentTypes);
 // Checks: missing dep targets, unregistered components/validators, circular deps
@@ -125,7 +125,7 @@ const errors = validateFieldConfigs(fieldConfigs, registeredComponentTypes);
 ## Multi-Step Wizard
 
 ```tsx
-import { WizardForm } from "@form-engine/core";
+import { WizardForm } from "@form-eng/core";
 
 <WizardForm
   wizardConfig={{
@@ -152,7 +152,7 @@ All fields stay in a single `react-hook-form` context. Steps just control which 
 ## Field Arrays
 
 ```tsx
-import { FieldArray } from "@form-engine/core";
+import { FieldArray } from "@form-eng/core";
 
 <FieldArray
   fieldName="contacts"
@@ -176,7 +176,7 @@ import { FieldArray } from "@form-engine/core";
 ## i18n / Localization
 
 ```tsx
-import { registerLocale } from "@form-engine/core";
+import { registerLocale } from "@form-eng/core";
 
 registerLocale({
   required: "Obligatoire",
@@ -211,7 +211,7 @@ All strings in `FormStrings` and validation error messages resolve through the l
 Each field is individually wrapped in `FormErrorBoundary` so one crashing field does not take down the entire form:
 
 ```tsx
-import { FormErrorBoundary } from "@form-engine/core";
+import { FormErrorBoundary } from "@form-eng/core";
 
 <FormErrorBoundary
   fallback={(error, resetErrorBoundary) => (
@@ -259,7 +259,7 @@ Built-in accessibility features:
 Auto-save form state to localStorage and recover after page refresh:
 
 ```tsx
-import { useDraftPersistence, useBeforeUnload } from "@form-engine/core";
+import { useDraftPersistence, useBeforeUnload } from "@form-eng/core";
 
 const { hasDraft, clearDraft } = useDraftPersistence({
   formId: "my-form-123",
@@ -347,7 +347,7 @@ All callbacks are optional. Zero overhead when not provided. See [docs/analytics
 Collapsible dev-only panel with 7 tabs: **Rules**, **Values**, **Errors**, **Graph**, **Perf**, **Deps**, **Timeline**.
 
 ```tsx
-import { FormDevTools } from "@form-engine/core";
+import { FormDevTools } from "@form-eng/core";
 
 <FormDevTools
   configName="myForm"
@@ -376,7 +376,7 @@ See [docs/performance-debugging.md](https://github.com/bghcore/form-engine/blob/
 Convert JSON Schema to field configs:
 
 ```tsx
-import { jsonSchemaToFieldConfig } from "@form-engine/core";
+import { jsonSchemaToFieldConfig } from "@form-eng/core";
 
 const fieldConfigs = jsonSchemaToFieldConfig({
   type: "object",
@@ -396,7 +396,7 @@ Maps JSON Schema types, enums, formats, and required fields to `Dictionary<IFiel
 Convert Zod object schemas to field configs without adding zod as a dependency. The adapter inspects Zod's internal type structure at runtime.
 
 ```tsx
-import { zodSchemaToFieldConfig } from "@form-engine/core";
+import { zodSchemaToFieldConfig } from "@form-eng/core";
 import { z } from "zod";
 
 const UserSchema = z.object({
@@ -422,7 +422,7 @@ No `zod` peer dependency is required. If you do not use Zod, this function is tr
 Use `defineFieldConfigs()` to get compile-time verification that dependency targets reference real field names:
 
 ```tsx
-import { defineFieldConfigs } from "@form-engine/core";
+import { defineFieldConfigs } from "@form-eng/core";
 
 const configs = defineFieldConfigs({
   name: { type: "Textbox", label: "Name", required: true },
@@ -454,7 +454,7 @@ The package ships JSON Schema files for `IFieldConfig` and `IWizardConfig` at `s
 
 ```json
 {
-  "$schema": "node_modules/@form-engine/core/schemas/field-config.schema.json"
+  "$schema": "node_modules/@form-eng/core/schemas/field-config.schema.json"
 }
 ```
 
@@ -463,7 +463,7 @@ The package ships JSON Schema files for `IFieldConfig` and `IWizardConfig` at `s
 Load field components on demand using `React.lazy()` for smaller initial bundles:
 
 ```tsx
-import { createLazyFieldRegistry } from "@form-engine/core";
+import { createLazyFieldRegistry } from "@form-eng/core";
 
 const lazyFields = createLazyFieldRegistry({
   Textbox: () => import("./fields/HookTextbox"),

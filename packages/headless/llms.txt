@@ -1,12 +1,12 @@
-# @form-engine/headless
+# @form-eng/headless
 
-> Unstyled semantic HTML field components for @form-engine/core. All 19 field types using native HTML elements only -- no UI framework dependency. Data attributes for CSS targeting, ARIA for accessibility.
+> Unstyled semantic HTML field components for @form-eng/core. All 19 field types using native HTML elements only -- no UI framework dependency. Data attributes for CSS targeting, ARIA for accessibility.
 
 - Docs: [README](https://github.com/bghcore/form-engine/tree/main/packages/headless/README.md)
 - Agent instructions: [AGENTS.md](https://github.com/bghcore/form-engine/tree/main/packages/headless/AGENTS.md)
-- npm: [@form-engine/headless](https://www.npmjs.com/package/@form-engine/headless)
+- npm: [@form-eng/headless](https://www.npmjs.com/package/@form-eng/headless)
 - License: MIT
-- Peer dependencies: `react`, `react-dom`, `react-hook-form`, `@form-engine/core`
+- Peer dependencies: `react`, `react-dom`, `react-hook-form`, `@form-eng/core`
 
 ## API Surface
 
@@ -59,9 +59,9 @@
 ## Code Example
 
 ```tsx
-import { RulesEngineProvider, InjectedFieldProvider, FormEngine } from "@form-engine/core";
-import { createHeadlessFieldRegistry } from "@form-engine/headless";
-import "@form-engine/headless/styles.css";
+import { RulesEngineProvider, InjectedFieldProvider, FormEngine } from "@form-eng/core";
+import { createHeadlessFieldRegistry } from "@form-eng/headless";
+import "@form-eng/headless/styles.css";
 
 const formConfig = {
   version: 2,

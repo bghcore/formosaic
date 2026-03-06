@@ -5,12 +5,12 @@
 A React library for rendering complex, configuration-driven forms with a built-in rules engine. Forms are defined as a single `IFormConfig` JSON object (field definitions, rules with rich conditions, validation, ordering) and the library handles rendering, validation, auto-save, and field interactions automatically.
 
 Published as six npm packages:
-- `@form-engine/core` -- UI-library agnostic rules engine and form orchestration (React + react-hook-form only)
-- `@form-engine/fluent` -- Fluent UI v9 field component implementations
-- `@form-engine/mui` -- Material UI (MUI) field component implementations
-- `@form-engine/headless` -- Unstyled semantic HTML field implementations (no UI framework dependency)
-- `@form-engine/designer` -- Visual drag-and-drop form builder that outputs IFormConfig v2
-- `@form-engine/examples` -- 3 example apps (login+MFA, checkout wizard, data entry)
+- `@form-eng/core` -- UI-library agnostic rules engine and form orchestration (React + react-hook-form only)
+- `@form-eng/fluent` -- Fluent UI v9 field component implementations
+- `@form-eng/mui` -- Material UI (MUI) field component implementations
+- `@form-eng/headless` -- Unstyled semantic HTML field implementations (no UI framework dependency)
+- `@form-eng/designer` -- Visual drag-and-drop form builder that outputs IFormConfig v2
+- `@form-eng/examples` -- 3 example apps (login+MFA, checkout wizard, data entry)
 
 ## Architecture
 
@@ -115,7 +115,7 @@ type ICondition = IFieldCondition | ILogicalCondition;
 
 ```
 packages/
-  core/                          -- @form-engine/core
+  core/                          -- @form-eng/core
     src/
       index.ts                   -- Public API barrel exports
       constants.ts               -- ComponentTypes, FormConstants
@@ -187,26 +187,26 @@ packages/
       __tests__/                 -- Vitest tests (616 tests, 29 files)
         __fixtures__/            -- Shared test configs and entity data (v2 format)
 
-  fluent/                        -- @form-engine/fluent
+  fluent/                        -- @form-eng/fluent
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, HookFormLoading, StatusDropdown/, DocumentLinks/)
       fields/ (13 editable + 6 read-only, accept IFieldProps)
 
-  mui/                           -- @form-engine/mui
+  mui/                           -- @form-eng/mui
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, HookFormLoading)
       fields/ (13 editable + 6 read-only, accept IFieldProps, using @mui/material)
 
-  headless/                      -- @form-engine/headless
+  headless/                      -- @form-eng/headless
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, HookFormLoading)
       fields/ (13 editable + 6 read-only, semantic HTML, data-* attributes, ARIA)
       styles.css (optional CSS custom properties)
 
-  designer/                      -- @form-engine/designer
+  designer/                      -- @form-eng/designer
     src/
       types/ (IDesignerState, IDesignerAction)
       state/ (designerReducer, DesignerProvider, useDesigner)
@@ -214,7 +214,7 @@ packages/
                    RuleBuilder, ConfigPreview, WizardConfigurator, ImportExport)
       styles.css
 
-  examples/                      -- @form-engine/examples
+  examples/                      -- @form-eng/examples
     src/
       login-mfa/ (conditional MFA fields, dynamic labels)
       checkout/ (wizard, dropdown dependencies, payment branching)

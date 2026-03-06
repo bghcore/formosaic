@@ -6,10 +6,10 @@ import {
   FormEngine,
   WizardForm,
   useDraftPersistence,
-} from "@form-engine/core";
-import { createFluentFieldRegistry } from "@form-engine/fluent";
+} from "@form-eng/core";
+import { createFluentFieldRegistry } from "@form-eng/fluent";
 import { FluentProvider, webLightTheme } from "@fluentui/react-components";
-import type { IFormConfig } from "@form-engine/core";
+import type { IFormConfig } from "@form-eng/core";
 
 import { basicFormConfig, basicFormDefaults } from "./configs/basic-form";
 import { rulesFormConfig, rulesFormDefaults } from "./configs/rules-form";

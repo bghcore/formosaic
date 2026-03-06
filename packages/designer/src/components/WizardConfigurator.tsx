@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import type { IWizardConfig, IWizardStep } from "@form-engine/core";
+import type { IWizardConfig, IWizardStep } from "@form-eng/core";
 import { useDesigner } from "../state/useDesigner";
 
 export function WizardConfigurator() {

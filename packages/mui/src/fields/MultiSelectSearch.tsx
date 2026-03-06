@@ -1,4 +1,4 @@
-import { IFieldProps } from "@form-engine/core";
+import { IFieldProps } from "@form-eng/core";
 import { Autocomplete, TextField, Chip, Box } from "@mui/material";
 import React from "react";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";

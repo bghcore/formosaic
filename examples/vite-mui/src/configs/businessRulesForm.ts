@@ -1,5 +1,5 @@
-import { Dictionary } from "@form-engine/core";
-import type { IFieldConfig } from "@form-engine/core";
+import { Dictionary } from "@form-eng/core";
+import type { IFieldConfig } from "@form-eng/core";
 
 export const businessRulesConfig: Dictionary<IFieldConfig> = {
   type: {

@@ -1,4 +1,4 @@
-import { IFieldProps, FormStrings } from "@form-engine/core";
+import { IFieldProps, FormStrings } from "@form-eng/core";
 import { Input, Button } from "@fluentui/react-components";
 import { DismissRegular } from "@fluentui/react-icons";
 import React from "react";

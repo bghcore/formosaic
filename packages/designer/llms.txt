@@ -1,12 +1,12 @@
-# @form-engine/designer
+# @form-eng/designer
 
-> Visual drag-and-drop form builder for @form-engine/core. Outputs valid IFormConfig v2 JSON. HTML5 native DnD, undo/redo, rule builder with all 15 condition operators + AND/OR/NOT.
+> Visual drag-and-drop form builder for @form-eng/core. Outputs valid IFormConfig v2 JSON. HTML5 native DnD, undo/redo, rule builder with all 15 condition operators + AND/OR/NOT.
 
 - Docs: [README](https://github.com/bghcore/form-engine/tree/main/packages/designer/README.md)
 - Agent instructions: [AGENTS.md](https://github.com/bghcore/form-engine/tree/main/packages/designer/AGENTS.md)
-- npm: [@form-engine/designer](https://www.npmjs.com/package/@form-engine/designer)
+- npm: [@form-eng/designer](https://www.npmjs.com/package/@form-eng/designer)
 - License: MIT
-- Peer dependencies: `react`, `react-dom`, `@form-engine/core`
+- Peer dependencies: `react`, `react-dom`, `@form-eng/core`
 
 ## API Surface
 
@@ -42,8 +42,8 @@
 ## Code Example
 
 ```tsx
-import { DesignerProvider, FormDesigner, useDesigner } from "@form-engine/designer";
-import "@form-engine/designer/dist/styles.css";
+import { DesignerProvider, FormDesigner, useDesigner } from "@form-eng/designer";
+import "@form-eng/designer/dist/styles.css";
 
 function SaveButton() {
   const { exportConfig, state } = useDesigner();

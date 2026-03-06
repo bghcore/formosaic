@@ -7,8 +7,8 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, "./"),
   // Ensure @form-engine packages are transpiled from node_modules
   transpilePackages: [
-    "@form-engine/core",
-    "@form-engine/mui",
+    "@form-eng/core",
+    "@form-eng/mui",
   ],
 };
 

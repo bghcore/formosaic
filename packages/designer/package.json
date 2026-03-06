@@ -1,7 +1,7 @@
 {
-  "name": "@form-engine/designer",
+  "name": "@form-eng/designer",
   "version": "1.0.0",
-  "description": "Visual form builder for @form-engine/core",
+  "description": "Visual form builder for @form-eng/core",
   "repository": {
     "type": "git",
     "url": "https://github.com/bghcore/form-engine.git",
@@ -45,12 +45,12 @@
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0",
-    "@form-engine/core": "^1.0.0"
+    "@form-eng/core": "^1.0.0"
   },
   "devDependencies": {
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "@form-engine/core": "*",
+    "@form-eng/core": "*",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "@types/react": "^19.2.14",

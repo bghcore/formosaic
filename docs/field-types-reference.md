@@ -749,7 +749,7 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 
 **How to register:**
 ```tsx
-import { createFluentFieldRegistry } from "@form-engine/fluent";
+import { createFluentFieldRegistry } from "@form-eng/fluent";
 import MyCustomChoiceSet from "./MyCustomChoiceSet";
 
 const registry = createFluentFieldRegistry();

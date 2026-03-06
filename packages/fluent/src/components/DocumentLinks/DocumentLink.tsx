@@ -1,4 +1,4 @@
-import { FormStrings, FormConstants } from "@form-engine/core";
+import { FormStrings, FormConstants } from "@form-eng/core";
 import { Input, Button, Tooltip } from "@fluentui/react-components";
 import { CheckmarkRegular, DismissRegular, EditRegular, DeleteRegular } from "@fluentui/react-icons";
 import React from "react";

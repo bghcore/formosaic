@@ -1,6 +1,6 @@
-# @form-engine/examples
+# @form-eng/examples
 
-Example applications demonstrating `@form-engine/core` and `@form-engine/mui`.
+Example applications demonstrating `@form-eng/core` and `@form-eng/mui`.
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/bghcore/form-engine/tree/main/packages/examples?file=src/App.tsx)
 
@@ -40,8 +40,8 @@ A purchase order form with repeating line items (FieldArray), computed values (l
 - **React 19** + **TypeScript**
 - **Material UI (MUI)** for field components
 - **Vite** for dev server and build
-- **@form-engine/core** for form orchestration and rules engine
-- **@form-engine/mui** for MUI field implementations
+- **@form-eng/core** for form orchestration and rules engine
+- **@form-eng/mui** for MUI field implementations
 
 ## Project Structure
 

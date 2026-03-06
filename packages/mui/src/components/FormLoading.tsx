@@ -1,4 +1,4 @@
-import { FormConstants } from "@form-engine/core";
+import { FormConstants } from "@form-eng/core";
 import { Skeleton } from "@mui/material";
 import React from "react";
 

@@ -9,7 +9,7 @@ export default defineConfig({
   external: [
     "react",
     "react-dom",
-    "@form-engine/core",
+    "@form-eng/core",
   ],
   jsx: "automatic",
 });

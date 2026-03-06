@@ -1,4 +1,4 @@
-import { IFieldProps } from "@form-engine/core";
+import { IFieldProps } from "@form-eng/core";
 import React from "react";
 
 const ReadOnlyArray = (props: IFieldProps<{}>) => {

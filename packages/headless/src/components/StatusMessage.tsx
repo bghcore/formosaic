@@ -1,4 +1,4 @@
-import { FormStrings } from "@form-engine/core";
+import { FormStrings } from "@form-eng/core";
 import React from "react";
 import { FieldError } from "react-hook-form";
 

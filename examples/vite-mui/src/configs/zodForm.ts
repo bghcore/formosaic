@@ -1,4 +1,4 @@
-import { zodSchemaToFieldConfig } from "@form-engine/core";
+import { zodSchemaToFieldConfig } from "@form-eng/core";
 
 // This would normally be: import { z } from "zod";
 // For this example we construct a mock Zod-like schema

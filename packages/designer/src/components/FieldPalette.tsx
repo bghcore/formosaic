@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { ComponentTypes } from "@form-engine/core";
+import { ComponentTypes } from "@form-eng/core";
 
 /** Palette field types grouped by category */
 const PALETTE_GROUPS: { label: string; types: { key: string; label: string }[] }[] = [

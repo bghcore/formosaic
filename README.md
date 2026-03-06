@@ -1,10 +1,10 @@
 # Form Engine
 
-[![npm core](https://img.shields.io/npm/v/@form-engine/core?label=core)](https://www.npmjs.com/package/@form-engine/core)
-[![npm fluent](https://img.shields.io/npm/v/@form-engine/fluent?label=fluent)](https://www.npmjs.com/package/@form-engine/fluent)
-[![npm mui](https://img.shields.io/npm/v/@form-engine/mui?label=mui)](https://www.npmjs.com/package/@form-engine/mui)
-[![npm headless](https://img.shields.io/npm/v/@form-engine/headless?label=headless)](https://www.npmjs.com/package/@form-engine/headless)
-[![npm designer](https://img.shields.io/npm/v/@form-engine/designer?label=designer)](https://www.npmjs.com/package/@form-engine/designer)
+[![npm core](https://img.shields.io/npm/v/@form-eng/core?label=core)](https://www.npmjs.com/package/@form-eng/core)
+[![npm fluent](https://img.shields.io/npm/v/@form-eng/fluent?label=fluent)](https://www.npmjs.com/package/@form-eng/fluent)
+[![npm mui](https://img.shields.io/npm/v/@form-eng/mui?label=mui)](https://www.npmjs.com/package/@form-eng/mui)
+[![npm headless](https://img.shields.io/npm/v/@form-eng/headless?label=headless)](https://www.npmjs.com/package/@form-eng/headless)
+[![npm designer](https://img.shields.io/npm/v/@form-eng/designer?label=designer)](https://www.npmjs.com/package/@form-eng/designer)
 [![CI](https://github.com/bghcore/form-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/bghcore/form-engine/actions/workflows/ci.yml)
 
 [Storybook](https://bghcore.github.io/form-engine/storybook/) | [Designer Demo](https://bghcore.github.io/form-engine/designer/) | [npm](https://www.npmjs.com/org/form-engine)
@@ -30,24 +30,24 @@ A React library for rendering complex, configuration-driven forms with a built-i
 
 | Package | Description | Size |
 |---------|-------------|------|
-| [`@form-engine/core`](./packages/core) | UI-agnostic rules engine, form orchestration, validation, analytics, devtools. React + react-hook-form only, no UI library dependency. | ~114 KB ESM |
-| [`@form-engine/fluent`](./packages/fluent) | Fluent UI v9 field components (19 field types). | ~39 KB ESM |
-| [`@form-engine/mui`](./packages/mui) | Material UI field components (19 field types). | ~39 KB ESM |
-| [`@form-engine/headless`](./packages/headless) | Unstyled semantic HTML field components (19 field types). | ~36 KB ESM |
-| [`@form-engine/designer`](./packages/designer) | Visual drag-and-drop form builder with rule editor and JSON export. | ~65 KB ESM |
-| [`@form-engine/examples`](./packages/examples) | 3 example apps (login+MFA, checkout wizard, data entry). | -- |
+| [`@form-eng/core`](./packages/core) | UI-agnostic rules engine, form orchestration, validation, analytics, devtools. React + react-hook-form only, no UI library dependency. | ~114 KB ESM |
+| [`@form-eng/fluent`](./packages/fluent) | Fluent UI v9 field components (19 field types). | ~39 KB ESM |
+| [`@form-eng/mui`](./packages/mui) | Material UI field components (19 field types). | ~39 KB ESM |
+| [`@form-eng/headless`](./packages/headless) | Unstyled semantic HTML field components (19 field types). | ~36 KB ESM |
+| [`@form-eng/designer`](./packages/designer) | Visual drag-and-drop form builder with rule editor and JSON export. | ~65 KB ESM |
+| [`@form-eng/examples`](./packages/examples) | 3 example apps (login+MFA, checkout wizard, data entry). | -- |
 
 ## Quick Start
 
 ```bash
 # With Fluent UI
-npm install @form-engine/core @form-engine/fluent
+npm install @form-eng/core @form-eng/fluent
 
 # Or with MUI
-npm install @form-engine/core @form-engine/mui @mui/material @emotion/react @emotion/styled
+npm install @form-eng/core @form-eng/mui @mui/material @emotion/react @emotion/styled
 
 # Or headless (no UI framework)
-npm install @form-engine/core @form-engine/headless
+npm install @form-eng/core @form-eng/headless
 ```
 
 ```tsx
@@ -55,10 +55,10 @@ import {
   RulesEngineProvider,
   InjectedFieldProvider,
   FormEngine,
-} from "@form-engine/core";
-import { createFluentFieldRegistry } from "@form-engine/fluent";
-// Or: import { createMuiFieldRegistry } from "@form-engine/mui";
-// Or: import { createHeadlessFieldRegistry } from "@form-engine/headless";
+} from "@form-eng/core";
+import { createFluentFieldRegistry } from "@form-eng/fluent";
+// Or: import { createMuiFieldRegistry } from "@form-eng/mui";
+// Or: import { createHeadlessFieldRegistry } from "@form-eng/headless";
 
 const formConfig = {
   version: 2 as const,
@@ -210,7 +210,7 @@ fields: {
 Split forms into wizard steps with conditional visibility and per-step validation:
 
 ```tsx
-import { WizardForm } from "@form-engine/core";
+import { WizardForm } from "@form-eng/core";
 
 const formConfig = {
   version: 2 as const,
@@ -250,7 +250,7 @@ All fields stay in a single `react-hook-form` context. Steps control which field
 Add "add another" patterns for addresses, line items, etc.:
 
 ```tsx
-import { FieldArray } from "@form-engine/core";
+import { FieldArray } from "@form-eng/core";
 
 <FieldArray
   fieldName="contacts"
@@ -282,13 +282,13 @@ The library uses a component injection system for field rendering. Core provides
 
 ```tsx
 // Use built-in Fluent UI fields
-import { createFluentFieldRegistry } from "@form-engine/fluent";
+import { createFluentFieldRegistry } from "@form-eng/fluent";
 
 // Or use MUI fields (swap with one line)
-import { createMuiFieldRegistry } from "@form-engine/mui";
+import { createMuiFieldRegistry } from "@form-eng/mui";
 
 // Or use headless semantic HTML fields
-import { createHeadlessFieldRegistry } from "@form-engine/headless";
+import { createHeadlessFieldRegistry } from "@form-eng/headless";
 
 // Pass via the injectedFields prop
 <InjectedFieldProvider injectedFields={createFluentFieldRegistry()}>
@@ -309,7 +309,7 @@ import {
   registerValidators,
   createMinLengthValidation,
   createPatternValidation,
-} from "@form-engine/core";
+} from "@form-eng/core";
 
 // Register built-in factory validators
 registerValidators({
@@ -357,7 +357,7 @@ Built-in validators: `EmailValidation`, `PhoneNumberValidation`, `YearValidation
 All user-facing strings are localizable:
 
 ```tsx
-import { registerLocale } from "@form-engine/core";
+import { registerLocale } from "@form-eng/core";
 
 registerLocale({
   required: "Obligatoire",
@@ -409,7 +409,7 @@ A collapsible dev-only panel with 7 tabs for debugging form state at runtime:
 | **Timeline** | Chronological event log with filtering (via `EventTimeline`) |
 
 ```tsx
-import { FormDevTools } from "@form-engine/core";
+import { FormDevTools } from "@form-eng/core";
 
 <FormDevTools
   configName="myForm"
@@ -426,7 +426,7 @@ import { FormDevTools } from "@form-engine/core";
 Catch configuration errors early:
 
 ```tsx
-import { validateFieldConfigs } from "@form-engine/core";
+import { validateFieldConfigs } from "@form-eng/core";
 
 const errors = validateFieldConfigs(fieldConfigs, registeredComponentTypes);
 // Returns: missing dependency targets, unregistered components,
@@ -438,7 +438,7 @@ const errors = validateFieldConfigs(fieldConfigs, registeredComponentTypes);
 Each field is individually wrapped in a `FormErrorBoundary` so a single field crash does not take down the entire form:
 
 ```tsx
-import { FormErrorBoundary } from "@form-engine/core";
+import { FormErrorBoundary } from "@form-eng/core";
 
 <FormErrorBoundary
   fallback={(error, resetErrorBoundary) => (
@@ -520,7 +520,7 @@ Built-in accessibility features:
 Auto-save form state to localStorage for recovery after accidental page closures:
 
 ```tsx
-import { useDraftPersistence, useBeforeUnload } from "@form-engine/core";
+import { useDraftPersistence, useBeforeUnload } from "@form-eng/core";
 
 function MyForm() {
   const { isDirty, formValues } = useFormState();
@@ -585,8 +585,8 @@ Form-level error banner via `formErrors` prop on `FormEngine`:
 The headless package renders all 19 field types using native HTML elements with `data-field-type` and `data-field-state` attributes for CSS targeting. No UI framework required.
 
 ```tsx
-import { createHeadlessFieldRegistry } from "@form-engine/headless";
-import "@form-engine/headless/styles.css"; // optional minimal styles
+import { createHeadlessFieldRegistry } from "@form-eng/headless";
+import "@form-eng/headless/styles.css"; // optional minimal styles
 
 <InjectedFieldProvider injectedFields={createHeadlessFieldRegistry()}>
 ```
@@ -611,8 +611,8 @@ See the [headless package README](./packages/headless/README.md) for full detail
 The designer package provides a drag-and-drop form builder that exports valid `IFormConfig` v2 JSON:
 
 ```tsx
-import { DesignerProvider, FormDesigner } from "@form-engine/designer";
-import "@form-engine/designer/dist/styles.css";
+import { DesignerProvider, FormDesigner } from "@form-eng/designer";
+import "@form-eng/designer/dist/styles.css";
 
 function Builder() {
   return (
@@ -640,7 +640,7 @@ See the [SSR / Next.js integration guide](./docs/ssr-guide.md) for full setup in
 Migrate from [react-jsonschema-form](https://github.com/rjsf-team/react-jsonschema-form) with zero rewrite. Bring your existing `schema` + `uiSchema` + `formData` and get a full `IFormConfig` with our rules engine layered on top. JSON Schema `dependencies` and `if/then/else` are auto-converted to `IRule[]`.
 
 ```tsx
-import { fromRjsfSchema } from "@form-engine/core";
+import { fromRjsfSchema } from "@form-eng/core";
 
 // Your existing RJSF schema
 const schema = {
@@ -688,7 +688,7 @@ Also exports `toRjsfSchema(config)` for converting back to JSON Schema + uiSchem
 Convert Zod object schemas to field configs without adding zod as a dependency:
 
 ```tsx
-import { zodSchemaToFieldConfig } from "@form-engine/core";
+import { zodSchemaToFieldConfig } from "@form-eng/core";
 import { z } from "zod";
 
 const UserSchema = z.object({
@@ -714,7 +714,7 @@ No `zod` peer dependency is required. If you do not use Zod, this function is tr
 Load field components on demand using React.lazy for bundle optimization:
 
 ```tsx
-import { createLazyFieldRegistry } from "@form-engine/core";
+import { createLazyFieldRegistry } from "@form-eng/core";
 
 const lazyFields = createLazyFieldRegistry({
   Textbox: () => import("./fields/HookTextbox"),
@@ -818,11 +818,11 @@ npm run clean
 
 ```
 packages/
-  core/       -- @form-engine/core (React + react-hook-form only)
-  fluent/     -- @form-engine/fluent (Fluent UI v9 adapter)
-  mui/        -- @form-engine/mui (Material UI adapter)
-  headless/   -- @form-engine/headless (semantic HTML adapter)
-  designer/   -- @form-engine/designer (visual form builder)
+  core/       -- @form-eng/core (React + react-hook-form only)
+  fluent/     -- @form-eng/fluent (Fluent UI v9 adapter)
+  mui/        -- @form-eng/mui (Material UI adapter)
+  headless/   -- @form-eng/headless (semantic HTML adapter)
+  designer/   -- @form-eng/designer (visual form builder)
   examples/   -- 3 example apps (login+MFA, checkout wizard, data entry)
 e2e/          -- Playwright end-to-end tests
 benchmarks/   -- Vitest benchmarks for rules engine performance

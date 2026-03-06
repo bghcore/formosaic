@@ -1,12 +1,12 @@
-# @form-engine/fluent
+# @form-eng/fluent
 
-> Fluent UI v9 field components for @form-engine/core. Provides 13 editable and 6 read-only field types plus a one-line registry setup.
+> Fluent UI v9 field components for @form-eng/core. Provides 13 editable and 6 read-only field types plus a one-line registry setup.
 
 - Docs: [README](https://github.com/bghcore/form-engine/tree/main/packages/fluent/README.md)
 - Agent instructions: [AGENTS.md](https://github.com/bghcore/form-engine/tree/main/packages/fluent/AGENTS.md)
-- npm: [@form-engine/fluent](https://www.npmjs.com/package/@form-engine/fluent)
+- npm: [@form-eng/fluent](https://www.npmjs.com/package/@form-eng/fluent)
 - License: MIT
-- Peer dependencies: `react`, `react-dom`, `react-hook-form`, `@fluentui/react-components`, `@form-engine/core`
+- Peer dependencies: `react`, `react-dom`, `react-hook-form`, `@fluentui/react-components`, `@form-eng/core`
 
 ## API Surface
 
@@ -66,8 +66,8 @@ import {
   InjectedFieldProvider,
   FormEngine,
   IFormConfig,
-} from "@form-engine/core";
-import { createFluentFieldRegistry } from "@form-engine/fluent";
+} from "@form-eng/core";
+import { createFluentFieldRegistry } from "@form-eng/fluent";
 
 const formConfig: IFormConfig = {
   version: 2,

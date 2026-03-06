@@ -1,4 +1,4 @@
-import { ComponentTypes, Dictionary } from "@form-engine/core";
+import { ComponentTypes, Dictionary } from "@form-eng/core";
 import Textbox from "./fields/Textbox";
 import Number from "./fields/Number";
 import Toggle from "./fields/Toggle";

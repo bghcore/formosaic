@@ -29,12 +29,12 @@ Monorepo using npm workspaces. Six packages:
 
 ```
 packages/
-  core/      -- @form-engine/core (React + react-hook-form, NO UI library deps)
-  fluent/    -- @form-engine/fluent (Fluent UI v9 field components)
-  mui/       -- @form-engine/mui (Material UI field components)
-  headless/  -- @form-engine/headless (unstyled semantic HTML field components)
-  designer/  -- @form-engine/designer (visual drag-and-drop form builder)
-  examples/  -- @form-engine/examples (3 example apps: login+MFA, checkout wizard, data entry)
+  core/      -- @form-eng/core (React + react-hook-form, NO UI library deps)
+  fluent/    -- @form-eng/fluent (Fluent UI v9 field components)
+  mui/       -- @form-eng/mui (Material UI field components)
+  headless/  -- @form-eng/headless (unstyled semantic HTML field components)
+  designer/  -- @form-eng/designer (visual drag-and-drop form builder)
+  examples/  -- @form-eng/examples (3 example apps: login+MFA, checkout wizard, data entry)
 docs/
   creating-an-adapter.md      -- Guide for building custom UI library adapters
   ACCESSIBILITY.md            -- Accessibility guide (ARIA, keyboard, screen readers)

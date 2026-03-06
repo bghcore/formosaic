@@ -1,6 +1,6 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import ReadOnlyCumulativeNumber from "@form-engine/fluent/fields/readonly/ReadOnlyCumulativeNumber";
+import ReadOnlyCumulativeNumber from "@form-eng/fluent/fields/readonly/ReadOnlyCumulativeNumber";
 import { FormDecorator, createFieldProps } from "../../helpers";
 
 /**

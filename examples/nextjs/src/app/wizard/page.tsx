@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Container, Typography, Paper, Button, Stack, Alert, Stepper, Step, StepLabel } from "@mui/material";
-import { WizardForm, getVisibleSteps } from "@form-engine/core";
-import type { IWizardStep } from "@form-engine/core";
+import { WizardForm, getVisibleSteps } from "@form-eng/core";
+import type { IWizardStep } from "@form-eng/core";
 
 const wizardConfig = {
   steps: [

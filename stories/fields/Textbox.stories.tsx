@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import Textbox from "@form-engine/fluent/fields/Textbox";
+import Textbox from "@form-eng/fluent/fields/Textbox";
 import { FormDecorator, createFieldProps } from "../helpers";
 
 /**

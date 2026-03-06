@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://github.com/bghcore/form-engine/field-config.schema.json",
   "title": "Dynamic Forms Field Configuration",
-  "description": "Schema for defining configuration-driven form fields used by @form-engine/core. Each top-level property key is a field name and its value is a FieldConfig object.",
+  "description": "Schema for defining configuration-driven form fields used by @form-eng/core. Each top-level property key is a field name and its value is a FieldConfig object.",
   "type": "object",
   "additionalProperties": {
     "$ref": "#/definitions/FieldConfig"

@@ -1,4 +1,4 @@
-import { IFieldProps, isEmpty } from "@form-engine/core";
+import { IFieldProps, isEmpty } from "@form-eng/core";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { ReadOnlyText, IReadOnlyFieldProps } from "../../components/ReadOnlyText";

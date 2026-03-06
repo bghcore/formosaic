@@ -1,6 +1,6 @@
 # Dynamic Forms — Vite + MUI Example
 
-A lightweight Vite app demonstrating [@form-engine/core](https://www.npmjs.com/package/@form-engine/core) with the MUI adapter.
+A lightweight Vite app demonstrating [@form-eng/core](https://www.npmjs.com/package/@form-eng/core) with the MUI adapter.
 
 ## Quick Start
 

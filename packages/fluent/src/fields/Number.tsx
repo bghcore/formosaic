@@ -1,4 +1,4 @@
-import { IFieldProps, isNull } from "@form-engine/core";
+import { IFieldProps, isNull } from "@form-eng/core";
 import { Input } from "@fluentui/react-components";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";

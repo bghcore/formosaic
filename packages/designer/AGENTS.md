@@ -1,14 +1,14 @@
-# AGENTS.md -- @form-engine/designer
+# AGENTS.md -- @form-eng/designer
 
 ## Package Purpose
 
-Visual drag-and-drop form builder for `@form-engine/core`. Outputs valid `IFormConfig` v2 JSON. Provides components for field palette, canvas, property editor, rule builder, wizard configurator, and import/export.
+Visual drag-and-drop form builder for `@form-eng/core`. Outputs valid `IFormConfig` v2 JSON. Provides components for field palette, canvas, property editor, rule builder, wizard configurator, and import/export.
 
 ## Critical Constraints
 
 - **No UI library imports.** Uses plain HTML + inline styles + CSS custom properties. No `@fluentui/*`, `@mui/*`, or CSS-in-JS.
 - **No external DnD libraries.** Uses HTML5 native drag-and-drop API (dragstart, dragover, drop).
-- **Import core types from `@form-engine/core`**, not from relative paths.
+- **Import core types from `@form-eng/core`**, not from relative paths.
 - **All state managed via `useReducer`** in `DesignerProvider` with undo/redo support.
 - **Output must always be a valid `IFormConfig` v2 object** with `version: 2`.
 
