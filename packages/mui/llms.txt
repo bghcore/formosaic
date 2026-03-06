@@ -62,7 +62,7 @@ import { CssBaseline } from "@mui/material";
 import {
   RulesEngineProvider,
   InjectedFieldProvider,
-  DynamicForm,
+  FormEngine,
   IFormConfig,
 } from "@form-engine/core";
 import { createMuiFieldRegistry } from "@form-engine/mui";
@@ -91,7 +91,7 @@ function App() {
       <CssBaseline />
       <RulesEngineProvider>
         <InjectedFieldProvider injectedFields={createMuiFieldRegistry()}>
-          <DynamicForm
+          <FormEngine
             programName="myApp"
             configName="myForm"
             formConfig={formConfig}

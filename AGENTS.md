@@ -63,9 +63,9 @@ Build output per package: `dist/index.js` (CJS), `dist/index.mjs` (ESM), `dist/i
 
 ## Code Style
 
-- Core components: `DynamicForm`, `FormFields`, `RenderField`, `FieldWrapper`, `WizardForm`, `FieldArray`
-- Adapter field components use `Hook` prefix: `HookTextbox`, `HookDropdown` -- kept for file naming
-- Read-only variants: `HookReadOnly` prefix in `fields/readonly/`
+- Core components: `FormEngine`, `FormFields`, `RenderField`, `FieldWrapper`, `WizardForm`, `FieldArray`
+- Adapter field components: `Textbox`, `Dropdown`, `Toggle`, etc.
+- Read-only variants in `fields/readonly/`: `ReadOnly`, `ReadOnlyArray`, etc.
 - Interfaces use `I` prefix: `IFieldConfig`, `IRuntimeFieldState`, `IFieldProps`
 - Providers export both the component and a `Use*Context` hook
 - Use `React.JSX.Element` not bare `JSX.Element`

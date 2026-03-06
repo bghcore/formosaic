@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { FieldWrapper } from "../../components/HookFieldWrapper";
-import { WizardForm } from "../../components/HookWizardForm";
+import { FieldWrapper } from "../../components/FieldWrapper";
+import { WizardForm } from "../../components/WizardForm";
 import { IWizardConfig } from "../../types/IWizardConfig";
 import { resetLocale, getLocaleString } from "../../helpers/LocaleRegistry";
 
@@ -448,9 +448,9 @@ describe("WizardForm accessibility", () => {
   });
 });
 
-// ─── HookConfirmInputsModal accessibility tests ─────────────────────────────
+// ─── ConfirmInputsModal accessibility tests ──────────────────────────────────
 
-describe("HookConfirmInputsModal accessibility", () => {
+describe("ConfirmInputsModal accessibility", () => {
   it("native dialog has aria-label when rendered", () => {
     // The dialog element should have:
     // - role="dialog" and aria-modal="true"

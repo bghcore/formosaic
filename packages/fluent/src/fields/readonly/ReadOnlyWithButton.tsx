@@ -3,13 +3,13 @@ import { Button } from "@fluentui/react-components";
 import React from "react";
 import { ReadOnlyText, IReadOnlyFieldProps } from "../../components/ReadOnlyText";
 
-interface HookReadOnlyWithButtonProps extends IReadOnlyFieldProps {
+interface IReadOnlyWithButtonProps extends IReadOnlyFieldProps {
   containerClassName?: string;
   buttonText?: string;
   onButtonClick?: () => void;
 }
 
-const ReadOnlyWithButton = (props: IFieldProps<HookReadOnlyWithButtonProps>) => {
+const ReadOnlyWithButton = (props: IFieldProps<IReadOnlyWithButtonProps>) => {
   const { fieldName, value, config } = props;
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "8px" }} className={config?.containerClassName}>

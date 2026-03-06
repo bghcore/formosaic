@@ -232,7 +232,7 @@ type ValueFunction = (context: {
   fieldName: string;           // Name of the field this function is being executed for
   fieldValue?: SubEntityType;  // Current value of the field (may be undefined on create)
   parentEntity?: IEntityData;  // Parent entity data (if editing a child entity)
-  currentUserId?: string;      // Current user's UPN/ID from DynamicForm props
+  currentUserId?: string;      // Current user's UPN/ID from FormEngine props
 }) => SubEntityType;
 ```
 

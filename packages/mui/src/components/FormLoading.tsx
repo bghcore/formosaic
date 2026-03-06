@@ -12,9 +12,9 @@ interface IFormLoadingProps {
 export const FormLoading = (props: IFormLoadingProps) => {
   const { loadingShimmerCount, loadingFieldShimmerHeight, inPanel, hideTitleShimmer } = props;
   return (
-    <div className={`hook-form-loading ${inPanel ? "in-panel" : ""}`}>
+    <div className={`fe-loading ${inPanel ? "in-panel" : ""}`}>
       {[...Array(loadingShimmerCount || FormConstants.loadingShimmerCount)].map((_, i) => (
-        <div key={`hook-form-loading-${i}`} className="form-field-loading" style={{ marginBottom: "16px" }}>
+        <div key={`fe-loading-${i}`} className="form-field-loading" style={{ marginBottom: "16px" }}>
           {!hideTitleShimmer && <Skeleton variant="text" width="33%" />}
           <Skeleton
             variant="rectangular"
@@ -26,6 +26,4 @@ export const FormLoading = (props: IFormLoadingProps) => {
   );
 };
 
-/** @deprecated Use FormLoading instead */
-export const HookFormLoading = FormLoading;
 export default FormLoading;

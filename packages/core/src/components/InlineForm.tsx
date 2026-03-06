@@ -12,19 +12,19 @@ import {
   InitOnCreateFormState,
   InitOnEditFormState,
   IsExpandVisible,
-} from "../helpers/HookInlineFormHelper";
+} from "../helpers/InlineFormHelper";
 import { IRulesEngineState, IRuntimeFormState } from "../types/IRuntimeFieldState";
 import { IConfirmInputModalProps } from "../types/IConfirmInputModalProps";
 import { IFieldConfig } from "../types/IFieldConfig";
 import { IFormConfig } from "../types/IFormConfig";
-import { IHookInlineFormSharedProps } from "../types/IHookInlineFormSharedProps";
+import { IFormEngineSharedProps } from "../types/IFormEngineSharedProps";
 import { UseRulesEngineContext } from "../providers/BusinessRulesProvider";
 import { FormStrings } from "../strings";
 import { useFormAnalytics } from "../hooks/useFormAnalytics";
-import ConfirmInputsModal from "./HookConfirmInputsModal";
-import { FormFields } from "./HookInlineFormFields";
+import ConfirmInputsModal from "./ConfirmInputsModal";
+import { FormFields } from "./InlineFormFields";
 
-interface IDynamicFormProps extends IHookInlineFormSharedProps {
+interface IFormEngineProps extends IFormEngineSharedProps {
   /** v2 form config (preferred). If provided, fieldConfigs is ignored. */
   formConfig?: IFormConfig;
   /** v1-style field configs (for migration). Use formConfig instead. */
@@ -45,7 +45,7 @@ interface IDynamicFormProps extends IHookInlineFormSharedProps {
   renderStatus?: (props: { id: string; saving?: boolean; savePending?: boolean; errorCount?: number; isManualSave?: boolean }) => React.ReactNode;
 }
 
-export const DynamicForm: React.FC<IDynamicFormProps> = (props: IDynamicFormProps): React.JSX.Element => {
+export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps): React.JSX.Element => {
   const {
     configName,
     entityId,

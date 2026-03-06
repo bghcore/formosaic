@@ -85,7 +85,7 @@ The `FieldWrapper` component is the accessibility hub for every form field. It:
 - Fallback UI has `role="alert"` to announce component crashes to assistive technology
 - Retry button is keyboard accessible
 
-### DynamicForm
+### FormEngine
 
 - `aria-live="polite"` region announces form-level status (validating, saving, saved, failed)
 - Filter input has `aria-label` for screen readers

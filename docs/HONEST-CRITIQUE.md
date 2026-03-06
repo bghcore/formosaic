@@ -44,7 +44,7 @@ Using `Controller` for each field, `FormProvider` for context sharing, and `useF
 
 ### No tests is a risk, not just a gap
 
-The pure helper functions (`BusinessRulesHelper.ts`, `HookInlineFormHelper.ts`) contain the library's core logic and are eminently testable. The fact that they have zero tests means:
+The pure helper functions (`BusinessRulesHelper.ts`, `InlineFormHelper.ts`) contain the library's core logic and are eminently testable. The fact that they have zero tests means:
 
 - Refactoring is risky. Future changes to the rules engine have no safety net.
 - Edge cases in rule evaluation are undocumented. Tests would serve as documentation for how combo rules interact with single-field rules, what happens with circular dependencies, etc.

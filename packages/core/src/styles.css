@@ -7,14 +7,14 @@
  * Override any variable on a parent element or :root to customize colors.
  */
 :root {
-  --hook-form-error-color: #d13438;
-  --hook-form-warning-color: #ffb900;
-  --hook-form-saving-color: #0078d4;
-  --hook-form-label-color: #323130;
-  --hook-form-required-color: #d13438;
-  --hook-form-border-radius: 4px;
-  --hook-form-field-gap: 8px;
-  --hook-form-font-size: 14px;
+  --fe-error-color: #d13438;
+  --fe-warning-color: #ffb900;
+  --fe-saving-color: #0078d4;
+  --fe-label-color: #323130;
+  --fe-required-color: #d13438;
+  --fe-border-radius: 4px;
+  --fe-field-gap: 8px;
+  --fe-font-size: 14px;
 }
 
 /* Screen-reader-only utility (visually hidden, accessible to assistive technology) */
@@ -32,6 +32,6 @@
 
 /* Focus styles for keyboard navigation */
 .dynamic-form :focus-visible {
-  outline: 2px solid var(--hook-form-saving-color, #0078d4);
+  outline: 2px solid var(--fe-saving-color, #0078d4);
   outline-offset: 2px;
 }

@@ -63,12 +63,12 @@ const formConfig: IFormConfig = {
 };
 ```
 
-Pass the `formConfig` to `DynamicForm` as usual. The component reads `formConfig.settings.analytics` internally and wires up all event tracking automatically.
+Pass the `formConfig` to `FormEngine` as usual. The component reads `formConfig.settings.analytics` internally and wires up all event tracking automatically.
 
 ```tsx
 <RulesEngineProvider>
   <InjectedFieldProvider injectedFields={fieldRegistry}>
-    <DynamicForm
+    <FormEngine
       formConfig={formConfig}
       defaultValues={entityData}
       configName="myForm"
@@ -144,9 +144,9 @@ Fired when field validation fails. The `errors` array contains the error message
 onFormSubmit?: (values: Record<string, unknown>, durationMs: number) => void;
 ```
 
-Fired on successful form submission (after the save completes without error). `values` contains the submitted form data. `durationMs` is the elapsed time from when the `useFormAnalytics` hook was mounted (i.e., when `DynamicForm` first rendered) to the moment of submission.
+Fired on successful form submission (after the save completes without error). `values` contains the submitted form data. `durationMs` is the elapsed time from when the `useFormAnalytics` hook was mounted (i.e., when `FormEngine` first rendered) to the moment of submission.
 
-**Fired from:** `DynamicForm` -- inside the `handleSave` function, after the save promise resolves successfully (including after retries, if any).
+**Fired from:** `FormEngine` -- inside the `handleSave` function, after the save promise resolves successfully (including after retries, if any).
 
 ---
 
@@ -272,7 +272,7 @@ This table summarizes which component or hook fires each analytics event:
 | `trackFieldBlur` | `RenderField` | Passed as `onBlur` prop to injected field component |
 | `trackFieldChange` | `RenderField` | Detected inside `Controller` render when value differs from previous ref |
 | `trackValidationError` | `RenderField` | Detected inside `Controller` render when `error` is present |
-| `trackFormSubmit` | `DynamicForm` | Called in `handleSave` after successful save |
+| `trackFormSubmit` | `FormEngine` | Called in `handleSave` after successful save |
 | `trackFormAbandonment` | Consumer code | Wired via `useBeforeUnload` hook's `onAbandonment` parameter |
 | `trackWizardStepChange` | `WizardForm` | Called via `onAnalyticsStepChange` prop in `goToStep` |
 | `trackRuleTriggered` | Consumer code | Called via `trackRuleTriggered` method |
@@ -283,7 +283,7 @@ This table summarizes which component or hook fires each analytics event:
 IFormConfig.settings.analytics (IAnalyticsCallbacks)
   |
   v
-DynamicForm
+FormEngine
   |-- useFormAnalytics(settings.analytics) --> IFormAnalytics
   |
   |-- analytics.trackFormSubmit(data) ............ on successful save
@@ -539,7 +539,7 @@ Per-field focus duration is tracked with a `useRef<Record<string, number>>({})` 
 
 ### Form duration from hook mount time
 
-`formStartTime` is captured once via `useRef(Date.now()).current` when `useFormAnalytics` is first called. Since `DynamicForm` calls the hook at mount, this represents when the form first rendered. `trackFormSubmit` computes `Date.now() - formStartTime` to report total form interaction duration.
+`formStartTime` is captured once via `useRef(Date.now()).current` when `useFormAnalytics` is first called. Since `FormEngine` calls the hook at mount, this represents when the form first rendered. `trackFormSubmit` computes `Date.now() - formStartTime` to report total form interaction duration.
 
 ---
 
@@ -552,6 +552,6 @@ The analytics system is separate from but complementary to the following debuggi
 | **EventTimeline** | Chronological log of field changes, rule evaluations, validation runs, and form submits for `FormDevTools` | `helpers/EventTimeline.ts` |
 | **RenderTracker** | Tracks per-field render counts for performance profiling | `helpers/RenderTracker.ts` |
 | **RuleTracer** | Detailed rule evaluation trace log for debugging rule behavior | `helpers/RuleTracer.ts` |
-| **FormDevTools** | Dev-mode panel displaying rules state, values, errors, and dependency graph | `components/HookFormDevTools.tsx` |
+| **FormDevTools** | Dev-mode panel displaying rules state, values, errors, and dependency graph | `components/FormDevTools.tsx` |
 
 The analytics system is designed for **production telemetry** (shipped to external services), while the above tools are designed for **development-time debugging** (in-browser inspection).

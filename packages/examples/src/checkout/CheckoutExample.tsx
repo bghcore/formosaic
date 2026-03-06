@@ -12,7 +12,7 @@ import {
 import {
   RulesEngineProvider,
   InjectedFieldProvider,
-  DynamicForm,
+  FormEngine,
   WizardForm,
   UseRulesEngineContext,
 } from "@form-engine/core";
@@ -62,8 +62,8 @@ const CheckoutWizard: React.FC = () => {
             </Alert>
           ) : (
             <Typography variant="body2" color="text.secondary">
-              The DynamicForm component below renders all fields. In a real app,
-              you would integrate WizardForm with DynamicForm to filter visible
+              The FormEngine component below renders all fields. In a real app,
+              you would integrate WizardForm with FormEngine to filter visible
               fields per step.
             </Typography>
           )}
@@ -110,7 +110,7 @@ const CheckoutWizard: React.FC = () => {
 /**
  * E-Commerce Checkout Example
  *
- * Uses WizardForm for step navigation and DynamicForm for form state.
+ * Uses WizardForm for step navigation and FormEngine for form state.
  * The wizard config defines 3 steps: Shipping -> Payment -> Review.
  * Payment fields change based on the selected payment method.
  * State/Province/County options depend on the selected country.
@@ -132,7 +132,7 @@ export const CheckoutExample: React.FC = () => {
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
         A 3-step wizard with conditional payment fields and country-dependent
         address options. The WizardForm handles step navigation while
-        DynamicForm manages form state.
+        FormEngine manages form state.
       </Typography>
 
       <Paper variant="outlined" sx={{ p: 3 }}>
@@ -146,7 +146,7 @@ export const CheckoutExample: React.FC = () => {
             >
               Full Form (all fields):
             </Typography>
-            <DynamicForm
+            <FormEngine
               formConfig={checkoutFormConfig}
               defaultValues={{ country: "US", paymentMethod: "credit" }}
               programName="examples"
@@ -179,7 +179,7 @@ export const CheckoutExample: React.FC = () => {
             renderStepNavigation
           </li>
           <li>
-            <strong>DynamicForm component</strong> &mdash; full form state
+            <strong>FormEngine component</strong> &mdash; full form state
             management with rules engine
           </li>
           <li>

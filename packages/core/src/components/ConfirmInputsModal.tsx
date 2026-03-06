@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form";
 import { IFieldConfig } from "../types/IFieldConfig";
 import { UseRulesEngineContext } from "../providers/BusinessRulesProvider";
 import { FormStrings } from "../strings";
-import RenderField from "./HookRenderField";
+import RenderField from "./RenderField";
 
 interface IConfirmInputsModalProps {
   isOpen?: boolean;

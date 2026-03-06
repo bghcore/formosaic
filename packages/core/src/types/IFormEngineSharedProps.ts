@@ -1,6 +1,6 @@
 import { IEntityData } from "../utils";
 
-export interface IHookInlineFormSharedProps {
+export interface IFormEngineSharedProps {
   entityId?: string;
   entityType?: string;
   programName: string;

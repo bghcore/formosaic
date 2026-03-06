@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import {
   WizardForm,
-  DynamicForm,
+  FormEngine,
   UseInjectedFieldContext,
   IFormConfig,
 } from "@form-engine/core";
@@ -209,7 +209,7 @@ export const WithFormIntegration: StoryObj = {
       <div>
         <p style={{ color: "#666", fontSize: "14px", marginBottom: "16px" }}>
           This demonstrates WizardForm managing step navigation while
-          DynamicForm handles each step's fields.
+          FormEngine handles each step's fields.
         </p>
         <WizardForm
           wizardConfig={wizardConfig.wizard!}

@@ -3,7 +3,7 @@ import { Typography, Paper, Button, Box, Alert } from "@mui/material";
 import {
   RulesEngineProvider,
   InjectedFieldProvider,
-  DynamicForm,
+  FormEngine,
   registerValueFunctions,
 } from "@form-engine/core";
 import { createMuiFieldRegistry } from "@form-engine/mui";
@@ -48,7 +48,7 @@ export const DataEntryExample: React.FC = () => {
       <Paper variant="outlined" sx={{ p: 3 }}>
         <RulesEngineProvider>
           <InjectedFieldProvider injectedFields={fieldRegistry}>
-            <DynamicForm
+            <FormEngine
               formConfig={dataEntryFormConfig}
               defaultValues={{
                 lineItems: [

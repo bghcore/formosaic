@@ -2,7 +2,7 @@
 
 Last updated: 2026-03-05 | Applies to: `@form-engine/core` v2.0.x
 
-This guide covers the FormDevTools component and the underlying performance and event-tracing APIs. It is written for developers building forms with the dynamic-forms library who need to diagnose render performance issues, inspect rule evaluation behavior, or trace field-level events during development.
+This guide covers the FormDevTools component and the underlying performance and event-tracing APIs. It is written for developers building forms with the form-engine library who need to diagnose render performance issues, inspect rule evaluation behavior, or trace field-level events during development.
 
 ---
 
@@ -77,7 +77,7 @@ The Perf tab shows per-field render counts tracked by the `RenderTracker` module
 
 ### How Tracking Works
 
-`RenderField` calls `trackRender(fieldName)` on every render (line 62 of `HookRenderField.tsx`). This is automatic -- no additional wiring is needed. Each call increments the per-field counter and adds the field name to a pending set.
+`RenderField` calls `trackRender(fieldName)` on every render (line 62 of `RenderField.tsx`). This is automatic -- no additional wiring is needed. Each call increments the per-field counter and adds the field name to a pending set.
 
 `flushRenderCycle()` snapshots the pending set into `lastRenderedFields` and resets the pending set. This function is exported but **not called automatically** by any built-in component. To get accurate "Last Cycle" data, you must call `flushRenderCycle()` yourself, typically in a `useEffect` inside your form wrapper:
 
@@ -89,7 +89,7 @@ function MyFormWrapper(props) {
     flushRenderCycle();
   });
 
-  return <DynamicForm {...props} />;
+  return <FormEngine {...props} />;
 }
 ```
 
@@ -195,7 +195,7 @@ The following integration points produce timeline events without any manual inst
 |---|---|---|---|
 | `RuleEngine.ts` | `evaluateAllRules()` | `rule_evaluated` | `"N rule(s) evaluated"` |
 | `RuleEngine.ts` | `evaluateAffectedFields()` | `field_change` | `"N affected field(s)"` |
-| `HookInlineFormHelper.ts` | `CheckFieldValidationRules()` | `validation_run` | `"passed"` or `"failed: message"` |
+| `InlineFormHelper.ts` | `CheckFieldValidationRules()` | `validation_run` | `"passed"` or `"failed: message"` |
 
 The `form_submit` event type is defined but not logged automatically. You can log it yourself using the `logEvent` API (see Programmatic Access below).
 

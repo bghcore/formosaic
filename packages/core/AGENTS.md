@@ -6,7 +6,7 @@ UI-library agnostic React library for rendering configuration-driven forms with 
 
 ## Critical Constraints
 
-- **No UI library imports allowed.** No `@fluentui/*`, no `@mui/*`, no CSS-in-JS libraries. Plain HTML only for any visual elements (see `HookFieldWrapper.tsx`).
+- **No UI library imports allowed.** No `@fluentui/*`, no `@mui/*`, no CSS-in-JS libraries. Plain HTML only for any visual elements (see `FieldWrapper.tsx`).
 - **`strict: true`** in tsconfig.
 - **Use `React.JSX.Element`** not bare `JSX.Element` for return types.
 - **Use `structuredClone`** for deep copies, not `JSON.parse(JSON.stringify(...))` or lodash.
@@ -16,7 +16,7 @@ UI-library agnostic React library for rendering configuration-driven forms with 
 ```
 RulesEngineProvider (useReducer for rules engine state)
   -> InjectedFieldProvider (component registry)
-    -> DynamicForm (react-hook-form, auto-save, rules engine init)
+    -> FormEngine (react-hook-form, auto-save, rules engine init)
       -> FormFields (ordered field list)
         -> FormErrorBoundary (per-field crash isolation)
           -> RenderField (Controller + component injection lookup)
@@ -30,7 +30,7 @@ RulesEngineProvider (useReducer for rules engine state)
 |------|---------|
 | `src/helpers/RuleEngine.ts` | Core rules engine (~800 lines, largest file). Builds dependency graph via topological sort, evaluates all rules, evaluates affected fields incrementally, priority-based conflict resolution. Exports `buildDependencyGraph`, `evaluateAllRules`, `evaluateAffectedFields`, `processFieldChange`, `topologicalSort`. |
 | `src/helpers/ConditionEvaluator.ts` | Evaluates rule conditions. 15 operators (equals, notEquals, greaterThan, lessThan, greaterThanOrEqual, lessThanOrEqual, contains, notContains, startsWith, endsWith, in, notIn, isEmpty, isNotEmpty, matches) + AND/OR/NOT logical composition. Exports `evaluateCondition`. |
-| `src/helpers/HookInlineFormHelper.ts` | Form initialization, validation execution, value functions, schema merging. Exports `GetFieldsToRender`, `CheckFieldValidationRules`, `ExecuteValueFunction`, etc. |
+| `src/helpers/InlineFormHelper.ts` | Form initialization, validation execution, value functions, schema merging. Exports `GetFieldsToRender`, `CheckFieldValidationRules`, `ExecuteValueFunction`, etc. |
 | `src/helpers/ValidationRegistry.ts` | Unified sync/async/cross-field validation registry. Register custom validators via `registerValidators()`. Includes factory functions: `createMinLengthValidation`, `createMaxLengthValidation`, `createNumericRangeValidation`, `createPatternValidation`, `createRequiredIfValidation`. |
 | `src/helpers/ValueFunctionRegistry.ts` | Pluggable value function registry. Register custom value functions via `registerValueFunctions()`. Built-in: `setDate`, `setDateIfNull`, `setLoggedInUser`, `inheritFromParent`. |
 | `src/helpers/ExpressionEngine.ts` | Expression evaluation for computed values. Handles `$values.field`, `$fn.name()`, `$parent.field`, `$root.field` syntax. |
@@ -42,14 +42,14 @@ RulesEngineProvider (useReducer for rules engine state)
 | `src/helpers/RuleTracer.ts` | Rule evaluation tracing/debugging. |
 | `src/helpers/RenderTracker.ts` | Per-field render count tracking for DevTools Perf tab. |
 | `src/helpers/EventTimeline.ts` | Chronological event log for DevTools Timeline tab. |
-| `src/components/HookInlineForm.tsx` | DynamicForm component. Orchestrates react-hook-form, auto-save (AbortController, timeout via `saveTimeoutMs`, retry via `maxSaveRetries`), expand/collapse, confirm modal. Supports `formErrors` prop for form-level error banner. |
-| `src/components/HookWizardForm.tsx` | WizardForm component. Multi-step wizard with render props for step content, navigation, and header. Screen reader step announcements. |
-| `src/components/HookFieldArray.tsx` | FieldArray component. Wraps react-hook-form's `useFieldArray` with min/max/reorder support. Items use full `IFieldConfig`. |
-| `src/components/HookRenderField.tsx` | RenderField component. Per-field rendering with useMemo for component resolution. Async validation wired with AbortController -- sync runs first, async only if sync passes. |
-| `src/components/HookFieldWrapper.tsx` | FieldWrapper component. Field chrome (label, error, status) using plain HTML. Render props: `renderLabel`, `renderError`, `renderStatus` for theming. Supports CSS custom properties via optional `styles.css`. |
-| `src/components/HookConfirmInputsModal.tsx` | ConfirmInputsModal component. Confirmation dialog using native `<dialog>` element. Focus trap (Tab wraps, Escape closes, focus restored on close). |
-| `src/components/HookFormErrorBoundary.tsx` | FormErrorBoundary component. Per-field error boundary. Props: `children`, `fallback` (render function), `onError` callback. Each field is wrapped automatically in the rendering pipeline. |
-| `src/components/HookFormDevTools.tsx` | FormDevTools component. Collapsible dev-only panel with tabs: Rules, Values, Errors, Graph, Perf, Deps, Timeline. |
+| `src/components/InlineForm.tsx` | FormEngine component. Orchestrates react-hook-form, auto-save (AbortController, timeout via `saveTimeoutMs`, retry via `maxSaveRetries`), expand/collapse, confirm modal. Supports `formErrors` prop for form-level error banner. |
+| `src/components/WizardForm.tsx` | WizardForm component. Multi-step wizard with render props for step content, navigation, and header. Screen reader step announcements. |
+| `src/components/FieldArray.tsx` | FieldArray component. Wraps react-hook-form's `useFieldArray` with min/max/reorder support. Items use full `IFieldConfig`. |
+| `src/components/RenderField.tsx` | RenderField component. Per-field rendering with useMemo for component resolution. Async validation wired with AbortController -- sync runs first, async only if sync passes. |
+| `src/components/FieldWrapper.tsx` | FieldWrapper component. Field chrome (label, error, status) using plain HTML. Render props: `renderLabel`, `renderError`, `renderStatus` for theming. Supports CSS custom properties via optional `styles.css`. |
+| `src/components/ConfirmInputsModal.tsx` | ConfirmInputsModal component. Confirmation dialog using native `<dialog>` element. Focus trap (Tab wraps, Escape closes, focus restored on close). |
+| `src/components/FormErrorBoundary.tsx` | FormErrorBoundary component. Per-field error boundary. Props: `children`, `fallback` (render function), `onError` callback. Each field is wrapped automatically in the rendering pipeline. |
+| `src/components/FormDevTools.tsx` | FormDevTools component. Collapsible dev-only panel with tabs: Rules, Values, Errors, Graph, Perf, Deps, Timeline. |
 | `src/hooks/useDraftPersistence.ts` | Auto-save form state to localStorage on interval, recover draft on mount, clear after server save. Options: `formId`, `data`, `saveIntervalMs`, `enabled`, `storageKeyPrefix`. |
 | `src/hooks/useBeforeUnload.ts` | Browser warning on page leave with unsaved changes. Args: `shouldWarn` (boolean), `message?` (string). |
 | `src/hooks/useFormAnalytics.ts` | Analytics callback wrapper hook. Accepts `IAnalyticsCallbacks` (8 event hooks) and returns `IFormAnalytics`. |
@@ -71,7 +71,7 @@ RulesEngineProvider (useReducer for rules engine state)
 | `src/types/ILocaleStrings.ts` | `ICoreLocaleStrings` (~50 keys). |
 | `src/types/IAnalyticsCallbacks.ts` | `IAnalyticsCallbacks` (8 event hooks for analytics/telemetry). |
 | `src/types/TypedFieldConfig.ts` | `defineFormConfig()` type-safe builder. |
-| `src/styles.css` | Optional CSS custom properties for theming: `--hook-form-error-color`, `--hook-form-warning-color`, `--hook-form-saving-color`, `--hook-form-label-color`, `--hook-form-required-color`, `--hook-form-border-radius`, `--hook-form-field-gap`, `--hook-form-font-size`. |
+| `src/styles.css` | Optional CSS custom properties for theming: `--fe-error-color`, `--fe-warning-color`, `--fe-saving-color`, `--fe-label-color`, `--fe-required-color`, `--fe-border-radius`, `--fe-field-gap`, `--fe-font-size`. |
 | `src/providers/BusinessRulesProvider.tsx` | RulesEngineProvider (React context provider owning rules engine state via useReducer). |
 | `src/providers/InjectedHookFieldProvider.tsx` | InjectedFieldProvider (React context provider for component injection registry). |
 | `src/reducers/BusinessRulesReducer.ts` | Reducer for rules engine state mutations. |
@@ -84,7 +84,7 @@ RulesEngineProvider (useReducer for rules engine state)
 - **515 tests** across 25 test files using Vitest
 - Run: `npm test` (from monorepo root or `packages/core`)
 - Test files are in `src/__tests__/`
-- Coverage targets: helpers (RuleEngine, ConditionEvaluator, HookInlineFormHelper, ValidationRegistry, ValueFunctionRegistry, DependencyGraphValidator, ConfigValidator, LocaleRegistry, WizardHelper), reducers (BusinessRulesReducer), hooks (useDraftPersistence, useBeforeUnload, useFormAnalytics), utils (formStateSerialization, jsonSchemaImport, lazyFieldRegistry, zodSchemaImport), components (FormErrorBoundary, FormDevTools)
+- Coverage targets: helpers (RuleEngine, ConditionEvaluator, InlineFormHelper, ValidationRegistry, ValueFunctionRegistry, DependencyGraphValidator, ConfigValidator, LocaleRegistry, WizardHelper), reducers (BusinessRulesReducer), hooks (useDraftPersistence, useBeforeUnload, useFormAnalytics), utils (formStateSerialization, jsonSchemaImport, lazyFieldRegistry, zodSchemaImport), components (FormErrorBoundary, FormDevTools)
 - All tests must pass before committing
 
 ## Known Issues

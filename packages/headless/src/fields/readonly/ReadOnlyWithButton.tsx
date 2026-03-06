@@ -2,13 +2,13 @@ import { IFieldProps } from "@form-engine/core";
 import React from "react";
 import { ReadOnlyText, IReadOnlyFieldProps } from "../../components/ReadOnlyText";
 
-interface HookReadOnlyWithButtonProps extends IReadOnlyFieldProps {
+interface IReadOnlyWithButtonProps extends IReadOnlyFieldProps {
   containerClassName?: string;
   buttonText?: string;
   onButtonClick?: () => void;
 }
 
-const ReadOnlyWithButton = (props: IFieldProps<HookReadOnlyWithButtonProps>) => {
+const ReadOnlyWithButton = (props: IFieldProps<IReadOnlyWithButtonProps>) => {
   const { fieldName, value, config } = props;
   return (
     <div

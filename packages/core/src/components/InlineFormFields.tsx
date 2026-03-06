@@ -1,10 +1,10 @@
 import React from "react";
-import { GetFieldsToRender } from "../helpers/HookInlineFormHelper";
+import { GetFieldsToRender } from "../helpers/InlineFormHelper";
 import { IRuntimeFormState } from "../types/IRuntimeFieldState";
 import { IFieldConfig } from "../types/IFieldConfig";
 import { IFormAnalytics } from "../hooks/useFormAnalytics";
-import RenderField from "./HookRenderField";
-import { FormErrorBoundary } from "./HookFormErrorBoundary";
+import RenderField from "./RenderField";
+import { FormErrorBoundary } from "./FormErrorBoundary";
 
 interface IFormFieldsProps {
   entityId?: string;

@@ -1,7 +1,7 @@
 "use client";
 
 import { Container, Typography, Paper, Alert } from "@mui/material";
-import { HookInlineForm } from "@form-engine/core";
+import { FormEngine } from "@form-engine/core";
 import FieldRegistrar from "@/components/FieldRegistrar";
 
 const fieldConfigs = {
@@ -38,11 +38,11 @@ export default function FieldArraysForm() {
       <Typography variant="h4" gutterBottom>Field Arrays</Typography>
       <Alert severity="info" sx={{ mb: 3 }}>
         Field arrays enable repeating sections like team members, addresses, or line items.
-        This example shows a team form — the field array component is available via HookFieldArray.
+        This example shows a team form — the field array component is available via FieldArray.
       </Alert>
       <Paper sx={{ p: 3 }}>
         <FieldRegistrar>
-          <HookInlineForm
+          <FormEngine
             configName="fieldArrayForm"
             programName="example"
             fieldConfigs={fieldConfigs}

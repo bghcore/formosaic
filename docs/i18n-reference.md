@@ -1,6 +1,6 @@
 # i18n / Localization Reference
 
-The dynamic-forms-core package uses a locale registry to manage all user-facing strings. All strings default to English and can be partially or fully overridden for other languages.
+The @form-engine/core package uses a locale registry to manage all user-facing strings. All strings default to English and can be partially or fully overridden for other languages.
 
 ---
 
@@ -58,7 +58,7 @@ registerLocale({ cancel: "Cancelar" });
 |-----|------|-------------------|---------|
 | `autoSavePending` | `string` | `"AutoSave Pending, please check for errors..."` | FieldWrapper status display |
 | `savePending` | `string` | `"Save Pending, please check for errors..."` | FieldWrapper status display |
-| `saving` | `string` | `"Saving..."` | FieldWrapper, DynamicForm save indicator |
+| `saving` | `string` | `"Saving..."` | FieldWrapper, FormEngine save indicator |
 | `saveError` | `string` | `"Error saving form"` | FieldWrapper, error display |
 
 ### Actions
@@ -209,7 +209,7 @@ FormStrings                       <-- ES getter properties that call getLocaleSt
         v
 Form Components                   <-- Read strings from FormStrings
   - FieldWrapper                  <-- required label, error messages, save status
-  - DynamicForm                   <-- saving status, action buttons
+  - FormEngine                   <-- saving status, action buttons
   - ConfirmInputsModal            <-- confirm/cancel labels
   - Field components (via props)  <-- validation error messages
 ```

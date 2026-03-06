@@ -3,7 +3,7 @@ import {
   RulesEngineProvider,
   InjectedFieldProvider,
   UseInjectedFieldContext,
-  DynamicForm,
+  FormEngine,
   WizardForm,
   useDraftPersistence,
 } from "@form-engine/core";
@@ -70,7 +70,7 @@ function FormShell(props: {
 
   return (
     <div data-testid="form-shell">
-      <DynamicForm
+      <FormEngine
         configName="e2e-test"
         entityId="e2e-1"
         entityType="TestEntity"

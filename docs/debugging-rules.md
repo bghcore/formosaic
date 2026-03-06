@@ -233,7 +233,7 @@ interface IConfigValidationError {
 The dependency graph is automatically validated for cycles in dev mode when `buildDefaultFieldStates()` is called (which happens during form initialization). If cycles are detected, warnings are logged to the console:
 
 ```
-[dynamic-forms] Circular dependency detected among fields: fieldA, fieldB, fieldC
+[form-engine] Circular dependency detected among fields: fieldA, fieldB, fieldC
 ```
 
 This uses `validateDependencyGraph()` internally, which runs:

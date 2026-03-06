@@ -16,7 +16,7 @@ Peer dependencies: `react` (18 or 19), `react-hook-form` (v7)
 import {
   RulesEngineProvider,
   InjectedFieldProvider,
-  DynamicForm,
+  FormEngine,
 } from "@form-engine/core";
 
 const fieldConfigs = {
@@ -35,7 +35,7 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider>
-        <DynamicForm
+        <FormEngine
           configName="myForm"
           programName="myApp"
           fieldConfigs={fieldConfigs}
@@ -192,13 +192,13 @@ All strings in `FormStrings` and validation error messages resolve through the l
 
 ```tsx
 // Auto-save (default) -- saves on every field change with debounce
-<DynamicForm saveData={async (data) => data} />
+<FormEngine saveData={async (data) => data} />
 
 // Manual save -- shows Save/Cancel buttons, no auto-save
-<DynamicForm isManualSave={true} saveData={async (data) => data} />
+<FormEngine isManualSave={true} saveData={async (data) => data} />
 
 // Manual save with custom buttons
-<DynamicForm
+<FormEngine
   isManualSave={true}
   renderSaveButton={({ onSave, isDirty, isSubmitting }) => (
     <button onClick={onSave} disabled={!isDirty || isSubmitting}>Submit</button>
@@ -230,14 +230,14 @@ Built into the core rendering pipeline automatically.
 
 ## Save Reliability
 
-DynamicForm includes robust save handling:
+FormEngine includes robust save handling:
 
 - **AbortController** cancels previous in-flight saves when a new save triggers
 - **Configurable timeout** via `saveTimeoutMs` prop (default 30 seconds)
 - **Retry with exponential backoff** via `maxSaveRetries` prop (default 3 retries)
 
 ```tsx
-<DynamicForm
+<FormEngine
   saveTimeoutMs={15000}
   maxSaveRetries={5}
   saveData={async (data) => { /* ... */ }}
@@ -295,14 +295,14 @@ Import the optional `styles.css` and override CSS custom properties:
 
 ```css
 :root {
-  --hook-form-error-color: #d32f2f;
-  --hook-form-warning-color: #ed6c02;
-  --hook-form-saving-color: #0288d1;
-  --hook-form-label-color: #333;
-  --hook-form-required-color: #d32f2f;
-  --hook-form-border-radius: 4px;
-  --hook-form-field-gap: 12px;
-  --hook-form-font-size: 14px;
+  --fe-error-color: #d32f2f;
+  --fe-warning-color: #ed6c02;
+  --fe-saving-color: #0288d1;
+  --fe-label-color: #333;
+  --fe-required-color: #d32f2f;
+  --fe-border-radius: 4px;
+  --fe-field-gap: 12px;
+  --fe-font-size: 14px;
 }
 ```
 
@@ -311,7 +311,7 @@ Import the optional `styles.css` and override CSS custom properties:
 Display a form-level error banner for cross-field validation:
 
 ```tsx
-<DynamicForm
+<FormEngine
   formErrors={["End date must be after start date"]}
   /* ... */
 />
@@ -478,7 +478,7 @@ setInjectedFields(lazyFields);
 ```
 <RulesEngineProvider>            -- Owns rule state via useReducer (memoized)
   <InjectedFieldProvider>        -- Component injection registry (memoized)
-    <DynamicForm>                -- Form state (react-hook-form), auto-save with retry, business rules
+    <FormEngine>                -- Form state (react-hook-form), auto-save with retry, business rules
       <FormFields>               -- Renders ordered field list
         <FormErrorBoundary>      -- Per-field error boundary (crash isolation)
           <RenderField>          -- Per-field: Controller + component lookup (useMemo)

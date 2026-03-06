@@ -72,7 +72,7 @@ After completing the initial 6 phases, here's where we stand vs competitors:
 - Add `onSaveRetry` callback so consumers can show "Retrying..." UI
 
 **Files to modify:**
-- `components/DynamicForm.tsx`
+- `components/FormEngine.tsx`
 
 ### Verification
 - Test: async validation runs after sync passes, cancels on re-type
@@ -134,7 +134,7 @@ After completing the initial 6 phases, here's where we stand vs competitors:
 ### 9B. beforeunload protection
 
 - Warn user on page navigation when form has unsaved changes
-- `useBeforeUnload` hook integrated into `DynamicForm`
+- `useBeforeUnload` hook integrated into `FormEngine`
 - Configurable via `warnOnUnsavedChanges` prop
 
 ### 9C. Form state serialization
@@ -164,12 +164,12 @@ After completing the initial 6 phases, here's where we stand vs competitors:
 ### 10B. CSS custom properties
 
 - Define CSS variables for all colors, spacing, fonts
-- `--hook-form-error-color`, `--hook-form-label-color`, etc.
+- `--fe-error-color`, `--fe-label-color`, etc.
 - Document all variables in README
 
 ### 10C. Form-level error display
 
-- Add `formErrors` prop to `DynamicForm` for server-side cross-field errors
+- Add `formErrors` prop to `FormEngine` for server-side cross-field errors
 - Render form-level error banner above fields
 - Support both field-level and form-level errors simultaneously
 

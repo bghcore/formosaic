@@ -54,7 +54,7 @@ npm install @form-engine/core @form-engine/headless
 import {
   RulesEngineProvider,
   InjectedFieldProvider,
-  DynamicForm,
+  FormEngine,
 } from "@form-engine/core";
 import { createFluentFieldRegistry } from "@form-engine/fluent";
 // Or: import { createMuiFieldRegistry } from "@form-engine/mui";
@@ -81,7 +81,7 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider injectedFields={createFluentFieldRegistry()}>
-        <DynamicForm
+        <FormEngine
           configName="myForm"
           programName="myApp"
           formConfig={formConfig}
@@ -461,7 +461,7 @@ By default, forms auto-save on every field change (debounced). Set `isManualSave
 
 ```tsx
 // Auto-save (default) -- saves on every field change with debounce
-<DynamicForm
+<FormEngine
   configName="myForm"
   formConfig={formConfig}
   defaultValues={defaultValues}
@@ -469,7 +469,7 @@ By default, forms auto-save on every field change (debounced). Set `isManualSave
 />
 
 // Manual save -- shows Save/Cancel buttons, no auto-save
-<DynamicForm
+<FormEngine
   configName="myForm"
   formConfig={formConfig}
   defaultValues={defaultValues}
@@ -478,7 +478,7 @@ By default, forms auto-save on every field change (debounced). Set `isManualSave
 />
 
 // Manual save with custom button
-<DynamicForm
+<FormEngine
   isManualSave={true}
   renderSaveButton={({ onSave, isDirty, isSubmitting }) => (
     <button onClick={onSave} disabled={!isDirty || isSubmitting}>
@@ -491,14 +491,14 @@ By default, forms auto-save on every field change (debounced). Set `isManualSave
 
 ### Save Reliability
 
-DynamicForm includes robust save handling:
+FormEngine includes robust save handling:
 
 - **AbortController** cancels previous in-flight saves when a new save is triggered
 - **Configurable timeout** via `saveTimeoutMs` prop (default 30 seconds)
 - **Retry with exponential backoff** via `maxSaveRetries` prop (default 3 retries)
 
 ```tsx
-<DynamicForm
+<FormEngine
   saveTimeoutMs={15000}   // 15 second timeout
   maxSaveRetries={5}      // Retry up to 5 times with exponential backoff
   saveData={async (data) => { /* ... */ }}
@@ -537,7 +537,7 @@ function MyForm() {
   // Warn user before leaving page with unsaved changes
   useBeforeUnload(isDirty, "You have unsaved changes.");
 
-  return <DynamicForm /* ... */ />;
+  return <FormEngine /* ... */ />;
 }
 ```
 
@@ -560,21 +560,21 @@ CSS custom properties for global theming (import optional `styles.css`):
 
 ```css
 :root {
-  --hook-form-error-color: #d32f2f;
-  --hook-form-warning-color: #ed6c02;
-  --hook-form-saving-color: #0288d1;
-  --hook-form-label-color: #333;
-  --hook-form-required-color: #d32f2f;
-  --hook-form-border-radius: 4px;
-  --hook-form-field-gap: 12px;
-  --hook-form-font-size: 14px;
+  --fe-error-color: #d32f2f;
+  --fe-warning-color: #ed6c02;
+  --fe-saving-color: #0288d1;
+  --fe-label-color: #333;
+  --fe-required-color: #d32f2f;
+  --fe-border-radius: 4px;
+  --fe-field-gap: 12px;
+  --fe-font-size: 14px;
 }
 ```
 
-Form-level error banner via `formErrors` prop on `DynamicForm`:
+Form-level error banner via `formErrors` prop on `FormEngine`:
 
 ```tsx
-<DynamicForm
+<FormEngine
   formErrors={["End date must be after start date"]}
   /* ... */
 />
@@ -677,8 +677,8 @@ const uiSchema = {
 const formConfig = fromRjsfSchema(schema, uiSchema, existingFormData);
 // formConfig.fields.adminCode has rules for conditional visibility based on role
 
-// Use directly with DynamicForm
-<DynamicForm formConfig={formConfig} /* ... */ />
+// Use directly with FormEngine
+<FormEngine formConfig={formConfig} /* ... */ />
 ```
 
 Also exports `toRjsfSchema(config)` for converting back to JSON Schema + uiSchema (best-effort, structural fidelity only).
@@ -764,7 +764,7 @@ All 19 field types are available in the Fluent UI, MUI, and headless adapters:
 ```
 <RulesEngineProvider>           -- Owns rule state via useReducer (memoized)
   <InjectedFieldProvider>       -- Component injection registry (memoized)
-    <DynamicForm>               -- Form state (react-hook-form), auto-save with retry, rules
+    <FormEngine>               -- Form state (react-hook-form), auto-save with retry, rules
       <FormFields>              -- Renders ordered field list
         <FormErrorBoundary>     -- Per-field error boundary (crash isolation)
           <RenderField>         -- Per-field: Controller + component lookup (useMemo)

@@ -45,9 +45,9 @@ The library is split into two packages:
 ### 2.1 Testing
 
 - Unit tests for `BusinessRulesHelper.ts` (pure functions, highest value target)
-- Unit tests for `HookInlineFormHelper.ts` (validation, value functions, schema merging)
+- Unit tests for `InlineFormHelper.ts` (validation, value functions, schema merging)
 - Unit tests for `ValidationRegistry` and `ValueFunctionRegistry`
-- Component tests for `DynamicForm` with `@testing-library/react`
+- Component tests for `FormEngine` with `@testing-library/react`
 - Component tests for individual field types in the fluent package
 - Integration tests for business rules cascading (combo rules, circular dependencies, revert-then-reapply)
 
@@ -113,7 +113,7 @@ The library is split into two packages:
 ### 4.1 API Stabilization
 
 - Review all public APIs for naming consistency and ergonomics
-- Create a unified `<DynamicFormsProvider>` that wraps both context providers
+- Create a unified `<FormEngineProvider>` that wraps both context providers
 - Finalize the field registration API
 - Mark stable APIs and document any planned breaking changes
 

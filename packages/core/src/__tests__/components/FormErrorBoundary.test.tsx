@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { FormErrorBoundary } from "../../components/HookFormErrorBoundary";
+import { FormErrorBoundary } from "../../components/FormErrorBoundary";
 
 // Component that throws on demand
 const ThrowingComponent = ({ shouldThrow }: { shouldThrow: boolean }) => {

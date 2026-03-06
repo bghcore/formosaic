@@ -9,8 +9,8 @@ type LazyFieldImport = () => Promise<{ default: React.ComponentType<any> }>;
  *
  * @example
  * const registry = createLazyFieldRegistry({
- *   Textbox: () => import("./fields/HookTextbox"),
- *   Dropdown: () => import("./fields/HookDropdown"),
+ *   Textbox: () => import("./fields/Textbox"),
+ *   Dropdown: () => import("./fields/Dropdown"),
  * });
  */
 export function createLazyFieldRegistry(

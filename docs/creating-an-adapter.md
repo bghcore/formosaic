@@ -246,7 +246,7 @@ The following 19 component types should be implemented for a complete adapter:
 Consumers wire up the adapter like this:
 
 ```tsx
-import { RulesEngineProvider, InjectedFieldProvider, UseInjectedFieldContext, DynamicForm } from "@form-engine/core";
+import { RulesEngineProvider, InjectedFieldProvider, UseInjectedFieldContext, FormEngine } from "@form-engine/core";
 import { createMyAdapterFieldRegistry } from "@form-engine/my-adapter";
 
 function FieldRegistrar({ children }) {
@@ -263,7 +263,7 @@ function App() {
       <RulesEngineProvider>
         <InjectedFieldProvider>
           <FieldRegistrar>
-            <DynamicForm {...formProps} />
+            <FormEngine {...formProps} />
           </FieldRegistrar>
         </InjectedFieldProvider>
       </RulesEngineProvider>

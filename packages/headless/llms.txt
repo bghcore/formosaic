@@ -59,7 +59,7 @@
 ## Code Example
 
 ```tsx
-import { RulesEngineProvider, InjectedFieldProvider, DynamicForm } from "@form-engine/core";
+import { RulesEngineProvider, InjectedFieldProvider, FormEngine } from "@form-engine/core";
 import { createHeadlessFieldRegistry } from "@form-engine/headless";
 import "@form-engine/headless/styles.css";
 
@@ -79,7 +79,7 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider injectedFields={createHeadlessFieldRegistry()}>
-        <DynamicForm formConfig={formConfig} saveData={async (data) => data} />
+        <FormEngine formConfig={formConfig} saveData={async (data) => data} />
       </InjectedFieldProvider>
     </RulesEngineProvider>
   );

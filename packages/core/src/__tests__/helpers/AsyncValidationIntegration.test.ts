@@ -40,7 +40,7 @@ describe("AsyncValidationIntegration", () => {
     const ctx: IValidationContext = { fieldName: "field1", values: { field1: "test" } };
     const value = "sync-bad";
 
-    // Simulate the validate logic from HookRenderField:
+    // Simulate the validate logic from RenderField:
     // 1. Run sync validations first
     // 2. Only run async if sync passes
     let result: string | undefined;

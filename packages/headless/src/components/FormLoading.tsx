@@ -1,14 +1,14 @@
 import { FormConstants } from "@form-engine/core";
 import React from "react";
 
-interface IHookFormLoadingProps {
+interface IFormLoadingProps {
   loadingShimmerCount?: number;
   loadingFieldShimmerHeight?: number;
   inPanel?: boolean;
   hideTitleShimmer?: boolean;
 }
 
-export const FormLoading = (props: IHookFormLoadingProps) => {
+export const FormLoading = (props: IFormLoadingProps) => {
   const { loadingShimmerCount, loadingFieldShimmerHeight, inPanel, hideTitleShimmer } = props;
   const count = loadingShimmerCount || FormConstants.loadingShimmerCount;
   const height = loadingFieldShimmerHeight || FormConstants.loadingFieldShimmerHeight;
@@ -31,8 +31,5 @@ export const FormLoading = (props: IHookFormLoadingProps) => {
     </div>
   );
 };
-
-/** @deprecated Use FormLoading instead */
-export const HookFormLoading = FormLoading;
 
 export default FormLoading;

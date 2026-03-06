@@ -16,7 +16,7 @@
 - `UseInjectedFieldContext` -- Hook to access injected field registry
 
 ### Components
-- `DynamicForm` -- Main form component (react-hook-form, auto-save with AbortController/retry/timeout, rules engine orchestration). Props include `saveTimeoutMs` (default 30s), `maxSaveRetries` (default 3), `formErrors` (form-level error banner)
+- `FormEngine` -- Main form component (react-hook-form, auto-save with AbortController/retry/timeout, rules engine orchestration). Props include `saveTimeoutMs` (default 30s), `maxSaveRetries` (default 3), `formErrors` (form-level error banner)
 - `FormFields` -- Ordered field list rendering
 - `RenderField` -- Per-field routing with Controller integration (useMemo, async validation wired with AbortController)
 - `FieldWrapper` -- Field chrome (label, error, status) using plain HTML. Render props: `renderLabel`, `renderError`, `renderStatus` for theming customization
@@ -104,7 +104,7 @@
 - `IRulesEngineState` -- Top-level rules engine state container
 - `IRulesEngineAction` -- Reducer action types
 - `RulesEngineActionType` -- Action type enum
-- `IHookInlineFormSharedProps` -- Shared form props (entity IDs, program name, config name, etc.)
+- `IFormEngineSharedProps` -- Shared form props (entity IDs, program name, config name, etc.)
 - `IConfirmInputModalProps` -- Confirm modal state
 - `IFieldToRender` -- Field render instruction
 - `IWizardConfig` / `IWizardStep` -- Wizard configuration types (visibleWhen uses ICondition)
@@ -164,7 +164,7 @@
 import {
   RulesEngineProvider,
   InjectedFieldProvider,
-  DynamicForm,
+  FormEngine,
   IFormConfig,
 } from "@form-engine/core";
 import { createFluentFieldRegistry } from "@form-engine/fluent";
@@ -189,7 +189,7 @@ function MyForm() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider injectedFields={createFluentFieldRegistry()}>
-        <DynamicForm
+        <FormEngine
           programName="myApp"
           configName="myForm"
           formConfig={formConfig}

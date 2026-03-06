@@ -1,9 +1,9 @@
 import { describe, it, expect, vi } from "vitest";
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { FieldWrapper } from "../../components/HookFieldWrapper";
+import { FieldWrapper } from "../../components/FieldWrapper";
 import { FormProvider, useForm } from "react-hook-form";
-import { DynamicForm } from "../../components/HookInlineForm";
+import { FormEngine } from "../../components/InlineForm";
 import { RulesEngineProvider } from "../../providers/BusinessRulesProvider";
 import { InjectedFieldProvider } from "../../providers/InjectedHookFieldProvider";
 
@@ -166,13 +166,13 @@ describe("FieldWrapper render props", () => {
   });
 });
 
-describe("DynamicForm formErrors", () => {
-  /** Wraps DynamicForm with necessary providers */
+describe("FormEngine formErrors", () => {
+  /** Wraps FormEngine with necessary providers */
   const renderWithProviders = (formErrors?: string[]) => {
     return render(
       <RulesEngineProvider>
         <InjectedFieldProvider>
-          <DynamicForm
+          <FormEngine
             configName="test"
             programName="testProgram"
             entityId="entity-1"

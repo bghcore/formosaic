@@ -54,7 +54,7 @@ export {
   ShowField,
   GetFieldsToRender,
   SortOptions,
-} from "./helpers/HookInlineFormHelper";
+} from "./helpers/InlineFormHelper";
 
 export { SortOptions as SortDropdownOptions } from "./helpers/FieldHelper";
 
@@ -100,25 +100,25 @@ export {
 } from "./helpers/LocaleRegistry";
 
 // Wizard
-export { WizardForm } from "./components/HookWizardForm";
-export type { IWizardNavigationProps, IWizardStepHeaderProps, IWizardFormProps } from "./components/HookWizardForm";
+export { WizardForm } from "./components/WizardForm";
+export type { IWizardNavigationProps, IWizardStepHeaderProps, IWizardFormProps } from "./components/WizardForm";
 export { getVisibleSteps, getStepFields, getStepFieldOrder, validateStepFields, isStepValid, getStepIndex } from "./helpers/WizardHelper";
 
 // Field Array
-export { FieldArray } from "./components/HookFieldArray";
-export type { IFieldArrayProps } from "./components/HookFieldArray";
+export { FieldArray } from "./components/FieldArray";
+export type { IFieldArrayProps } from "./components/FieldArray";
 
 // Components
-export { DynamicForm } from "./components/HookInlineForm";
-export { FormFields } from "./components/HookInlineFormFields";
-export { FieldWrapper } from "./components/HookFieldWrapper";
-export { default as RenderField } from "./components/HookRenderField";
-export { default as ConfirmInputsModal } from "./components/HookConfirmInputsModal";
-export { FormErrorBoundary } from "./components/HookFormErrorBoundary";
+export { FormEngine } from "./components/InlineForm";
+export { FormFields } from "./components/InlineFormFields";
+export { FieldWrapper } from "./components/FieldWrapper";
+export { default as RenderField } from "./components/RenderField";
+export { default as ConfirmInputsModal } from "./components/ConfirmInputsModal";
+export { FormErrorBoundary } from "./components/FormErrorBoundary";
 
 // DevTools
-export { FormDevTools } from "./components/HookFormDevTools";
-export type { IFormDevToolsProps } from "./components/HookFormDevTools";
+export { FormDevTools } from "./components/FormDevTools";
+export type { IFormDevToolsProps } from "./components/FormDevTools";
 
 // RJSF Schema Import/Export
 export { fromRjsfSchema, toRjsfSchema } from "./utils/rjsf";

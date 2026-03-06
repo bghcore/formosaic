@@ -13,7 +13,7 @@ npm install @form-engine/headless @form-engine/core react react-dom react-hook-f
 ## Quick Start
 
 ```tsx
-import { DynamicForm, RulesEngineProvider, InjectedFieldProvider } from "@form-engine/core";
+import { FormEngine, RulesEngineProvider, InjectedFieldProvider } from "@form-engine/core";
 import { createHeadlessFieldRegistry } from "@form-engine/headless";
 
 // Optional: import the minimal default styles
@@ -25,7 +25,7 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider fields={fields}>
-        <DynamicForm
+        <FormEngine
           formConfig={myFormConfig}
           entityData={myEntityData}
           onSave={handleSave}

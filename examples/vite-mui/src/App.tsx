@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { Container, Typography, Tabs, Tab, Box, Paper } from "@mui/material";
-import { UseInjectedHookFieldContext, HookInlineForm } from "@form-engine/core";
+import { UseInjectedFieldContext, FormEngine } from "@form-engine/core";
 import { createMuiFieldRegistry } from "@form-engine/mui";
 import { basicFormConfig, basicDefaults } from "./configs/basicForm";
 import { businessRulesConfig, businessRulesDefaults } from "./configs/businessRulesForm";
 import { zodExampleConfig, zodExampleDefaults } from "./configs/zodForm";
 
 function FieldRegistrar({ children }: { children: React.ReactNode }) {
-  const { setInjectedFields } = UseInjectedHookFieldContext();
+  const { setInjectedFields } = UseInjectedFieldContext();
   useEffect(() => {
     setInjectedFields(createMuiFieldRegistry());
   }, [setInjectedFields]);
@@ -37,7 +37,7 @@ export default function App() {
       <FieldRegistrar>
         <TabPanel value={tab} index={0}>
           <Paper sx={{ p: 3 }}>
-            <HookInlineForm
+            <FormEngine
               configName="basicForm"
               programName="example"
               fieldConfigs={basicFormConfig}
@@ -52,7 +52,7 @@ export default function App() {
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Change &quot;Issue Type&quot; to see fields show/hide based on business rules.
             </Typography>
-            <HookInlineForm
+            <FormEngine
               configName="businessRulesForm"
               programName="example"
               fieldConfigs={businessRulesConfig}
@@ -67,7 +67,7 @@ export default function App() {
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               This form was generated from a Zod schema using zodSchemaToFieldConfig().
             </Typography>
-            <HookInlineForm
+            <FormEngine
               configName="zodForm"
               programName="example"
               fieldConfigs={zodExampleConfig}

@@ -17,7 +17,7 @@ import {
   RulesEngineProvider,
   InjectedFieldProvider,
   UseInjectedFieldContext,
-  DynamicForm,
+  FormEngine,
 } from "@form-engine/core";
 import { createFluentFieldRegistry } from "@form-engine/fluent";
 import { FluentProvider, webLightTheme } from "@fluentui/react-components";
@@ -37,7 +37,7 @@ function App() {
       <RulesEngineProvider>
         <InjectedFieldProvider>
           <FieldRegistrar>
-            <DynamicForm
+            <FormEngine
               configName="myForm"
               programName="myApp"
               fieldConfigs={{
@@ -126,7 +126,7 @@ When paired with `@form-engine/core` v1.3.0+, you automatically get:
 - **Accessibility** -- focus trap in modals, focus-to-first-error on validation failure, ARIA live regions for status announcements
 - **Draft persistence** -- `useDraftPersistence` hook auto-saves form state to localStorage; `useBeforeUnload` warns on page leave
 - **Theming render props** -- `FieldWrapper` accepts `renderLabel`, `renderError`, `renderStatus` for custom field chrome
-- **CSS custom properties** -- override `--hook-form-error-color`, `--hook-form-field-gap`, etc. via optional `styles.css`
+- **CSS custom properties** -- override `--fe-error-color`, `--fe-field-gap`, etc. via optional `styles.css`
 - **DevTools** -- `FormDevTools` component for debugging business rules, form values, and errors
 - **JSON Schema import** -- `jsonSchemaToFieldConfig()` converts JSON Schema to field configs
 - **Lazy field registry** -- `createLazyFieldRegistry()` for on-demand field component loading

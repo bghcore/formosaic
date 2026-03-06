@@ -64,7 +64,7 @@ import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 import {
   RulesEngineProvider,
   InjectedFieldProvider,
-  DynamicForm,
+  FormEngine,
   IFormConfig,
 } from "@form-engine/core";
 import { createFluentFieldRegistry } from "@form-engine/fluent";
@@ -90,7 +90,7 @@ function App() {
     <FluentProvider theme={webLightTheme}>
       <RulesEngineProvider>
         <InjectedFieldProvider injectedFields={createFluentFieldRegistry()}>
-          <DynamicForm
+          <FormEngine
             programName="myApp"
             configName="myForm"
             formConfig={formConfig}

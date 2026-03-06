@@ -1,7 +1,7 @@
 "use client";
 
 import { Container, Typography, Paper, Alert } from "@mui/material";
-import { HookInlineForm } from "@form-engine/core";
+import { FormEngine } from "@form-engine/core";
 import FieldRegistrar from "@/components/FieldRegistrar";
 
 const fieldConfigs = {
@@ -88,7 +88,7 @@ export default function BusinessRulesForm() {
       </Alert>
       <Paper sx={{ p: 3 }}>
         <FieldRegistrar>
-          <HookInlineForm
+          <FormEngine
             configName="businessRulesForm"
             programName="example"
             fieldConfigs={fieldConfigs}

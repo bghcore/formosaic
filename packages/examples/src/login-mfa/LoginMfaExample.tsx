@@ -3,7 +3,7 @@ import { Typography, Paper, Button, Alert, Box } from "@mui/material";
 import {
   RulesEngineProvider,
   InjectedFieldProvider,
-  DynamicForm,
+  FormEngine,
 } from "@form-engine/core";
 import { createMuiFieldRegistry } from "@form-engine/mui";
 import { loginMfaFormConfig } from "./loginMfaConfig";
@@ -38,7 +38,7 @@ export const LoginMfaExample: React.FC = () => {
       <Paper variant="outlined" sx={{ p: 3 }}>
         <RulesEngineProvider>
           <InjectedFieldProvider injectedFields={fieldRegistry}>
-            <DynamicForm
+            <FormEngine
               formConfig={loginMfaFormConfig}
               defaultValues={{}}
               programName="examples"

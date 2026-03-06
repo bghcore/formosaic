@@ -20,7 +20,7 @@ The library is a **configuration-driven React form engine** with a declarative b
 
 **Core rendering pipeline:**
 ```
-Config JSON -> DynamicForm -> initBusinessRules() -> FormFields -> RenderField
+Config JSON -> FormEngine -> initBusinessRules() -> FormFields -> RenderField
   -> Component injection lookup -> Controller (react-hook-form) -> FieldWrapper -> cloneElement
 ```
 
@@ -39,7 +39,7 @@ Config JSON -> DynamicForm -> initBusinessRules() -> FormFields -> RenderField
 | File | Lines | Complexity | Risk |
 |------|-------|------------|------|
 | `BusinessRulesHelper.ts` | 617 | HIGH -- recursive order deps, multi-pass rule evaluation, mutation via CombineBusinessRules | **Critical** -- zero test coverage on the most complex file |
-| `HookInlineFormHelper.ts` | 411 | MEDIUM -- validation orchestration, value function execution, schema merging | High -- validation and schema merging untested |
+| `InlineFormHelper.ts` | 411 | MEDIUM -- validation orchestration, value function execution, schema merging | High -- validation and schema merging untested |
 | `RenderField.tsx` | 157 | MEDIUM -- effect-driven component routing with Controller integration | Medium -- useEffect re-renders on every prop change |
 | `RulesEngineProvider.tsx` | 161 | MEDIUM -- multi-step rule processing pipeline in processBusinessRule | Medium -- context value recreated every render |
 | `BusinessRulesReducer.ts` | 31 | LOW -- simple SET/UPDATE switch | Low |
@@ -126,14 +126,14 @@ This moat is defensible. The strategic expansion plan fills the feature gaps whi
 | Vitest setup | `vitest.config.ts` (root + packages) | Matches tsup/esbuild pipeline, native ESM + workspace |
 | Test fixtures | `__fixtures__/fieldConfigs.ts`, `entityData.ts` | Realistic configs with deps, combos, order deps, dropdowns |
 | BusinessRulesHelper tests | `BusinessRulesHelper.test.ts` | Rule evaluation, combo rules, order deps, revert, dropdown filtering |
-| HookInlineFormHelper tests | `HookInlineFormHelper.test.ts` | Validation execution, value functions, field rendering |
+| InlineFormHelper tests | `InlineFormHelper.test.ts` | Validation execution, value functions, field rendering |
 | Registry tests | `ValidationRegistry.test.ts`, `ValueFunctionRegistry.test.ts` | Register, get, all defaults |
 | Reducer tests | `BusinessRulesReducer.test.ts` | SET and UPDATE actions |
 | Circular dep detection | `DependencyGraphValidator.ts` | Kahn's algorithm, dev-mode warning |
 | Provider memoization | `RulesEngineProvider.tsx`, `InjectedFieldProvider.tsx` | `useCallback` + `useMemo` |
 | React.memo | `RenderField.tsx`, `FieldWrapper.tsx` | Prevent unnecessary re-renders |
 
-**Coverage target:** 80%+ on BusinessRulesHelper, ValidationRegistry, ValueFunctionRegistry, HookInlineFormHelper, BusinessRulesReducer
+**Coverage target:** 80%+ on BusinessRulesHelper, ValidationRegistry, ValueFunctionRegistry, InlineFormHelper, BusinessRulesReducer
 
 ### Phase 2: Async Validation + Extended Validators (v1.2.0)
 
@@ -244,14 +244,14 @@ index.ts                              -- Public API barrel (68 lines, 33 exports
 constants.ts                          -- Component type keys, form constants (53 lines)
 strings.ts                            -- 37 English string literals (37 lines)
 components/
-  DynamicForm.tsx                     -- Main form entry point
+  FormEngine.tsx                     -- Main form entry point
   FormFields.tsx                      -- Field list renderer
   RenderField.tsx                     -- Per-field routing + Controller (157 lines)
   FieldWrapper.tsx                    -- Label/error/status chrome (124 lines)
   ConfirmInputsModal.tsx              -- Native <dialog> confirmation
 helpers/
   BusinessRulesHelper.ts              -- Rule engine core (617 lines) *** HIGHEST RISK ***
-  HookInlineFormHelper.ts             -- Form init, validation, schema merge (411 lines)
+  InlineFormHelper.ts             -- Form init, validation, schema merge (411 lines)
   FieldHelper.ts                      -- Dropdown sorting
   ValidationRegistry.ts               -- 6 sync validators + registry (57 lines)
   ValueFunctionRegistry.ts            -- 4 value functions + registry (39 lines)

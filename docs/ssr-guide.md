@@ -1,6 +1,6 @@
 # SSR / Next.js Integration Guide
 
-This guide covers server-side rendering (SSR) compatibility for `@form-engine/core` and the UI adapter packages (`dynamic-forms-fluent`, `dynamic-forms-mui`).
+This guide covers server-side rendering (SSR) compatibility for `@form-engine/core` and the UI adapter packages (`@form-engine/fluent`, `@form-engine/mui`).
 
 ## SSR Compatibility Status
 
@@ -10,7 +10,7 @@ The core library is **SSR-safe** as of v2.0.x. All browser-only API access is gu
 |---|---|---|
 | Rules engine (`RuleEngine`, `ConditionEvaluator`) | Yes | Pure logic, no DOM access |
 | `ExpressionEngine` | Yes | Uses `new Function()` which works in Node.js. May fail in CSP-strict environments. |
-| `DynamicForm` | Yes | `document` access for focus management is guarded |
+| `FormEngine` | Yes | `document` access for focus management is guarded |
 | `ConfirmInputsModal` | Yes | `document.activeElement` access is inside `useEffect` (client-only) |
 | `WizardForm` | Yes | No browser APIs |
 | `FormDevTools` | Yes | Renders only when `enabled` prop is true; no browser APIs |
@@ -35,7 +35,7 @@ With the App Router (React Server Components), form components must be rendered 
 "use client";
 
 import {
-  DynamicForm,
+  FormEngine,
   RulesEngineProvider,
   InjectedFieldProvider,
 } from "@form-engine/core";
@@ -54,7 +54,7 @@ export function MyForm({ defaultValues }: { defaultValues: Record<string, unknow
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider fieldComponents={fluentFieldRegistry}>
-        <DynamicForm
+        <FormEngine
           configName="my-form"
           defaultValues={defaultValues}
           formConfig={formConfig}
@@ -95,7 +95,7 @@ export default async function Page() {
 ```tsx
 "use client";
 
-import { DynamicForm, useDraftPersistence, RulesEngineProvider, InjectedFieldProvider } from "@form-engine/core";
+import { FormEngine, useDraftPersistence, RulesEngineProvider, InjectedFieldProvider } from "@form-engine/core";
 import { fluentFieldRegistry } from "@form-engine/fluent";
 
 export function MyFormWithDrafts({ defaultValues }: { defaultValues: Record<string, unknown> }) {
@@ -116,7 +116,7 @@ export function MyFormWithDrafts({ defaultValues }: { defaultValues: Record<stri
             <button onClick={clearDraft}>Discard draft</button>
           </div>
         )}
-        <DynamicForm
+        <FormEngine
           configName="my-form"
           defaultValues={initialData}
           formConfig={formConfig}
@@ -138,7 +138,7 @@ With the Pages Router, all components run on both server and client by default d
 ```tsx
 // pages/edit/[id].tsx
 import {
-  DynamicForm,
+  FormEngine,
   RulesEngineProvider,
   InjectedFieldProvider,
 } from "@form-engine/core";
@@ -158,7 +158,7 @@ export default function EditPage({ entityData }: Props) {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider fieldComponents={fluentFieldRegistry}>
-        <DynamicForm
+        <FormEngine
           configName="edit-form"
           defaultValues={entityData}
           formConfig={formConfig}
@@ -306,14 +306,14 @@ To verify your form renders without errors during SSR, you can test with `render
 
 ```tsx
 import { renderToString } from "react-dom/server";
-import { RulesEngineProvider, InjectedFieldProvider, DynamicForm } from "@form-engine/core";
+import { RulesEngineProvider, InjectedFieldProvider, FormEngine } from "@form-engine/core";
 import { fluentFieldRegistry } from "@form-engine/fluent";
 
 test("form renders without errors during SSR", () => {
   const html = renderToString(
     <RulesEngineProvider>
       <InjectedFieldProvider fieldComponents={fluentFieldRegistry}>
-        <DynamicForm
+        <FormEngine
           configName="test"
           defaultValues={{ name: "" }}
           formConfig={{

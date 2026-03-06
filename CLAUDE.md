@@ -18,7 +18,7 @@ Published as six npm packages:
 
 ```
 IFormConfig (v2)
-  -> DynamicForm (form state via react-hook-form, save with AbortController/retry)
+  -> FormEngine (form state via react-hook-form, save with AbortController/retry)
     -> evaluateAllRules() -> IRuntimeFormState
     -> FormFields (ordered field list)
       -> FormErrorBoundary (per-field crash isolation)
@@ -36,7 +36,7 @@ Two React context providers must wrap the form tree (both memoized via useMemo):
 ```
 <RulesEngineProvider>          -- Owns rule state via useReducer (memoized context value)
   <InjectedFieldProvider>      -- Component injection registry (memoized context value)
-    <DynamicForm>              -- Entry point
+    <FormEngine>              -- Entry point
 ```
 
 ### Rules Engine (v2)
@@ -121,19 +121,19 @@ packages/
       constants.ts               -- ComponentTypes, FormConstants
       strings.ts                 -- FormStrings (i18n-aware, getters over LocaleRegistry)
       components/
-        HookInlineForm.tsx       -- DynamicForm (main form component)
-        HookInlineFormFields.tsx -- FormFields (field list rendering)
-        HookRenderField.tsx      -- RenderField (per-field routing + Controller)
-        HookFieldWrapper.tsx     -- FieldWrapper (label, error, status chrome)
-        HookConfirmInputsModal.tsx -- ConfirmInputsModal (native <dialog>, focus trap)
-        HookWizardForm.tsx       -- WizardForm (multi-step, render props)
-        HookFieldArray.tsx       -- FieldArray (react-hook-form useFieldArray)
-        HookFormErrorBoundary.tsx -- FormErrorBoundary (crash isolation)
-        HookFormDevTools.tsx     -- FormDevTools (dev panel: rules, values, errors, graph)
+        InlineForm.tsx       -- FormEngine (main form component)
+        InlineFormFields.tsx -- FormFields (field list rendering)
+        RenderField.tsx      -- RenderField (per-field routing + Controller)
+        FieldWrapper.tsx     -- FieldWrapper (label, error, status chrome)
+        ConfirmInputsModal.tsx -- ConfirmInputsModal (native <dialog>, focus trap)
+        WizardForm.tsx       -- WizardForm (multi-step, render props)
+        FieldArray.tsx       -- FieldArray (react-hook-form useFieldArray)
+        FormErrorBoundary.tsx -- FormErrorBoundary (crash isolation)
+        FormDevTools.tsx     -- FormDevTools (dev panel: rules, values, errors, graph)
       helpers/
         ConditionEvaluator.ts    -- evaluateCondition (15 operators + AND/OR/NOT)
         RuleEngine.ts            -- buildDependencyGraph, evaluateAllRules, evaluateAffectedFields, topologicalSort
-        HookInlineFormHelper.ts  -- Form init, validation, computed values, field rendering
+        InlineFormHelper.ts  -- Form init, validation, computed values, field rendering
         ValidationRegistry.ts    -- Unified ValidatorFn registry (sync+async+cross-field)
         ValueFunctionRegistry.ts -- $fn.name() value function registry
         ExpressionEngine.ts      -- $values, $fn, $parent, $root expression evaluation
@@ -160,7 +160,7 @@ packages/
         ILocaleStrings.ts        -- ICoreLocaleStrings (~50 keys)
         TypedFieldConfig.ts      -- defineFormConfig() type-safe builder
         IAnalyticsCallbacks.ts    -- Analytics/telemetry callback interface (8 event hooks)
-        IConfirmInputModalProps.ts, IFieldToRender.ts, IHookInlineFormSharedProps.ts
+        IConfirmInputModalProps.ts, IFieldToRender.ts, IFormEngineSharedProps.ts
       providers/
         BusinessRulesProvider.tsx -- RulesEngineProvider (useReducer + memoized)
         InjectedHookFieldProvider.tsx -- InjectedFieldProvider (useMemo memoized)
@@ -262,9 +262,9 @@ npm run build-storybook  # Build static Storybook
 
 ## Coding Conventions
 
-- Core components: `DynamicForm`, `FormFields`, `RenderField`, `FieldWrapper`, `WizardForm`, `FieldArray`
-- Adapter field components use `Hook` prefix (e.g., `HookTextbox`, `HookDropdown`) -- kept for file naming
-- Read-only variants in `fields/readonly/` with `HookReadOnly` prefix
+- Core components: `FormEngine`, `FormFields`, `RenderField`, `FieldWrapper`, `WizardForm`, `FieldArray`
+- Adapter field components: `Textbox`, `Dropdown`, `Toggle`, etc.
+- Read-only variants in `fields/readonly/`: `ReadOnly`, `ReadOnlyArray`, etc.
 - Interfaces use `I` prefix (e.g., `IFieldConfig`, `IRuntimeFieldState`)
 - Providers export both the provider component and a `Use*Context` hook
 - Field components receive `IFieldProps<T>` via `React.cloneElement`

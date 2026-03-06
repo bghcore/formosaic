@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Container, Typography, Paper, Button, Stack, Alert, Stepper, Step, StepLabel } from "@mui/material";
-import { HookWizardForm, getVisibleSteps } from "@form-engine/core";
+import { WizardForm, getVisibleSteps } from "@form-engine/core";
 import type { IWizardStep } from "@form-engine/core";
 
 const wizardConfig = {
@@ -31,7 +31,7 @@ export default function WizardForm() {
         react-hook-form context — cross-step business rules work automatically.
       </Alert>
       <Paper sx={{ p: 3 }}>
-        <HookWizardForm
+        <WizardForm
           wizardConfig={wizardConfig}
           entityData={formValues}
           renderStepContent={(fields) => (

@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import {
-  DynamicForm,
+  FormEngine,
   UseInjectedFieldContext,
   IFormConfig,
 } from "@form-engine/core";
 import { createFluentFieldRegistry } from "@form-engine/fluent";
 
 /**
- * **DynamicForm** is the main form component. It accepts an `IFormConfig`
+ * **FormEngine** is the main form component. It accepts an `IFormConfig`
  * (v2 schema) and renders the full form with validation, auto-save,
  * rules evaluation, and field interactions.
  */
 const meta: Meta = {
-  title: "Composite/DynamicForm",
+  title: "Composite/FormEngine",
   argTypes: {
     areAllFieldsReadonly: { control: "boolean" },
     isManualSave: { control: "boolean" },
@@ -138,7 +138,7 @@ const defaultValues = {
 export const Default: StoryObj = {
   render: (args) => (
     <FieldRegistrar>
-      <DynamicForm
+      <FormEngine
         configName="contact-form"
         entityId="1"
         entityType="contact"
@@ -163,7 +163,7 @@ export const Default: StoryObj = {
 export const ReadOnlyForm: StoryObj = {
   render: () => (
     <FieldRegistrar>
-      <DynamicForm
+      <FormEngine
         configName="contact-form-readonly"
         entityId="1"
         entityType="contact"
@@ -225,7 +225,7 @@ export const WithRules: StoryObj = {
         <p style={{ color: "#666", marginBottom: "16px", fontSize: "14px" }}>
           Change Status to "Active" to reveal the Priority field (rules engine demo).
         </p>
-        <DynamicForm
+        <FormEngine
           configName="rules-demo"
           entityId="2"
           entityType="demo"

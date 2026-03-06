@@ -63,7 +63,7 @@ function FormContainer() {
     setInjectedFields(createFluentFieldRegistry());
   }, []);
 
-  return <DynamicForm {...formProps} />;
+  return <FormEngine {...formProps} />;
 }
 ```
 
@@ -107,9 +107,9 @@ const myFormConfig: IFormConfig = {
 ### 4. Render the Form
 
 ```tsx
-import { DynamicForm } from "@form-engine/core";
+import { FormEngine } from "@form-engine/core";
 
-<DynamicForm
+<FormEngine
   configName="my-form"
   entityId="123"
   entityType="contact"

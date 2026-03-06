@@ -2,14 +2,14 @@ import { isEmpty, isNull } from "../utils";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { ComponentTypes } from "../constants";
-import { CheckFieldValidationRules, CheckAsyncFieldValidationRules, ShowField } from "../helpers/HookInlineFormHelper";
+import { CheckFieldValidationRules, CheckAsyncFieldValidationRules, ShowField } from "../helpers/InlineFormHelper";
 import { IOption } from "../types/IOption";
 import { IValidationRule } from "../types/IValidationRule";
 import { IRuntimeFieldState } from "../types/IRuntimeFieldState";
 import { UseInjectedFieldContext } from "../providers/InjectedHookFieldProvider";
 import { FormStrings } from "../strings";
 import { IFormAnalytics } from "../hooks/useFormAnalytics";
-import { FieldWrapper } from "./HookFieldWrapper";
+import { FieldWrapper } from "./FieldWrapper";
 import { trackRender } from "../helpers/RenderTracker";
 
 interface IRenderFieldProps {

@@ -29,7 +29,7 @@ The library centers on four key concepts: a **declarative rules engine** that ev
 UI-library agnostic engine built for React. Depends only on `react` and `react-hook-form`.
 
 - **Providers**: `RulesEngineProvider`, `InjectedFieldProvider` -- React context providers that must wrap the form tree (memoized)
-- **Components**: `DynamicForm` (entry point, save with AbortController/retry/timeout), `FormFields`, `RenderField` (useMemo, async validation wired), `FieldWrapper` (React.memo, render props for theming), `ConfirmInputsModal` (focus trap), `WizardForm` (multi-step wizard, step announcements), `FieldArray` (repeating sections), `FormErrorBoundary` (per-field crash isolation), `FormDevTools` (dev-only debugging panel with Rules, Values, Errors, Graph, Perf, Deps, Timeline tabs)
+- **Components**: `FormEngine` (entry point, save with AbortController/retry/timeout), `FormFields`, `RenderField` (useMemo, async validation wired), `FieldWrapper` (React.memo, render props for theming), `ConfirmInputsModal` (focus trap), `WizardForm` (multi-step wizard, step announcements), `FieldArray` (repeating sections), `FormErrorBoundary` (per-field crash isolation), `FormDevTools` (dev-only debugging panel with Rules, Values, Errors, Graph, Perf, Deps, Timeline tabs)
 - **Rules Engine**: `buildDependencyGraph`, `evaluateAllRules`, `evaluateAffectedFields`, `processFieldChange`, `topologicalSort`, `evaluateCondition` (15 operators + AND/OR/NOT), priority-based conflict resolution
 - **Validation**: 14 built-in validators + `registerValidators()` for custom sync/async/cross-field. Per-rule `when` condition, `debounceMs`, `async` flag. Factory functions: `createMinLengthValidation`, `createMaxLengthValidation`, `createNumericRangeValidation`, `createPatternValidation`, `createRequiredIfValidation`
 - **Config Validation**: `validateFieldConfigs()` -- dev-mode checks for missing deps, unregistered components/validators, circular deps
@@ -44,7 +44,7 @@ UI-library agnostic engine built for React. Depends only on `react` and `react-h
 - **Type Safety**: `defineFormConfig()` -- zero-cost TypeScript utility for type-safe form configs
 - **JSON Schemas**: `schemas/field-config.schema.json` and `schemas/wizard-config.schema.json` for IDE autocompletion
 - **Lazy Loading**: `createLazyFieldRegistry()` -- React.lazy field registry for code splitting
-- **Theming**: CSS custom properties (`--hook-form-error-color`, etc.) via optional `styles.css`, render props on `FieldWrapper`
+- **Theming**: CSS custom properties (`--fe-error-color`, etc.) via optional `styles.css`, render props on `FieldWrapper`
 - **Accessibility**: Focus trap in modals, focus-to-first-error, ARIA live regions, wizard step announcements
 - **Analytics**: `IAnalyticsCallbacks` (8 event hooks), `useFormAnalytics()` hook
 - **Performance**: `RenderTracker` (per-field render count tracking), `EventTimeline` (chronological event log)
@@ -96,7 +96,7 @@ Three example applications demonstrating common form patterns.
 ### Minimal Setup (Fluent UI)
 
 ```tsx
-import { RulesEngineProvider, InjectedFieldProvider, UseInjectedFieldContext, DynamicForm } from "@form-engine/core";
+import { RulesEngineProvider, InjectedFieldProvider, UseInjectedFieldContext, FormEngine } from "@form-engine/core";
 import { createFluentFieldRegistry } from "@form-engine/fluent";
 
 function FieldRegistrar({ children }) {
@@ -116,7 +116,7 @@ const formConfig: IFormConfig = {
 <RulesEngineProvider>
   <InjectedFieldProvider>
     <FieldRegistrar>
-      <DynamicForm
+      <FormEngine
         configName="myForm"
         programName="myApp"
         formConfig={formConfig}

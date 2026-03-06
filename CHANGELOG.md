@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2026-03-06
 
-First release under the `@form-engine` scope. Rebranded from `@bghcore/dynamic-forms-*` with a new RJSF-compatible schema import system.
+First release under the `@form-engine` scope. Rebranded from `@bghcore/dynamic-forms-*` with a new RJSF-compatible schema import system. Renamed `DynamicForm` to `FormEngine`, renamed CSS custom properties from `--hook-form-*` to `--fe-*`, renamed CSS classes from `hook-form-*` to `fe-*`, removed deprecated `Hook*` aliases from adapter packages, renamed internal component files (removed `Hook` prefix from core component file names).
 
 ### Added
 
@@ -56,7 +56,7 @@ Comprehensive bug-fix audit: 23 bugs fixed across 34 files spanning the rules en
 ### Fixed
 
 #### Rules Engine
-- **Dynamic labels now work** -- Added `label` to `IRuntimeFieldState`, `mergeEffect`, `applyEffectToState`, and `evaluateAffectedFields` reset. `FormFields` now reads label from runtime state with fallback to config. (RuleEngine.ts, IRuntimeFieldState.ts, HookInlineFormFields.tsx)
+- **Dynamic labels now work** -- Added `label` to `IRuntimeFieldState`, `mergeEffect`, `applyEffectToState`, and `evaluateAffectedFields` reset. `FormFields` now reads label from runtime state with fallback to config. (RuleEngine.ts, IRuntimeFieldState.ts, InlineFormFields.tsx)
 - **`activeRuleIds` now populated** -- `evaluateFieldRules` tracks matched rule IDs for DevTools tracing. (RuleEngine.ts)
 - **`IFieldEffect.type` preferred over `component`** -- Added `type` as the preferred property with backward-compatible `component` deprecated. `mergeEffect` and `applyEffectToState` handle both. (IFieldEffect.ts, RuleEngine.ts)
 - **`NOT` with empty conditions returns `false`** instead of `true`. (ConditionEvaluator.ts)
@@ -65,11 +65,11 @@ Comprehensive bug-fix audit: 23 bugs fixed across 34 files spanning the rules en
 - **Reset block completeness** -- `evaluateAffectedFields` now resets `defaultValue`, `computeOnCreateOnly`, `label`, `activeRuleIds`. (RuleEngine.ts)
 
 #### Core Components
-- **Fixed stale closures in `DynamicForm`** -- `attemptSave` and `manualSave` now use `validateAndSaveRef` pattern for always-current function reference. (HookInlineForm.tsx)
-- **Fixed filter input memory leak** -- `onFilterChange` now uses `filterTimeoutRef` with proper cleanup instead of leaking timeouts. (HookInlineForm.tsx)
-- **Fixed `RenderField` `useMemo`** -- Added 21 missing dependencies to prevent stale `Controller` closures. (HookRenderField.tsx)
-- **Fixed `trackRender` side effect** -- Moved from render phase to `useEffect`. (HookRenderField.tsx)
-- **Fixed `FieldWrapper` ARIA on sibling children** -- All children now receive `aria-labelledby`, `aria-required`, `aria-invalid`, `aria-describedby`. (HookFieldWrapper.tsx)
+- **Fixed stale closures in `FormEngine`** -- `attemptSave` and `manualSave` now use `validateAndSaveRef` pattern for always-current function reference. (InlineForm.tsx)
+- **Fixed filter input memory leak** -- `onFilterChange` now uses `filterTimeoutRef` with proper cleanup instead of leaking timeouts. (InlineForm.tsx)
+- **Fixed `RenderField` `useMemo`** -- Added 21 missing dependencies to prevent stale `Controller` closures. (RenderField.tsx)
+- **Fixed `trackRender` side effect** -- Moved from render phase to `useEffect`. (RenderField.tsx)
+- **Fixed `FieldWrapper` ARIA on sibling children** -- All children now receive `aria-labelledby`, `aria-required`, `aria-invalid`, `aria-describedby`. (FieldWrapper.tsx)
 
 #### Validation & Provider
 - **`minLength` validates empty strings** -- Empty string `""` now correctly fails `minLength` when `min > 0`. (ValidationRegistry.ts)
@@ -116,7 +116,7 @@ Major release: new packages, tooling, and ecosystem expansion.
 - **FormDevTools: Timeline tab** -- Chronological event log via `EventTimeline` helper. Events: field_change, rule_evaluated, validation_run, form_submit. Filterable, clearable, capped at 500 events.
 - **`IFieldEffect.label`** -- Rules can now dynamically change field labels via the `label` property in rule effects.
 - **`InjectedFieldProvider` `injectedFields` prop** -- Field registry can now be passed directly as a prop instead of requiring `setInjectedFields()` in a child component.
-- **Storybook 10** -- 64 stories covering all 19 field types (editable + read-only states), composite components (DynamicForm, WizardForm, FieldArray, FormDevTools), and a Getting Started MDX docs page.
+- **Storybook 10** -- 64 stories covering all 19 field types (editable + read-only states), composite components (FormEngine, WizardForm, FieldArray, FormDevTools), and a Getting Started MDX docs page.
 - **Playwright E2E tests** -- 54 tests across 7 spec files: basic form, rules engine, validation, wizard navigation, field arrays, draft recovery, keyboard navigation. Includes Vite test app and page object pattern.
 - **Performance benchmarks** -- vitest bench suite with 5 benchmark files: rule engine (10-500 fields), condition evaluator (15 operators, nested trees), validation throughput, expression engine, and bundle size tracking. Config generators for N-field forms.
 - **CI/CD pipeline** -- GitHub Actions with matrix CI (Node 18+20), test + coverage artifacts, publish workflow with workflow_dispatch, dry-run mode, OIDC provenance, and GitHub Release creation.
@@ -144,7 +144,7 @@ Complete schema redesign with unified rules engine. All v1 names kept as depreca
 ### Changed
 
 - **Component renames** (old names kept as deprecated aliases):
-  - `DynamicForm` (was `HookInlineForm`)
+  - `FormEngine` (was `HookInlineForm`)
   - `FormFields` (was `HookInlineFormFields`)
   - `RenderField` (was `HookRenderField`)
   - `FieldWrapper` (was `HookFieldWrapper`)
@@ -218,24 +218,24 @@ Enterprise features: reliability, accessibility, persistence, theming, developer
 
 ### Added
 
-- **Async validation wired into rendering** — `HookRenderField` now runs async validators after sync pass. `AbortController` cancels in-flight checks on re-type.
-- **`HookFormErrorBoundary`** — per-field error boundary wrapping each `HookRenderField`. One crashing field no longer kills the entire form. Props: `fallback`, `onError`.
+- **Async validation wired into rendering** — `RenderField` now runs async validators after sync pass. `AbortController` cancels in-flight checks on re-type.
+- **`FormErrorBoundary`** — per-field error boundary wrapping each `RenderField`. One crashing field no longer kills the entire form. Props: `fallback`, `onError`.
 - **Save reliability** — `AbortController` cancels previous in-flight saves, configurable timeout via `saveTimeoutMs` (default 30s), retry with exponential backoff via `maxSaveRetries` (default 3).
-- **Accessibility (WCAG AA)** — focus trap in `HookConfirmInputsModal`, focus-to-first-error on validation failure, ARIA live regions for form status, `aria-label` on filter input, `aria-busy` during save, wizard step announcements for screen readers.
+- **Accessibility (WCAG AA)** — focus trap in `ConfirmInputsModal`, focus-to-first-error on validation failure, ARIA live regions for form status, `aria-label` on filter input, `aria-busy` during save, wizard step announcements for screen readers.
 - **`useDraftPersistence`** hook — auto-save form state to localStorage on configurable interval, recover draft on mount, clear after server save.
 - **`useBeforeUnload`** hook — browser warning on page leave with unsaved changes.
 - **`serializeFormState` / `deserializeFormState`** — Date-safe JSON round-trip utilities.
-- **Theming render props** — `renderLabel`, `renderError`, `renderStatus` on `HookFieldWrapper` for custom field chrome without replacing components.
-- **CSS custom properties** — `--hook-form-error-color`, `--hook-form-warning-color`, `--hook-form-saving-color`, etc. in optional `styles.css`.
+- **Theming render props** — `renderLabel`, `renderError`, `renderStatus` on `FieldWrapper` for custom field chrome without replacing components.
+- **CSS custom properties** — `--fe-error-color`, `--fe-warning-color`, `--fe-saving-color`, etc. in optional `styles.css`.
 - **`formErrors`** prop on `HookInlineForm` — form-level error banner for cross-field validation.
-- **`HookFormDevTools`** — collapsible dev-only panel showing business rules state, form values, errors, and dependency graph.
+- **`FormDevTools`** — collapsible dev-only panel showing business rules state, form values, errors, and dependency graph.
 - **`jsonSchemaToFieldConfig()`** — convert JSON Schema to `Dictionary<IFieldConfig>`. Maps types, enums, formats, required.
 - **`createLazyFieldRegistry()`** — React.lazy field registry for on-demand component loading.
 - 79 new tests across 8 new test files.
 
 ### Changed
 
-- **`HookRenderField`** refactored from `useState` + `useEffect` to `useMemo` — eliminates one render cycle per field update.
+- **`RenderField`** refactored from `useState` + `useEffect` to `useMemo` — eliminates one render cycle per field update.
 
 ## [1.2.0] - 2026-03-02
 
@@ -265,8 +265,8 @@ Test infrastructure, async validation, i18n, wizard forms, and field arrays.
 - **Async validation framework** — `AsyncValidationFunction` type, `registerAsyncValidations()`, `getAsyncValidation()`, `CheckAsyncFieldValidationRules()`.
 - **9 new validators** (15 total): `NoSpecialCharactersValidation`, `CurrencyValidation`, `UniqueInArrayValidation` + factories: `createMinLengthValidation`, `createMaxLengthValidation`, `createNumericRangeValidation`, `createPatternValidation`, `createRequiredIfValidation`.
 - **i18n** — `LocaleRegistry` with `registerLocale()`, `getLocaleString()`, `resetLocale()`. `ICoreLocaleStrings` interface. `strings.ts` rewritten with ES getters for backwards compatibility.
-- **`HookWizardForm`** — multi-step wizard composing around existing form. Steps partition field order, not business rules. Render props for navigation/headers. Conditional step visibility.
-- **`HookFieldArray`** — repeating sections via react-hook-form `useFieldArray`. Min/max items, defaultItem, reorderable, qualified names (`addresses.0.city`).
+- **`WizardForm`** — multi-step wizard composing around existing form. Steps partition field order, not business rules. Render props for navigation/headers. Conditional step visibility.
+- **`FieldArray`** — repeating sections via react-hook-form `useFieldArray`. Min/max items, defaultItem, reorderable, qualified names (`addresses.0.city`).
 - **`IWizardConfig`**, **`IFieldArrayConfig`**, **`ICoreLocaleStrings`** types.
 - **`ComponentTypes.FieldArray`** constant.
 - `docs/FINDINGS.md` — codebase analysis and strategic expansion plan.
@@ -274,7 +274,7 @@ Test infrastructure, async validation, i18n, wizard forms, and field arrays.
 ### Changed
 
 - **Provider memoization** — `useCallback`/`useMemo` on `BusinessRulesProvider` and `InjectedHookFieldProvider`.
-- **`React.memo`** on `HookRenderField` and `HookFieldWrapper`.
+- **`React.memo`** on `RenderField` and `FieldWrapper`.
 
 ## [1.0.0] - 2026-03-02
 

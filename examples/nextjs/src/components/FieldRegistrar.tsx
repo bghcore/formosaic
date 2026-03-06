@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import { UseInjectedHookFieldContext } from "@form-engine/core";
+import { UseInjectedFieldContext } from "@form-engine/core";
 import { createMuiFieldRegistry } from "@form-engine/mui";
 
 export default function FieldRegistrar({ children }: { children: React.ReactNode }) {
-  const { setInjectedFields } = UseInjectedHookFieldContext();
+  const { setInjectedFields } = UseInjectedFieldContext();
   useEffect(() => {
     setInjectedFields(createMuiFieldRegistry());
   }, [setInjectedFields]);

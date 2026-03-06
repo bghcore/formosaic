@@ -14,13 +14,13 @@ import {
   ExecuteComputedValue,
   InitOnEditFormState,
   SortOptions,
-} from "../../helpers/HookInlineFormHelper";
+} from "../../helpers/InlineFormHelper";
 import { IEntityData } from "../../utils";
 import { IRuntimeFieldState, IRuntimeFormState } from "../../types/IRuntimeFieldState";
 import { IFieldConfig } from "../../types/IFieldConfig";
 import { IOption } from "../../types/IOption";
 
-describe("HookInlineFormHelper", () => {
+describe("InlineFormHelper", () => {
   describe("GetChildEntity", () => {
     const parentEntity: IEntityData = {
       items: [

@@ -1,7 +1,7 @@
 "use client";
 
 import { Container, Typography, Paper, Box } from "@mui/material";
-import { HookInlineForm } from "@form-engine/core";
+import { FormEngine } from "@form-engine/core";
 import FieldRegistrar from "@/components/FieldRegistrar";
 
 const fieldConfigs = {
@@ -55,7 +55,7 @@ export default function BasicForm() {
       </Typography>
       <Paper sx={{ p: 3 }}>
         <FieldRegistrar>
-          <HookInlineForm
+          <FormEngine
             configName="basicForm"
             programName="example"
             fieldConfigs={fieldConfigs}

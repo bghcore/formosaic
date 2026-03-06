@@ -1,7 +1,7 @@
 import { type Locator, type Page, expect } from "@playwright/test";
 
 /**
- * Page object for interacting with DynamicForm instances rendered by the E2E test app.
+ * Page object for interacting with FormEngine instances rendered by the E2E test app.
  *
  * Encapsulates Fluent UI v9 field interaction patterns so test specs stay
  * focused on scenarios rather than DOM selectors.
