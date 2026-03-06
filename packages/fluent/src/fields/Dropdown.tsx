@@ -11,7 +11,7 @@ interface IHookDropdownProps {
 }
 
 const DropdownField = (props: IFieldProps<IHookDropdownProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, options, setFieldValue } = props;
+  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, placeholder, options, setFieldValue } = props;
 
   const onOptionSelect = (_: unknown, data: OptionOnSelectData) => {
     setFieldValue(fieldName, data.optionValue);
@@ -33,6 +33,9 @@ const DropdownField = (props: IFieldProps<IHookDropdownProps>) => {
       value={selectedText ?? ""}
       selectedOptions={value ? [String(value)] : []}
       onOptionSelect={onOptionSelect}
+      placeholder={placeholder}
+      aria-invalid={!!error}
+      aria-required={required}
       data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
     >
       {options?.map(option => (

@@ -11,7 +11,7 @@ interface ISimpleDropdownProps {
 }
 
 const SimpleDropdown = (props: IFieldProps<ISimpleDropdownProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, setFieldValue } = props;
+  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, placeholder, setFieldValue } = props;
 
   const simpleOptions = config?.dropdownOptions ?? [];
 
@@ -22,14 +22,18 @@ const SimpleDropdown = (props: IFieldProps<ISimpleDropdownProps>) => {
   return readOnly ? (
     <ReadOnlyText fieldName={fieldName} value={value as string} />
   ) : (
-    <FormControl fullWidth size="small" error={!!error}>
+    <FormControl fullWidth size="small" error={!!error} required={required}>
       <Select
         className={FieldClassName("hook-dropdown", error)}
         value={(value as string) ?? ""}
         onChange={onChange}
         displayEmpty
+        aria-required={required}
         data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
       >
+        {!value && (placeholder ?? config?.placeHolder) && (
+          <MenuItem value="" disabled>{placeholder ?? config?.placeHolder}</MenuItem>
+        )}
         {simpleOptions.map(option => (
           <MenuItem key={option} value={option}>{option}</MenuItem>
         ))}

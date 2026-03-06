@@ -318,7 +318,7 @@ describe("FieldWrapper accessibility", () => {
     expect(errorSpan).toHaveTextContent("Required");
   });
 
-  it("only applies ARIA props to the first child, not subsequent children", () => {
+  it("applies ARIA props to all children for accessibility", () => {
     render(
       <FieldWrapper
         id="testField"
@@ -334,7 +334,7 @@ describe("FieldWrapper accessibility", () => {
     const secondInput = screen.getByTestId("second-input");
 
     expect(firstInput).toHaveAttribute("aria-required", "true");
-    expect(secondInput).not.toHaveAttribute("aria-required");
+    expect(secondInput).toHaveAttribute("aria-required", "true");
   });
 });
 

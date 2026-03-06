@@ -11,7 +11,7 @@ interface IHookSliderProps {
 }
 
 const SliderField = (props: IFieldProps<IHookSliderProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, setFieldValue } = props;
+  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, setFieldValue } = props;
 
   const onChange = (_: unknown, data: { value: number }) => {
     setFieldValue(fieldName, data.value);
@@ -22,11 +22,13 @@ const SliderField = (props: IFieldProps<IHookSliderProps>) => {
   ) : (
     <Slider
       className={FieldClassName("hook-slider", error)}
-      value={value as number}
+      value={(value as number) ?? 0}
       onChange={onChange}
       max={config?.max}
       min={config?.min}
       step={config?.step}
+      aria-invalid={!!error}
+      aria-required={required}
       data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
     />
   );

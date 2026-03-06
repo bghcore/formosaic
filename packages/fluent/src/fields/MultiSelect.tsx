@@ -6,7 +6,7 @@ import { useFormContext } from "react-hook-form";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const MultiSelect = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, options, setFieldValue } = props;
+  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, options, setFieldValue } = props;
 
   const { watch } = useFormContext();
   const selectedOptions = (watch(`${fieldName}` as const) as string[]) ?? [];
@@ -37,6 +37,8 @@ const MultiSelect = (props: IFieldProps<{}>) => {
       value={selectedOptions.join(", ")}
       selectedOptions={selectedOptions}
       onOptionSelect={onOptionSelect}
+      aria-invalid={!!error}
+      aria-required={required}
       data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
     >
       {options?.map(option => (

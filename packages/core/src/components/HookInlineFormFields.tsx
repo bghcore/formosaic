@@ -76,7 +76,7 @@ export const FormFields = (props: IFormFieldsProps) => {
                 isCreate={isCreate}
                 filterText={filterText}
                 softHidden={softHidden}
-                label={fieldConfig?.label}
+                label={fieldState?.label ?? fieldConfig?.label}
                 skipLayoutReadOnly={fieldConfig?.skipLayoutReadOnly}
                 hideOnCreate={fieldConfig?.hideOnCreate}
                 config={fieldConfig?.config}

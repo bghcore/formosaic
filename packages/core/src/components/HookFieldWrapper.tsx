@@ -102,7 +102,22 @@ export const FieldWrapper: React.FunctionComponent<React.PropsWithChildren<IFiel
             if (ariaDescription && !error) {
               childProps["aria-description"] = ariaDescription;
             }
-            return index === 0 ? React.cloneElement(child, childProps) : React.cloneElement(child, { key: index });
+            if (index === 0) {
+              return React.cloneElement(child, childProps);
+            }
+            const siblingProps: Record<string, unknown> = {
+              key: index,
+              "aria-labelledby": childProps["aria-labelledby"],
+              "aria-label": childProps["aria-label"],
+              "aria-required": childProps["aria-required"],
+              "aria-invalid": childProps["aria-invalid"],
+              "aria-describedby": childProps["aria-describedby"],
+              className: child.props.className,
+            };
+            if (childProps["aria-description"]) {
+              siblingProps["aria-description"] = childProps["aria-description"];
+            }
+            return React.cloneElement(child, siblingProps);
           }
           return <React.Fragment key={index} />;
         })}

@@ -29,14 +29,14 @@ const Slider = (props: IFieldProps<IHookSliderProps>) => {
       <input
         type="range"
         className="df-slider__input"
-        value={value as number}
+        value={(value as number) ?? 0}
         onChange={onChange}
         max={config?.max}
         min={config?.min}
         step={config?.step}
         aria-invalid={!!error}
         aria-required={required}
-        aria-valuenow={value as number}
+        aria-valuenow={(value as number) ?? 0}
         aria-valuemin={config?.min}
         aria-valuemax={config?.max}
         data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}

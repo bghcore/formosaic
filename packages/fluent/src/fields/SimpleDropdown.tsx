@@ -11,7 +11,7 @@ interface IHookSimpleDropdownProps {
 }
 
 const SimpleDropdown = (props: IFieldProps<IHookSimpleDropdownProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, setFieldValue } = props;
+  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, placeholder, setFieldValue } = props;
 
   const simpleOptions = config?.dropdownOptions ?? [];
 
@@ -27,6 +27,9 @@ const SimpleDropdown = (props: IFieldProps<IHookSimpleDropdownProps>) => {
       value={(value as string) ?? ""}
       selectedOptions={value ? [String(value)] : []}
       onOptionSelect={onOptionSelect}
+      placeholder={placeholder}
+      aria-invalid={!!error}
+      aria-required={required}
       data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
     >
       {simpleOptions.map(option => (

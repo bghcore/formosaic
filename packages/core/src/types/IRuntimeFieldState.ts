@@ -24,6 +24,8 @@ export interface IRuntimeFieldState {
   confirmInput?: boolean;
   /** Available options for dropdown-type fields (may be filtered by rules). */
   options?: IOption[];
+  /** Override field label (may be set by rules). */
+  label?: string;
   /** Default value to set when the field value is null and the field is visible. */
   defaultValue?: unknown;
   /** If true, computedValue only runs during create. */

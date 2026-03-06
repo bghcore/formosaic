@@ -16,7 +16,9 @@ export interface IFieldEffect {
   readOnly?: boolean;
   /** Override field label */
   label?: string;
-  /** Swap the component type */
+  /** Swap the component type (preferred over component) */
+  type?: string;
+  /** Swap the component type (deprecated, use type instead) */
   component?: string;
   /** Replace dropdown options */
   options?: IOption[];

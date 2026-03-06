@@ -44,7 +44,7 @@ The core library provides a strong accessibility foundation. Adapter packages (F
 | Requirement | Status | Details |
 |---|---|---|
 | Valid ARIA roles | Supported | `role="alert"` for errors, `role="status"` for save/pending states, `role="dialog"` + `aria-modal="true"` on confirm modal, `role="group"` on wizard and field arrays. |
-| `aria-invalid` | Supported | Fields receive `aria-invalid="true"` when an error exists, `"false"` otherwise. |
+| `aria-invalid` | Supported | Fields receive `aria-invalid="true"` when an error exists, `"false"` otherwise. As of v3.0.4, all Fluent and MUI adapter fields also set `aria-invalid` and `aria-required` directly on their inner controls. |
 | `aria-busy` | Supported | Form field container receives `aria-busy="true"` while saving. |
 | `aria-current` | Supported | Wizard step content marked with `aria-current="step"`. |
 | DevTools tabs | Supported | DevTools panel uses `role="tablist"`, `role="tab"` with `aria-selected`, and `role="tabpanel"`. |
@@ -55,7 +55,7 @@ The core library provides a strong accessibility foundation. Adapter packages (F
 
 The `FieldWrapper` component is the accessibility hub for every form field. It:
 - Renders a `<label>` with `htmlFor={id}` and `id="{id}_label"`
-- Clones ARIA attributes onto the first child element: `id`, `aria-labelledby`, `aria-required`, `aria-invalid`, `aria-describedby`
+- Clones ARIA attributes onto all child elements: `id`, `aria-labelledby`, `aria-required`, `aria-invalid`, `aria-describedby`
 - Renders error/status messages with the correct `id="{id}_error"` matching `aria-describedby`
 - Uses `role="alert"` for error messages and `role="status"` for save/pending states
 - Adds `aria-busy="true"` to the container during save operations
@@ -94,13 +94,15 @@ The `FieldWrapper` component is the accessibility hub for every form field. It:
 
 ## Adapter Field Guidelines
 
-Adapter fields (Fluent and MUI) receive ARIA attributes from `FieldWrapper` via `React.cloneElement`. The following attributes are automatically applied to the first child element:
+Adapter fields (Fluent, MUI, and Headless) receive ARIA attributes from `FieldWrapper` via `React.cloneElement`. The following attributes are automatically applied to **all** child elements (not just the first child):
 
 - `id` -- matches the field name, enables `<label htmlFor>` association
 - `aria-labelledby` -- points to the label element (unless `ariaLabel` is set)
 - `aria-required` -- reflects the field's required state
 - `aria-invalid` -- reflects whether the field has a validation error
 - `aria-describedby` -- points to the error/status message element
+
+> **v3.0.4 improvement:** In previous versions, only the first child element received ARIA attributes from `FieldWrapper`. As of v3.0.4, all sibling children receive `aria-labelledby`, `aria-required`, `aria-invalid`, and `aria-describedby`. Additionally, all 9 Fluent and 9 MUI field components (Textbox, Number, Dropdown, SimpleDropdown, MultiSelect, MultiSelectSearch, DateControl, Slider, Toggle) now explicitly set `aria-invalid` and `aria-required` on their inner controls, ensuring screen readers announce validation state even when the underlying UI library component does not propagate cloned ARIA props.
 
 ### When creating custom field components
 

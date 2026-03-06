@@ -108,6 +108,8 @@ export const DynamicForm: React.FC<IDynamicFormProps> = (props: IDynamicFormProp
 
   const rulesStateRef = React.useRef<IRulesEngineState>(rulesState);
   const formStateRef = React.useRef<FormState<IEntityData>>({ ...formState });
+  const filterTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const validateAndSaveRef = React.useRef<(() => void) | undefined>(undefined);
   const { isDirty, isValid, dirtyFields, errors, isSubmitting, isSubmitSuccessful } = formState;
 
   React.useEffect(() => { rulesStateRef.current = rulesState; }, [rulesState]);
@@ -135,11 +137,11 @@ export const DynamicForm: React.FC<IDynamicFormProps> = (props: IDynamicFormProp
   const attemptSave = React.useCallback(() => {
     if (saveTimeout.current) { clearTimeout(saveTimeout.current); saveTimeout.current = undefined; }
     saveTimeout.current = setTimeout(() => {
-      validateAndSave();
+      validateAndSaveRef.current?.();
       clearTimeout(saveTimeout.current);
       saveTimeout.current = undefined;
     }, saveTimeoutDelay?.current || 100);
-  }, [saveTimeout, inputFieldsConfirmed]);
+  }, []);
 
   const setFieldValue = (fieldName: string, fieldValue: unknown, skipSave?: boolean, timeout?: number) => {
     saveTimeoutDelay.current = timeout;
@@ -149,7 +151,7 @@ export const DynamicForm: React.FC<IDynamicFormProps> = (props: IDynamicFormProp
     if (!skipSave && !effectiveManualSave) { attemptSave(); }
   };
 
-  const manualSave = React.useCallback(() => { validateAndSave(); }, []);
+  const manualSave = React.useCallback(() => { validateAndSaveRef.current?.(); }, []);
 
   const saveConfirmInputFields = () => {
     trigger().then((valid: boolean) => {
@@ -216,6 +218,7 @@ export const DynamicForm: React.FC<IDynamicFormProps> = (props: IDynamicFormProp
       }
     });
   };
+  validateAndSaveRef.current = validateAndSave;
 
   const handleSave = (data: IEntityData) => {
     if (saveAbortControllerRef.current) saveAbortControllerRef.current.abort();
@@ -263,10 +266,10 @@ export const DynamicForm: React.FC<IDynamicFormProps> = (props: IDynamicFormProp
     });
   };
 
-  const onFilterChange = (value: string) => {
-    const timeOutId = setTimeout(() => setFilterText(value), 500);
-    return () => clearTimeout(timeOutId);
-  };
+  const onFilterChange = React.useCallback((value: string) => {
+    if (filterTimeoutRef.current) clearTimeout(filterTimeoutRef.current);
+    filterTimeoutRef.current = setTimeout(() => setFilterText(value), 500);
+  }, []);
 
   const cancelConfirmInputFields = () => {
     const current = confirmInputModalProps.current;

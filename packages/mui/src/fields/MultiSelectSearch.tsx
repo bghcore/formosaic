@@ -4,7 +4,7 @@ import React from "react";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const MultiSelectSearch = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, options: dropdownOptions, setFieldValue } = props;
+  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, options: dropdownOptions, setFieldValue } = props;
 
   const selectedValues = (value as string[]) ?? [];
 
@@ -33,6 +33,7 @@ const MultiSelectSearch = (props: IFieldProps<{}>) => {
       className={FieldClassName("hook-multi-select-search", error)}
       multiple
       freeSolo
+      aria-required={required}
       options={mappedOptions}
       getOptionLabel={(option) => typeof option === "string" ? option : option.label}
       getOptionDisabled={(option) => typeof option === "string" ? false : !!option.disabled}
@@ -53,6 +54,7 @@ const MultiSelectSearch = (props: IFieldProps<{}>) => {
           {...params}
           size="small"
           error={!!error}
+          required={required}
           helperText={error?.message}
           inputProps={{
             ...params.inputProps,

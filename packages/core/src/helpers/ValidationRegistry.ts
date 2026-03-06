@@ -80,7 +80,7 @@ const uniqueInArray: ValidatorFn = (value) => {
 };
 
 const minLength: ValidatorFn = (value, params) => {
-  if (!value || typeof value !== "string") return undefined;
+  if (value === null || value === undefined || typeof value !== "string") return undefined;
   const min = Number(params?.min ?? 0);
   return value.length < min ? `Must be at least ${min} characters` : undefined;
 };

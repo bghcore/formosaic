@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.4] - 2026-03-06
+
+Comprehensive bug-fix audit: 23 bugs fixed across 34 files spanning the rules engine, core components, validation, providers, and all three adapter packages.
+
+### Fixed
+
+#### Rules Engine
+- **Dynamic labels now work** -- Added `label` to `IRuntimeFieldState`, `mergeEffect`, `applyEffectToState`, and `evaluateAffectedFields` reset. `FormFields` now reads label from runtime state with fallback to config. (RuleEngine.ts, IRuntimeFieldState.ts, HookInlineFormFields.tsx)
+- **`activeRuleIds` now populated** -- `evaluateFieldRules` tracks matched rule IDs for DevTools tracing. (RuleEngine.ts)
+- **`IFieldEffect.type` preferred over `component`** -- Added `type` as the preferred property with backward-compatible `component` deprecated. `mergeEffect` and `applyEffectToState` handle both. (IFieldEffect.ts, RuleEngine.ts)
+- **`NOT` with empty conditions returns `false`** instead of `true`. (ConditionEvaluator.ts)
+- **`notIn` with non-array value returns `false`** instead of `true`, matching `in` behavior. (ConditionEvaluator.ts)
+- **Nested field dependency extraction** -- Dotted paths like `"address.city"` now correctly extract root field name for dependency graph. (ConditionEvaluator.ts)
+- **Reset block completeness** -- `evaluateAffectedFields` now resets `defaultValue`, `computeOnCreateOnly`, `label`, `activeRuleIds`. (RuleEngine.ts)
+
+#### Core Components
+- **Fixed stale closures in `DynamicForm`** -- `attemptSave` and `manualSave` now use `validateAndSaveRef` pattern for always-current function reference. (HookInlineForm.tsx)
+- **Fixed filter input memory leak** -- `onFilterChange` now uses `filterTimeoutRef` with proper cleanup instead of leaking timeouts. (HookInlineForm.tsx)
+- **Fixed `RenderField` `useMemo`** -- Added 21 missing dependencies to prevent stale `Controller` closures. (HookRenderField.tsx)
+- **Fixed `trackRender` side effect** -- Moved from render phase to `useEffect`. (HookRenderField.tsx)
+- **Fixed `FieldWrapper` ARIA on sibling children** -- All children now receive `aria-labelledby`, `aria-required`, `aria-invalid`, `aria-describedby`. (HookFieldWrapper.tsx)
+
+#### Validation & Provider
+- **`minLength` validates empty strings** -- Empty string `""` now correctly fails `minLength` when `min > 0`. (ValidationRegistry.ts)
+- **Circular reference protection** -- `markDates()` uses `WeakSet` to prevent stack overflow with circular entity data. (formStateSerialization.ts)
+- **`processFieldChange` stability** -- Uses `rulesStateRef` pattern to avoid callback recreation on every dispatch. (BusinessRulesProvider.tsx)
+
+#### Cross-Adapter Consistency (Fluent, MUI, Headless)
+- **Added `aria-invalid` and `aria-required`** to all 9 Fluent and 9 MUI field components (Textbox, Number, Dropdown, SimpleDropdown, MultiSelect, MultiSelectSearch, DateControl, Slider, Toggle).
+- **Added placeholder support** to Fluent and MUI Textbox, Dropdown, SimpleDropdown.
+- **Fixed Slider null safety** -- Added `?? 0` fallback in Fluent and Headless adapters.
+- **Fixed Fluent DateControl error display** -- Now shows error message with `role="alert"`.
+- **Fixed DocumentLinks type mismatch** -- Headless adapter aligned to use `title` (matching Fluent).
+- **Fixed MUI Dropdown/SimpleDropdown placeholders** -- Added disabled placeholder `MenuItem`.
+
+#### Test Fixtures
+- **`componentSwapConfigs` uses `type` instead of `component`** to match v2 naming conventions.
+
 ## [3.0.3] - 2026-03-05
 
 ### Fixed

@@ -5,7 +5,7 @@ import { GetFieldDataTestId, getFieldState, DocumentLinksStrings } from "../help
 
 export interface IDocumentLink {
   url: string;
-  text?: string;
+  title?: string;
 }
 
 const DocumentLinks = (props: IFieldProps<{}>) => {
@@ -18,7 +18,7 @@ const DocumentLinks = (props: IFieldProps<{}>) => {
 
   const onAddLink = () => {
     if (!newUrl) return;
-    const link: IDocumentLink = { url: newUrl, text: newText || newUrl };
+    const link: IDocumentLink = { url: newUrl, title: newText || newUrl };
     setFieldValue(fieldName, [...documentLinks, link]);
     setNewUrl("");
     setNewText("");
@@ -40,7 +40,7 @@ const DocumentLinks = (props: IFieldProps<{}>) => {
         {(value as IDocumentLink[])?.map((link, i) => (
           <li key={i} className="df-document-links__item">
             <a href={link.url} target="_blank" rel="noopener noreferrer">
-              {link.text || link.url}
+              {link.title || link.url}
             </a>
           </li>
         ))}
@@ -59,13 +59,13 @@ const DocumentLinks = (props: IFieldProps<{}>) => {
         {documentLinks.map((link, i) => (
           <li key={i} className="df-document-links__item">
             <a href={link.url} target="_blank" rel="noopener noreferrer">
-              {link.text || link.url}
+              {link.title || link.url}
             </a>
             <button
               type="button"
               className="df-document-links__delete"
               onClick={() => onDeleteLink(i)}
-              aria-label={`${DocumentLinksStrings.deleteLink}: ${link.text || link.url}`}
+              aria-label={`${DocumentLinksStrings.deleteLink}: ${link.title || link.url}`}
             >
               &times;
             </button>

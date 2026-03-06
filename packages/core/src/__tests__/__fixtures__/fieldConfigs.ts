@@ -275,8 +275,8 @@ export const componentSwapConfigs: Record<string, IFieldConfig> = {
     rules: [
       {
         when: { field: "mode", operator: "equals", value: "simple" },
-        then: { fields: { detail: { component: "Textbox" } } },
-        else: { fields: { detail: { component: "PopOutEditor" } } },
+        then: { fields: { detail: { type: "Textbox" } } },
+        else: { fields: { detail: { type: "PopOutEditor" } } },
       },
     ],
   },

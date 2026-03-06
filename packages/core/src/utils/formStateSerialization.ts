@@ -8,17 +8,21 @@ import { IEntityData } from "../utils";
  * which means Date objects appear as plain strings to the replacer.
  * Pre-processing avoids this problem.
  */
-function markDates(value: unknown): unknown {
+function markDates(value: unknown, visited = new WeakSet()): unknown {
   if (value instanceof Date) {
     return { __type: "Date", value: value.toISOString() };
   }
   if (Array.isArray(value)) {
-    return value.map(markDates);
+    if (visited.has(value)) return value;
+    visited.add(value);
+    return value.map((item) => markDates(item, visited));
   }
   if (value !== null && typeof value === "object") {
+    if (visited.has(value as object)) return value;
+    visited.add(value as object);
     const result: Record<string, unknown> = {};
     for (const key of Object.keys(value as Record<string, unknown>)) {
-      result[key] = markDates((value as Record<string, unknown>)[key]);
+      result[key] = markDates((value as Record<string, unknown>)[key], visited);
     }
     return result;
   }

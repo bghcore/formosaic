@@ -11,7 +11,7 @@ interface IDropdownProps {
 }
 
 const Dropdown = (props: IFieldProps<IDropdownProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, options, setFieldValue } = props;
+  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, placeholder, options, setFieldValue } = props;
 
   const onChange = (event: SelectChangeEvent<string>) => {
     setFieldValue(fieldName, event.target.value);
@@ -26,14 +26,18 @@ const Dropdown = (props: IFieldProps<IDropdownProps>) => {
   return readOnly ? (
     <ReadOnlyText fieldName={fieldName} value={value as string} />
   ) : (
-    <FormControl fullWidth size="small" error={!!error}>
+    <FormControl fullWidth size="small" error={!!error} required={required}>
       <Select
         className={FieldClassName("hook-dropdown", error)}
         value={value ? String(value) : ""}
         onChange={onChange}
         displayEmpty
+        aria-required={required}
         data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
       >
+        {!value && (placeholder ?? config?.placeHolder) && (
+          <MenuItem value="" disabled>{placeholder ?? config?.placeHolder}</MenuItem>
+        )}
         {options?.map(option => (
           <MenuItem key={String(option.value)} value={String(option.value)} disabled={option.disabled}>
             {option.label}

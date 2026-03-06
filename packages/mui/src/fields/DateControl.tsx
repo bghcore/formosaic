@@ -4,7 +4,7 @@ import React from "react";
 import { FieldClassName, GetFieldDataTestId, formatDateTime } from "../helpers";
 
 const DateControl = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, setFieldValue } = props;
+  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, setFieldValue } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const date = new Date(event.target.value);
@@ -37,6 +37,7 @@ const DateControl = (props: IFieldProps<{}>) => {
         size="small"
         fullWidth
         error={!!error}
+        required={required}
         helperText={error?.message}
         InputLabelProps={{ shrink: true }}
         inputProps={{

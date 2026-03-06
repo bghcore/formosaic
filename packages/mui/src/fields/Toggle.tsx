@@ -5,7 +5,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId } from "../helpers";
 
 const Toggle = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, setFieldValue } = props;
+  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, setFieldValue } = props;
 
   const onChange = (_: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     setFieldValue(fieldName, checked);
@@ -20,6 +20,8 @@ const Toggle = (props: IFieldProps<{}>) => {
         <Switch
           checked={value as boolean}
           onChange={onChange}
+          aria-invalid={!!error}
+          aria-required={required}
           data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
         />
       }

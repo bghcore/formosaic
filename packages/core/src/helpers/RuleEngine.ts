@@ -136,10 +136,12 @@ export function buildDefaultFieldStates(
       computedValue: config.computedValue,
       confirmInput: config.confirmInput,
       options: config.options,
+      label: config.label,
       defaultValue: config.defaultValue,
       computeOnCreateOnly: config.computeOnCreateOnly,
       dependentFields: [...(graph[fieldName] ?? [])],
       dependsOnFields: [],
+      activeRuleIds: [],
     };
   }
 
@@ -180,6 +182,11 @@ export function evaluateAllRules(
     if (!config?.rules) continue;
 
     const ruleResults = evaluateFieldRules(config.rules, values);
+
+    if (fieldStates[fieldName]) {
+      fieldStates[fieldName].activeRuleIds = ruleResults.activeRuleIds;
+    }
+
     logEvent("rule_evaluated", fieldName, `${config.rules.length} rule(s) evaluated`);
 
     // Apply self-effects
@@ -237,6 +244,10 @@ export function evaluateAffectedFields(
       computedValue: config.computedValue,
       confirmInput: config.confirmInput,
       options: config.options,
+      label: config.label,
+      defaultValue: config.defaultValue,
+      computeOnCreateOnly: config.computeOnCreateOnly,
+      activeRuleIds: [],
     };
   }
 
@@ -292,6 +303,7 @@ interface IRuleEvalResult {
   selfEffect: IFieldEffect;
   crossEffects: Record<string, IFieldEffect>;
   fieldOrder?: string[];
+  activeRuleIds: string[];
 }
 
 /**
@@ -305,9 +317,14 @@ function evaluateFieldRules(rules: IRule[], values: IEntityData): IRuleEvalResul
   const selfEffect: IFieldEffect = {};
   const crossEffects: Record<string, IFieldEffect> = {};
   let fieldOrder: string[] | undefined;
+  const activeRuleIds: string[] = [];
 
-  for (const rule of sorted) {
+  for (let i = 0; i < sorted.length; i++) {
+    const rule = sorted[i];
     const conditionMet = evaluateCondition(rule.when, values);
+    if (conditionMet) {
+      activeRuleIds.push(rule.id ?? `rule_${i}`);
+    }
     const effect = conditionMet ? rule.then : rule.else;
 
     if (!effect) continue;
@@ -331,7 +348,7 @@ function evaluateFieldRules(rules: IRule[], values: IEntityData): IRuleEvalResul
     }
   }
 
-  return { selfEffect, crossEffects, fieldOrder };
+  return { selfEffect, crossEffects, fieldOrder, activeRuleIds };
 }
 
 /**
@@ -347,8 +364,13 @@ function mergeEffect(target: IFieldEffect, source: IFieldEffect): void {
   if (source.readOnly !== undefined && target.readOnly === undefined) {
     target.readOnly = source.readOnly;
   }
-  if (source.component !== undefined && target.component === undefined) {
-    target.component = source.component;
+  if (source.label !== undefined && target.label === undefined) {
+    target.label = source.label;
+  }
+  const sourceType = source.type ?? source.component;
+  const targetType = target.type ?? target.component;
+  if (sourceType !== undefined && targetType === undefined) {
+    target.type = sourceType;
   }
   if (source.options !== undefined && target.options === undefined) {
     target.options = source.options;
@@ -372,7 +394,9 @@ function applyEffectToState(
   if (effect.required !== undefined) state.required = effect.required;
   if (effect.hidden !== undefined) state.hidden = effect.hidden;
   if (effect.readOnly !== undefined) state.readOnly = effect.readOnly;
-  if (effect.component !== undefined) state.type = effect.component;
+  if (effect.label !== undefined) state.label = effect.label;
+  const effectType = effect.type ?? effect.component;
+  if (effectType !== undefined) state.type = effectType;
   if (effect.options !== undefined) state.options = effect.options;
   if (effect.validate !== undefined) state.validate = effect.validate;
   if (effect.computedValue !== undefined) state.computedValue = effect.computedValue;

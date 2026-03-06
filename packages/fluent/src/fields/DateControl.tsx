@@ -5,7 +5,7 @@ import React from "react";
 import { FieldClassName, GetFieldDataTestId, formatDateTime } from "../helpers";
 
 const DateControl = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, setFieldValue } = props;
+  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, setFieldValue } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const date = new Date(event.target.value);
@@ -35,6 +35,8 @@ const DateControl = (props: IFieldProps<{}>) => {
         type="date"
         value={dateInputValue}
         onChange={onChange}
+        aria-invalid={!!error}
+        aria-required={required}
         data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
       />
       <Button
@@ -44,6 +46,11 @@ const DateControl = (props: IFieldProps<{}>) => {
         title={FormStrings.clickToClear}
         aria-label={`${fieldName} ${FormStrings.clear}`}
       />
+      {error?.message && (
+        <span className="hook-date-control-error" role="alert" style={{ color: "var(--colorPaletteRedForeground1, #bc2f32)", fontSize: "12px" }}>
+          {error.message}
+        </span>
+      )}
     </div>
   );
 };

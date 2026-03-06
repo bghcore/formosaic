@@ -23,7 +23,7 @@ function evaluateLogicalCondition(condition: ILogicalCondition, values: IEntityD
       // NOT applies to the first (and typically only) child condition
       return condition.conditions.length > 0
         ? !evaluateCondition(condition.conditions[0], values)
-        : true;
+        : false;
     default:
       return false;
   }
@@ -60,7 +60,7 @@ function evaluateFieldCondition(condition: IFieldCondition, values: IEntityData)
     case "notIn":
       return Array.isArray(condition.value)
         ? !condition.value.some(v => looseEquals(fieldValue, v))
-        : true;
+        : false;
     case "isEmpty":
       return isValueEmpty(fieldValue);
     case "isNotEmpty":
@@ -89,7 +89,8 @@ function collectDependencies(condition: ICondition, deps: Set<string>): void {
   if (isLogicalCondition(condition)) {
     condition.conditions.forEach(c => collectDependencies(c, deps));
   } else {
-    deps.add((condition as IFieldCondition).field);
+    const fieldRef = (condition as IFieldCondition).field;
+    deps.add(fieldRef.includes('.') ? fieldRef.split('.')[0] : fieldRef);
   }
 }
 

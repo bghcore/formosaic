@@ -28,11 +28,11 @@ describe("Extended Validators", () => {
       expect(runSyncValidations("ab", rules, ctx)).toBe("Must be at least 3 characters");
     });
 
-    it("returns undefined for empty/null value", () => {
+    it("validates empty string but skips null/undefined", () => {
       const rules: IValidationRule[] = [createMinLengthRule(3)];
       const ctx: IValidationContext = { fieldName: "test", values: {} };
 
-      expect(runSyncValidations("", rules, ctx)).toBeUndefined();
+      expect(runSyncValidations("", rules, ctx)).toBe("Must be at least 3 characters");
       expect(runSyncValidations(null, rules, ctx)).toBeUndefined();
       expect(runSyncValidations(undefined, rules, ctx)).toBeUndefined();
     });

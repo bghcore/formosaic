@@ -28,6 +28,9 @@ export const RulesEngineProvider: React.FC<React.PropsWithChildren<{}>> = (
 ): React.JSX.Element => {
   const [rulesState, dispatch] = React.useReducer(rulesEngineReducer, defaultRulesEngineState);
 
+  const rulesStateRef = React.useRef(rulesState);
+  React.useEffect(() => { rulesStateRef.current = rulesState; }, [rulesState]);
+
   const initFormState = React.useCallback((
     configName: string,
     defaultValues: IEntityData,
@@ -57,7 +60,7 @@ export const RulesEngineProvider: React.FC<React.PropsWithChildren<{}>> = (
     fieldName: string,
     fields: Record<string, IFieldConfig>
   ) => {
-    const currentState = rulesState.configs[configName];
+    const currentState = rulesStateRef.current.configs[configName];
     if (!currentState) return;
 
     const hasAnyDeps =
@@ -72,7 +75,7 @@ export const RulesEngineProvider: React.FC<React.PropsWithChildren<{}>> = (
       type: RulesEngineActionType.UPDATE,
       payload: { configName, formState: updatedState },
     });
-  }, [rulesState]);
+  }, []);
 
   const providerValue: IRulesEngineProvider = React.useMemo(() => ({
     rulesState,

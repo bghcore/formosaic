@@ -59,7 +59,9 @@ const RenderField = (props: IRenderFieldProps) => {
   const { control, getValues } = useFormContext();
   const previousValueRef = React.useRef<unknown>(undefined);
 
-  trackRender(fieldName);
+  React.useEffect(() => {
+    trackRender(fieldName);
+  });
 
   const isDisabled = disabled ?? false;
   const fieldNameConst = `${fieldName}` as const;
@@ -158,7 +160,11 @@ const RenderField = (props: IRenderFieldProps) => {
         Missing component &quot;{type}&quot; for field &quot;{fieldName}&quot;. Available: [{available}]
       </div>
     );
-  }, [type, hidden, required, readOnly, disabled, options, softHidden, renderLabel, renderError, renderStatus]);
+  }, [type, hidden, required, readOnly, disabled, options, softHidden, renderLabel, renderError, renderStatus,
+    fieldName, fieldNameConst, label, validate, config, description, placeholder, helpText,
+    isCreate, hideOnCreate, isManualSave, skipLayoutReadOnly,
+    entityId, entityType, programName, parentEntityId, parentEntityType,
+    injectedFields, analytics, control, getValues, setFieldValue]);
 
   return FieldComponent;
 };
