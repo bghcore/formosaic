@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-03-06
+
+### Fixed
+
+- Fix CSS variable references in `FieldWrapper` and `InlineForm` — inline styles now correctly use `--fe-*` vars matching `styles.css` definitions
+- Rename `hook-*` CSS classes to `fe-*` across fluent and mui adapter field components
+- Rename `dynamic-form-*` CSS classes to `fe-*` in core components
+- Rename internal `IHook*` interfaces to clean names in fluent and headless adapters
+- Rename internal files: `BusinessRulesProvider` → `RulesEngineProvider`, `BusinessRulesReducer` → `RulesEngineReducer`, `InjectedHookFieldProvider` → `InjectedFieldProvider`
+- Fix console log prefix: `[dynamic-forms]` → `[form-engine]`
+- Fix old provider names in vite-mui and nextjs examples (`BusinessRulesProvider` → `RulesEngineProvider`)
+
 ## [1.0.0] - 2026-03-06
 
 First release under the `@form-eng` npm scope. Complete rebrand from legacy naming throughout the codebase.
