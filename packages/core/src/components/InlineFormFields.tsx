@@ -43,9 +43,9 @@ export const FormFields = (props: IFormFieldsProps) => {
   const loadingKey = `${programName}-${entityType}-${entityId}-form-loaded`;
 
   return (
-    <div className={`dynamic-form-container ${collapsedClass}`}>
+    <div className={`fe-form-container ${collapsedClass}`}>
       <form
-        className={`dynamic-form ${collapsedClass} ${inPanel ? "in-panel" : ""}`}
+        className={`fe-form ${collapsedClass} ${inPanel ? "in-panel" : ""}`}
         style={collapsedClass && collapsedMaxHeight ? { maxHeight: `${collapsedMaxHeight}px` } : undefined}
         data-testid={`${programName}-${entityType}-${entityId}-form`}
       >

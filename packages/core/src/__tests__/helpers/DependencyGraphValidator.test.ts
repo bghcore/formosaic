@@ -171,7 +171,7 @@ describe("DependencyGraphValidator", () => {
       const errors = validateDependencyGraph(circularDependencyConfigs);
       expect(errors.length).toBeGreaterThan(0);
       expect(warnSpy).toHaveBeenCalled();
-      expect(warnSpy.mock.calls[0][0]).toContain("[dynamic-forms]");
+      expect(warnSpy.mock.calls[0][0]).toContain("[form-engine]");
     });
 
     it("returns empty for valid dependency graph (non-self-referencing conditions)", () => {

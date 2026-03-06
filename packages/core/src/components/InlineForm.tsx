@@ -18,7 +18,7 @@ import { IConfirmInputModalProps } from "../types/IConfirmInputModalProps";
 import { IFieldConfig } from "../types/IFieldConfig";
 import { IFormConfig } from "../types/IFormConfig";
 import { IFormEngineSharedProps } from "../types/IFormEngineSharedProps";
-import { UseRulesEngineContext } from "../providers/BusinessRulesProvider";
+import { UseRulesEngineContext } from "../providers/RulesEngineProvider";
 import { FormStrings } from "../strings";
 import { useFormAnalytics } from "../hooks/useFormAnalytics";
 import ConfirmInputsModal from "./ConfirmInputsModal";
@@ -295,9 +295,9 @@ export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps):
         {statusMessage}
       </div>
       {enableFilter && (
-        <div className="dynamic-form-filter">
+        <div className="fe-filter">
           {renderFilterInput ? renderFilterInput({ onChange: onFilterChange }) : (
-            <input type="text" placeholder={FormStrings.filterFields} aria-label={FormStrings.filterFields} onChange={(e) => onFilterChange(e.target.value)} className="dynamic-form-filter-input" />
+            <input type="text" placeholder={FormStrings.filterFields} aria-label={FormStrings.filterFields} onChange={(e) => onFilterChange(e.target.value)} className="fe-filter-input" />
           )}
         </div>
       )}
@@ -306,7 +306,7 @@ export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps):
           {formErrors.map((err, i) => (<div key={i} className="form-error-item">{err}</div>))}
         </div>
       )}
-      <div className="dynamic-form-wrapper">
+      <div className="fe-form-wrapper">
         <FormFields
           entityId={entityId}
           entityType={entityType}
@@ -338,7 +338,7 @@ export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps):
         )}
         {effectiveManualSave && (
           renderSaveButton ? renderSaveButton({ onSave: manualSave, isDirty, isValid, isSubmitting }) : (
-            <div className="dynamic-form-save-actions" style={{ marginTop: "16px", display: "flex", gap: "8px" }}>
+            <div className="fe-save-actions" style={{ marginTop: "16px", display: "flex", gap: "8px" }}>
               <button type="button" className="save-button" onClick={manualSave} disabled={!isDirty || isSubmitting}>
                 {isCreate ? FormStrings.create : FormStrings.save}
               </button>

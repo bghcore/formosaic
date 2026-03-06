@@ -14,12 +14,12 @@ export { FormStrings } from "./strings";
 export {
   RulesEngineProvider,
   UseRulesEngineContext,
-} from "./providers/BusinessRulesProvider";
+} from "./providers/RulesEngineProvider";
 export {
   InjectedFieldProvider,
   UseInjectedFieldContext,
 } from "./providers/InjectedFieldProvider";
-export type { IRulesEngineProvider } from "./providers/IBusinessRulesProvider";
+export type { IRulesEngineProvider } from "./providers/IRulesEngineProvider";
 export type { IInjectedFieldProvider } from "./providers/IInjectedFieldProvider";
 
 // Rule Engine

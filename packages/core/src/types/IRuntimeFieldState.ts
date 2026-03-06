@@ -3,9 +3,7 @@ import { IValidationRule } from "./IValidationRule";
 
 /**
  * Runtime state for a single field after all rules have been evaluated.
- *
- * This replaces the v1 IBusinessRule type. Contains the evaluated state
- * consumed by form components to determine rendering behavior.
+ * Consumed by form components to determine rendering behavior.
  */
 export interface IRuntimeFieldState {
   /** UI component type to render. May be swapped by rules. */
@@ -40,8 +38,6 @@ export interface IRuntimeFieldState {
 
 /**
  * Runtime state for the entire form.
- *
- * This replaces the v1 IConfigBusinessRules + IBusinessRulesState types.
  */
 export interface IRuntimeFormState {
   /** Per-field runtime state keyed by field name. */
@@ -52,8 +48,6 @@ export interface IRuntimeFormState {
 
 /**
  * State stored in the rules engine provider (keyed by config name).
- *
- * This replaces the v1 IBusinessRulesState type.
  */
 export interface IRulesEngineState {
   configs: Record<string, IRuntimeFormState>;

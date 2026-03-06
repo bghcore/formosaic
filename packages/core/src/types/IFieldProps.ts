@@ -2,9 +2,7 @@ import { FieldError } from "react-hook-form";
 import { IOption } from "./IOption";
 
 /**
- * Props passed to injected field components (v2 schema).
- *
- * This replaces the v1 IHookFieldSharedProps type.
+ * Props passed to injected field components via React.cloneElement.
  * The generic parameter T types the `config` metadata object.
  */
 export interface IFieldProps<T = Record<string, unknown>> {

@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { IFieldConfig } from "../types/IFieldConfig";
-import { UseRulesEngineContext } from "../providers/BusinessRulesProvider";
+import { UseRulesEngineContext } from "../providers/RulesEngineProvider";
 import { FormStrings } from "../strings";
 import RenderField from "./RenderField";
 
@@ -76,9 +76,9 @@ const ConfirmInputsModal = (props: IConfirmInputsModalProps) => {
   };
 
   const content = (
-    <div className="dynamic-form-wrapper">
-      <div className="dynamic-form-container">
-        <form className="dynamic-form modal">
+    <div className="fe-form-wrapper">
+      <div className="fe-form-container">
+        <form className="fe-form fe-modal">
           {confirmInputFields?.map(confirmInputField => {
             const fieldState = rulesState.configs[configName]?.fieldStates[confirmInputField];
             const fieldConfig = fields[confirmInputField];
@@ -113,9 +113,9 @@ const ConfirmInputsModal = (props: IConfirmInputsModalProps) => {
   }
 
   return (
-    <dialog ref={dialogRef} className="dynamic-form-modal" role="dialog" aria-modal="true" aria-label={FormStrings.confirm} onKeyDown={handleKeyDown}>
+    <dialog ref={dialogRef} className="fe-modal" role="dialog" aria-modal="true" aria-label={FormStrings.confirm} onKeyDown={handleKeyDown}>
       {content}
-      <div className="dynamic-form-modal-actions">
+      <div className="fe-modal-actions">
         <button type="button" ref={saveButtonRef} onClick={saveConfirmInputFields}>{FormStrings.save}</button>
         <button type="button" onClick={cancelConfirmInputFields}>{FormStrings.cancel}</button>
       </div>

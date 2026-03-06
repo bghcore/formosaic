@@ -74,7 +74,7 @@ export function validateDependencyGraph(
   try {
     if (typeof globalThis !== "undefined" && (globalThis as Record<string, unknown>).__DEV__ !== false) {
       for (const error of errors) {
-        console.warn(`[dynamic-forms] ${error.message}`);
+        console.warn(`[form-engine] ${error.message}`);
       }
     }
   } catch {

@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
-import rulesEngineReducer, { defaultRulesEngineState } from "../../reducers/BusinessRulesReducer";
+import rulesEngineReducer, { defaultRulesEngineState } from "../../reducers/RulesEngineReducer";
 import { RulesEngineActionType, RulesEngineAction } from "../../types/IRulesEngineAction";
 import { IRulesEngineState, IRuntimeFormState } from "../../types/IRuntimeFieldState";
 
-describe("BusinessRulesReducer (v2 — RulesEngineReducer)", () => {
+describe("RulesEngineReducer", () => {
   const makeFormState = (overrides?: Partial<IRuntimeFormState>): IRuntimeFormState => ({
     fieldOrder: ["field1", "field2"],
     fieldStates: {

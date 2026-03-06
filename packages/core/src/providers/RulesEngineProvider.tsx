@@ -4,8 +4,8 @@ import { IFieldConfig } from "../types/IFieldConfig";
 import { IRuntimeFormState } from "../types/IRuntimeFieldState";
 import { RulesEngineActionType } from "../types/IRulesEngineAction";
 import { evaluateAllRules, evaluateAffectedFields } from "../helpers/RuleEngine";
-import rulesEngineReducer, { defaultRulesEngineState } from "../reducers/BusinessRulesReducer";
-import { IRulesEngineProvider } from "./IBusinessRulesProvider";
+import rulesEngineReducer, { defaultRulesEngineState } from "../reducers/RulesEngineReducer";
+import { IRulesEngineProvider } from "./IRulesEngineProvider";
 
 const RulesEngineContext: React.Context<IRulesEngineProvider> = React.createContext(
   undefined as unknown as IRulesEngineProvider
