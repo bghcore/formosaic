@@ -7,7 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2026-03-06
 
-First release under the `@form-engine` scope. Rebranded from `@bghcore/dynamic-forms-*` with a new RJSF-compatible schema import system. Renamed `DynamicForm` to `FormEngine`, renamed CSS custom properties from `--hook-form-*` to `--fe-*`, renamed CSS classes from `hook-form-*` to `fe-*`, removed deprecated `Hook*` aliases from adapter packages, renamed internal component files (removed `Hook` prefix from core component file names).
+First release under the `@form-eng` npm scope. Complete rebrand from legacy naming throughout the codebase.
+
+**Public API rebrand:**
+- Main component: `FormEngine` (was `DynamicForm`)
+- CSS custom properties: `--fe-*` prefix (was `--hook-form-*`)
+- CSS classes: `fe-*` prefix (was `hook-form-*` and `dynamic-form-*`)
+- Removed all deprecated `Hook*` aliases from adapter packages (`@form-eng/fluent`, `@form-eng/mui`, `@form-eng/headless`)
+
+**Internal naming cleanup:**
+- Core component files renamed: `InlineForm.tsx`, `FieldWrapper.tsx`, `RenderField.tsx`, `ConfirmInputsModal.tsx`, `WizardForm.tsx`, `FieldArray.tsx`, `FormErrorBoundary.tsx`, `FormDevTools.tsx`, `InlineFormFields.tsx` (all removed `Hook` prefix)
+- Provider files renamed: `RulesEngineProvider.tsx` (was `BusinessRulesProvider.tsx`), `InjectedFieldProvider.tsx` (was `InjectedHookFieldProvider.tsx`)
+- Reducer renamed: `RulesEngineReducer.ts` (was `BusinessRulesReducer.ts`)
+- Helper renamed: `InlineFormHelper.ts` (was `HookInlineFormHelper.ts`)
+- Type renamed: `IFormEngineSharedProps` (was `IHookInlineFormSharedProps`)
+- Adapter CSS classes: `fe-textbox`, `fe-dropdown`, etc. (was `hook-textbox`, `hook-dropdown`)
+- Console log prefix: `[form-engine]` (was `[dynamic-forms]`)
 
 ### Added
 
