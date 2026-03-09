@@ -14,17 +14,17 @@ import { Parser } from "expr-eval";
  * - $fn.name() for value function calls
  * - $parent.fieldName for parent entity references
  * - $root.fieldName alias for $values.fieldName
- * - Math functions: Math.round, Math.floor, Math.ceil, Math.abs, Math.min, Math.max
+ * - Math functions (expr-eval builtins): round(), floor(), ceil(), abs(), min(), max(), sqrt(), pow(), log()
  * - Arithmetic: +, -, *, /
- * - Comparison: >, <, >=, <=, ===, !==
- * - Logical: &&, ||
+ * - Comparison: ==, !=, >, <, >=, <=
+ * - Logical: and, or, not
  * - String concatenation via +
  *
  * @example
  *   "$values.quantity * $values.unitPrice"
  *   "$fn.setDate()"
  *   "$parent.category"
- *   "Math.round($values.total * 100) / 100"
+ *   "round($values.total * 100) / 100"
  */
 
 // The @types/expr-eval package covers the 1.x API; expr-eval 2.x exposes additional
@@ -36,7 +36,7 @@ type Parser2 = Parser & {
   consts: Record<string, unknown>;
 };
 
-// Singleton CSP-safe parser with string + support and Math.* aliases
+// Singleton CSP-safe parser with string + support
 const _parser: Parser = (() => {
   const p = new Parser() as Parser2;
 
@@ -47,17 +47,6 @@ const _parser: Parser = (() => {
     return origAdd(a as number, b as number);
   };
 
-  // Add Math.* function aliases (expr-eval uses lowercase names natively)
-  p.functions["round"] = Math.round;
-  p.functions["floor"] = Math.floor;
-  p.functions["ceil"] = Math.ceil;
-  p.functions["abs"] = Math.abs;
-  p.functions["min"] = Math.min;
-  p.functions["max"] = Math.max;
-  p.functions["pow"] = Math.pow;
-  p.functions["sqrt"] = Math.sqrt;
-  p.functions["log"] = Math.log;
-
   // Add NaN as a named constant so that text-substitution of null/undefined → "NaN"
   // produces valid arithmetic (NaN * x === NaN, preserving backward-compatible behaviour).
   p.consts["NaN"] = NaN;
@@ -65,23 +54,6 @@ const _parser: Parser = (() => {
   return p as Parser;
 })();
 
-/**
- * Normalises an expression so it is compatible with expr-eval:
- * - Converts `===` to `==` and `!==` to `!=`
- * - Converts `&&` to `and` and `||` to `or`
- * - Converts `Math.round(` → `round(`, etc.
- */
-function normaliseExpression(expression: string): string {
-  return expression
-    // Must replace !== before != to avoid double-replacement
-    .replace(/!==/g, "!=")
-    .replace(/===/g, "==")
-    // Logical operators
-    .replace(/&&/g, " and ")
-    .replace(/\|\|/g, " or ")
-    // Math.* → bare function names supported by expr-eval
-    .replace(/Math\.(round|floor|ceil|abs|min|max|pow|sqrt|log)\(/g, "$1(");
-}
 
 export function evaluateExpression(
   expression: string,
@@ -161,12 +133,9 @@ export function evaluateExpression(
     (_, fieldPath: string) => serializeValue(getNestedValue(values, fieldPath))
   );
 
-  // Step 3 – normalise JS operators to expr-eval syntax
-  const normalisedExpr = normaliseExpression(resolved);
-
-  // Step 4 – evaluate with the CSP-safe expr-eval parser
+  // Step 3 – evaluate with the CSP-safe expr-eval parser
   try {
-    return _parser.evaluate(normalisedExpr, {});
+    return _parser.evaluate(resolved, {});
   } catch {
     return undefined;
   }

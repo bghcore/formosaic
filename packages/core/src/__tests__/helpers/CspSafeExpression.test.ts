@@ -9,9 +9,8 @@ afterEach(() => {
 /**
  * Feature 4 – CSP-Safe Expression Engine
  *
- * These tests verify that the expr-eval-based implementation maintains
- * backward compatibility with the previous new Function() implementation
- * and does not use eval() or new Function() at runtime.
+ * These tests verify that the expr-eval-based implementation does not use
+ * eval() or new Function() at runtime, and that expr-eval native syntax works.
  */
 
 describe("Feature 4 – CSP-Safe Expression Engine", () => {
@@ -30,51 +29,51 @@ describe("Feature 4 – CSP-Safe Expression Engine", () => {
     });
   });
 
-  describe("Operator compatibility", () => {
-    it("evaluates === (strict equality) correctly", () => {
-      expect(evaluateExpression("$values.a === $values.b", { a: 5, b: 5 })).toBe(true);
-      expect(evaluateExpression("$values.a === $values.b", { a: 5, b: 6 })).toBe(false);
+  describe("Operators (expr-eval native syntax)", () => {
+    it("evaluates == (equality) correctly", () => {
+      expect(evaluateExpression("$values.a == $values.b", { a: 5, b: 5 })).toBe(true);
+      expect(evaluateExpression("$values.a == $values.b", { a: 5, b: 6 })).toBe(false);
     });
 
-    it("evaluates !== (strict inequality) correctly", () => {
-      expect(evaluateExpression("$values.a !== $values.b", { a: 5, b: 6 })).toBe(true);
-      expect(evaluateExpression("$values.a !== $values.b", { a: 5, b: 5 })).toBe(false);
+    it("evaluates != (inequality) correctly", () => {
+      expect(evaluateExpression("$values.a != $values.b", { a: 5, b: 6 })).toBe(true);
+      expect(evaluateExpression("$values.a != $values.b", { a: 5, b: 5 })).toBe(false);
     });
 
-    it("evaluates && (logical and) correctly", () => {
-      expect(evaluateExpression("$values.a && $values.b", { a: true, b: true })).toBe(true);
-      expect(evaluateExpression("$values.a && $values.b", { a: true, b: false })).toBe(false);
+    it("evaluates 'and' (logical and) correctly", () => {
+      expect(evaluateExpression("$values.a and $values.b", { a: true, b: true })).toBe(true);
+      expect(evaluateExpression("$values.a and $values.b", { a: true, b: false })).toBe(false);
     });
 
-    it("evaluates || (logical or) correctly", () => {
-      expect(evaluateExpression("$values.a || $values.b", { a: false, b: true })).toBe(true);
-      expect(evaluateExpression("$values.a || $values.b", { a: false, b: false })).toBe(false);
+    it("evaluates 'or' (logical or) correctly", () => {
+      expect(evaluateExpression("$values.a or $values.b", { a: false, b: true })).toBe(true);
+      expect(evaluateExpression("$values.a or $values.b", { a: false, b: false })).toBe(false);
     });
   });
 
-  describe("Math.* functions", () => {
-    it("evaluates Math.round via expr-eval", () => {
-      expect(evaluateExpression("Math.round($values.x * 100) / 100", { x: 10.567 })).toBe(10.57);
+  describe("Math functions (expr-eval builtins)", () => {
+    it("evaluates round()", () => {
+      expect(evaluateExpression("round($values.x * 100) / 100", { x: 10.567 })).toBe(10.57);
     });
 
-    it("evaluates Math.floor via expr-eval", () => {
-      expect(evaluateExpression("Math.floor($values.x)", { x: 4.9 })).toBe(4);
+    it("evaluates floor()", () => {
+      expect(evaluateExpression("floor($values.x)", { x: 4.9 })).toBe(4);
     });
 
-    it("evaluates Math.ceil via expr-eval", () => {
-      expect(evaluateExpression("Math.ceil($values.x)", { x: 4.1 })).toBe(5);
+    it("evaluates ceil()", () => {
+      expect(evaluateExpression("ceil($values.x)", { x: 4.1 })).toBe(5);
     });
 
-    it("evaluates Math.abs via expr-eval", () => {
-      expect(evaluateExpression("Math.abs($values.x)", { x: -42 })).toBe(42);
+    it("evaluates abs()", () => {
+      expect(evaluateExpression("abs($values.x)", { x: -42 })).toBe(42);
     });
 
-    it("evaluates Math.min via expr-eval", () => {
-      expect(evaluateExpression("Math.min($values.a, $values.b)", { a: 3, b: 7 })).toBe(3);
+    it("evaluates min()", () => {
+      expect(evaluateExpression("min($values.a, $values.b)", { a: 3, b: 7 })).toBe(3);
     });
 
-    it("evaluates Math.max via expr-eval", () => {
-      expect(evaluateExpression("Math.max($values.a, $values.b)", { a: 3, b: 7 })).toBe(7);
+    it("evaluates max()", () => {
+      expect(evaluateExpression("max($values.a, $values.b)", { a: 3, b: 7 })).toBe(7);
     });
   });
 
