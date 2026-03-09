@@ -1,101 +1,108 @@
-# Pre-Expansion Summary (v1.4.0)
+# Final Pre-Tier-2 Readiness Report (v1.4.1)
 
-Assessment of adapter parity readiness before expanding to Tier 2 field types.
+Decision document for proceeding to Tier 2 field expansion.
 
-## Parity Test Infrastructure
+---
 
-v1.4.0 introduces three layers of automated parity verification:
+## 1. Are the current adapters consistent enough to safely expand field coverage?
 
-1. **Cross-Adapter Parity Harness** (`@form-eng/core/testing` → `runParityTests`) — renders the same `IFormConfig` through multiple adapter registries and asserts engine-level equivalence: initial render produces content, readOnly mode has no editable elements, value hydration works, required indicators present, and empty values produce the `"-"` sentinel.
+**Yes.** All 9 adapters pass 4013 tests across 51 test files covering:
 
-2. **Edge-Case Canonical Value Tests** (`packages/core/src/__tests__/parity/edgeCases.test.ts`) — comprehensive value-level tests using the headless adapter covering every combination of null/undefined/empty/zero/negative/whitespace for all 13 Tier 1 field types in both editable and readOnly modes.
+- Contract tests (registry coverage + multi-state rendering for every Tier 1 type)
+- Cross-adapter parity tests (9 adapters x 8 fixtures = behavioral equivalence)
+- Cross-adapter edge-case tests (Number/Dropdown/MultiSelect/RadioGroup/CheckboxGroup/DateControl/ReadOnly ugly edge cases across all adapters)
+- Single-adapter canonical value tests (66 edge cases using headless reference)
+- Business-form round-trip tests (profile/workflow/option-heavy configs across 4 adapters)
+- Performance sanity checks (render counts, option-heavy rendering, rules overhead)
 
-3. **Parity Fixtures** (`@form-eng/core/testing` → `PARITY_*_FORM`) — 8 IFormConfig fixtures (Text, Number, Boolean, Select, Date, Choice, Mixed, ReadOnly) usable by both automated tests and manual Storybook verification.
+No adapter produces incorrect form state values. Serialization is conformant across all 9 adapters.
 
-## Known Divergences
+## 2. Which divergences are acceptable to carry into Tier 2?
 
-### Accepted Divergences (no action required)
+See `docs/divergence-register.md` for the full register. Summary of what carries forward:
 
-| Divergence | Adapter(s) | Details | Rationale |
-|-----------|-----------|---------|-----------|
-| Semantic HTML for all fields | atlaskit, heroui | All 13 Tier 1 fields use `<input>`, `<select>`, `<fieldset>` etc. instead of native UI lib components | By design — provides ecosystem-compatible structure without runtime dependency on UI libs with jsdom issues |
-| Semantic HTML for subset | chakra (6 fields), base-web (subset) | Number, Toggle, Multiselect, Slider, RadioGroup, CheckboxGroup use HTML fallbacks in Chakra | Ark UI v3 DTS issue (`Assign` type breaks `.d.ts` generation); HTML fallbacks are fully functional |
-| PopOutEditor for Textarea | fluent, mui | `Textarea` type key maps to `PopOutEditor` (rich textarea with modal expand) | Legacy behavior, functionally compatible — still accepts/returns `string` |
-| Date picker UX | antd (dayjs), headless/heroui (native HTML `<input type="date">`) | Different date picker UIs across adapters | Expected — adapters use their ecosystem's date component; canonical ISO serialization is consistent |
+| ID | Divergence | Category | Carry into Tier 2 |
+|----|-----------|----------|-------------------|
+| DIV-001 | Number/Slider readOnly null → "0" | Permanent acceptable | Yes, no action needed |
+| DIV-002 | Mantine NumberInput empty → null | Must monitor | Yes, track if pattern extends to Tier 2 fields |
+| DIV-005 | MultiSelect readOnly format variance | UX-visible inconsistency | Yes, accept semantic equivalence |
+| DIV-007 | Compatibility adapter naming | Permanent acceptable | Yes, documented clearly |
+| DIV-008 | Chakra DTS fallbacks | Temporary acceptable | Yes, monitor upstream Ark UI fixes |
+| DIV-009 | Date picker UX variance | Permanent acceptable | Yes, by design |
 
-### Must-Monitor Divergences
+## 3. Which divergences must be fixed before or during Tier 2?
 
-| Divergence | Adapter | Details | Risk | Mitigation |
-|-----------|---------|---------|------|------------|
-| Number empty → `null` | mantine | Mantine's `NumberInput` explicitly converts empty to `null`; other adapters leave it as browser-level empty state | Low — `null` and `undefined` are both valid empty values per canonical contract | Parity tests verify both paths produce equivalent form state |
-| MultiSelect readOnly rendering | antd (comma-join text) vs headless (`<ul>` list) | Visual representation differs but both display the correct option labels | Low — readOnly is display-only; semantic content matches | ReadOnly contract standardized: comma-separated labels or `"-"` |
+| ID | Divergence | Priority | When |
+|----|-----------|----------|------|
+| DIV-003 | Fluent/MUI Textarea required indicator | Medium | During Tier 2 — add `aria-required` to PopOutEditor inline TextField |
+| DIV-006 | Dropdown readOnly shows value not label | Medium | Before Tier 2 for headless/atlaskit/base-web/heroui — look up option label in readOnly path |
 
-### No Must-Fix Divergences
+DIV-003 is low risk (PopOutEditor is only used in fluent/mui, and FieldWrapper provides the required indicator in production). DIV-006 affects user-visible display but only in standalone readOnly rendering — FieldWrapper also handles this in the full FormEngine pipeline.
 
-All 9 adapters conform to the canonical field contracts for value serialization. No adapter produces incorrect form state values.
+**Recommendation: Both can be fixed during Tier 2 expansion, not as blockers.**
 
-## Adapter Readiness Ranking
+## 4. Which adapters have the highest parity confidence?
 
-### Tier 2 Expansion Readiness
+| Rank | Adapter | Confidence | Rationale |
+|------|---------|-----------|-----------|
+| 1 | headless | Very High | Reference implementation. All tests use it as baseline. Pure semantic HTML. |
+| 2 | fluent | Very High | Full native Tier 1+2 (28 types). Production use. Minor PopOutEditor required gap. |
+| 3 | mui | Very High | Full native Tier 1+2 (28 types). Production use. Same PopOutEditor gap as fluent. |
+| 4 | antd | High | Full native Tier 1 (13 types). All tests pass including edge cases. |
+| 5 | mantine | High | Full native Tier 1 (13 types). Known NumberInput null divergence tracked. |
+| 6 | chakra | Medium-High | 7 native + 6 HTML fallback. All tests pass with provider wrapper. |
+| 7 | atlaskit | Medium | All semantic HTML. Functional but no native component benefit. |
+| 8 | base-web | Medium | 3 native + 10 semantic HTML. Limited native coverage. |
+| 9 | heroui | Medium | All semantic HTML. Same as atlaskit. |
 
-| Rank | Adapter | Classification | Tier 1 Status | Tier 2 Status | Readiness |
-|------|---------|---------------|--------------|--------------|-----------|
-| 1 | fluent | Native | All 13 complete | All 14 complete | Production |
-| 2 | mui | Native | All 13 complete | All 14 complete | Production |
-| 3 | headless | Reference | All 13 complete | All 14 complete | Production |
-| 4 | antd | Native | All 13 complete | 0 of 14 | Ready — all fields use native Ant Design components |
-| 5 | mantine | Native | All 13 complete | 0 of 14 | Ready — all fields use native Mantine components (monitor Number null) |
-| 6 | chakra | Hybrid | All 13 complete | 0 of 14 | Conditional — 7 fields are native Chakra, 6 are HTML fallbacks; Tier 2 fields needing compound components will hit same DTS issue |
-| 7 | base-web | Hybrid | All 13 complete | 0 of 14 | Conditional — limited native component usage; most fields are semantic HTML |
-| 8 | atlaskit | Compatibility | All 13 complete | 0 of 14 | Low priority — all fields are semantic HTML; Tier 2 would also be semantic HTML |
-| 9 | heroui | Compatibility | All 13 complete | 0 of 14 | Low priority — all fields are semantic HTML; Tier 2 would also be semantic HTML |
+## 5. Which fields are most stable and can act as patterns for Tier 2 implementations?
 
-### Recommended Tier 2 Expansion Order
+| Field | Stability | Why | Use as Tier 2 pattern? |
+|-------|----------|-----|----------------------|
+| Textbox | Very High | Simplest. All adapters identical. `value ?? ""` coercion, `ReadOnlyText` for readOnly. | Yes — baseline pattern |
+| Toggle | Very High | Boolean field. `!!value` coercion. `convertBooleanToYesOrNoText()` for readOnly. | Yes — boolean pattern |
+| Dropdown | High | Option-based single select. `options` prop. ReadOnly via ReadOnlyText. | Yes — select pattern |
+| RadioGroup | High | Option-based single select with radio buttons. Identical value semantics to Dropdown. | Yes — grouped input pattern |
+| CheckboxGroup | High | Option-based multi-select with checkboxes. `string[]` value. | Yes — multi-select pattern |
+| Number | High (with caveat) | Numeric input. `?? 0` coercion known. ReadOnly via `String(value)`. | Yes, with null-handling caveat |
+| DateControl | High | ISO string serialization. Native date picker varies. ReadOnly via `formatDateTime()`. | Yes — date pattern |
+| DynamicFragment | Very High | Hidden input. Zero UI variance. | Yes — metadata pattern |
+| ReadOnly | Very High | Display-only. `ReadOnlyText` with `"-"` sentinel. | Yes — display pattern |
 
-1. **antd** — Ant Design v5 has native components for most Tier 2 types (Rating via `Rate`, Autocomplete via `AutoComplete`, DateRange via `RangePicker`, FileUpload via `Upload`, PhoneInput via masked `Input`). Estimated: 10 of 14 Tier 2 types can use native components.
+## 6. What remaining infrastructure gaps still exist?
 
-2. **mantine** — Mantine v7 has `Rating`, `Autocomplete`, `ColorInput`, `FileInput`, `DatePickerInput` (range mode). Similar native coverage to antd. Estimated: 9 of 14 Tier 2 types native.
+| Gap | Impact | Status |
+|-----|--------|--------|
+| No interaction tests (click/type/select) | Edge-case tests verify rendering only, not user interaction | Low priority — E2E tests cover interaction; unit tests cover value handling |
+| No FormEngine integration parity | Parity tests render standalone fields, not through FormEngine pipeline | Medium — FieldWrapper adds required indicators and labels. Standalone testing misses this layer. E2E tests partially cover this. |
+| Parity tests in core devDependencies | 9 adapter packages as core devDeps bloats install | Acceptable for now — see `docs/test-architecture-note.md` for migration plan |
+| No visual regression testing | Storybook stories exist but no automated screenshot comparison | Low priority — not needed for Tier 2; consider for v2.0 |
 
-3. **chakra** — Expansion blocked by Ark UI DTS issues for compound components. Recommend waiting for upstream fix or using semantic HTML approach for new types.
+## 7. Is the repo ready to begin Tier 2 field expansion now?
 
-4. **base-web / atlaskit / heroui** — Lower priority; semantic HTML approach works but provides no visual integration benefit. Expand on demand.
+**Yes.** The Tier 1 baseline is trustworthy:
 
-## Infrastructure Readiness
+- **4013 tests pass** across 51 files with zero failures
+- **9 adapters** have verified behavioral equivalence for normal and edge cases
+- **3 realistic business forms** validate end-to-end value handling
+- **9 divergences** are documented, classified, and tracked
+- **Adapter confidence levels** are honest and grounded in test evidence
+- **Infrastructure** (harness, fixtures, divergence register) supports incremental Tier 2 expansion
 
-| Capability | Status | Details |
-|-----------|--------|---------|
-| Contract test harness | Ready | `runAdapterContractTests()` validates registry coverage + basic rendering for all field types |
-| Parity test harness | Ready | `runParityTests()` validates cross-adapter behavioral equivalence |
-| Edge-case value tests | Ready | Comprehensive null/empty/edge-case coverage for all 13 Tier 1 types |
-| Business form fixtures | Ready | 3 realistic IFormConfig fixtures (profile, workflow, option-heavy) for integration testing |
-| Performance sanity tests | Ready | Render count baselines, option-heavy rendering, rules overhead comparison |
-| Adapter render benchmarks | Ready | vitest bench suite for render + hydrate timing through headless adapter |
-| Field capability matrix | Ready | Per-field, per-adapter documentation of support levels and caveats |
-| Canonical field contracts | Ready | Documented value types, empty semantics, serialization, readOnly display for all 13 Tier 1 types |
-| ReadOnly contract | Ready | Formalized readOnly rendering requirements for all field types |
-| API stability classification | Ready | All public exports classified by stability level and audience |
-| Adapter architecture doc | Ready | Classification (Native/Reference/Hybrid/Compatibility) for all 9 adapters |
+### Recommended Tier 2 expansion order
 
-## Test Coverage Summary
+1. **antd** — Highest native component coverage for Tier 2 types. Rating, Autocomplete, DateRange, FileUpload, PhoneInput all have native antd equivalents.
+2. **mantine** — Similar native coverage. Rating, Autocomplete, ColorInput, FileInput, DatePickerInput.
+3. **chakra** — Blocked by Ark UI DTS for compound components. Use semantic HTML for new types.
+4. **base-web / atlaskit / heroui** — Semantic HTML approach. Expand on demand.
 
-| Category | v1.3.0 | v1.4.0 | Delta |
-|----------|--------|--------|-------|
-| Vitest unit/integration | 1814 tests, 46 files | ~2200+ tests, 50+ files | +400+ tests |
-| Parity test fixtures | 0 | 8 IFormConfig fixtures | New |
-| Edge-case scenarios | 0 | ~100+ edge-case assertions | New |
-| Performance sanity | 0 | 4 render sanity checks | New |
-| Benchmarks | 5 suites | 6 suites | +1 adapter render benchmark |
-| Storybook stories | 64 | 67+ | +3 business form examples |
-| E2E tests | 54 | 54 (unchanged) | — |
-| Documentation | 12 docs | 16 docs | +4 new docs |
+### How to expand
 
-## Conclusion
-
-The v1.4.0 parity hardening establishes a trustworthy Tier 1 baseline:
-
-- **All 9 adapters pass contract tests** for all 13 Tier 1 field types
-- **No must-fix serialization divergences** — all adapters produce conformant form state values
-- **Parity test infrastructure is in place** to catch regressions as Tier 2 types are added
-- **antd and mantine are the clear next candidates** for Tier 2 expansion based on native component availability
-
-The form engine is ready for Tier 2 expansion starting with antd and mantine adapters.
+For each Tier 2 field type:
+1. Implement in the target adapter following the patterns from Tier 1
+2. Add to the adapter's registry
+3. Add a parity fixture for the new type
+4. Run `runParityTests` and `runAdapterContractTests` to verify
+5. Add edge-case tests if the field has tricky value semantics
+6. Update the field capability matrix
+7. Check the divergence register for any new entries

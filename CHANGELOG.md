@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.1] - 2026-03-09
+
+### Added
+
+- **Cross-adapter ugly edge-case parity tests** — ~250 tests covering Number (null/0/negative/decimal/readOnly), Dropdown (unknown value/placeholder/readOnly), MultiSelect (null/empty array/readOnly labels), RadioGroup/CheckboxGroup (unknown value/readOnly), DateControl (null/invalid/readOnly), and ReadOnly (empty/number) across all 9 adapters.
+- **Business-form serialization round-trip tests** — ~160 tests using profileFormConfig, workflowFormConfig, and optionHeavyFormConfig to validate value hydration, readOnly rendering, and serialization shape across headless, antd, mantine, and chakra adapters.
+- **`docs/divergence-register.md`** — Structured tracking artifact with 9 classified divergences (DIV-001 through DIV-009). Each entry has severity, affected adapters/fields, observed vs canonical behavior, user-visible flag, jsdom-only flag, and recommended action.
+- **`docs/test-architecture-note.md`** — Architecture note evaluating whether parity tests should stay in core or move to a separate package. Recommendation: keep in core for now, revisit at ~5000 tests or when external adapters appear.
+- **Provider wrapper documentation** in `docs/adapter-architecture.md` — Documents which adapters require wrappers (Chakra: ChakraProvider, Mantine: MantineProvider + jsdom mocks), why, and test setup reference.
+- **Updated adapter classification** in `docs/adapter-architecture.md` — Honest classification with native/fallback field counts, confidence levels, and production readiness assessment per adapter. base-web reclassified as effectively Compatibility for Tier 1.
+- **Updated pre-expansion summary** (`docs/pre-expansion-summary.md`) — Final readiness report answering 7 key questions for Tier 2 go/no-go decision.
+
+### Changed
+
+- 4013 tests passing across 51 files (up from 3606 in v1.4.0).
+- Adapter classification table now includes native/fallback field counts and confidence levels.
+- All packages bumped to 1.4.1.
+
 ## [1.4.0] - 2026-03-09
 
 ### Added

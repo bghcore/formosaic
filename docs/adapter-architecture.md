@@ -221,17 +221,87 @@ The contract tests verify:
 
 ## Adapter Classification
 
-| Adapter | Classification | Description |
-|---------|---------------|-------------|
-| fluent | Native | All fields use Fluent UI v9 components. Full Tier 1 + Tier 2 support. |
-| mui | Native | All fields use MUI v5/v6 components. Full Tier 1 + Tier 2 support. |
-| headless | Reference | Semantic HTML -- canonical reference implementation. Full Tier 1 + Tier 2 support. |
-| antd | Native | All Tier 1 fields use Ant Design v5 components. DateControl uses dayjs. |
-| mantine | Native | All Tier 1 fields use Mantine v7 components. Number field has null divergence. |
-| chakra | Hybrid | Some Chakra UI v3 native, some semantic HTML fallbacks (Ark UI DTS issues). |
-| base-web | Hybrid | Select/Slider/Checkbox use baseui components, rest is semantic HTML. |
-| atlaskit | Compatibility | Semantic HTML structured for Atlassian Design System ecosystem. |
-| heroui | Compatibility | Semantic HTML structured for HeroUI (NextUI) ecosystem. DateControl uses native HTML. |
+### Classification Criteria
+
+| Class | Definition |
+|-------|-----------|
+| **Native** | All Tier 1 fields use the UI library's own components. Production-ready for that ecosystem. |
+| **Reference** | Pure semantic HTML. Canonical reference implementation. Production-ready for any ecosystem. |
+| **Hybrid** | Mix of native components and semantic HTML fallbacks. Functional but visually inconsistent with the target library for fallback fields. |
+| **Compatibility** | All fields use semantic HTML. Named for ecosystem compatibility but does not use the library's actual components. Suitable for projects that want form-engine integration without adding a UI library runtime dependency. |
+
+### Classification Table
+
+| Adapter | Class | Native Fields | Fallback Fields | Confidence | Production Ready | Notes |
+|---------|-------|--------------|-----------------|------------|-----------------|-------|
+| fluent | Native | 13/13 | 0 | High | Yes | Full Fluent UI v9 components. Tier 2 also complete (28 types). |
+| mui | Native | 13/13 | 0 | High | Yes | Full MUI v5/v6 components. Tier 2 also complete (28 types). |
+| headless | Reference | 13/13 (semantic HTML) | 0 | High | Yes | Canonical reference. All fields use semantic HTML by design. Tier 2 also complete (28 types). |
+| antd | Native | 13/13 | 0 | High | Yes | Full Ant Design v5 components. DateControl uses dayjs. |
+| mantine | Native | 13/13 | 0 | High | Yes, with caveat | Full Mantine v7 components. NumberInput empty→null divergence (DIV-002). |
+| chakra | Hybrid | 7/13 | 6/13 | Medium | Yes, with caveats | Textbox, Dropdown, SimpleDropdown, DateControl, Textarea, DynamicFragment, ReadOnly use native Chakra. Number, Toggle, MultiSelect, Slider, RadioGroup, CheckboxGroup use semantic HTML due to Ark UI DTS issues (DIV-008). |
+| base-web | Hybrid | 3/13 | 10/13 | Medium-Low | Conditional | Input, Slider, Checkbox use baseui. Most fields are semantic HTML. Better classified as Compatibility for Tier 1. |
+| atlaskit | Compatibility | 0/13 | 13/13 | Medium | Conditional | All semantic HTML. No Atlassian Design System runtime components used. Suitable for ecosystem integration without atlaskit dependency. |
+| heroui | Compatibility | 0/13 | 13/13 | Medium | Conditional | All semantic HTML. No HeroUI runtime components used. Suitable for ecosystem integration without heroui dependency. |
+
+### What "Conditional" production readiness means
+
+Compatibility and hybrid adapters are functional and pass all contract and parity tests. "Conditional" means:
+- The adapter works correctly for form logic, validation, and rules
+- Visual appearance may not match the target UI library's design system
+- Use when you need form-engine integration in that ecosystem without adding full UI library styling
+- Not recommended if visual consistency with the target library is a hard requirement
+
+## Provider Wrapper Requirements
+
+Some adapters require a React context provider wrapper to render correctly. This applies both to consumer applications and to test infrastructure.
+
+### Which adapters need wrappers
+
+| Adapter | Wrapper Required | Provider | Reason |
+|---------|-----------------|----------|--------|
+| fluent | No | — | Fluent UI v9 components work without FluentProvider for basic rendering |
+| mui | No | — | MUI components work without ThemeProvider for basic rendering |
+| headless | No | — | Pure semantic HTML, no provider needed |
+| antd | No | — | Antd v5 components work without ConfigProvider for basic rendering |
+| chakra | **Yes** | `<ChakraProvider value={defaultSystem}>` | Chakra UI v3 requires system context for CSS variable resolution |
+| mantine | **Yes** | `<MantineProvider>` + matchMedia/ResizeObserver mocks | Mantine v7 reads color scheme from context; some components use ResizeObserver |
+| atlaskit | No | — | Pure semantic HTML, no provider needed |
+| base-web | No | — | Semantic HTML fields don't need StyletronProvider; baseui components degrade gracefully |
+| heroui | No | — | Pure semantic HTML, no provider needed |
+
+### Is this expected long-term?
+
+Yes. Chakra and Mantine's provider requirements are fundamental to their design:
+- **Chakra**: The system context provides CSS variable resolution and theme tokens. This is a core Chakra v3 architectural pattern, not a bug.
+- **Mantine**: The provider manages color scheme, viewport detection, and component defaults. Required for correct component behavior.
+
+### Does this affect consumers?
+
+**Yes, for consumer applications.** Any app using `@form-eng/chakra` must wrap with `ChakraProvider`, and any app using `@form-eng/mantine` must wrap with `MantineProvider`. This is documented in each adapter's README.
+
+**Yes, for test infrastructure.** Parity and contract tests include wrapper configuration for these adapters. The `IParityAdapterConfig.wrapper` and `IContractTestOptions.wrapper` properties handle this cleanly.
+
+### Test setup reference
+
+```typescript
+// Chakra wrapper
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+const ChakraWrapper = ({ children }) =>
+  React.createElement(ChakraProvider, { value: defaultSystem }, children);
+
+// Mantine wrapper (also needs jsdom mocks)
+import { MantineProvider } from "@mantine/core";
+Object.defineProperty(window, "matchMedia", { writable: true, value: (query) => ({
+  matches: false, media: query, onchange: null,
+  addListener: () => {}, removeListener: () => {},
+  addEventListener: () => {}, removeEventListener: () => {},
+  dispatchEvent: () => false,
+}) });
+global.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} };
+const MantineWrapper = ({ children }) =>
+  React.createElement(MantineProvider, { forceColorScheme: "light" }, children);
+```
 
 ## Package Structure Template
 

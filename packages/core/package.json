@@ -1,6 +1,6 @@
 {
   "name": "@form-eng/core",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Core business rules engine and form orchestration for dynamic React forms",
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 {
   "name": "@form-eng/base-web",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Base Web (Uber) field components for @form-eng/core",
   "repository": {
     "type": "git",
