@@ -1,6 +1,6 @@
 {
   "name": "@form-eng/mui",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Material UI (MUI) field components for @form-eng/core",
   "repository": {
     "type": "git",

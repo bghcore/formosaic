@@ -34,6 +34,12 @@ A React library for rendering complex, configuration-driven forms with a built-i
 | [`@form-eng/fluent`](./packages/fluent) | Fluent UI v9 field components (28 field types). | ~39 KB ESM |
 | [`@form-eng/mui`](./packages/mui) | Material UI field components (28 field types). | ~39 KB ESM |
 | [`@form-eng/headless`](./packages/headless) | Unstyled semantic HTML field components (28 field types). | ~36 KB ESM |
+| [`@form-eng/antd`](./packages/antd) | Ant Design v5 field components (13 Tier 1 field types). | ~18 KB ESM |
+| [`@form-eng/chakra`](./packages/chakra) | Chakra UI v3 field components (13 Tier 1 field types). | ~18 KB ESM |
+| [`@form-eng/mantine`](./packages/mantine) | Mantine v7 field components (13 Tier 1 field types). | ~18 KB ESM |
+| [`@form-eng/atlaskit`](./packages/atlaskit) | Atlassian Design System field components (13 Tier 1 field types). | ~16 KB ESM |
+| [`@form-eng/base-web`](./packages/base-web) | Uber Base Web field components (13 Tier 1 field types). | ~16 KB ESM |
+| [`@form-eng/heroui`](./packages/heroui) | HeroUI field components (13 Tier 1 field types). | ~16 KB ESM |
 | [`@form-eng/designer`](./packages/designer) | Visual drag-and-drop form builder with rule editor and JSON export. | ~65 KB ESM |
 | [`@form-eng/examples`](./packages/examples) | 3 example apps (login+MFA, checkout wizard, data entry). | -- |
 
@@ -48,6 +54,12 @@ npm install @form-eng/core @form-eng/mui @mui/material @emotion/react @emotion/s
 
 # Or headless (no UI framework)
 npm install @form-eng/core @form-eng/headless
+
+# Or with Ant Design
+npm install @form-eng/core @form-eng/antd antd dayjs
+
+# Or with Mantine
+npm install @form-eng/core @form-eng/mantine @mantine/core @mantine/hooks
 ```
 
 ```tsx
@@ -814,6 +826,12 @@ npm run build:core
 npm run build:fluent
 npm run build:mui
 npm run build:headless
+npm run build:antd     # Build Ant Design package only
+npm run build:chakra   # Build Chakra UI package only
+npm run build:mantine  # Build Mantine package only
+npm run build:atlaskit # Build Atlaskit package only
+npm run build:base-web # Build Base Web package only
+npm run build:heroui   # Build HeroUI package only
 
 # Run tests
 npm run test
@@ -839,18 +857,29 @@ npm run clean
 ```
 packages/
   core/       -- @form-eng/core (React + react-hook-form only)
-  fluent/     -- @form-eng/fluent (Fluent UI v9 adapter)
-  mui/        -- @form-eng/mui (Material UI adapter)
-  headless/   -- @form-eng/headless (semantic HTML adapter)
+  fluent/     -- @form-eng/fluent (Fluent UI v9 adapter, 28 field types)
+  mui/        -- @form-eng/mui (Material UI adapter, 28 field types)
+  headless/   -- @form-eng/headless (semantic HTML adapter, 28 field types)
+  antd/       -- @form-eng/antd (Ant Design v5 adapter, 13 Tier 1 types)
+  chakra/     -- @form-eng/chakra (Chakra UI v3 adapter, 13 Tier 1 types)
+  mantine/    -- @form-eng/mantine (Mantine v7 adapter, 13 Tier 1 types)
+  atlaskit/   -- @form-eng/atlaskit (Atlassian Design System adapter, 13 Tier 1 types)
+  base-web/   -- @form-eng/base-web (Uber Base Web adapter, 13 Tier 1 types)
+  heroui/     -- @form-eng/heroui (HeroUI adapter, 13 Tier 1 types)
   designer/   -- @form-eng/designer (visual form builder)
   examples/   -- 3 example apps (login+MFA, checkout wizard, data entry)
 e2e/          -- Playwright end-to-end tests
 benchmarks/   -- Vitest benchmarks for rules engine performance
 stories/      -- Storybook stories for field components
 docs/
-  creating-an-adapter.md   -- Guide for building custom UI adapters
-  ssr-guide.md             -- SSR / Next.js integration guide
-  ACCESSIBILITY.md         -- Accessibility documentation
+  creating-an-adapter.md     -- Guide for building custom UI adapters
+  adapter-architecture.md    -- Adapter classification and architecture
+  canonical-field-contracts.md -- Canonical field behavior contracts
+  field-capability-matrix.md -- Per-field, per-adapter parity matrix
+  api-stability.md           -- Public API stability classification
+  pre-expansion-summary.md   -- Pre-Tier-2 expansion readiness assessment
+  ssr-guide.md               -- SSR / Next.js integration guide
+  ACCESSIBILITY.md           -- Accessibility documentation
 ```
 
 ## License

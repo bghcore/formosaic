@@ -1,6 +1,6 @@
 # Form Engine
 
-> A React library for rendering complex, configuration-driven forms with a built-in rules engine. Define forms as JSON configurations (IFormConfig v2) and the library handles rendering, validation, auto-save, and field interactions automatically. UI-library agnostic -- works with Fluent UI, MUI, headless HTML, or any React component library. Published as six packages: `@form-eng/core` (engine + orchestration), `@form-eng/fluent` (Fluent UI v9 adapter), `@form-eng/mui` (Material UI adapter), `@form-eng/headless` (unstyled semantic HTML adapter), `@form-eng/designer` (visual drag-and-drop form builder), and `@form-eng/examples` (3 example apps).
+> A React library for rendering complex, configuration-driven forms with a built-in rules engine. Define forms as JSON configurations (IFormConfig v2) and the library handles rendering, validation, auto-save, and field interactions automatically. UI-library agnostic -- works with Fluent UI, MUI, headless HTML, or any React component library. Published as twelve npm packages: `@form-eng/core` (engine + orchestration), `@form-eng/fluent` (Fluent UI v9 adapter), `@form-eng/mui` (Material UI adapter), `@form-eng/headless` (unstyled semantic HTML adapter), `@form-eng/antd` (Ant Design v5 adapter), `@form-eng/chakra` (Chakra UI v3 adapter), `@form-eng/mantine` (Mantine v7 adapter), `@form-eng/atlaskit` (Atlassian Design System adapter), `@form-eng/base-web` (Uber Base Web adapter), `@form-eng/heroui` (HeroUI adapter), `@form-eng/designer` (visual drag-and-drop form builder), and `@form-eng/examples` (3 example apps).
 
 The library centers on four key concepts: a **declarative rules engine** that evaluates field dependencies, visibility, required state, and computed values from declarative `IRule[]` definitions with rich conditions (18 operators + AND/OR/NOT); a **component injection system** where UI field implementations are registered by string key and rendered via `React.cloneElement`; **pluggable registries** for custom sync/async validation and value functions referenced by name in field configs; and **i18n support** via a locale registry with partial overrides and English fallback. v2.0 adds the unified rules engine (IRule/ICondition/IFieldEffect), per-field error boundaries, save reliability (AbortController + retry), accessibility (focus trap, ARIA live regions, focus-to-first-error), draft persistence to localStorage, theming via CSS custom properties and render props, a DevTools panel (Rules, Values, Errors, Graph, Perf, Deps, Timeline tabs), JSON Schema import, Zod Schema import, lazy field registry for code splitting, analytics/telemetry (IAnalyticsCallbacks, useFormAnalytics), and performance debugging helpers (RenderTracker, EventTimeline). v1.1.0 adds 9 new field types (RadioGroup, CheckboxGroup, Rating, ColorPicker, Autocomplete, FileUpload, DateRange, DateTime, PhoneInput), the `setValue` rule effect, three array condition operators (arrayContains, arrayNotContains, arrayLength), and `registerValidatorMetadata()` for designer integration.
 
@@ -15,12 +15,23 @@ The library centers on four key concepts: a **declarative rules engine** that ev
 - [docs/performance-debugging.md](https://github.com/bghcore/form-engine/blob/main/docs/performance-debugging.md): Performance debugging with DevTools
 - [docs/field-config-reference.md](https://github.com/bghcore/form-engine/blob/main/docs/field-config-reference.md): IFieldConfig v2 reference
 - [docs/expression-syntax.md](https://github.com/bghcore/form-engine/blob/main/docs/expression-syntax.md): Expression syntax ($values, $fn, $parent)
+- [docs/adapter-architecture.md](https://github.com/bghcore/form-engine/blob/main/docs/adapter-architecture.md): Adapter classification and architecture
+- [docs/canonical-field-contracts.md](https://github.com/bghcore/form-engine/blob/main/docs/canonical-field-contracts.md): Canonical field behavior contracts
+- [docs/field-capability-matrix.md](https://github.com/bghcore/form-engine/blob/main/docs/field-capability-matrix.md): Per-field, per-adapter parity matrix
+- [docs/api-stability.md](https://github.com/bghcore/form-engine/blob/main/docs/api-stability.md): Public API stability classification
+- [docs/pre-expansion-summary.md](https://github.com/bghcore/form-engine/blob/main/docs/pre-expansion-summary.md): Pre-Tier-2 expansion readiness assessment
+- [docs/date-policy.md](https://github.com/bghcore/form-engine/blob/main/docs/date-policy.md): Date handling policy
 - [packages/core/llms.txt](https://github.com/bghcore/form-engine/blob/main/packages/core/llms.txt): Core package API reference for LLMs
 - [packages/fluent/llms.txt](https://github.com/bghcore/form-engine/blob/main/packages/fluent/llms.txt): Fluent UI adapter API reference for LLMs
 - [packages/mui/llms.txt](https://github.com/bghcore/form-engine/blob/main/packages/mui/llms.txt): MUI adapter API reference for LLMs
 - [packages/headless/llms.txt](https://github.com/bghcore/form-engine/blob/main/packages/headless/llms.txt): Headless adapter API reference for LLMs
+- [packages/antd/llms.txt](https://github.com/bghcore/form-engine/blob/main/packages/antd/llms.txt): Ant Design adapter API reference for LLMs
+- [packages/chakra/llms.txt](https://github.com/bghcore/form-engine/blob/main/packages/chakra/llms.txt): Chakra UI adapter API reference for LLMs
+- [packages/mantine/llms.txt](https://github.com/bghcore/form-engine/blob/main/packages/mantine/llms.txt): Mantine adapter API reference for LLMs
+- [packages/atlaskit/llms.txt](https://github.com/bghcore/form-engine/blob/main/packages/atlaskit/llms.txt): Atlassian adapter API reference for LLMs
+- [packages/base-web/llms.txt](https://github.com/bghcore/form-engine/blob/main/packages/base-web/llms.txt): Base Web adapter API reference for LLMs
+- [packages/heroui/llms.txt](https://github.com/bghcore/form-engine/blob/main/packages/heroui/llms.txt): HeroUI adapter API reference for LLMs
 - [packages/designer/llms.txt](https://github.com/bghcore/form-engine/blob/main/packages/designer/llms.txt): Designer API reference for LLMs
-- [packages/headless/llms.txt](https://github.com/bghcore/form-engine/blob/main/packages/headless/llms.txt): Headless adapter API reference for LLMs
 
 ## Packages
 
@@ -74,6 +85,30 @@ Unstyled semantic HTML adapter. No UI framework dependency. Provides 28 field co
 - **Editable Fields**: HookTextbox, HookDropdown, HookToggle, HookNumber, HookMultiSelect, HookDateControl, HookSlider, HookSimpleDropdown, HookMultiSelectSearch, HookPopOutEditor, HookDocumentLinks, HookStatusDropdown, HookFragment, HookRadioGroup, HookCheckboxGroup, HookRating, HookColorPicker, HookAutocomplete, HookFileUpload, HookDateRange, HookDateTime, HookPhoneInput
 - **Read-Only Fields**: HookReadOnly, HookReadOnlyArray, HookReadOnlyDateTime, HookReadOnlyCumulativeNumber, HookReadOnlyRichText, HookReadOnlyWithButton
 - **Optional CSS**: `styles.css` with CSS custom properties for basic styling
+
+### @form-eng/antd
+Ant Design v5 adapter. Provides 13 Tier 1 field components using antd components.
+- **Registry**: `createAntdFieldRegistry()`
+
+### @form-eng/chakra
+Chakra UI v3 adapter. Provides 13 Tier 1 field components (7 native Chakra, 6 semantic HTML fallbacks due to Ark UI DTS issues).
+- **Registry**: `createChakraFieldRegistry()`
+
+### @form-eng/mantine
+Mantine v7 adapter. Provides 13 Tier 1 field components using Mantine components.
+- **Registry**: `createMantineFieldRegistry()`
+
+### @form-eng/atlaskit
+Atlassian Design System adapter. Provides 13 Tier 1 field components using semantic HTML.
+- **Registry**: `createAtlaskitFieldRegistry()`
+
+### @form-eng/base-web
+Uber Base Web adapter. Provides 13 Tier 1 field components (mix of baseui components and semantic HTML).
+- **Registry**: `createBaseWebFieldRegistry()`
+
+### @form-eng/heroui
+HeroUI (formerly NextUI) adapter. Provides 13 Tier 1 field components using semantic HTML.
+- **Registry**: `createHeroUIFieldRegistry()`
 
 ### @form-eng/designer
 

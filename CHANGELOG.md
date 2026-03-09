@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-03-09
+
+### Added
+
+- **Cross-adapter parity test harness** -- `runParityTests()` in `@form-eng/core/testing` renders the same `IFormConfig` through multiple adapter registries and asserts engine-level equivalence: initial render, readOnly mode (no editable inputs), value hydration, required indicators, and empty-display sentinel (`"-"`).
+  - `IParityAdapterConfig` interface with `name`, `registry`, optional `wrapper` (for provider-requiring adapters), `contextDependentFields`, and `skipRequiredCheck` for documenting known adapter gaps.
+  - 8 parity fixtures exported from `@form-eng/core/testing`: `PARITY_TEXT_FORM`, `PARITY_NUMBER_FORM`, `PARITY_BOOLEAN_FORM`, `PARITY_SELECT_FORM`, `PARITY_DATE_FORM`, `PARITY_CHOICE_FORM`, `PARITY_MIXED_FORM`, `PARITY_READONLY_FORM`.
+- **Cross-adapter parity test suite** -- 7 adapters x 8 fixtures = ~1331 parity tests validating behavioral equivalence across fluent, mui, headless, antd, atlaskit, base-web, and heroui adapters. Chakra and mantine documented as requiring provider wrappers.
+- **Edge-case canonical value tests** -- ~100+ edge-case assertions using the headless adapter covering `undefined`, `null`, `""`, `0`, `-1`, whitespace, unknown values, and readOnly sentinel behavior for all 13 Tier 1 field types.
+- **Performance/render sanity tests** -- Baseline render count checks, option-heavy rendering (200 options), and rules overhead comparison using the headless adapter.
+- **Adapter render benchmark** -- `benchmarks/suites/adapter-render.bench.ts` for timing render + hydrate of 10-field forms through the headless adapter.
+- **Business form test fixtures** -- 3 realistic `IFormConfig` fixtures (`profileFormConfig`, `workflowFormConfig`, `optionHeavyFormConfig`) with cross-field rules, validation, and 100+ option lists.
+- **Storybook example stories** -- 3 new stories: `ProfileForm`, `WorkflowForm`, `OptionHeavyForm` demonstrating realistic business form patterns with the Fluent UI adapter.
+- **`docs/field-capability-matrix.md`** -- Per-field, per-adapter capability matrix documenting support level, implementation strategy, readOnly/disabled/required support, serialization conformance, and parity caveats for all 13 Tier 1 fields x 9 adapters.
+- **`docs/api-stability.md`** -- Public API stability classification (Stable, Extension, Adapter, Internal) for all `@form-eng/core`, `@form-eng/core/adapter-utils`, and `@form-eng/core/testing` exports.
+- **`docs/pre-expansion-summary.md`** -- Pre-Tier-2 expansion readiness assessment with adapter rankings, known divergences (accepted vs must-monitor), and infrastructure readiness checklist.
+- **ReadOnly contract** in `docs/canonical-field-contracts.md` -- Formalized readOnly rendering requirements: no editable inputs, `"-"` sentinel for empty values, option labels (not values) for selects, `formatDateTime()` for dates, hidden input for DynamicFragment.
+- **Adapter classification** in `docs/adapter-architecture.md` -- Classification table for all 9 adapters: Native (fluent, mui, antd, mantine), Reference (headless), Hybrid (chakra, base-web), Compatibility (atlaskit, heroui).
+
+### Changed
+
+- `@form-eng/core` package.json now includes all 9 adapter packages as devDependencies for parity test imports.
+- `@form-eng/core/testing` exports expanded with `runParityTests`, `IParityAdapterConfig`, `IParityTestOptions`, and all 8 `PARITY_*_FORM` fixtures.
+- 3219 tests passing across 50 files (up from 1814 tests in v1.3.0).
+- 67+ Storybook stories (up from 64 in v1.3.0).
+- 6 benchmark suites (up from 5 in v1.3.0).
+
+### Documented Parity Findings
+
+- **Number/Slider readOnly with null** -- Shows `"0"` not `"-"` due to `?? 0` coercion. Accepted behavior per canonical contract.
+- **Mantine Number empty** -- Explicitly converts to `null`; other adapters leave as browser-level empty state. Accepted divergence.
+- **Fluent/MUI Textarea required indicator** -- PopOutEditor shows `*` only inside the expanded modal dialog, not in inline rendering. Documented gap.
+- **MUI CheckboxGroup required** -- `FormControl required` class not detectable in jsdom standalone rendering. Documented gap.
+- **All 9 adapters conform** to canonical field contracts for value serialization -- no must-fix divergences found.
+
 ## [1.3.0] - 2026-03-09
 
 ### Added

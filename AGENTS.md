@@ -5,7 +5,7 @@
 ```bash
 npm install --legacy-peer-deps
 npm run build          # Build all packages (core, fluent, mui, headless, designer)
-npm run test           # Run 709 tests with Vitest
+npm run test           # Run 3219 tests with Vitest
 npm run test:coverage  # Run tests with coverage report
 npm run test:e2e       # Run 54 Playwright E2E tests
 npm run bench          # Run performance benchmarks
@@ -21,20 +21,32 @@ npm run build:core     # packages/core only
 npm run build:fluent   # packages/fluent only
 npm run build:mui      # packages/mui only
 npm run build:headless # packages/headless only
+npm run build:antd     # packages/antd only
+npm run build:chakra   # packages/chakra only
+npm run build:mantine  # packages/mantine only
+npm run build:atlaskit # packages/atlaskit only
+npm run build:base-web # packages/base-web only
+npm run build:heroui   # packages/heroui only
 ```
 
 ## Project Structure
 
-Monorepo using npm workspaces. Six packages:
+Monorepo using npm workspaces. Twelve packages:
 
 ```
 packages/
   core/      -- @form-eng/core (React + react-hook-form, NO UI library deps)
-  fluent/    -- @form-eng/fluent (Fluent UI v9 field components)
-  mui/       -- @form-eng/mui (Material UI field components)
-  headless/  -- @form-eng/headless (unstyled semantic HTML field components)
+  fluent/    -- @form-eng/fluent (Fluent UI v9 field components, 28 types)
+  mui/       -- @form-eng/mui (Material UI field components, 28 types)
+  headless/  -- @form-eng/headless (unstyled semantic HTML, 28 types)
+  antd/      -- @form-eng/antd (Ant Design v5 field components, 13 Tier 1 types)
+  chakra/    -- @form-eng/chakra (Chakra UI v3 field components, 13 Tier 1 types)
+  mantine/   -- @form-eng/mantine (Mantine v7 field components, 13 Tier 1 types)
+  atlaskit/  -- @form-eng/atlaskit (Atlassian Design System, 13 Tier 1 types)
+  base-web/  -- @form-eng/base-web (Uber Base Web, 13 Tier 1 types)
+  heroui/    -- @form-eng/heroui (HeroUI, 13 Tier 1 types)
   designer/  -- @form-eng/designer (visual drag-and-drop form builder)
-  examples/  -- @form-eng/examples (3 example apps: login+MFA, checkout wizard, data entry)
+  examples/  -- @form-eng/examples (3 example apps)
 docs/
   creating-an-adapter.md      -- Guide for building custom UI library adapters
   ACCESSIBILITY.md            -- Accessibility guide (ARIA, keyboard, screen readers)
@@ -50,6 +62,12 @@ docs/
   condition-operators.md      -- Condition operator reference
   new-field-types.md          -- New field type guide
   rules-engine.md             -- Rules engine architecture
+  adapter-architecture.md     -- Adapter classification and architecture
+  canonical-field-contracts.md -- Canonical field behavior contracts
+  field-capability-matrix.md  -- Per-field, per-adapter parity matrix
+  api-stability.md            -- Public API stability classification
+  pre-expansion-summary.md    -- Pre-Tier-2 expansion readiness assessment
+  date-policy.md              -- Date handling and serialization policy
 e2e/                           -- Playwright E2E tests (54 tests, 7 specs)
 benchmarks/                    -- Performance benchmark suite (vitest bench)
 stories/                       -- Storybook stories (64+ stories + MDX docs)
@@ -62,6 +80,12 @@ Build output per package: `dist/index.js` (CJS), `dist/index.mjs` (ESM), `dist/i
 - [packages/fluent/AGENTS.md](./packages/fluent/AGENTS.md) -- Fluent UI adapter patterns
 - [packages/mui/AGENTS.md](./packages/mui/AGENTS.md) -- MUI adapter patterns
 - [packages/headless/AGENTS.md](./packages/headless/AGENTS.md) -- Headless adapter patterns
+- [packages/antd/AGENTS.md](./packages/antd/AGENTS.md) -- Ant Design adapter patterns
+- [packages/chakra/AGENTS.md](./packages/chakra/AGENTS.md) -- Chakra UI adapter patterns
+- [packages/mantine/AGENTS.md](./packages/mantine/AGENTS.md) -- Mantine adapter patterns
+- [packages/atlaskit/AGENTS.md](./packages/atlaskit/AGENTS.md) -- Atlassian adapter patterns
+- [packages/base-web/AGENTS.md](./packages/base-web/AGENTS.md) -- Base Web adapter patterns
+- [packages/heroui/AGENTS.md](./packages/heroui/AGENTS.md) -- HeroUI adapter patterns
 - [packages/designer/AGENTS.md](./packages/designer/AGENTS.md) -- Visual form designer architecture
 
 ## Code Style
@@ -83,7 +107,7 @@ Build output per package: `dist/index.js` (CJS), `dist/index.mjs` (ESM), `dist/i
 
 ## Testing
 
-709 tests using Vitest across 34 test files. 54 Playwright E2E tests across 7 specs. Coverage targets met on all core helpers (80%+, many at 100%).
+3219 tests using Vitest across 50 test files. 54 Playwright E2E tests across 7 specs. 67+ Storybook stories.
 
 ```bash
 npm run test             # Run all tests
@@ -103,14 +127,14 @@ After any code change, verify:
 npm run build && npm run test
 ```
 
-All packages should build cleanly and all 709 tests should pass.
+All packages should build cleanly and all 3219 tests should pass.
 
 ## Git Workflow
 
 - Conventional commits: `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`
 - Single `main` branch
-- Per-package tags for publishing: `core-v1.1.0`, `fluent-v1.1.0`, `mui-v1.1.0`, `headless-v1.1.0`, `designer-v1.1.0`
-- Unified tag for all packages: `v1.1.0`
+- Per-package tags for publishing: `core-v1.4.0`, `fluent-v1.4.0`, `mui-v1.4.0`, `headless-v1.4.0`, `antd-v1.4.0`, `chakra-v1.4.0`, `mantine-v1.4.0`, `atlaskit-v1.4.0`, `base-web-v1.4.0`, `heroui-v1.4.0`, `designer-v1.4.0`
+- Unified tag for all packages: `v1.4.0`
 - Run `npm run build && npm run test` before committing
 
 ## Boundaries

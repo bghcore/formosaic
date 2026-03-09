@@ -219,6 +219,20 @@ The contract tests verify:
 2. **Minimal rendering** -- each field renders without errors given minimal props
 3. **Read-only rendering** -- each field renders in read-only mode without errors
 
+## Adapter Classification
+
+| Adapter | Classification | Description |
+|---------|---------------|-------------|
+| fluent | Native | All fields use Fluent UI v9 components. Full Tier 1 + Tier 2 support. |
+| mui | Native | All fields use MUI v5/v6 components. Full Tier 1 + Tier 2 support. |
+| headless | Reference | Semantic HTML -- canonical reference implementation. Full Tier 1 + Tier 2 support. |
+| antd | Native | All Tier 1 fields use Ant Design v5 components. DateControl uses dayjs. |
+| mantine | Native | All Tier 1 fields use Mantine v7 components. Number field has null divergence. |
+| chakra | Hybrid | Some Chakra UI v3 native, some semantic HTML fallbacks (Ark UI DTS issues). |
+| base-web | Hybrid | Select/Slider/Checkbox use baseui components, rest is semantic HTML. |
+| atlaskit | Compatibility | Semantic HTML structured for Atlassian Design System ecosystem. |
+| heroui | Compatibility | Semantic HTML structured for HeroUI (NextUI) ecosystem. DateControl uses native HTML. |
+
 ## Package Structure Template
 
 For creating a new adapter package:

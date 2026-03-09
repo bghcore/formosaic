@@ -313,3 +313,50 @@ This document defines the canonical contract for each of the 13 Tier 1 field typ
 | Textarea | `string` | `undefined` / `null` / `""` | No | 3000ms |
 | ReadOnly | `string` | `undefined` / `null` / `""` | No | N/A |
 | DynamicFragment | `string` | `undefined` / `null` | No | N/A |
+
+---
+
+## ReadOnly Contract
+
+Every adapter must conform to these rules when rendering a field in `readOnly` mode. These rules are non-negotiable for Tier 1 parity.
+
+### 1. Universal readOnly support
+
+Every Tier 1 field must support `readOnly` mode. There are no exceptions. When `props.readOnly` is `true`, the field must render display-only content.
+
+### 2. No interactive elements in readOnly output
+
+ReadOnly rendering must not produce `<input>`, `<select>`, or `<textarea>` elements in the DOM output. The only exception is `DynamicFragment`, which renders `<input type="hidden">` (invisible, non-interactive).
+
+### 3. Empty display sentinel
+
+All fields must render `"-"` (a single hyphen) as the display text for missing, null, or undefined values. This applies uniformly across all adapters and all field types.
+
+### 4. Text and Number fields
+
+- **Textbox**: Renders the string value via `ReadOnlyText`, or `"-"` if the value is null/undefined/empty string.
+- **Number**: Renders `String(value)` via `ReadOnlyText`, or `"-"` if the value is null/undefined.
+
+### 5. Boolean fields (Toggle)
+
+Renders `"Yes"` or `"No"` via `convertBooleanToYesOrNoText()`. An undefined/null value renders as `""` (empty string from the conversion function).
+
+### 6. Single-select fields (Dropdown, SimpleDropdown, RadioGroup)
+
+Renders the selected option **label** (not the option value), or `"-"` if no option is selected. For `RadioGroup`, the adapter looks up the matching option label via `options.find()`. For `Dropdown` and `SimpleDropdown`, the raw value string is passed to `ReadOnlyText` (the label lookup may happen at a higher level).
+
+### 7. Multi-select fields (MultiSelect, CheckboxGroup)
+
+Renders comma-separated option **labels** for all selected values, or `"-"` if the selection is empty. `CheckboxGroup` uses `options.filter().map(o => o.label).join(", ")`. `MultiSelect` in some adapters renders a `<ul>` list of selected values.
+
+### 8. Date fields (DateControl)
+
+Renders `formatDateTime(value, { hideTimestamp: true })` output for non-null values, or `"-"` if the value is null/undefined. Some adapters (headless) use a `<time>` element with a `dateTime` attribute for semantic markup.
+
+### 9. DynamicFragment
+
+Always renders `<input type="hidden">` regardless of readOnly state. This is the only field type that produces an `<input>` element in readOnly mode. The hidden input is invisible and non-interactive.
+
+### 10. ReadOnly field type
+
+The `ReadOnly` field type is always in read-only mode regardless of the `readOnly` prop. It delegates directly to the adapter's `ReadOnlyText` component.

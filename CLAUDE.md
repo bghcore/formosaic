@@ -282,7 +282,7 @@ npm run build:atlaskit   # Build Atlaskit package only
 npm run build:base-web   # Build Base Web package only
 npm run build:heroui     # Build HeroUI package only
 npm run clean            # Remove all dist/ directories
-npm run test             # Run all tests (vitest, 745 tests)
+npm run test             # Run all tests (vitest, 3219 tests)
 npm run test:watch       # Run tests in watch mode
 npm run test:coverage    # Run tests with coverage report
 npm run test:e2e         # Run Playwright E2E tests (54 tests)
@@ -302,9 +302,9 @@ npm run build-storybook  # Build static Storybook
 - **Fluent UI v9** (`@fluentui/react-components`) for UI components (fluent package)
 - **MUI v5/v6** (`@mui/material`) for UI components (mui package)
 - **TypeScript** with `strict: true`
-- **Vitest** for testing (745 tests across 35 files)
+- **Vitest** for testing (3219 tests across 50 files)
 - **Playwright** for E2E testing (54 tests across 7 specs)
-- **Storybook 10** for visual component documentation (64 stories)
+- **Storybook 10** for visual component documentation (67+ stories)
 - **tsup** for bundling (CJS + ESM + .d.ts)
 - **npm workspaces** for monorepo management
 
