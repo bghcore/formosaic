@@ -25,6 +25,11 @@ export const ComponentTypes = {
   ReadOnlyWithButton: "ReadOnlyWithButton",
   ChoiceSet: "ChoiceSet",
   FieldArray: "FieldArray",
+  RadioGroup: "RadioGroup",
+  CheckboxGroup: "CheckboxGroup",
+  Rating: "Rating",
+  ColorPicker: "ColorPicker",
+  Autocomplete: "Autocomplete",
 } as const;
 
 /** Form-level constants */

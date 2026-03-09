@@ -727,7 +727,7 @@ const lazyFields = createLazyFieldRegistry({
 
 ## Available Field Types
 
-All 19 field types are available in the Fluent UI, MUI, and headless adapters:
+All 24 field types are available in the Fluent UI, MUI, and headless adapters:
 
 ### Editable Fields
 
@@ -747,6 +747,11 @@ All 19 field types are available in the Fluent UI, MUI, and headless adapters:
 | `StatusDropdown` | Dropdown with color status indicator |
 | `DynamicFragment` | Hidden field (form state only) |
 | `FieldArray` | Repeating section (add/remove items) |
+| `RadioGroup` | Single-select radio button group |
+| `CheckboxGroup` | Multi-select checkbox group (value: `string[]`) |
+| `Rating` | Star rating input (value: `number`; configurable `max`, `allowHalf`) |
+| `ColorPicker` | Native color picker returning hex string |
+| `Autocomplete` | Searchable single-select with type-ahead |
 
 ### Read-Only Fields
 

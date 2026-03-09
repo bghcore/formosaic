@@ -12,6 +12,11 @@ export { default as MultiSelectSearch } from "./fields/MultiSelectSearch";
 export { default as Textarea } from "./fields/Textarea";
 export { default as DocumentLinks } from "./fields/DocumentLinks";
 export { default as StatusDropdown } from "./fields/StatusDropdown";
+export { default as RadioGroup } from "./fields/RadioGroup";
+export { default as CheckboxGroup } from "./fields/CheckboxGroup";
+export { default as Rating } from "./fields/Rating";
+export { default as ColorPicker } from "./fields/ColorPicker";
+export { default as Autocomplete } from "./fields/Autocomplete";
 
 // Read-only fields
 export { default as ReadOnly } from "./fields/readonly/ReadOnly";
