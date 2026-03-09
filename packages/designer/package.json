@@ -1,6 +1,6 @@
 {
   "name": "@form-eng/designer",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Visual form builder for @form-eng/core",
   "repository": {
     "type": "git",

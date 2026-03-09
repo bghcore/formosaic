@@ -5,6 +5,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] - 2026-03-09
+
+### Added
+
+- **CHANGELOG.md restored** -- Re-added CHANGELOG.md which was accidentally dropped from the repo.
+
+### Fixed
+
+- **`npm install` required after PR merge** -- `expr-eval` dependency from Phase 2B PR was declared in core's package.json but not installed. Build now passes cleanly after install.
+
+## [1.2.0] - 2026-03-09
+
+### Added
+
+- **`@form-eng/antd` documentation** -- README.md, llms.txt, and AGENTS.md for the Ant Design v5 adapter package.
+- **`@form-eng/chakra` documentation** -- README.md, llms.txt, and AGENTS.md for the Chakra UI v3 adapter package.
+- **`@form-eng/mantine` documentation** -- README.md, llms.txt, and AGENTS.md for the Mantine v7 adapter package.
+- **CSP-safe expression engine** -- `ExpressionEngine` now uses `expr-eval` instead of `new Function()` for Content Security Policy compliance. No `unsafe-eval` required.
+- **Async options loading** -- Select, radio, and checkbox fields support `asyncOptions` on `IFieldConfig` for server-driven option loading.
+- **Server-side field errors** -- `fieldErrors` prop on `FormEngine` allows injecting server-side validation errors that display inline alongside client-side errors.
+
+### Fixed
+
+- **Repository URLs** -- All 8 package.json `repository.url` fields updated from `https://` to `git+https://` to fix npm publish warnings.
+
+### Changed
+
+- All packages bumped from 1.1.1 to 1.2.0.
+- 776 tests passing (up from 745 in v1.1.1).
+
+## [1.1.1] - 2026-03-09
+
+### Added
+
+- **`@form-eng/antd`** -- New Ant Design v5 adapter package with 12 editable + 1 read-only field types. Uses antd `Input`, `InputNumber`, `Switch`, `Select`, `DatePicker` (dayjs), `Slider`, `Radio.Group`, `Checkbox.Group`, `Input.TextArea`.
+- **`@form-eng/chakra`** -- New Chakra UI v3 adapter package with 12 editable + 1 read-only field types. Uses Chakra `Input`, `NativeSelect`, `Textarea` with semantic HTML fallbacks for compound components (Switch, NumberInput, Slider, RadioGroup, CheckboxGroup) due to Ark UI DTS issues.
+- **`@form-eng/mantine`** -- New Mantine v7 adapter package with 12 editable + 1 read-only field types. Uses Mantine `TextInput`, `NumberInput`, `Switch`, `Select`, `MultiSelect`, `Slider`, `Radio.Group`, `Checkbox.Group`, `Textarea`.
+- **Shared adapter utilities in core** -- `FieldUtils.ts` and `IFieldConfigs.ts` extracted to core so all adapters re-export from a single source (no code duplication).
+- **Contract test infrastructure** -- `runAdapterContractTests()` in core for verifying adapter compliance.
+- **Auto-publish CI** -- `publish.yml` supports all 8 publishable packages with tag triggers and manual dispatch.
+
+### Changed
+
+- Standalone examples migrated to v2 API.
+- `author` field added to all package.json files.
+- All packages bumped from 1.1.0 to 1.1.1.
+
 ## [1.1.0] - 2026-03-09
 
 ### Added
