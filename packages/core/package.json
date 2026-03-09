@@ -4,7 +4,7 @@
   "description": "Core business rules engine and form orchestration for dynamic React forms",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bghcore/form-engine.git",
+    "url": "git+https://github.com/bghcore/form-engine.git",
     "directory": "packages/core"
   },
   "homepage": "https://github.com/bghcore/form-engine#readme",

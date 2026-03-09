@@ -1,0 +1,72 @@
+# @form-eng/mantine
+
+> Mantine v7 field components for @form-eng/core. 13 field types with strong 1:1 Mantine component mappings.
+
+- Docs: [README](https://github.com/bghcore/form-engine/tree/main/packages/mantine/README.md)
+- Agent instructions: [AGENTS.md](https://github.com/bghcore/form-engine/tree/main/packages/mantine/AGENTS.md)
+- npm: [@form-eng/mantine](https://www.npmjs.com/package/@form-eng/mantine)
+- License: MIT
+- Peer dependencies: `react`, `react-dom`, `react-hook-form`, `@form-eng/core`, `@mantine/core`, `@mantine/dates`
+
+## API Surface
+
+### Registry
+- `createMantineFieldRegistry()` -- Creates the default Mantine field registry (`Record<string, React.JSX.Element>`) for use with `InjectedFieldProvider`
+
+### Editable Field Components (12)
+- `Textbox` -- Mantine `TextInput`
+- `Number` -- Mantine `NumberInput`
+- `Toggle` -- Mantine `Switch`
+- `Dropdown` -- Mantine `Select`
+- `SimpleDropdown` -- Mantine `Select` for string arrays
+- `MultiSelect` -- Mantine `MultiSelect`
+- `DateControl` -- Native `<input type="date">`
+- `Slider` -- Mantine `Slider`
+- `RadioGroup` -- Mantine `Radio.Group` + `Radio`
+- `CheckboxGroup` -- Mantine `Checkbox.Group` + `Checkbox`
+- `Textarea` -- Mantine `Textarea`
+- `DynamicFragment` -- `<input type="hidden">`
+
+### Read-Only Field Components (1)
+- `ReadOnly` -- `ReadOnlyText`
+
+### Supporting Components
+- `ReadOnlyText` -- Shared read-only text display
+- `StatusMessage` -- Form status display
+- `FormLoading` -- Loading state
+
+### Helpers
+- `FieldClassName()` -- Build CSS class name with error state
+- `GetFieldDataTestId()` -- Build data-testid attribute
+- `formatDateTime()` -- Format date string for display
+- `DocumentLinksStrings` -- Default string literals for document links UI
+
+## Code Example
+
+```tsx
+import { RulesEngineProvider, InjectedFieldProvider, FormEngine } from "@form-eng/core";
+import { createMantineFieldRegistry } from "@form-eng/mantine";
+import "@mantine/core/styles.css";
+
+const formConfig = {
+  version: 2,
+  fields: {
+    name: { type: "Textbox", label: "Name", required: true },
+    role: { type: "Dropdown", label: "Role", options: [
+      { value: "admin", label: "Admin" },
+      { value: "user", label: "User" },
+    ]},
+  },
+  fieldOrder: ["name", "role"],
+};
+
+function App() {
+  return (
+    <RulesEngineProvider>
+      <InjectedFieldProvider injectedFields={createMantineFieldRegistry()}>
+        <FormEngine formConfig={formConfig} saveData={async (data) => data} />
+      </InjectedFieldProvider>
+    </RulesEngineProvider>
+  );
+}
+```

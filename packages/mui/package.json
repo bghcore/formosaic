@@ -4,7 +4,7 @@
   "description": "Material UI (MUI) field components for @form-eng/core",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bghcore/form-engine.git",
+    "url": "git+https://github.com/bghcore/form-engine.git",
     "directory": "packages/mui"
   },
   "homepage": "https://github.com/bghcore/form-engine#readme",

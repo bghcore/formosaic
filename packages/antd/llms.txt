@@ -1,0 +1,71 @@
+# @form-eng/antd
+
+> Ant Design v5 field components for @form-eng/core. 13 field types using antd components with dayjs for date handling.
+
+- Docs: [README](https://github.com/bghcore/form-engine/tree/main/packages/antd/README.md)
+- Agent instructions: [AGENTS.md](https://github.com/bghcore/form-engine/tree/main/packages/antd/AGENTS.md)
+- npm: [@form-eng/antd](https://www.npmjs.com/package/@form-eng/antd)
+- License: MIT
+- Peer dependencies: `react`, `react-dom`, `react-hook-form`, `@form-eng/core`, `antd`
+
+## API Surface
+
+### Registry
+- `createAntdFieldRegistry()` -- Creates the default Ant Design field registry (`Record<string, React.JSX.Element>`) for use with `InjectedFieldProvider`
+
+### Editable Field Components (12)
+- `Textbox` -- antd `Input`
+- `Number` -- antd `InputNumber`
+- `Toggle` -- antd `Switch`
+- `Dropdown` -- antd `Select`
+- `SimpleDropdown` -- antd `Select` for string arrays
+- `MultiSelect` -- antd `Select` with `mode="multiple"`
+- `DateControl` -- antd `DatePicker` with dayjs
+- `Slider` -- antd `Slider`
+- `RadioGroup` -- antd `Radio.Group`
+- `CheckboxGroup` -- antd `Checkbox.Group`
+- `Textarea` -- antd `Input.TextArea`
+- `DynamicFragment` -- `<input type="hidden">`
+
+### Read-Only Field Components (1)
+- `ReadOnly` -- `ReadOnlyText`
+
+### Supporting Components
+- `ReadOnlyText` -- Shared read-only text display
+- `StatusMessage` -- Form status display
+- `FormLoading` -- Loading state
+
+### Helpers
+- `FieldClassName()` -- Build CSS class name with error state
+- `GetFieldDataTestId()` -- Build data-testid attribute
+- `formatDateTime()` -- Format date string for display
+- `DocumentLinksStrings` -- Default string literals for document links UI
+
+## Code Example
+
+```tsx
+import { RulesEngineProvider, InjectedFieldProvider, FormEngine } from "@form-eng/core";
+import { createAntdFieldRegistry } from "@form-eng/antd";
+
+const formConfig = {
+  version: 2,
+  fields: {
+    name: { type: "Textbox", label: "Name", required: true },
+    role: { type: "Dropdown", label: "Role", options: [
+      { value: "admin", label: "Admin" },
+      { value: "user", label: "User" },
+    ]},
+  },
+  fieldOrder: ["name", "role"],
+};
+
+function App() {
+  return (
+    <RulesEngineProvider>
+      <InjectedFieldProvider injectedFields={createAntdFieldRegistry()}>
+        <FormEngine formConfig={formConfig} saveData={async (data) => data} />
+      </InjectedFieldProvider>
+    </RulesEngineProvider>
+  );
+}
+```

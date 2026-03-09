@@ -1,0 +1,72 @@
+# @form-eng/chakra
+
+> Chakra UI v3 field components for @form-eng/core. 13 field types using Chakra components with semantic HTML fallbacks where needed.
+
+- Docs: [README](https://github.com/bghcore/form-engine/tree/main/packages/chakra/README.md)
+- Agent instructions: [AGENTS.md](https://github.com/bghcore/form-engine/tree/main/packages/chakra/AGENTS.md)
+- npm: [@form-eng/chakra](https://www.npmjs.com/package/@form-eng/chakra)
+- License: MIT
+- Peer dependencies: `react`, `react-dom`, `react-hook-form`, `@form-eng/core`, `@chakra-ui/react`
+
+## API Surface
+
+### Registry
+- `createChakraFieldRegistry()` -- Creates the default Chakra UI field registry (`Record<string, React.JSX.Element>`) for use with `InjectedFieldProvider`
+
+### Editable Field Components (12)
+- `Textbox` -- Chakra `Input`
+- `Number` -- Chakra `Input` (`type="number"`)
+- `Toggle` -- Semantic `<input type="checkbox" role="switch">` (HTML fallback)
+- `Dropdown` -- Chakra `NativeSelect`
+- `SimpleDropdown` -- Chakra `NativeSelect` for string arrays
+- `MultiSelect` -- Semantic `<select multiple>` (HTML fallback)
+- `DateControl` -- Chakra `Input` (`type="date"`)
+- `Slider` -- Semantic `<input type="range">` (HTML fallback)
+- `RadioGroup` -- Semantic `<fieldset>` + `<input type="radio">` (HTML fallback)
+- `CheckboxGroup` -- Semantic `<fieldset>` + `<input type="checkbox">` (HTML fallback)
+- `Textarea` -- Chakra `Textarea`
+- `DynamicFragment` -- `<input type="hidden">`
+
+### Read-Only Field Components (1)
+- `ReadOnly` -- `ReadOnlyText`
+
+### Supporting Components
+- `ReadOnlyText` -- Shared read-only text display
+- `StatusMessage` -- Form status display
+- `FormLoading` -- Loading state
+
+### Helpers
+- `FieldClassName()` -- Build CSS class name with error state
+- `GetFieldDataTestId()` -- Build data-testid attribute
+- `getFieldState()` -- Compute data-field-state value from error/required/readOnly
+- `formatDateTime()` -- Format date string for display
+- `DocumentLinksStrings` -- Default string literals for document links UI
+
+## Code Example
+
+```tsx
+import { RulesEngineProvider, InjectedFieldProvider, FormEngine } from "@form-eng/core";
+import { createChakraFieldRegistry } from "@form-eng/chakra";
+
+const formConfig = {
+  version: 2,
+  fields: {
+    name: { type: "Textbox", label: "Name", required: true },
+    role: { type: "Dropdown", label: "Role", options: [
+      { value: "admin", label: "Admin" },
+      { value: "user", label: "User" },
+    ]},
+  },
+  fieldOrder: ["name", "role"],
+};
+
+function App() {
+  return (
+    <RulesEngineProvider>
+      <InjectedFieldProvider injectedFields={createChakraFieldRegistry()}>
+        <FormEngine formConfig={formConfig} saveData={async (data) => data} />
+      </InjectedFieldProvider>
+    </RulesEngineProvider>
+  );
+}
+```
