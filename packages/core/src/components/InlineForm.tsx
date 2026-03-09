@@ -40,9 +40,17 @@ interface IFormEngineProps extends IFormEngineSharedProps {
   isManualSave?: boolean;
   renderSaveButton?: (props: { onSave: () => void; isDirty: boolean; isValid: boolean; isSubmitting: boolean }) => React.ReactNode;
   formErrors?: string[];
+  /** Per-field server-side errors to inject (e.g. from a failed API save). Keys are field names, values are error messages. */
+  fieldErrors?: Record<string, string>;
   renderLabel?: (props: { id: string; labelId: string; label?: string; required?: boolean }) => React.ReactNode;
   renderError?: (props: { id: string; error?: import("react-hook-form").FieldError; errorCount?: number }) => React.ReactNode;
   renderStatus?: (props: { id: string; saving?: boolean; savePending?: boolean; errorCount?: number; isManualSave?: boolean }) => React.ReactNode;
+  /** Called with validated form values when the user submits. Works alongside auto-save. */
+  onSubmit?: (values: IEntityData) => void | Promise<void>;
+  /** Called with RHF FieldErrors when submit validation fails. */
+  onSubmitError?: (errors: import("react-hook-form").FieldErrors) => void;
+  /** Render prop for a custom submit button. If onSubmit is provided and this is omitted, a default submit button is rendered. */
+  renderSubmitButton?: (props: { onSubmit: () => void; isDirty: boolean; isValid: boolean; isSubmitting: boolean }) => React.ReactNode;
 }
 
 export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps): React.JSX.Element => {
@@ -73,9 +81,13 @@ export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps):
     renderDialog,
     renderSaveButton,
     formErrors,
+    fieldErrors,
     renderLabel,
     renderError,
     renderStatus,
+    onSubmit: onSubmitProp,
+    onSubmitError,
+    renderSubmitButton,
   } = props;
 
   // Support both v2 formConfig and v1 fieldConfigs
@@ -115,6 +127,14 @@ export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps):
   React.useEffect(() => { rulesStateRef.current = rulesState; }, [rulesState]);
   React.useEffect(() => { formStateRef.current = formState; }, [formState]);
   React.useEffect(() => { initForm(defaultValues); }, [areAllFieldsReadonly]);
+
+  // Inject server-side per-field errors into RHF error state
+  React.useEffect(() => {
+    if (!fieldErrors) return;
+    Object.entries(fieldErrors).forEach(([fieldName, message]) => {
+      setError(fieldName, { type: "server", message });
+    });
+  }, [fieldErrors]);
 
   const initForm = (entityData: IEntityData) => {
     const { formState: loadedState, initEntityData } = isCreate
@@ -266,6 +286,30 @@ export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps):
     });
   };
 
+  // Feature 2: handleSubmit / Batch Submit Validation
+  // Triggers full RHF validation, calls onSubmit if valid, onSubmitError if invalid,
+  // and focuses the first invalid field.
+  const handleFormSubmit = React.useCallback(() => {
+    if (!onSubmitProp) return;
+    const cfg = rulesStateRef.current.configs[configName];
+    // Clear hidden-field errors before batch validation (mirrors validateAndSave behaviour)
+    if (cfg?.fieldStates) {
+      Object.keys(cfg.fieldStates).forEach(fieldName => {
+        if (cfg.fieldStates[fieldName]?.hidden) clearErrors(fieldName);
+      });
+    }
+    trigger().then((valid: boolean) => {
+      if (!valid) {
+        setIsExpanded(true);
+        (typeof requestAnimationFrame !== "undefined" ? requestAnimationFrame : setTimeout)(() => focusFirstError());
+        onSubmitError?.(formStateRef.current.errors);
+      } else {
+        const values = formMethods.getValues();
+        Promise.resolve(onSubmitProp(values)).catch(() => { /* consumer handles errors */ });
+      }
+    });
+  }, [onSubmitProp, onSubmitError, configName, trigger, clearErrors]);
+
   const onFilterChange = React.useCallback((value: string) => {
     if (filterTimeoutRef.current) clearTimeout(filterTimeoutRef.current);
     filterTimeoutRef.current = setTimeout(() => setFilterText(value), 500);
@@ -344,6 +388,15 @@ export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps):
               </button>
               <button type="button" className="cancel-button" onClick={() => { reset(); initForm(defaultValues); }} disabled={!isDirty || isSubmitting}>
                 {FormStrings.cancel}
+              </button>
+            </div>
+          )
+        )}
+        {onSubmitProp && (
+          renderSubmitButton ? renderSubmitButton({ onSubmit: handleFormSubmit, isDirty, isValid, isSubmitting }) : (
+            <div className="fe-submit-actions" style={{ marginTop: "16px" }}>
+              <button type="button" className="submit-button" onClick={handleFormSubmit} disabled={isSubmitting}>
+                {FormStrings.save}
               </button>
             </div>
           )

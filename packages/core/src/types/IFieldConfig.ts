@@ -1,6 +1,7 @@
 import { IOption } from "./IOption";
 import { IRule } from "./IRule";
 import { IValidationRule } from "./IValidationRule";
+import { IEntityData } from "../utils";
 
 /**
  * Static configuration for a single form field (v2 schema).
@@ -54,4 +55,15 @@ export interface IFieldConfig {
   skipLayoutReadOnly?: boolean;
   /** Whether the field is disabled at the layout level. */
   disabled?: boolean;
+  /**
+   * Async function that loads options dynamically for select/radio/checkbox fields.
+   * When present, overrides the static `options` array with the resolved result.
+   * Results are cached per unique combination of `optionsDependsOn` field values.
+   */
+  loadOptions?: (context: { fieldId: string; values: IEntityData }) => Promise<IOption[]>;
+  /**
+   * Field IDs whose values trigger a re-run of `loadOptions` when they change.
+   * If omitted, `loadOptions` is only called once on mount.
+   */
+  optionsDependsOn?: string[];
 }

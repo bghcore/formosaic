@@ -42,43 +42,43 @@ describe("ExpressionEngine", () => {
       expect(evaluateExpression("$values.a < $values.b", values)).toBe(false);
       expect(evaluateExpression("$values.a >= $values.b", values)).toBe(true);
       expect(evaluateExpression("$values.a <= $values.b", values)).toBe(false);
-      expect(evaluateExpression("$values.a === $values.b", values)).toBe(false);
-      expect(evaluateExpression("$values.a !== $values.b", values)).toBe(true);
+      expect(evaluateExpression("$values.a == $values.b", values)).toBe(false);
+      expect(evaluateExpression("$values.a != $values.b", values)).toBe(true);
     });
 
     it("evaluates equality correctly", () => {
       const values = { a: 5, b: 5 };
-      expect(evaluateExpression("$values.a === $values.b", values)).toBe(true);
+      expect(evaluateExpression("$values.a == $values.b", values)).toBe(true);
     });
 
-    it("evaluates Math.round", () => {
+    it("evaluates round()", () => {
       const values = { total: 10.567 };
       const result = evaluateExpression(
-        "Math.round($values.total * 100) / 100",
+        "round($values.total * 100) / 100",
         values
       );
       expect(result).toBe(10.57);
     });
 
-    it("evaluates Math.floor", () => {
+    it("evaluates floor()", () => {
       const values = { num: 4.9 };
-      expect(evaluateExpression("Math.floor($values.num)", values)).toBe(4);
+      expect(evaluateExpression("floor($values.num)", values)).toBe(4);
     });
 
-    it("evaluates Math.ceil", () => {
+    it("evaluates ceil()", () => {
       const values = { num: 4.1 };
-      expect(evaluateExpression("Math.ceil($values.num)", values)).toBe(5);
+      expect(evaluateExpression("ceil($values.num)", values)).toBe(5);
     });
 
-    it("evaluates Math.abs", () => {
+    it("evaluates abs()", () => {
       const values = { num: -42 };
-      expect(evaluateExpression("Math.abs($values.num)", values)).toBe(42);
+      expect(evaluateExpression("abs($values.num)", values)).toBe(42);
     });
 
-    it("evaluates Math.min and Math.max", () => {
+    it("evaluates min() and max()", () => {
       const values = { a: 3, b: 7 };
-      expect(evaluateExpression("Math.min($values.a, $values.b)", values)).toBe(3);
-      expect(evaluateExpression("Math.max($values.a, $values.b)", values)).toBe(7);
+      expect(evaluateExpression("min($values.a, $values.b)", values)).toBe(3);
+      expect(evaluateExpression("max($values.a, $values.b)", values)).toBe(7);
     });
 
     it("handles null field values gracefully", () => {
@@ -111,8 +111,9 @@ describe("ExpressionEngine", () => {
     it("handles nested path where intermediate is undefined", () => {
       const values = {};
       const result = evaluateExpression("$values.parent.child", values);
-      // parent is undefined, so parent.child resolves to undefined
-      expect(result).toBeUndefined();
+      // CSP-safe implementation: unresolvable paths substitute as NaN (same as null/undefined),
+      // preserving arithmetic safety (e.g. NaN * x === NaN) while avoiding new Function().
+      expect(result).toBeNaN();
     });
 
     it("returns undefined for invalid expression (no throw)", () => {
@@ -128,8 +129,8 @@ describe("ExpressionEngine", () => {
 
     it("evaluates logical operators", () => {
       const values = { a: true, b: false };
-      expect(evaluateExpression("$values.a && $values.b", values)).toBe(false);
-      expect(evaluateExpression("$values.a || $values.b", values)).toBe(true);
+      expect(evaluateExpression("$values.a and $values.b", values)).toBe(false);
+      expect(evaluateExpression("$values.a or $values.b", values)).toBe(true);
     });
 
     it("evaluates boolean field values correctly", () => {
@@ -140,7 +141,7 @@ describe("ExpressionEngine", () => {
     it("evaluates complex multi-field arithmetic", () => {
       const values = { quantity: 3, unitPrice: 29.99, taxRate: 0.08 };
       const result = evaluateExpression(
-        "Math.round($values.quantity * $values.unitPrice * (1 + $values.taxRate) * 100) / 100",
+        "round($values.quantity * $values.unitPrice * (1 + $values.taxRate) * 100) / 100",
         values
       );
       expect(result).toBe(97.17);
@@ -176,9 +177,9 @@ describe("ExpressionEngine", () => {
       expect(deps).toEqual([]);
     });
 
-    it("extracts field names from expressions with Math functions", () => {
+    it("extracts field names from expressions with math functions", () => {
       const deps = extractExpressionDependencies(
-        "Math.round($values.total * 100) / 100"
+        "round($values.total * 100) / 100"
       );
       expect(deps).toEqual(["total"]);
     });

@@ -1,7 +1,9 @@
 import React from "react";
+import { useFormContext } from "react-hook-form";
 import { GetFieldsToRender } from "../helpers/InlineFormHelper";
 import { IRuntimeFormState } from "../types/IRuntimeFieldState";
 import { IFieldConfig } from "../types/IFieldConfig";
+import { IOption } from "../types/IOption";
 import { IFormAnalytics } from "../hooks/useFormAnalytics";
 import RenderField from "./RenderField";
 import { FormErrorBoundary } from "./FormErrorBoundary";
@@ -38,6 +40,42 @@ export const FormFields = (props: IFormFieldsProps) => {
     fieldRenderLimit, renderLabel, renderError, renderStatus, analytics,
   } = props;
 
+  // Async options state: maps fieldId -> loaded IOption[] (undefined = not yet loaded)
+  const [asyncOptions, setAsyncOptions] = React.useState<Record<string, IOption[]>>({});
+  // Async options loading state: maps fieldId -> boolean
+  const [asyncOptionsLoading, setAsyncOptionsLoading] = React.useState<Record<string, boolean>>({});
+  // Cache key per field: JSON-serialised values of optionsDependsOn fields
+  const asyncCacheKeyRef = React.useRef<Record<string, string>>({});
+
+  const { getValues } = useFormContext();
+
+  // Run loadOptions for each field that declares it, re-running when deps change.
+  // useEffect runs after every render; we guard with a cache key to avoid redundant fetches.
+  React.useEffect(() => {
+    if (!fields) return;
+    Object.entries(fields).forEach(([fieldId, fieldConfig]) => {
+      if (!fieldConfig.loadOptions) return;
+      const depValues = (fieldConfig.optionsDependsOn ?? []).reduce<Record<string, unknown>>(
+        (acc, dep) => { acc[dep] = getValues(dep); return acc; },
+        {}
+      );
+      const cacheKey = JSON.stringify(depValues);
+      if (asyncCacheKeyRef.current[fieldId] === cacheKey) return; // deps unchanged, use cached result
+      asyncCacheKeyRef.current[fieldId] = cacheKey;
+      setAsyncOptionsLoading(prev => ({ ...prev, [fieldId]: true }));
+      fieldConfig.loadOptions({ fieldId, values: getValues() })
+        .then(options => {
+          setAsyncOptions(prev => ({ ...prev, [fieldId]: options }));
+        })
+        .catch(() => {
+          // On error, leave the previous options intact and clear loading state
+        })
+        .finally(() => {
+          setAsyncOptionsLoading(prev => ({ ...prev, [fieldId]: false }));
+        });
+    });
+  });
+
   const collapsedClass = !isExpanded && (expandEnabled || expandEnabled === undefined) ? "collapsed" : "";
   const fieldsToRender = GetFieldsToRender(fieldRenderLimit ?? 0, fieldOrder ?? [], formState?.fieldStates);
   const loadingKey = `${programName}-${entityType}-${entityId}-form-loaded`;
@@ -67,7 +105,8 @@ export const FormFields = (props: IFormFieldsProps) => {
                 hidden={fieldState.hidden}
                 required={fieldState.required}
                 readOnly={fieldState.readOnly}
-                options={fieldState.options}
+                options={asyncOptions[fieldName] ?? fieldState.options}
+                optionsLoading={asyncOptionsLoading[fieldName] ?? false}
                 validate={fieldState.validate}
                 parentEntityId={parentEntityId}
                 parentEntityType={parentEntityType}

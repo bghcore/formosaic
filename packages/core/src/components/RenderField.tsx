@@ -23,6 +23,7 @@ interface IRenderFieldProps {
   readOnly?: boolean;
   disabled?: boolean;
   options?: IOption[];
+  optionsLoading?: boolean;
   validate?: IValidationRule[];
   parentEntityId?: string;
   parentEntityType?: string;
@@ -47,7 +48,7 @@ interface IRenderFieldProps {
 const RenderField = (props: IRenderFieldProps) => {
   const {
     type, fieldName, entityId, entityType, programName,
-    hidden, required, readOnly, disabled, options, validate,
+    hidden, required, readOnly, disabled, options, optionsLoading, validate,
     parentEntityId, parentEntityType, isManualSave,
     setFieldValue, isCreate, filterText, softHidden,
     label, skipLayoutReadOnly, hideOnCreate, config,
@@ -138,6 +139,7 @@ const RenderField = (props: IRenderFieldProps) => {
                   savePending,
                   config,
                   options,
+                  optionsLoading,
                   label,
                   type,
                   description,
@@ -160,7 +162,7 @@ const RenderField = (props: IRenderFieldProps) => {
         Missing component &quot;{type}&quot; for field &quot;{fieldName}&quot;. Available: [{available}]
       </div>
     );
-  }, [type, hidden, required, readOnly, disabled, options, softHidden, renderLabel, renderError, renderStatus,
+  }, [type, hidden, required, readOnly, disabled, options, optionsLoading, softHidden, renderLabel, renderError, renderStatus,
     fieldName, fieldNameConst, label, validate, config, description, placeholder, helpText,
     isCreate, hideOnCreate, isManualSave, skipLayoutReadOnly,
     entityId, entityType, programName, parentEntityId, parentEntityType,

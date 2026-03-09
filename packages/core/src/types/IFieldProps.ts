@@ -36,6 +36,8 @@ export interface IFieldProps<T = Record<string, unknown>> {
   config?: T;
   /** Dropdown/select options (was `dropdownOptions` in v1) */
   options?: IOption[];
+  /** True while async loadOptions is in-flight for this field */
+  optionsLoading?: boolean;
   /** Field label */
   label?: string;
   /** Component type string */

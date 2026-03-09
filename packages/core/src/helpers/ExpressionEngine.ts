@@ -1,7 +1,12 @@
 import { IEntityData } from "../utils";
 import { getValueFunction } from "./ValueFunctionRegistry";
+import { Parser } from "expr-eval";
 
 /**
+ * CSP-SAFE: This module uses expr-eval (https://www.npmjs.com/package/expr-eval) instead of
+ * `new Function()` / `eval()`, making expression evaluation safe in environments with strict
+ * Content-Security-Policies (CSP) that forbid `script-src 'unsafe-eval'`.
+ *
  * Evaluates an expression string against form values.
  *
  * Supports:
@@ -9,18 +14,37 @@ import { getValueFunction } from "./ValueFunctionRegistry";
  * - $fn.name() for value function calls
  * - $parent.fieldName for parent entity references
  * - $root.fieldName alias for $values.fieldName
- * - Math functions: Math.round, Math.floor, Math.ceil, Math.abs, Math.min, Math.max
+ * - Math functions (expr-eval builtins): round(), floor(), ceil(), abs(), min(), max(), sqrt(), pow(), log()
  * - Arithmetic: +, -, *, /
- * - Comparison: >, <, >=, <=, ===, !==
- * - Logical: &&, ||
+ * - Comparison: ==, !=, >, <, >=, <=
+ * - Logical: and, or, not
  * - String concatenation via +
  *
  * @example
  *   "$values.quantity * $values.unitPrice"
  *   "$fn.setDate()"
  *   "$parent.category"
- *   "Math.round($values.total * 100) / 100"
+ *   "round($values.total * 100) / 100"
  */
+
+// Singleton CSP-safe parser.
+// expr-eval 2.x exposes binaryOps/consts as plain objects; access via any to avoid
+// augmenting the upstream @types/expr-eval declarations.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const _parser: Parser = new Parser() as any;
+// Override + to handle string concatenation (string + number, number + string).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const _origAdd = (_parser as any).binaryOps["+"];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(_parser as any).binaryOps["+"] = (a: unknown, b: unknown): unknown => {
+  if (typeof a === "string" || typeof b === "string") return String(a) + String(b);
+  return _origAdd(a as number, b as number);
+};
+// Register NaN as a named constant so substituted "NaN" tokens evaluate correctly.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(_parser as any).consts["NaN"] = NaN;
+
+
 export function evaluateExpression(
   expression: string,
   values: IEntityData,
@@ -28,10 +52,27 @@ export function evaluateExpression(
   parentEntity?: IEntityData,
   currentUserId?: string
 ): unknown {
-  // Replace $fn.name() calls with their results
+  // Optimisation: if the expression is a single $fn.name() call (nothing else),
+  // execute the function and return its result directly — preserving complex types
+  // such as Date objects that cannot be round-tripped through text substitution.
+  const singleFnMatch = /^\s*\$fn\.([a-zA-Z_][a-zA-Z0-9_]*)\(\)\s*$/.exec(expression);
+  if (singleFnMatch) {
+    const fn = getValueFunction(singleFnMatch[1]);
+    if (!fn) return undefined;
+    return fn({
+      fieldName: fieldName ?? "",
+      fieldValue: fieldName ? values[fieldName] as string : undefined,
+      values,
+      parentEntity,
+      currentUserId,
+    });
+  }
+
+  // Step 1 – resolve $fn.name() calls by executing registered value functions and
+  // substituting their results as literal tokens into the expression string.
   let resolved = expression.replace(
     /\$fn\.([a-zA-Z_][a-zA-Z0-9_]*)\(\)/g,
-    (_, fnName) => {
+    (_, fnName: string) => {
       const fn = getValueFunction(fnName);
       if (fn) {
         const result = fn({
@@ -41,56 +82,50 @@ export function evaluateExpression(
           parentEntity,
           currentUserId,
         });
-        if (result === null || result === undefined) return "undefined";
+        if (result === null || result === undefined) return "NaN";
         if (typeof result === "string") return JSON.stringify(result);
-        if (result instanceof Date) return `new Date(${result.getTime()})`;
+        if (result instanceof Date) return String(result.getTime());
         return String(result);
       }
-      return "undefined";
+      // Unknown function: substitute NaN so arithmetic remains well-behaved
+      return "NaN";
     }
   );
 
-  // Replace $parent.fieldName with parent entity values
+  // Step 2 – substitute $parent.fieldName, $root.fieldName, $values.fieldName with
+  // their literal values inline. null/undefined values are substituted as the token
+  // "NaN" so that arithmetic expressions (e.g. qty * price) return NaN rather than
+  // throwing, preserving backward-compatible behaviour.
+
+  const serializeValue = (value: unknown): string => {
+    if (value === null || value === undefined) return "NaN";
+    if (typeof value === "string") return JSON.stringify(value);
+    if (typeof value === "boolean") return value ? "true" : "false";
+    if (value instanceof Date) return String(value.getTime());
+    return String(value);
+  };
+
+  // Replace $parent.fieldName
   resolved = resolved.replace(
     /\$parent\.([a-zA-Z_][a-zA-Z0-9_.]*)/g,
-    (_, fieldPath) => {
-      const value = getNestedValue(parentEntity ?? {}, fieldPath);
-      if (value === null || value === undefined) return "undefined";
-      if (typeof value === "string") return JSON.stringify(value);
-      return String(value);
-    }
+    (_, fieldPath: string) => serializeValue(getNestedValue(parentEntity ?? {}, fieldPath))
   );
 
   // Replace $root.fieldName (alias for $values)
   resolved = resolved.replace(
     /\$root\.([a-zA-Z_][a-zA-Z0-9_.]*)/g,
-    (_, fieldPath) => {
-      const value = getNestedValue(values, fieldPath);
-      if (value === null || value === undefined) return "undefined";
-      if (typeof value === "string") return JSON.stringify(value);
-      return String(value);
-    }
+    (_, fieldPath: string) => serializeValue(getNestedValue(values, fieldPath))
   );
 
-  // Replace $values.fieldName with actual values
+  // Replace $values.fieldName
   resolved = resolved.replace(
     /\$values\.([a-zA-Z_][a-zA-Z0-9_.]*)/g,
-    (_, fieldPath) => {
-      const value = getNestedValue(values, fieldPath);
-      if (value === null || value === undefined) return "undefined";
-      if (typeof value === "string") return JSON.stringify(value);
-      return String(value);
-    }
+    (_, fieldPath: string) => serializeValue(getNestedValue(values, fieldPath))
   );
 
-  // Safe evaluation using Function constructor with restricted scope
+  // Step 3 – evaluate with the CSP-safe expr-eval parser
   try {
-    const safeEval = new Function(
-      "Math",
-      "Date",
-      `"use strict"; return (${resolved});`
-    );
-    return safeEval(Math, Date);
+    return _parser.evaluate(resolved, {});
   } catch {
     return undefined;
   }

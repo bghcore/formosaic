@@ -22,6 +22,8 @@ export interface IRuntimeFieldState {
   confirmInput?: boolean;
   /** Available options for dropdown-type fields (may be filtered by rules). */
   options?: IOption[];
+  /** True while async loadOptions is in-flight. Passed through to field adapters via IFieldProps. */
+  optionsLoading?: boolean;
   /** Override field label (may be set by rules). */
   label?: string;
   /** Default value to set when the field value is null and the field is visible. */
