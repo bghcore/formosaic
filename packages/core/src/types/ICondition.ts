@@ -25,7 +25,12 @@ export interface IFieldCondition {
     | "notIn"
     | "isEmpty"
     | "isNotEmpty"
-    | "matches";
+    | "matches"
+    | "arrayContains"
+    | "arrayNotContains"
+    | "arrayLengthEquals"
+    | "arrayLengthGreaterThan"
+    | "arrayLengthLessThan";
   /** The value to compare against. Not required for isEmpty/isNotEmpty. */
   value?: unknown;
 }

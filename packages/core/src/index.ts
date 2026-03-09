@@ -77,8 +77,12 @@ export {
   createNumericRangeRule,
   createPatternRule,
   createRequiredIfRule,
+  registerValidatorMetadata,
+  getValidatorMetadata,
+  getAllValidatorMetadata,
+  resetValidatorMetadataRegistry,
 } from "./helpers/ValidationRegistry";
-export type { ValidatorFn, IValidationContext } from "./helpers/ValidationRegistry";
+export type { ValidatorFn, IValidationContext, IValidatorMetadata } from "./helpers/ValidationRegistry";
 
 export {
   registerValueFunctions,

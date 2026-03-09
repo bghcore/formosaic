@@ -34,6 +34,11 @@ export interface IRuntimeFieldState {
   dependsOnFields?: string[];
   /** The source rules that produced this state (for tracing/debugging). */
   activeRuleIds?: string[];
+  /**
+   * A pending value to set on the field, produced by a rule with setValue effect.
+   * The form component reads this and calls RHF setValue. Undefined if no rule set a value.
+   */
+  pendingSetValue?: { value: unknown };
 }
 
 /**

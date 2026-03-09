@@ -637,3 +637,60 @@ function getValidationRegistry(): Record<string, ValidatorFn>;
 ```
 
 **Important:** `registerValidators()` **merges** into the existing registry -- it does not replace it. Call it at application startup before rendering any forms. Registering a name that already exists overwrites the previous validator for that name.
+
+---
+
+## Validator Metadata
+
+Custom validators registered via `registerValidators()` are not visible to the designer by default. Use `registerValidatorMetadata()` to attach display metadata so the designer can surface them in its UI.
+
+### IValidatorMetadata
+
+```typescript
+interface IValidatorMetadata {
+  /** Human-readable display name */
+  label: string;
+  /** Optional description of what the validator checks */
+  description?: string;
+  /** Named parameters the validator accepts */
+  params?: Record<string, {
+    type: "string" | "number" | "boolean";
+    label: string;
+    required?: boolean;
+  }>;
+}
+```
+
+### API
+
+```typescript
+function registerValidatorMetadata(name: string, metadata: IValidatorMetadata): void;
+function getValidatorMetadata(name: string): IValidatorMetadata | undefined;
+function getAllValidatorMetadata(): Record<string, IValidatorMetadata>;
+```
+
+### Example
+
+```typescript
+import { registerValidators, registerValidatorMetadata } from "@form-eng/core";
+
+// 1. Register the validator logic
+registerValidators({
+  minWords: (value, params) => {
+    const count = String(value ?? "").trim().split(/\s+/).filter(Boolean).length;
+    const min = Number(params?.min ?? 1);
+    return count < min ? `Must contain at least ${min} word(s)` : undefined;
+  },
+});
+
+// 2. Register metadata so the designer can display it
+registerValidatorMetadata("minWords", {
+  label: "Minimum Word Count",
+  description: "Ensures the field contains a minimum number of words.",
+  params: {
+    min: { type: "number", label: "Minimum words", required: true },
+  },
+});
+```
+
+The designer's Validation tab will now include `minWords` in its validator dropdown alongside the built-ins.

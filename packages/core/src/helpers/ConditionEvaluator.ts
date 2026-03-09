@@ -71,6 +71,26 @@ function evaluateFieldCondition(condition: IFieldCondition, values: IEntityData)
       } catch {
         return false;
       }
+    case "arrayContains":
+      return Array.isArray(fieldValue)
+        ? fieldValue.some(v => looseEquals(v, condition.value))
+        : false;
+    case "arrayNotContains":
+      return Array.isArray(fieldValue)
+        ? !fieldValue.some(v => looseEquals(v, condition.value))
+        : true;
+    case "arrayLengthEquals":
+      return Array.isArray(fieldValue)
+        ? fieldValue.length === toNumber(condition.value)
+        : false;
+    case "arrayLengthGreaterThan":
+      return Array.isArray(fieldValue)
+        ? fieldValue.length > toNumber(condition.value)
+        : false;
+    case "arrayLengthLessThan":
+      return Array.isArray(fieldValue)
+        ? fieldValue.length < toNumber(condition.value)
+        : false;
     default:
       return false;
   }

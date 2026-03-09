@@ -192,6 +192,11 @@ export function evaluateAllRules(
     // Apply self-effects
     applyEffectToState(fieldStates, fieldName, ruleResults.selfEffect);
 
+    // Apply setValue from then-branch only (stored separately to avoid else contamination)
+    if (ruleResults.pendingSetValue !== undefined && fieldStates[fieldName]) {
+      fieldStates[fieldName].pendingSetValue = ruleResults.pendingSetValue;
+    }
+
     // Apply cross-field effects
     for (const [targetField, effect] of Object.entries(ruleResults.crossEffects)) {
       if (fieldStates[targetField]) {
@@ -248,6 +253,7 @@ export function evaluateAffectedFields(
       defaultValue: config.defaultValue,
       computeOnCreateOnly: config.computeOnCreateOnly,
       activeRuleIds: [],
+      pendingSetValue: undefined,
     };
   }
 
@@ -261,6 +267,9 @@ export function evaluateAffectedFields(
     // Apply self-effects if this field is affected
     if (affected.has(ownerField) || ownerField === changedField) {
       applyEffectToState(updatedStates, ownerField, ruleResults.selfEffect);
+      if (ruleResults.pendingSetValue !== undefined && updatedStates[ownerField]) {
+        updatedStates[ownerField].pendingSetValue = ruleResults.pendingSetValue;
+      }
     }
 
     // Apply cross-field effects to affected fields
@@ -304,6 +313,8 @@ interface IRuleEvalResult {
   crossEffects: Record<string, IFieldEffect>;
   fieldOrder?: string[];
   activeRuleIds: string[];
+  /** Pending setValue from the winning then-branch rule (undefined if no rule fired setValue) */
+  pendingSetValue?: { value: unknown };
 }
 
 /**
@@ -318,6 +329,8 @@ function evaluateFieldRules(rules: IRule[], values: IEntityData): IRuleEvalResul
   const crossEffects: Record<string, IFieldEffect> = {};
   let fieldOrder: string[] | undefined;
   const activeRuleIds: string[] = [];
+  // setValue is tracked separately: only applies from the then-branch (not else)
+  let pendingSetValue: { value: unknown } | undefined;
 
   for (let i = 0; i < sorted.length; i++) {
     const rule = sorted[i];
@@ -327,9 +340,15 @@ function evaluateFieldRules(rules: IRule[], values: IEntityData): IRuleEvalResul
     }
     const effect = conditionMet ? rule.then : rule.else;
 
+    // setValue: only from the then branch, first-write-wins by priority
+    if (conditionMet && rule.then?.setValue !== undefined && pendingSetValue === undefined) {
+      pendingSetValue = { value: rule.then.setValue };
+    }
+
     if (!effect) continue;
 
     // Merge self-effects (first write wins due to priority sort)
+    // Note: setValue is intentionally excluded from general merging — handled above
     mergeEffect(selfEffect, effect);
 
     // Merge cross-field effects
@@ -348,7 +367,7 @@ function evaluateFieldRules(rules: IRule[], values: IEntityData): IRuleEvalResul
     }
   }
 
-  return { selfEffect, crossEffects, fieldOrder, activeRuleIds };
+  return { selfEffect, crossEffects, fieldOrder, activeRuleIds, pendingSetValue };
 }
 
 /**
@@ -381,6 +400,8 @@ function mergeEffect(target: IFieldEffect, source: IFieldEffect): void {
   if (source.computedValue !== undefined && target.computedValue === undefined) {
     target.computedValue = source.computedValue;
   }
+  // Note: setValue is intentionally NOT merged here — it is handled via pendingSetValue
+  // in evaluateFieldRules to ensure it only applies from the then branch (not else).
 }
 
 function applyEffectToState(
@@ -400,4 +421,6 @@ function applyEffectToState(
   if (effect.options !== undefined) state.options = effect.options;
   if (effect.validate !== undefined) state.validate = effect.validate;
   if (effect.computedValue !== undefined) state.computedValue = effect.computedValue;
+  // Note: setValue is applied via ruleResults.pendingSetValue in evaluateAllRules /
+  // evaluateAffectedFields, NOT here — to ensure it only fires from the then branch.
 }

@@ -28,6 +28,8 @@ export interface IFieldEffect {
   computedValue?: string;
   /** Override field ordering */
   fieldOrder?: string[];
+  /** Directly set the field's value when the rule condition is met */
+  setValue?: unknown;
   /** Apply effects to OTHER fields (keyed by field name) */
   fields?: Record<string, IFieldEffect>;
 }

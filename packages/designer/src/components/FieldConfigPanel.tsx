@@ -1,27 +1,30 @@
 import React, { useState, useCallback } from "react";
-import { ComponentTypes } from "@form-eng/core";
+import { ComponentTypes, getAllValidatorMetadata, getValidatorRegistry } from "@form-eng/core";
 import type { IOption, IValidationRule } from "@form-eng/core";
 import { useDesigner } from "../state/useDesigner";
 
 /** All available component types */
 const COMPONENT_TYPE_OPTIONS = Object.values(ComponentTypes);
 
-/** Built-in validator names */
-const VALIDATOR_NAMES = [
-  "required",
-  "minLength",
-  "maxLength",
-  "min",
-  "max",
-  "pattern",
-  "email",
-  "url",
-  "numeric",
-  "integer",
-  "date",
-  "requiredIf",
-  "custom",
-];
+/**
+ * Build the validator names list dynamically: all names from the validator
+ * registry (built-ins + any registered custom validators), with metadata-
+ * registered names merged in for completeness.
+ */
+function getValidatorNames(): string[] {
+  const registryNames = Object.keys(getValidatorRegistry());
+  const metadataNames = Object.keys(getAllValidatorMetadata());
+  const all = new Set([...registryNames, ...metadataNames]);
+  // Filter out legacy aliases to keep the list clean (they are duplicates)
+  const legacyAliases = new Set([
+    "EmailValidation", "PhoneNumberValidation", "YearValidation", "isValidUrl",
+    "NoSpecialCharactersValidation", "CurrencyValidation", "UniqueInArrayValidation",
+    "Max150KbValidation", "Max32KbValidation",
+  ]);
+  return [...all].filter(n => !legacyAliases.has(n)).sort();
+}
+
+const VALIDATOR_NAMES = getValidatorNames();
 
 type PanelTab = "general" | "options" | "validation" | "config";
 

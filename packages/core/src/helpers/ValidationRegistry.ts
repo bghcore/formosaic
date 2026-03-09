@@ -160,6 +160,44 @@ const requiredIf: ValidatorFn = (value, params, context) => {
   return undefined;
 };
 
+// --- Validator Metadata ---
+
+/** Metadata describing a validator for use in designer UIs and documentation. */
+export interface IValidatorMetadata {
+  /** Human-readable display name */
+  label: string;
+  /** Optional description of what the validator checks */
+  description?: string;
+  /** Named parameters the validator accepts */
+  params?: Record<string, {
+    type: "string" | "number" | "boolean";
+    label: string;
+    required?: boolean;
+  }>;
+}
+
+let validatorMetadataRegistry: Record<string, IValidatorMetadata> = {};
+
+/** Register metadata for a custom (or built-in) validator */
+export function registerValidatorMetadata(name: string, metadata: IValidatorMetadata): void {
+  validatorMetadataRegistry = { ...validatorMetadataRegistry, [name]: metadata };
+}
+
+/** Get metadata for a specific validator by name */
+export function getValidatorMetadata(name: string): IValidatorMetadata | undefined {
+  return validatorMetadataRegistry[name];
+}
+
+/** Get all registered validator metadata */
+export function getAllValidatorMetadata(): Record<string, IValidatorMetadata> {
+  return { ...validatorMetadataRegistry };
+}
+
+/** Reset validator metadata registry (for testing) */
+export function resetValidatorMetadataRegistry(): void {
+  validatorMetadataRegistry = {};
+}
+
 // --- Registry ---
 
 const defaultValidators: Record<string, ValidatorFn> = {
