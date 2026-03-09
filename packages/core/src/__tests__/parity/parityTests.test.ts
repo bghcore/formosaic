@@ -19,6 +19,9 @@ import { createMantineFieldRegistry } from "@form-eng/mantine";
 import { createAtlaskitFieldRegistry } from "@form-eng/atlaskit";
 import { createBaseWebFieldRegistry } from "@form-eng/base-web";
 import { createHeroUIFieldRegistry } from "@form-eng/heroui";
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import { MantineProvider } from "@mantine/core";
+import React from "react";
 
 // Mantine requires matchMedia + ResizeObserver mocks in jsdom
 Object.defineProperty(window, "matchMedia", {
@@ -49,26 +52,24 @@ const FORM_CONTEXT_FIELDS = ["Multiselect"];
 const FLUENT_SKIP_REQUIRED = ["Textarea"];
 const MUI_SKIP_REQUIRED = ["Textarea", "CheckboxGroup"];
 
-// Adapters that work in jsdom without a provider wrapper
+// Provider wrappers for Chakra and Mantine
+const ChakraWrapper = ({ children }: { children: React.ReactNode }) =>
+  React.createElement(ChakraProvider, { value: defaultSystem }, children);
+
+const MantineWrapper = ({ children }: { children: React.ReactNode }) =>
+  React.createElement(MantineProvider, { forceColorScheme: "light" as const }, children);
+
 const adapters: IParityAdapterConfig[] = [
   { name: "fluent", registry: createFluentFieldRegistry, contextDependentFields: FORM_CONTEXT_FIELDS, skipRequiredCheck: FLUENT_SKIP_REQUIRED },
   { name: "mui", registry: createMuiFieldRegistry, contextDependentFields: FORM_CONTEXT_FIELDS, skipRequiredCheck: MUI_SKIP_REQUIRED },
   { name: "headless", registry: createHeadlessFieldRegistry },
   { name: "antd", registry: createAntdFieldRegistry },
+  { name: "chakra", registry: createChakraFieldRegistry, wrapper: ChakraWrapper },
+  { name: "mantine", registry: createMantineFieldRegistry, wrapper: MantineWrapper },
   { name: "atlaskit", registry: createAtlaskitFieldRegistry },
   { name: "base-web", registry: createBaseWebFieldRegistry },
   { name: "heroui", registry: createHeroUIFieldRegistry },
 ];
-
-// Chakra and Mantine require provider wrappers to render correctly.
-// They are excluded from the default adapter list to avoid test setup complexity.
-// To include them, add entries with a wrapper:
-//   import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
-//   import { MantineProvider } from "@mantine/core";
-//   { name: "chakra", registry: createChakraFieldRegistry,
-//     wrapper: ({ children }) => <ChakraProvider value={defaultSystem}>{children}</ChakraProvider> },
-//   { name: "mantine", registry: createMantineFieldRegistry,
-//     wrapper: ({ children }) => <MantineProvider>{children}</MantineProvider> },
 
 describe("Cross-adapter parity tests", () => {
   runParityTests(fixtures.PARITY_TEXT_FORM, "Text fields", { adapters });
