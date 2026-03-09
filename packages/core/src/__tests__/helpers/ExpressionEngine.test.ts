@@ -111,8 +111,9 @@ describe("ExpressionEngine", () => {
     it("handles nested path where intermediate is undefined", () => {
       const values = {};
       const result = evaluateExpression("$values.parent.child", values);
-      // parent is undefined, so parent.child resolves to undefined
-      expect(result).toBeUndefined();
+      // CSP-safe implementation: unresolvable paths substitute as NaN (same as null/undefined),
+      // preserving arithmetic safety (e.g. NaN * x === NaN) while avoiding new Function().
+      expect(result).toBeNaN();
     });
 
     it("returns undefined for invalid expression (no throw)", () => {
