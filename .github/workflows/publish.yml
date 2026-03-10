@@ -16,6 +16,8 @@ on:
       - "base-web-v*"
       - "heroui-v*"
       - "designer-v*"
+      - "radix-v*"
+      - "react-aria-v*"
   workflow_dispatch:
     inputs:
       package:
@@ -35,6 +37,8 @@ on:
           - base-web
           - heroui
           - designer
+          - radix
+          - react-aria
       dry-run:
         description: Dry run (skip actual publish)
         required: false
@@ -57,13 +61,13 @@ jobs:
       - name: Detect packages to publish
         id: detect
         run: |
-          PKGS=("core" "fluent" "mui" "headless" "antd" "chakra" "mantine" "atlaskit" "base-web" "heroui" "designer")
+          PKGS=("core" "fluent" "mui" "headless" "antd" "chakra" "mantine" "atlaskit" "base-web" "heroui" "radix" "react-aria" "designer")
 
           # For tag pushes, determine from tag
           if [[ "$GITHUB_REF" == refs/tags/* ]]; then
             TAG="${GITHUB_REF#refs/tags/}"
             if [[ "$TAG" == v* ]]; then
-              echo 'packages=["core","fluent","mui","headless","antd","chakra","mantine","atlaskit","base-web","heroui","designer"]' >> "$GITHUB_OUTPUT"
+              echo 'packages=["core","fluent","mui","headless","antd","chakra","mantine","atlaskit","base-web","heroui","radix","react-aria","designer"]' >> "$GITHUB_OUTPUT"
             elif [[ "$TAG" == core-v* ]]; then
               echo 'packages=["core"]' >> "$GITHUB_OUTPUT"
             elif [[ "$TAG" == fluent-v* ]]; then
@@ -86,6 +90,10 @@ jobs:
               echo 'packages=["heroui"]' >> "$GITHUB_OUTPUT"
             elif [[ "$TAG" == designer-v* ]]; then
               echo 'packages=["designer"]' >> "$GITHUB_OUTPUT"
+            elif [[ "$TAG" == radix-v* ]]; then
+              echo 'packages=["radix"]' >> "$GITHUB_OUTPUT"
+            elif [[ "$TAG" == react-aria-v* ]]; then
+              echo 'packages=["react-aria"]' >> "$GITHUB_OUTPUT"
             else
               echo "Unknown tag: $TAG"
               echo 'packages=[]' >> "$GITHUB_OUTPUT"
