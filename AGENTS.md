@@ -64,18 +64,19 @@ docs/
   i18n-reference.md           -- Internationalization guide
   debugging-rules.md          -- Rules engine debugging guide
   condition-operators.md      -- Condition operator reference
-  new-field-types.md          -- New field type guide
   rules-engine.md             -- Rules engine architecture
   adapter-architecture.md     -- Adapter classification and architecture
   canonical-field-contracts.md -- Canonical field behavior contracts
-  field-capability-matrix.md  -- Per-field, per-adapter parity matrix
+  parity-matrix.md            -- Field implementation matrix (Y/FB/---) across all adapters
   api-stability.md            -- Public API stability classification
-  pre-expansion-summary.md    -- Pre-Tier-2 expansion readiness assessment
   divergence-register.md      -- Cross-adapter divergence register (12 entries)
   choosing-an-adapter.md      -- Adapter recommendation guide
-  tier2-feasibility-matrix.md -- Tier 2 field feasibility matrix
-  tier2-handoff.md            -- Pre-Tier-2 handoff document
+  date-policy.md              -- ISO 8601 date handling policy
+  tier2-handoff.md            -- Tier 2 planning (feasibility, waves, go/no-go)
+  tier1-baseline-report.md    -- Tier 1 stabilization assessment
+  tier1-patterns.md           -- Implementation patterns for Tier 2
   shadcn-integration.md       -- shadcn/ui integration guide
+  field-types-reference.md    -- All field type reference
   date-policy.md              -- Date handling and serialization policy
 e2e/                           -- Playwright E2E tests (54 tests, 7 specs)
 benchmarks/                    -- Performance benchmark suite (vitest bench)

@@ -240,4 +240,4 @@ Already using a UI framework?
 - [Divergence Register](./divergence-register.md) -- complete list of known behavioral differences
 - [Parity Matrix](./parity-matrix.md) -- cross-adapter field coverage comparison
 - [shadcn Integration](./shadcn-integration.md) -- detailed guide for shadcn/ui projects
-- [Tier 2 Feasibility Matrix](./tier2-feasibility-matrix.md) -- upcoming field expansion plans
+- [Tier 2 Handoff](./tier2-handoff.md) -- Tier 2 planning, feasibility, and rollout waves

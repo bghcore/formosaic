@@ -111,3 +111,15 @@ The following Tier 2 field types are only implemented in fluent, mui, and headle
 | PhoneInput | Formatted phone number input | Low -- masked input |
 
 Tier 3 read-only types (ReadOnlyArray, ReadOnlyDateTime, ReadOnlyCumulativeNumber, ReadOnlyRichText, ReadOnlyWithButton) are display-only and relatively low complexity to implement.
+
+## Adapter Strength Summary
+
+**Full Tier 1 + Tier 2 (26+ field types):** fluent, mui, headless -- all fields native or reference HTML.
+
+**Native Tier 1 (13 types):** antd (Ant Design v5), mantine (Mantine v7) -- all 13 use real library components.
+
+**Hybrid Tier 1 (13 types, mix):** chakra (7 native + 6 HTML fallback due to Ark UI DTS), base-web (10 native baseui + 3 HTML).
+
+**Primitives-first (13 types, unstyled):** radix (6 Radix primitives + 7 HTML), react-aria (10 React Aria Components + 3 HTML).
+
+**Compatibility (13 types, all semantic HTML):** atlaskit, heroui.

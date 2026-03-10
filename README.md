@@ -884,19 +884,18 @@ e2e/          -- Playwright end-to-end tests
 benchmarks/   -- Vitest benchmarks for rules engine performance
 stories/      -- Storybook stories for field components
 docs/
-  creating-an-adapter.md     -- Guide for building custom UI adapters
-  adapter-architecture.md    -- Adapter classification and architecture
+  choosing-an-adapter.md      -- Adapter recommendation guide
+  creating-an-adapter.md      -- Guide for building custom UI adapters
+  adapter-architecture.md     -- Adapter classification and architecture
   canonical-field-contracts.md -- Canonical field behavior contracts
-  field-capability-matrix.md -- Per-field, per-adapter parity matrix
-  api-stability.md           -- Public API stability classification
-  pre-expansion-summary.md   -- Pre-Tier-2 expansion readiness assessment
-  choosing-an-adapter.md     -- Adapter recommendation guide
-  tier2-feasibility-matrix.md -- Tier 2 field feasibility assessment
-  tier2-handoff.md           -- Pre-Tier-2 handoff document
-  shadcn-integration.md      -- shadcn/ui integration guide
-  divergence-register.md     -- Cross-adapter divergence register
-  ssr-guide.md               -- SSR / Next.js integration guide
-  ACCESSIBILITY.md           -- Accessibility documentation
+  parity-matrix.md            -- Field implementation matrix across all adapters
+  divergence-register.md      -- Cross-adapter divergence register
+  api-stability.md            -- Public API stability classification
+  tier2-handoff.md            -- Tier 2 planning (feasibility, waves, go/no-go)
+  tier1-patterns.md           -- Implementation patterns for Tier 2
+  shadcn-integration.md       -- shadcn/ui integration guide
+  ssr-guide.md                -- SSR / Next.js integration guide
+  ACCESSIBILITY.md            -- Accessibility documentation
 ```
 
 ## License

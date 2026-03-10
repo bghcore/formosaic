@@ -17,11 +17,11 @@ The library centers on four key concepts: a **declarative rules engine** that ev
 - [docs/expression-syntax.md](https://github.com/bghcore/form-engine/blob/main/docs/expression-syntax.md): Expression syntax ($values, $fn, $parent)
 - [docs/adapter-architecture.md](https://github.com/bghcore/form-engine/blob/main/docs/adapter-architecture.md): Adapter classification and architecture
 - [docs/canonical-field-contracts.md](https://github.com/bghcore/form-engine/blob/main/docs/canonical-field-contracts.md): Canonical field behavior contracts
-- [docs/field-capability-matrix.md](https://github.com/bghcore/form-engine/blob/main/docs/field-capability-matrix.md): Per-field, per-adapter parity matrix
+- [docs/parity-matrix.md](https://github.com/bghcore/form-engine/blob/main/docs/parity-matrix.md): Per-field, per-adapter parity matrix
 - [docs/api-stability.md](https://github.com/bghcore/form-engine/blob/main/docs/api-stability.md): Public API stability classification
-- [docs/pre-expansion-summary.md](https://github.com/bghcore/form-engine/blob/main/docs/pre-expansion-summary.md): Pre-Tier-2 expansion readiness assessment
+- [docs/tier1-baseline-report.md](https://github.com/bghcore/form-engine/blob/main/docs/tier1-baseline-report.md): Tier 1 stabilization assessment
 - [docs/choosing-an-adapter.md](https://github.com/bghcore/form-engine/blob/main/docs/choosing-an-adapter.md): Adapter recommendation guide
-- [docs/tier2-feasibility-matrix.md](https://github.com/bghcore/form-engine/blob/main/docs/tier2-feasibility-matrix.md): Tier 2 field feasibility matrix
+- [docs/tier1-patterns.md](https://github.com/bghcore/form-engine/blob/main/docs/tier1-patterns.md): Implementation patterns for Tier 2
 - [docs/tier2-handoff.md](https://github.com/bghcore/form-engine/blob/main/docs/tier2-handoff.md): Pre-Tier-2 handoff document
 - [docs/shadcn-integration.md](https://github.com/bghcore/form-engine/blob/main/docs/shadcn-integration.md): shadcn/ui integration guide
 - [docs/divergence-register.md](https://github.com/bghcore/form-engine/blob/main/docs/divergence-register.md): Cross-adapter divergence register

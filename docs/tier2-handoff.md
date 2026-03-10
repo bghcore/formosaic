@@ -1,10 +1,10 @@
 # Tier 2 Handoff Document
 
-Pre-Tier-2 hardening pass complete (v1.5.2). This document summarizes readiness status and answers the 7 key decision questions for Tier 2 expansion.
+Tier 1 stabilization complete (v1.5.2). This document consolidates all Tier 2 planning: readiness status, feasibility matrix, rollout waves, adapter priorities, and go/no-go assessment.
 
-## 1. Are all adapters at parity for Tier 1 fields?
+## 1. Tier 1 Parity Status
 
-**Yes.** All 11 adapters pass the full parity test suite (11 adapters x 8 fixtures). Known divergences are documented in the [Divergence Register](./divergence-register.md) and classified as acceptable or monitored.
+**All 11 adapters pass the full parity test suite.**
 
 | Suite | Tests |
 |---|---|
@@ -15,101 +15,144 @@ Pre-Tier-2 hardening pass complete (v1.5.2). This document summarizes readiness 
 | edgeCases (headless) | ~66 |
 | consumerSmoke (11 adapters) | 36 |
 
-## 2. Are the primitives-first adapters (radix, react-aria) ready?
+Known divergences documented in the [Divergence Register](./divergence-register.md). DIV-006 (Dropdown readOnly label) resolved in v1.5.2. All remaining divergences are permanent-acceptable, temporary-acceptable, or test-environment-only.
 
-**Yes.** Both adapters:
+## 2. Primitives-First Adapters
 
-- Pass all 8 parity fixtures with no skips
-- Pass cross-adapter edge cases (Number, Dropdown, MultiSelect, RadioGroup, CheckboxGroup, DateControl, ReadOnly)
-- Pass business form round-trip tests (profile, workflow, option-heavy)
-- Have dedicated primitives-first edge-case coverage (DIV-010, DIV-011, DIV-012)
-- Produce conformant 13-key registries (verified by consumer smoke tests)
-- Need no wrapper component (unlike Chakra/Mantine)
+Both radix and react-aria are production-ready:
+- Pass all 8 parity fixtures, cross-adapter edge cases, business form round-trips
+- Dedicated edge-case coverage (DIV-010, DIV-011, DIV-012)
+- No wrapper component required
+- Known divergences are all permanent-acceptable
 
-**Known divergences:**
-- DIV-010: Radix Select uses `undefined` (not `""`) for empty value — permanent acceptable
-- DIV-011: Radix Slider array boundary conversion — permanent acceptable, transparent
-- DIV-012: React Aria Key type cast `String(key)` — permanent acceptable, transparent
+## 3. shadcn Integration
 
-## 3. Has the shadcn integration been validated?
+Validated via reference implementation in `stories/examples/shadcn-fields/`:
+- 7 shadcn-style wrappers + `createShadcnFieldRegistry()` using radix registry spread
+- Pattern confirmed: radix adapter + custom overrides = complete shadcn path
+- Guide: [shadcn Integration](./shadcn-integration.md)
 
-**Yes.** A runnable reference implementation exists:
+## 4. Open Divergences
 
-- 7 shadcn-style field wrappers in `stories/examples/shadcn-fields/`
-- `createShadcnFieldRegistry()` spreads radix registry + overrides with styled wrappers
-- Storybook story at "Examples/shadcn Reference" with HybridRegistry and Empty variants
-- Demonstrates the recommended pattern from `docs/shadcn-integration.md`
+| DIV | Severity | Category | Impact on Tier 2 |
+|-----|----------|----------|-----------------|
+| DIV-001 | Low | Permanent | None -- same pattern for Rating/numeric |
+| DIV-002 | Low | Monitor | Watch if Mantine Tier 2 fields also normalize |
+| DIV-003 | Medium | UX inconsistency | Low priority, fix during Tier 2 Textarea work |
+| DIV-004 | Low | Test-env | None |
+| DIV-005 | Low | UX inconsistency | May affect MultiSelectSearch readOnly |
+| DIV-008 | Medium | Temporary | Monitor upstream; affects Tier 2 component choices |
 
-The pattern confirms: radix adapter + custom overrides via registry spread = complete shadcn integration path.
+**None block Tier 2 start.**
 
-## 4. What are the known divergences going into Tier 2?
+## 5. Feasibility Matrix
 
-12 entries in the [Divergence Register](./divergence-register.md):
+19 candidate Tier 2 fields assessed across all targets.
 
-| ID | Severity | Category | Summary |
-|---|---|---|---|
-| DIV-001 | Low | Permanent acceptable | Number/Slider readOnly null shows "0" |
-| DIV-002 | Low | Must monitor | Mantine NumberInput empty → null |
-| DIV-003 | Medium | UX inconsistency | Fluent/MUI Textarea required (PopOutEditor) |
-| DIV-004 | Low | Test-env limitation | MUI CheckboxGroup required detection |
-| DIV-005 | Low | UX inconsistency | MultiSelect readOnly format variance |
-| DIV-006 | Medium | Should normalize | Dropdown readOnly shows value not label |
-| DIV-007 | Low | Permanent acceptable | Semantic HTML adapter classification |
-| DIV-008 | Medium | Temporary acceptable | Chakra compound component DTS fallbacks |
-| DIV-009 | None | Permanent acceptable | Date picker UX variance |
-| DIV-010 | Low | Permanent acceptable | Radix Select empty value handling |
-| DIV-011 | None | Permanent acceptable | Radix Slider array boundary conversion |
-| DIV-012 | None | Permanent acceptable | React Aria Select Key type cast |
+**Key:** Strong (native component exists), Viable (minor workarounds), Partial (heavy custom work), Defer (not practical now), Recipe (shadcn copy-paste pattern)
 
-**Action items for Tier 2:**
-- DIV-006 should be fixed before Wave 1 (affects 4 adapters)
-- DIV-002, DIV-008 should be monitored during Tier 2 expansion
+| Field | fluent | mui | headless | antd | chakra | mantine | atlaskit | base-web | heroui | radix | react-aria | shadcn |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Rating | Strong | Strong | Viable | Strong | Viable | Strong | Viable | Viable | Viable | Viable | Viable | Recipe |
+| Autocomplete | Strong | Strong | Viable | Strong | Viable | Strong | Viable | Viable | Viable | Partial | Strong | Recipe |
+| DateTime | Strong | Strong | Viable | Strong | Viable | Strong | Viable | Viable | Viable | Viable | Strong | Recipe |
+| DateRange | Partial | Strong | Viable | Strong | Viable | Strong | Viable | Viable | Viable | Viable | Strong | Recipe |
+| PhoneInput | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Recipe |
+| FileUpload | Viable | Viable | Viable | Strong | Viable | Strong | Viable | Strong | Viable | Viable | Viable | Recipe |
+| ColorPicker | Strong | Viable | Viable | Strong | Viable | Strong | Viable | Viable | Viable | Viable | Viable | Recipe |
+| MultiSelectSearch | Strong | Strong | Partial | Strong | Partial | Strong | Partial | Partial | Partial | Partial | Viable | Recipe |
+| RichText | Defer | Defer | Defer | Defer | Defer | Strong | Defer | Defer | Defer | Defer | Defer | Defer |
+| DocumentLinks | Strong | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Recipe |
+| StatusDropdown | Strong | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Recipe |
+| ReadOnly variants (5) | Strong | Strong | Strong | Strong | Strong | Strong | Viable | Viable | Viable | Viable | Viable | Recipe |
+| ChoiceSet | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Recipe |
+| FieldArray (nested) | Strong | Strong | Strong | Strong | Strong | Strong | Strong | Strong | Strong | Strong | Strong | Recipe |
+| PopOutEditor | Strong | Strong | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Viable | Recipe |
 
-## 5. What is the rollout strategy?
+## 6. Rollout Waves
 
-Four waves, prioritized by value and implementation feasibility:
+| Wave | Fields | Rationale | Est. Tests |
+|------|--------|-----------|------------|
+| 1 | Rating, Autocomplete, DateTime | Strong native support in 5+ adapters, most requested | ~400 |
+| 2 | DateRange, PhoneInput, FileUpload | Common form patterns, several native implementations | ~300 |
+| 3 | ColorPicker, MultiSelectSearch, RichText | Specialized; RichText may slip to Wave 4 | ~250 |
+| 4 | DocumentLinks, StatusDropdown, ReadOnly variants, ChoiceSet, PopOutEditor | Completeness round | ~350 |
 
-| Wave | Fields | Rationale |
-|---|---|---|
-| 1 | Rating, Autocomplete, DateTime | Strong native support in 5+ adapters, most requested |
-| 2 | DateRange, PhoneInput, FileUpload | Common form patterns, several native implementations |
-| 3 | ColorPicker, MultiSelectSearch, RichText | Specialized use cases, RichText may slip to Wave 4 |
-| 4 | DocumentLinks, StatusDropdown, ReadOnly variants, ChoiceSet, PopOutEditor | Completeness round |
+## 7. Adapter Priorities for Tier 2
 
-Full feasibility assessment: [Tier 2 Feasibility Matrix](./tier2-feasibility-matrix.md)
+### Primary (implement first)
 
-## 6. Recommendations
+| Priority | Adapter | Reason |
+|----------|---------|--------|
+| 1 | headless | Always first -- reference implementation |
+| 2 | fluent | Already has Tier 2 fields, strongest ecosystem |
+| 3 | mui | Already has Tier 2 fields, large community |
+| 4 | antd | Rich component library |
+| 5 | mantine | Rich component library |
 
-1. **Fix DIV-006 first** — Dropdown readOnly label lookup affects headless, atlaskit, base-web, heroui. Low-risk fix, high-value normalization.
+### Secondary
 
-2. **Start Wave 1 with headless as reference** — Implement Rating, Autocomplete, DateTime in headless first, then propagate to framework-native adapters.
+| Adapter | Reason |
+|---------|--------|
+| react-aria | Excellent a11y, covers most Tier 2 patterns |
+| radix | Good primitives base, expand alongside shadcn recipes |
+| base-web | 10/13 native; baseui has relevant Tier 2 components |
 
-3. **Expand parity harness for Tier 2** — Add new fixture types to `parityFixtures.ts` for each Wave 1 field type.
+### Fallback (semantic HTML)
 
-4. **Consider shared utilities** — PhoneInput formatting, DateRange value type, and Rating star rendering could live in `core/adapter-utils`.
+| Adapter | Strategy |
+|---------|----------|
+| chakra | Native where Ark UI DTS allows; fallbacks otherwise |
+| atlaskit | All Tier 2 fields as semantic HTML |
+| heroui | All Tier 2 fields as semantic HTML |
 
-5. **Defer RichText** — Editor library dependency (tiptap vs prosemirror vs lexical) is a significant decision. Only Mantine has native support. Consider making this a recipe rather than adapter code.
+## 8. Implementation Patterns
 
-## 7. Go/No-Go per adapter
+See [tier1-patterns.md](./tier1-patterns.md) for the full Tier 1 blueprint.
 
-| Adapter | Tier 2 Ready | Notes |
-|---|---|---|
-| fluent | Go | Full Tier 1, many native Tier 2 components available |
-| mui | Go | Full Tier 1, strong Tier 2 component library |
-| headless | Go | Reference implementation, always first |
-| antd | Go | Full Tier 1, rich component library for Tier 2 |
-| chakra | Go (cautious) | 6 HTML fallbacks (DIV-008), monitor DTS issue |
-| mantine | Go | Full Tier 1, strongest Tier 2 native support |
-| atlaskit | Go (limited) | Semantic HTML only, Tier 2 will also be semantic |
-| base-web | Go | 10 native baseui + 3 semantic, good Tier 2 potential |
-| heroui | Go (limited) | Semantic HTML only, Tier 2 will also be semantic |
-| radix | Go | 6 native + 7 semantic, good primitives for Tier 2 |
-| react-aria | Go | 10 native + 3 semantic, excellent a11y base for Tier 2 |
-| shadcn (recipe) | Go | Pattern validated, expand recipes alongside radix |
+| New Field | Pattern Source |
+|-----------|---------------|
+| Rating | Numeric + Slider readOnly |
+| Autocomplete | Dropdown + Textbox (combobox) |
+| DateTime | DateControl + time component |
+| DateRange | DateControl x2 |
+| PhoneInput | Textbox + input mask |
+| FileUpload | Custom (new pattern) |
+| ColorPicker | Custom (new pattern) |
+| MultiSelectSearch | MultiSelect + Autocomplete |
+| StatusDropdown | Dropdown + status styling |
+| DocumentLinks | Custom (structured list) |
 
-## Test Count Summary (v1.5.2)
+## 9. Go/No-Go
 
-| Suite | File Count | Test Count |
+| # | Criterion | Status |
+|---|-----------|--------|
+| 1 | All Tier 1 fields pass across all 11 adapters | **GO** |
+| 2 | No unresolved Tier 1 blocking issues | **GO** |
+| 3 | Documentation reconciled and accurate | **GO** |
+| 4 | Parity test infrastructure supports new fields | **GO** |
+| 5 | Contract test infrastructure supports new fields | **GO** |
+| 6 | Implementation patterns documented | **GO** |
+| 7 | Adapter priority order established | **GO** |
+| 8 | Tier 2 wave plan exists | **GO** |
+
+**Verdict: GO for Tier 2.** Start with Wave 1 (Rating, Autocomplete, DateTime) using headless as reference implementation.
+
+## 10. Docs to Update During Tier 2
+
+| Document | Update When |
+|----------|-------------|
+| `docs/parity-matrix.md` | Every new field added |
+| `docs/divergence-register.md` | Any new behavioral divergence |
+| `docs/choosing-an-adapter.md` | Adapter readiness changes |
+| Package READMEs | Field count changes |
+| Package AGENTS.md / llms.txt | New field patterns |
+| `CLAUDE.md` | Major architecture changes |
+| Root `README.md` / `AGENTS.md` / `llms.txt` | Feature-level changes |
+
+## Test Count (v1.5.2)
+
+| Suite | Files | Tests |
 |---|---|---|
 | Core unit tests | 29 | ~616 |
 | Parity tests | 5 | ~2713 |
@@ -118,11 +161,3 @@ Full feasibility assessment: [Tier 2 Feasibility Matrix](./tier2-feasibility-mat
 | Contract tests | 11 | varies |
 | **Total vitest** | **55** | **4774** |
 | E2E (Playwright) | 7 | 54 |
-
-## Related Documentation
-
-- [Choosing an Adapter](./choosing-an-adapter.md) — adapter recommendation guide
-- [Divergence Register](./divergence-register.md) — behavioral differences
-- [Tier 2 Feasibility Matrix](./tier2-feasibility-matrix.md) — field x adapter assessment
-- [shadcn Integration](./shadcn-integration.md) — shadcn/ui integration guide
-- [Adapter Architecture](./adapter-architecture.md) — internal implementation patterns
