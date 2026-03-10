@@ -42,7 +42,7 @@
 - `evaluateAffectedFields()` -- Incremental: only re-evaluate transitively affected fields after a change
 - `processFieldChange()` -- Trigger rule evaluation for a field value change
 - `topologicalSort()` -- Topological sort of dependency graph for evaluation order
-- `evaluateCondition()` -- Evaluate an ICondition against current form values (15 operators + AND/OR/NOT)
+- `evaluateCondition()` -- Evaluate an ICondition against current form values (20 operators + AND/OR/NOT)
 
 ### Form Helpers
 - `GetFieldsToRender()` -- Get ordered list of fields to render

@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.2] - 2026-03-09
+
+### Fixed
+
+- **DIV-006 resolved: Dropdown readOnly now shows option label instead of raw value** -- All 11 adapters (fluent, mui, headless, antd, chakra, mantine, atlaskit, base-web, heroui, radix, react-aria) now perform `options?.find()` label lookup before passing to ReadOnlyText. Falls back to raw value if label not found. SimpleDropdown was not affected (string options where value equals label).
+- **Parity matrix corrected** -- atlaskit, base-web, and heroui were incorrectly shown as "---" (not implemented) for all Tier 1 fields. Now correctly shows "FB" (semantic HTML fallback).
+- **Condition operator count corrected to 20** -- Root README, CLAUDE.md, and core AGENTS.md updated from stale counts (15 or 18) to the actual 20 operators (15 scalar + 5 array: arrayContains, arrayNotContains, arrayLengthEquals, arrayLengthGreaterThan, arrayLengthLessThan).
+- **Base-web reclassified as framework-native** -- Base-web uses native baseui components for 10/13 Tier 1 fields, not "semantic HTML fallbacks" as previously documented. Only DateControl, DynamicFragment, and ReadOnly use HTML fallbacks.
+- **Radix native count corrected from 7 to 6** -- Actual native Radix UI primitives: Toggle, Dropdown, SimpleDropdown, Slider, RadioGroup, CheckboxGroup (6). Seven fields use semantic HTML.
+- Edge-case test updated to expect label ("Option 1") instead of raw value ("opt1") for Dropdown readOnly.
+
+### Added
+
+- **`docs/tier1-baseline-report.md`** -- Full Tier 1 audit table (13 fields x 11 adapters), production-readiness scorecard, gap register, test coverage summary, and Tier 2 target ranking.
+- **`docs/tier1-patterns.md`** -- 12 canonical implementation patterns for Tier 2: text-like, selection-single, selection-multi, boolean, numeric, date, readOnly, semantic fallback, primitives-first, recipe/wrapper, validation wiring, and serialization.
+- **`docs/tier2-launch-checklist.md`** -- Go/no-go document for Tier 2 launch with adapter priority order, pattern references, and doc sync requirements. Verdict: GO.
+
+### Changed
+
+- All documentation artifacts reconciled: parity-matrix.md, field-capability-matrix.md, divergence-register.md, choosing-an-adapter.md, tier2-handoff.md, pre-expansion-summary.md, CLAUDE.md, AGENTS.md, and package AGENTS.md files now agree on adapter classifications, field counts, and support claims.
+- All packages bumped to 1.5.2.
+
 ## [1.5.1] - 2026-03-09
 
 ### Added

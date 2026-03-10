@@ -246,9 +246,9 @@ describe("Edge-case canonical values", () => {
       expect(container).toBeTruthy();
     });
 
-    it("readOnly with value shows value", () => {
+    it("readOnly with value shows label", () => {
       const { container } = renderField(type, { readOnly: true, value: "opt1", options: TEST_OPTIONS });
-      expect(container.textContent).toContain("opt1");
+      expect(container.textContent).toContain("Option 1");
     });
 
     it("readOnly with missing value shows sentinel", () => {

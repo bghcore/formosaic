@@ -1,6 +1,6 @@
 {
   "name": "@form-eng/react-aria",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "React Aria Components field implementations for @form-eng/core",
   "repository": {
     "type": "git",

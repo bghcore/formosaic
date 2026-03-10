@@ -22,8 +22,10 @@ const Dropdown = (props: IFieldProps<IDropdownProps>) => {
     }
   }, [options]);
 
+  const selectedLabel = options?.find(o => String(o.value) === String(value))?.label;
+
   if (readOnly) {
-    return <ReadOnlyText fieldName={fieldName} value={value as string} />;
+    return <ReadOnlyText fieldName={fieldName} value={selectedLabel ?? (value as string)} />;
   }
 
   return (

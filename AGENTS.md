@@ -144,8 +144,8 @@ All packages should build cleanly and all 4774 tests should pass.
 
 - Conventional commits: `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`
 - Single `main` branch
-- Per-package tags for publishing: `core-v1.5.1`, `fluent-v1.5.1`, `mui-v1.5.1`, `headless-v1.5.1`, `antd-v1.5.1`, `chakra-v1.5.1`, `mantine-v1.5.1`, `atlaskit-v1.5.1`, `base-web-v1.5.1`, `heroui-v1.5.1`, `radix-v1.5.1`, `react-aria-v1.5.1`, `designer-v1.5.1`
-- Unified tag for all packages: `v1.5.1`
+- Per-package tags for publishing: `core-v1.5.2`, `fluent-v1.5.2`, `mui-v1.5.2`, `headless-v1.5.2`, `antd-v1.5.2`, `chakra-v1.5.2`, `mantine-v1.5.2`, `atlaskit-v1.5.2`, `base-web-v1.5.2`, `heroui-v1.5.2`, `radix-v1.5.2`, `react-aria-v1.5.2`, `designer-v1.5.2`
+- Unified tag for all packages: `v1.5.2`
 - Run `npm run build && npm run test` before committing
 
 ## Boundaries

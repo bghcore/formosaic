@@ -51,7 +51,7 @@ Two React context providers must wrap the form tree (both memoized via useMemo):
 
 Rules are **declarative** -- defined as `IRule[]` on each field config with rich conditions and effects.
 
-**Condition operators (15):** equals, notEquals, greaterThan, lessThan, greaterThanOrEqual, lessThanOrEqual, contains, notContains, startsWith, endsWith, in, notIn, isEmpty, isNotEmpty, matches
+**Condition operators (20):** equals, notEquals, greaterThan, lessThan, greaterThanOrEqual, lessThanOrEqual, contains, notContains, startsWith, endsWith, in, notIn, isEmpty, isNotEmpty, matches, arrayContains, arrayNotContains, arrayLengthEquals, arrayLengthGreaterThan, arrayLengthLessThan
 
 **Logical operators:** and, or, not (composable condition trees)
 
@@ -139,7 +139,7 @@ packages/
         FormErrorBoundary.tsx -- FormErrorBoundary (crash isolation)
         FormDevTools.tsx     -- FormDevTools (dev panel: rules, values, errors, graph)
       helpers/
-        ConditionEvaluator.ts    -- evaluateCondition (15 operators + AND/OR/NOT)
+        ConditionEvaluator.ts    -- evaluateCondition (20 operators + AND/OR/NOT)
         RuleEngine.ts            -- buildDependencyGraph, evaluateAllRules, evaluateAffectedFields, topologicalSort
         InlineFormHelper.ts  -- Form init, validation, computed values, field rendering
         ValidationRegistry.ts    -- Unified ValidatorFn registry (sync+async+cross-field)
@@ -254,7 +254,7 @@ packages/
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, FormLoading)
-      fields/ (7 Radix UI primitives + 6 semantic HTML, 1 read-only)
+      fields/ (6 Radix UI primitives + 7 semantic HTML)
 
   react-aria/                    -- @form-eng/react-aria
     src/

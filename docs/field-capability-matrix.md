@@ -248,7 +248,7 @@ This document provides a per-field, per-adapter capability matrix for the 13 Tie
 - **base-web** -- Textbox, Number, Toggle, Dropdown, SimpleDropdown, MultiSelect, Slider, RadioGroup, CheckboxGroup, and Textarea all use native baseui components. DateControl falls back to native HTML `<input type="date">`. Includes 1 ReadOnly field.
 
 **Primitives-first (13 field types, unstyled behavior primitives):**
-- **radix** -- 7 fields use Radix UI primitives (Toggle, Dropdown, SimpleDropdown, Slider, RadioGroup, CheckboxGroup), 6 use semantic HTML (Textbox, Number, MultiSelect, DateControl, Textarea, DynamicFragment). No styling included — consumer provides all CSS. Recommended base for shadcn/Tailwind projects. Includes 1 ReadOnly field.
+- **radix** -- 6 fields use Radix UI primitives (Toggle, Dropdown, SimpleDropdown, Slider, RadioGroup, CheckboxGroup), 7 use semantic HTML (Textbox, Number, MultiSelect, DateControl, Textarea, DynamicFragment, ReadOnly). No styling included — consumer provides all CSS. Recommended base for shadcn/Tailwind projects.
 - **react-aria** -- 10 fields use React Aria Components (Textbox, Number, Toggle, Dropdown, SimpleDropdown, Slider, RadioGroup, CheckboxGroup, Textarea), 3 use semantic HTML (MultiSelect, DateControl, DynamicFragment). Highest native Tier 1 coverage among primitives-first adapters. Best-in-class ARIA patterns. Includes 1 ReadOnly field.
 
 **Compatibility (13 field types, semantic HTML throughout):**

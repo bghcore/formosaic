@@ -29,9 +29,9 @@ form-engine supports 11 UI-library adapters. Each adapter maps the same `IFormCo
 | chakra | Hybrid | 7 | 6 | 13 | ChakraProvider | Medium |
 | mantine | Framework-native | 13 | 0 | 13 | MantineProvider | Medium |
 | atlaskit | Compatibility | 0 | 13 | 13 | None | Minimal |
-| base-web | Compatibility | 0 | 13 | 13 | None | Minimal |
+| base-web | Framework-native | 10 | 3 | 13 | BaseProvider + StyletronProvider | Medium |
 | heroui | Compatibility | 0 | 13 | 13 | None | Minimal |
-| radix | Primitives-first | 7 | 6 | 13 | None | Small |
+| radix | Primitives-first | 6 | 7 | 13 | None | Small |
 | react-aria | Primitives-first | 10 | 3 | 13 | None | Small |
 
 ### Category Definitions
@@ -91,7 +91,6 @@ form-engine supports 11 UI-library adapters. Each adapter maps the same `IFormCo
 
 **Limitations:**
 - No visual styling included -- you must provide your own CSS
-- Dropdown readOnly shows the raw value, not the display label (DIV-006)
 
 **Notes:** Ships an optional `styles.css` with CSS custom properties as a starting point.
 
@@ -108,7 +107,6 @@ form-engine supports 11 UI-library adapters. Each adapter maps the same `IFormCo
 
 **Limitations:**
 - Relatively large bundle due to Ant Design's footprint
-- Dropdown readOnly shows the raw value, not the display label (DIV-006)
 
 ---
 
@@ -154,21 +152,20 @@ form-engine supports 11 UI-library adapters. Each adapter maps the same `IFormCo
 
 **Limitations:**
 - Uses semantic HTML, not actual Atlaskit components (DIV-007)
-- Dropdown readOnly shows the raw value, not the display label (DIV-006)
 
 ---
 
 ### @form-eng/base-web
 
-**Best for:** Projects targeting Uber Base Web ecosystem compatibility.
+**Best for:** Uber Base Web projects.
 
 **Strengths:**
-- Lightweight semantic HTML implementation
-- No wrapper required
+- 10 of 13 Tier 1 fields use native baseui components (Input, Select, Checkbox, Radio, Slider, Textarea)
+- Native component quality matches other framework-native adapters
 
 **Limitations:**
-- Uses semantic HTML, not actual Base Web components (DIV-007)
-- Dropdown readOnly shows the raw value, not the display label (DIV-006)
+- Requires BaseProvider + StyletronProvider wrapper
+- DateControl uses native `<input type="date">` fallback (Base Web DatePicker requires react-input-mask, incompatible with React 19)
 
 ---
 
@@ -182,7 +179,6 @@ form-engine supports 11 UI-library adapters. Each adapter maps the same `IFormCo
 
 **Limitations:**
 - Uses semantic HTML, not actual HeroUI components (DIV-007)
-- Dropdown readOnly shows the raw value, not the display label (DIV-006)
 
 ---
 
@@ -191,13 +187,13 @@ form-engine supports 11 UI-library adapters. Each adapter maps the same `IFormCo
 **Best for:** shadcn/ui projects, Tailwind CSS applications, or any project wanting unstyled Radix primitives as a base.
 
 **Strengths:**
-- Radix UI primitives for key fields (Select, Switch, Checkbox, Slider, RadioGroup, Toggle, Label)
+- Radix UI primitives for key fields (Select, Switch, Checkbox, Slider, RadioGroup)
 - No wrapper required
 - Tiny bundle size
 - Ideal foundation for shadcn/ui integration
 
 **Limitations:**
-- 6 fields use semantic HTML (Textbox, Textarea, Number, DatePicker, DateRange, Rating)
+- 7 fields use semantic HTML (Textbox, Number, MultiSelect, DateControl, Textarea, DynamicFragment, ReadOnly)
 - Select uses `undefined` (not `""`) for empty value (DIV-010)
 - Slider uses array boundary conversion (DIV-011)
 
@@ -216,7 +212,7 @@ form-engine supports 11 UI-library adapters. Each adapter maps the same `IFormCo
 - Small bundle footprint
 
 **Limitations:**
-- 3 fields use semantic HTML (DateRange, Rating, Multiselect)
+- 3 fields use semantic HTML (Textarea, DynamicFragment, ReadOnly)
 - Key type cast required for Select component (DIV-012)
 
 ## Decision Flowchart

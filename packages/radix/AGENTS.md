@@ -2,7 +2,7 @@
 
 ## Package Purpose
 
-Radix UI primitives field components for `@form-eng/core`. Provides 7 native Radix fields and 6 semantic HTML fields. Ships with **no styles** -- ideal as the base for Tailwind CSS, shadcn/ui, and custom design systems. No provider wrapper needed.
+Radix UI primitives field components for `@form-eng/core`. Provides 6 native Radix fields (Toggle, Dropdown, SimpleDropdown, Slider, RadioGroup, CheckboxGroup) and 7 semantic HTML fields. Ships with **no styles** -- ideal as the base for Tailwind CSS, shadcn/ui, and custom design systems. No provider wrapper needed.
 
 ## Critical Constraints
 

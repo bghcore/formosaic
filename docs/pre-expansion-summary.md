@@ -52,9 +52,9 @@ DIV-003 is low risk (PopOutEditor is only used in fluent/mui, and FieldWrapper p
 | 5 | mantine | High | Full native Tier 1 (13 types). Known NumberInput null divergence tracked. |
 | 6 | chakra | Medium-High | 7 native + 6 HTML fallback. All tests pass with provider wrapper. |
 | 7 | atlaskit | Medium | All semantic HTML. Functional but no native component benefit. |
-| 8 | base-web | Medium | 3 native + 10 semantic HTML. Limited native coverage. |
+| 8 | base-web | High | 10 native baseui + 3 semantic HTML. Strong native coverage. |
 | 9 | heroui | Medium | All semantic HTML. Same as atlaskit. |
-| 10 | radix | High | 7 native Radix primitives + 6 semantic HTML. All tests pass. No provider needed. |
+| 10 | radix | High | 6 native Radix primitives + 7 semantic HTML. All tests pass. No provider needed. |
 | 11 | react-aria | High | 10 native React Aria Components + 3 semantic HTML. All tests pass. No provider needed. |
 
 ## 5. Which fields are most stable and can act as patterns for Tier 2 implementations?

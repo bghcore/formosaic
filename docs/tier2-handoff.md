@@ -1,6 +1,6 @@
 # Tier 2 Handoff Document
 
-Pre-Tier-2 hardening pass complete (v1.5.1). This document summarizes readiness status and answers the 7 key decision questions for Tier 2 expansion.
+Pre-Tier-2 hardening pass complete (v1.5.2). This document summarizes readiness status and answers the 7 key decision questions for Tier 2 expansion.
 
 ## 1. Are all adapters at parity for Tier 1 fields?
 
@@ -101,13 +101,13 @@ Full feasibility assessment: [Tier 2 Feasibility Matrix](./tier2-feasibility-mat
 | chakra | Go (cautious) | 6 HTML fallbacks (DIV-008), monitor DTS issue |
 | mantine | Go | Full Tier 1, strongest Tier 2 native support |
 | atlaskit | Go (limited) | Semantic HTML only, Tier 2 will also be semantic |
-| base-web | Go (limited) | Semantic HTML only, Tier 2 will also be semantic |
+| base-web | Go | 10 native baseui + 3 semantic, good Tier 2 potential |
 | heroui | Go (limited) | Semantic HTML only, Tier 2 will also be semantic |
-| radix | Go | 7 native + 6 semantic, good primitives for Tier 2 |
+| radix | Go | 6 native + 7 semantic, good primitives for Tier 2 |
 | react-aria | Go | 10 native + 3 semantic, excellent a11y base for Tier 2 |
 | shadcn (recipe) | Go | Pattern validated, expand recipes alongside radix |
 
-## Test Count Summary (v1.5.1)
+## Test Count Summary (v1.5.2)
 
 | Suite | File Count | Test Count |
 |---|---|---|

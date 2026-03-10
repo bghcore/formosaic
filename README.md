@@ -147,7 +147,7 @@ When a field value changes, the engine:
 
 The engine includes **circular dependency detection** via Kahn's algorithm and **config validation** for dev-mode diagnostics.
 
-**18 condition operators:** `equals`, `notEquals`, `greaterThan`, `lessThan`, `greaterThanOrEqual`, `lessThanOrEqual`, `contains`, `notContains`, `startsWith`, `endsWith`, `in`, `notIn`, `isEmpty`, `isNotEmpty`, `matches`, `arrayContains`, `arrayNotContains`, `arrayLength`
+**20 condition operators:** `equals`, `notEquals`, `greaterThan`, `lessThan`, `greaterThanOrEqual`, `lessThanOrEqual`, `contains`, `notContains`, `startsWith`, `endsWith`, `in`, `notIn`, `isEmpty`, `isNotEmpty`, `matches`, `arrayContains`, `arrayNotContains`, `arrayLengthEquals`, `arrayLengthGreaterThan`, `arrayLengthLessThan`
 
 **Logical operators:** `and`, `or`, `not` (composable condition trees)
 

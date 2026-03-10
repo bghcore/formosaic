@@ -20,7 +20,7 @@ Each entry is classified by severity and recommended action for Tier 2 readiness
 
 | Property | Value |
 |----------|-------|
-| Affected adapters | All 9 |
+| Affected adapters | All 11 |
 | Affected fields | Number, Slider |
 | Observed behavior | readOnly with null/undefined shows "0" (Number) or "0" (Slider) instead of "-" sentinel |
 | Canonical expectation | Empty sentinel "-" per readOnly contract |
@@ -91,35 +91,35 @@ Each entry is classified by severity and recommended action for Tier 2 readiness
 | Category | UX-visible inconsistency |
 | Recommended action | Accept. The headless `<ul>` renders raw values (not labels), while antd comma-joins raw values. Both display the correct selected values. The headless list format provides better accessibility (screen readers enumerate items). Normalizing to comma-join would reduce accessibility. |
 
-### DIV-006: Dropdown readOnly shows value not label
+### DIV-006: Dropdown readOnly shows value not label -- RESOLVED
 
 | Property | Value |
 |----------|-------|
-| Affected adapters | headless, atlaskit, base-web, heroui |
-| Affected fields | Dropdown, SimpleDropdown |
-| Observed behavior | ReadOnly rendering shows the option VALUE string, not the option LABEL |
+| Affected adapters | ~~All 11~~ **None (fixed in v1.5.2)** |
+| Affected fields | Dropdown |
+| Observed behavior | ReadOnly rendering showed the option VALUE string, not the option LABEL |
 | Canonical expectation | "selected option label (not value), or '-'" per readOnly contract for single-select fields |
-| Root cause | ReadOnlyText receives `value` directly without options lookup |
-| Severity | Medium |
-| User-visible | Yes — user sees "opt1" instead of "Option 1" |
+| Root cause | ReadOnlyText received `value` directly without options lookup |
+| Severity | ~~Medium~~ **Resolved** |
+| User-visible | ~~Yes~~ **No (fixed)** |
 | jsdom-only | No |
-| Category | Should normalize before Tier 2 |
-| Recommended action | Fix. The readOnly rendering of Dropdown should look up the option label from the options array and display that instead of the raw value. This affects headless, atlaskit, base-web, heroui. The antd and mantine adapters also do this. Only fluent/mui handle it differently (PopOutEditor path). |
+| Category | ~~Should normalize before Tier 2~~ **Resolved** |
+| Resolution | All 11 adapters now perform `options?.find(o => String(o.value) === String(value))?.label` before passing to ReadOnlyText. Falls back to raw value if label lookup fails. SimpleDropdown was not affected (string options where value equals label). |
 
 ### DIV-007: Semantic HTML adapter classification honesty
 
 | Property | Value |
 |----------|-------|
-| Affected adapters | atlaskit, heroui, base-web (partially) |
+| Affected adapters | atlaskit, heroui |
 | Affected fields | All |
-| Observed behavior | These adapters are labeled as "Atlassian Design System", "HeroUI", "Base Web" but use pure semantic HTML, not their namesake UI library components |
+| Observed behavior | These adapters are labeled as "Atlassian Design System" and "HeroUI" but use pure semantic HTML, not their namesake UI library components |
 | Canonical expectation | Package names imply native component usage |
-| Root cause | Adapters created for ecosystem compatibility before native components were integrated |
+| Root cause | Adapters created for ecosystem compatibility; native components had jsdom/SSR issues |
 | Severity | Low |
 | User-visible | No — behavior is correct, just classification |
 | jsdom-only | No |
 | Category | Permanent acceptable |
-| Recommended action | Ensure adapter-architecture.md clearly documents these as "Compatibility" adapters using semantic HTML. Package READMEs should also clarify this. |
+| Recommended action | Package READMEs clarify this. Note: base-web was previously listed here but actually uses native baseui components for 10/13 Tier 1 fields (Textbox, Number, Toggle, Dropdown, SimpleDropdown, MultiSelect, Slider, RadioGroup, CheckboxGroup, Textarea). Only DateControl, DynamicFragment, and ReadOnly use HTML fallbacks. |
 
 ### DIV-008: Chakra compound component DTS fallbacks
 
