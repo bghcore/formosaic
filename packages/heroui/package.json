@@ -63,7 +63,7 @@
     "react-hook-form": "^7.71.2",
     "@formosaic/core": "*",
     "@heroui/react": "^2.7.6",
-    "@internationalized/date": "^3.8.1",
+    "@internationalized/date": "^3.12.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "@types/react": "^19.2.14",

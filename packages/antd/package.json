@@ -61,7 +61,7 @@
     "react-dom": "^19.2.4",
     "react-hook-form": "^7.71.2",
     "@formosaic/core": "*",
-    "antd": "^5.24.7",
+    "antd": "^6.3.2",
     "dayjs": "^1.11.13",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
