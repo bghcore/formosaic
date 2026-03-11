@@ -1,4 +1,10 @@
-# Formosaic
+<p align="center">
+  <img src="formosaic-brand.png" alt="Formosaic" width="360">
+</p>
+
+<p align="center">
+  <strong>Configuration-driven forms with a built-in rules engine</strong>
+</p>
 
 [![CI](https://github.com/bghcore/formosaic/actions/workflows/ci.yml/badge.svg)](https://github.com/bghcore/formosaic/actions/workflows/ci.yml)
 [![Publish](https://github.com/bghcore/formosaic/actions/workflows/publish.yml/badge.svg)](https://github.com/bghcore/formosaic/actions/workflows/publish.yml)
