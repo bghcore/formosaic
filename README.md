@@ -1,11 +1,30 @@
 # Formosaic
 
+[![CI](https://github.com/bghcore/formosaic/actions/workflows/ci.yml/badge.svg)](https://github.com/bghcore/formosaic/actions/workflows/ci.yml)
+[![Publish](https://github.com/bghcore/formosaic/actions/workflows/publish.yml/badge.svg)](https://github.com/bghcore/formosaic/actions/workflows/publish.yml)
+[![Pages](https://github.com/bghcore/formosaic/actions/workflows/pages.yml/badge.svg)](https://github.com/bghcore/formosaic/actions/workflows/pages.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue.svg)](https://www.typescriptlang.org/)
+[![npm downloads](https://img.shields.io/npm/dm/@formosaic/core.svg?label=npm%20downloads)](https://www.npmjs.com/package/@formosaic/core)
+[![Bundle Size](https://img.shields.io/bundlephobia/minzip/@formosaic/core?label=core%20gzip)](https://bundlephobia.com/package/@formosaic/core)
+[![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/react-19-61dafb.svg?logo=react)](https://react.dev/)
+[![Tests](https://img.shields.io/badge/tests-6%2C296%20passing-brightgreen.svg)](https://github.com/bghcore/formosaic/actions/workflows/ci.yml)
+[![Storybook](https://img.shields.io/badge/storybook-deployed-ff4785.svg?logo=storybook)](https://bghcore.github.io/formosaic/storybook/)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/bghcore/formosaic/badge)](https://scorecard.dev/viewer/?uri=github.com/bghcore/formosaic)
+[![CodeQL](https://github.com/bghcore/formosaic/actions/workflows/codeql.yml/badge.svg)](https://github.com/bghcore/formosaic/actions/workflows/codeql.yml)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/bghcore/formosaic/pulls)
+
 [![npm core](https://img.shields.io/npm/v/@formosaic/core?label=core)](https://www.npmjs.com/package/@formosaic/core)
 [![npm fluent](https://img.shields.io/npm/v/@formosaic/fluent?label=fluent)](https://www.npmjs.com/package/@formosaic/fluent)
 [![npm mui](https://img.shields.io/npm/v/@formosaic/mui?label=mui)](https://www.npmjs.com/package/@formosaic/mui)
 [![npm headless](https://img.shields.io/npm/v/@formosaic/headless?label=headless)](https://www.npmjs.com/package/@formosaic/headless)
+[![npm antd](https://img.shields.io/npm/v/@formosaic/antd?label=antd)](https://www.npmjs.com/package/@formosaic/antd)
+[![npm chakra](https://img.shields.io/npm/v/@formosaic/chakra?label=chakra)](https://www.npmjs.com/package/@formosaic/chakra)
+[![npm mantine](https://img.shields.io/npm/v/@formosaic/mantine?label=mantine)](https://www.npmjs.com/package/@formosaic/mantine)
+[![npm radix](https://img.shields.io/npm/v/@formosaic/radix?label=radix)](https://www.npmjs.com/package/@formosaic/radix)
+[![npm react-aria](https://img.shields.io/npm/v/@formosaic/react-aria?label=react-aria)](https://www.npmjs.com/package/@formosaic/react-aria)
 [![npm designer](https://img.shields.io/npm/v/@formosaic/designer?label=designer)](https://www.npmjs.com/package/@formosaic/designer)
-[![CI](https://github.com/bghcore/formosaic/actions/workflows/ci.yml/badge.svg)](https://github.com/bghcore/formosaic/actions/workflows/ci.yml)
 
 [Storybook](https://bghcore.github.io/formosaic/storybook/) | [Designer Demo](https://bghcore.github.io/formosaic/designer/) | [npm](https://www.npmjs.com/org/formosaic)
 
