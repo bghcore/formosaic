@@ -2,7 +2,7 @@
 
 Atlassian Design System compatible field components for [@form-eng/core](https://www.npmjs.com/package/@form-eng/core).
 
-This package provides 13 field types using **semantic HTML elements** with Atlassian Design System compatible CSS class names (prefixed `ak-`). All fields integrate with `@form-eng/core`'s rules engine and form orchestration. No `@atlaskit/*` packages are required -- fields render native HTML with `data-field-type` and `data-field-state` attributes for CSS targeting and ARIA attributes for accessibility.
+This package provides 28 field types using **semantic HTML elements** with Atlassian Design System compatible CSS class names (prefixed `ak-`). All fields integrate with `@form-eng/core`'s rules engine and form orchestration. No `@atlaskit/*` packages are required -- fields render native HTML with `data-field-type` and `data-field-state` attributes for CSS targeting and ARIA attributes for accessibility.
 
 ## Installation
 

@@ -2,7 +2,7 @@
 
 HeroUI field components for [@form-eng/core](https://www.npmjs.com/package/@form-eng/core).
 
-This package provides 13 field types using **HeroUI**-styled semantic HTML components. All fields integrate with `@form-eng/core`'s rules engine and form orchestration.
+This package provides 28 field types using **HeroUI**-styled semantic HTML components. All fields integrate with `@form-eng/core`'s rules engine and form orchestration.
 
 > **Implementation note:** Field components use semantic HTML elements with appropriate ARIA attributes rather than `@heroui/react` components directly. This ensures compatibility across all environments including SSR and test runners (jsdom). In production, you can wrap the form in a `HeroUIProvider` for theme integration.
 

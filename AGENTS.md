@@ -5,7 +5,7 @@
 ```bash
 npm install --legacy-peer-deps
 npm run build          # Build all packages
-npm run test           # Run 4774 tests with Vitest
+npm run test           # Run 6296 tests with Vitest
 npm run test:coverage  # Run tests with coverage report
 npm run test:e2e       # Run 54 Playwright E2E tests
 npm run bench          # Run performance benchmarks
@@ -41,14 +41,14 @@ packages/
   fluent/    -- @form-eng/fluent (Fluent UI v9 field components, 28 types)
   mui/       -- @form-eng/mui (Material UI field components, 28 types)
   headless/  -- @form-eng/headless (unstyled semantic HTML, 28 types)
-  antd/      -- @form-eng/antd (Ant Design v5 field components, 13 Tier 1 types)
-  chakra/    -- @form-eng/chakra (Chakra UI v3 field components, 13 Tier 1 types)
-  mantine/   -- @form-eng/mantine (Mantine v7 field components, 13 Tier 1 types)
-  atlaskit/  -- @form-eng/atlaskit (Atlassian Design System, 13 Tier 1 types)
-  base-web/  -- @form-eng/base-web (Uber Base Web, 13 Tier 1 types)
-  heroui/    -- @form-eng/heroui (HeroUI, 13 Tier 1 types)
-  radix/     -- @form-eng/radix (Radix UI primitives, 13 Tier 1 types, unstyled)
-  react-aria/ -- @form-eng/react-aria (React Aria Components, 13 Tier 1 types)
+  antd/      -- @form-eng/antd (Ant Design v5 field components, 28 types)
+  chakra/    -- @form-eng/chakra (Chakra UI v3 field components, 28 types)
+  mantine/   -- @form-eng/mantine (Mantine v7 field components, 28 types)
+  atlaskit/  -- @form-eng/atlaskit (Atlassian Design System, 28 types)
+  base-web/  -- @form-eng/base-web (Uber Base Web, 28 types)
+  heroui/    -- @form-eng/heroui (HeroUI, 28 types)
+  radix/     -- @form-eng/radix (Radix UI primitives, 28 types, unstyled)
+  react-aria/ -- @form-eng/react-aria (React Aria Components, 28 types)
   designer/  -- @form-eng/designer (visual drag-and-drop form builder)
   examples/  -- @form-eng/examples (3 example apps)
 docs/
@@ -119,7 +119,7 @@ Build output per package: `dist/index.js` (CJS), `dist/index.mjs` (ESM), `dist/i
 
 ## Testing
 
-4774 tests using Vitest across 55 test files. 54 Playwright E2E tests across 7 specs. 67+ Storybook stories.
+6296 tests using Vitest across 55 test files. 54 Playwright E2E tests across 7 specs. 67+ Storybook stories.
 
 ```bash
 npm run test             # Run all tests
@@ -139,14 +139,14 @@ After any code change, verify:
 npm run build && npm run test
 ```
 
-All packages should build cleanly and all 4774 tests should pass.
+All packages should build cleanly and all 6296 tests should pass.
 
 ## Git Workflow
 
 - Conventional commits: `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`
 - Single `main` branch
-- Per-package tags for publishing: `core-v1.5.3`, `fluent-v1.5.3`, `mui-v1.5.3`, `headless-v1.5.3`, `antd-v1.5.3`, `chakra-v1.5.3`, `mantine-v1.5.3`, `atlaskit-v1.5.3`, `base-web-v1.5.3`, `heroui-v1.5.3`, `radix-v1.5.3`, `react-aria-v1.5.3`, `designer-v1.5.3`
-- Unified tag for all packages: `v1.5.3`
+- Per-package tags for publishing: `core-v1.6.0`, `fluent-v1.6.0`, `mui-v1.6.0`, `headless-v1.6.0`, `antd-v1.6.0`, `chakra-v1.6.0`, `mantine-v1.6.0`, `atlaskit-v1.6.0`, `base-web-v1.6.0`, `heroui-v1.6.0`, `radix-v1.6.0`, `react-aria-v1.6.0`, `designer-v1.6.0`
+- Unified tag for all packages: `v1.6.0`
 - Run `npm run build && npm run test` before committing
 
 ## Boundaries

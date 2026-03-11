@@ -11,7 +11,22 @@ import SimpleDropdown from "./fields/SimpleDropdown";
 import Textarea from "./fields/Textarea";
 import RadioGroup from "./fields/RadioGroup";
 import CheckboxGroup from "./fields/CheckboxGroup";
+import RatingField from "./fields/Rating";
+import AutocompleteField from "./fields/Autocomplete";
+import DateTimeField from "./fields/DateTime";
+import DateRange from "./fields/DateRange";
+import PhoneInput from "./fields/PhoneInput";
+import FileUploadField from "./fields/FileUpload";
 import ReadOnly from "./fields/readonly/ReadOnly";
+import ColorPicker from "./fields/ColorPicker";
+import MultiSelectSearchField from "./fields/MultiSelectSearch";
+import StatusDropdown from "./fields/StatusDropdown";
+import DocumentLinks from "./fields/DocumentLinks";
+import ReadOnlyArray from "./fields/readonly/ReadOnlyArray";
+import ReadOnlyDateTime from "./fields/readonly/ReadOnlyDateTime";
+import ReadOnlyCumulativeNumber from "./fields/readonly/ReadOnlyCumulativeNumber";
+import ReadOnlyRichText from "./fields/readonly/ReadOnlyRichText";
+import ReadOnlyWithButton from "./fields/readonly/ReadOnlyWithButton";
 import React from "react";
 
 /** Creates the default React Aria Components field registry for use with InjectedFieldProvider */
@@ -29,6 +44,21 @@ export function createReactAriaFieldRegistry(): Dictionary<React.JSX.Element> {
     [ComponentTypes.Textarea]: React.createElement(Textarea),
     [ComponentTypes.RadioGroup]: React.createElement(RadioGroup),
     [ComponentTypes.CheckboxGroup]: React.createElement(CheckboxGroup),
+    [ComponentTypes.Rating]: React.createElement(RatingField),
+    [ComponentTypes.Autocomplete]: React.createElement(AutocompleteField),
+    [ComponentTypes.DateTime]: React.createElement(DateTimeField),
+    [ComponentTypes.DateRange]: React.createElement(DateRange),
+    [ComponentTypes.PhoneInput]: React.createElement(PhoneInput),
+    [ComponentTypes.FileUpload]: React.createElement(FileUploadField),
     [ComponentTypes.ReadOnly]: React.createElement(ReadOnly),
+    [ComponentTypes.ColorPicker]: React.createElement(ColorPicker),
+    [ComponentTypes.MultiSelectSearch]: React.createElement(MultiSelectSearchField),
+    [ComponentTypes.StatusDropdown]: React.createElement(StatusDropdown),
+    [ComponentTypes.DocumentLinks]: React.createElement(DocumentLinks),
+    [ComponentTypes.ReadOnlyArray]: React.createElement(ReadOnlyArray),
+    [ComponentTypes.ReadOnlyDateTime]: React.createElement(ReadOnlyDateTime),
+    [ComponentTypes.ReadOnlyCumulativeNumber]: React.createElement(ReadOnlyCumulativeNumber),
+    [ComponentTypes.ReadOnlyRichText]: React.createElement(ReadOnlyRichText),
+    [ComponentTypes.ReadOnlyWithButton]: React.createElement(ReadOnlyWithButton),
   };
 }

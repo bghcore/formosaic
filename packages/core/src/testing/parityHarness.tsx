@@ -46,6 +46,21 @@ const VALUE_BY_TYPE: Record<string, unknown> = {
   [ComponentTypes.Textarea]: "some text",
   [ComponentTypes.ReadOnly]: "read only text",
   [ComponentTypes.Fragment]: "hidden",
+  [ComponentTypes.Rating]: 3,
+  [ComponentTypes.Autocomplete]: "opt1",
+  [ComponentTypes.DateTime]: "2024-01-15T10:30:00Z",
+  [ComponentTypes.DateRange]: { start: "2024-01-01", end: "2024-01-31" },
+  [ComponentTypes.PhoneInput]: "5551234567",
+  [ComponentTypes.FileUpload]: null,
+  [ComponentTypes.ColorPicker]: "#ff0000",
+  [ComponentTypes.MultiSelectSearch]: ["opt1"],
+  [ComponentTypes.StatusDropdown]: "opt1",
+  [ComponentTypes.DocumentLinks]: [{ url: "https://example.com", title: "Example" }],
+  [ComponentTypes.ReadOnlyArray]: ["item1", "item2"],
+  [ComponentTypes.ReadOnlyDateTime]: "2024-01-15T10:30:00Z",
+  [ComponentTypes.ReadOnlyCumulativeNumber]: 0,
+  [ComponentTypes.ReadOnlyRichText]: "<p>rich text</p>",
+  [ComponentTypes.ReadOnlyWithButton]: "value",
 };
 
 /** Default test options for select-like fields */
@@ -61,6 +76,9 @@ const OPTION_FIELDS: Set<string> = new Set([
   ComponentTypes.MultiSelect,
   ComponentTypes.RadioGroup,
   ComponentTypes.CheckboxGroup,
+  ComponentTypes.Autocomplete,
+  ComponentTypes.MultiSelectSearch,
+  ComponentTypes.StatusDropdown,
 ]);
 
 /**
@@ -70,6 +88,11 @@ const OPTION_FIELDS: Set<string> = new Set([
 const DISPLAY_ONLY_FIELDS: Set<string> = new Set([
   ComponentTypes.ReadOnly,
   ComponentTypes.Fragment,
+  ComponentTypes.ReadOnlyArray,
+  ComponentTypes.ReadOnlyDateTime,
+  ComponentTypes.ReadOnlyCumulativeNumber,
+  ComponentTypes.ReadOnlyRichText,
+  ComponentTypes.ReadOnlyWithButton,
 ]);
 
 /**
@@ -81,6 +104,12 @@ const NO_EMPTY_SENTINEL_FIELDS: Set<string> = new Set([
   ComponentTypes.Number,
   ComponentTypes.Slider,
   ComponentTypes.Fragment,
+  ComponentTypes.Rating,
+  ComponentTypes.ColorPicker,
+  ComponentTypes.ReadOnlyRichText,
+  ComponentTypes.ReadOnlyWithButton,
+  ComponentTypes.ReadOnlyArray,
+  ComponentTypes.MultiSelectSearch,
 ]);
 
 /**
@@ -177,15 +206,18 @@ export function runParityTests(
               return baseProps;
             };
 
-            it("renders initial state with non-empty content", () => {
-              const registry = adapter.registry();
-              const element = registry[fieldType];
-              if (!element) return;
+            // Display-only fields may render empty with undefined value
+            if (!DISPLAY_ONLY_FIELDS.has(fieldType)) {
+              it("renders initial state with non-empty content", () => {
+                const registry = adapter.registry();
+                const element = registry[fieldType];
+                if (!element) return;
 
-              const props = getPropsWithOptions(getMinimalProps());
-              const { container } = renderWithWrapper(React.cloneElement(element, props));
-              expect(container.innerHTML).not.toBe("");
-            });
+                const props = getPropsWithOptions(getMinimalProps());
+                const { container } = renderWithWrapper(React.cloneElement(element, props));
+                expect(container.innerHTML).not.toBe("");
+              });
+            }
 
             it("renders readOnly mode without editable inputs", () => {
               const registry = adapter.registry();

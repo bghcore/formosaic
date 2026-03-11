@@ -1,6 +1,6 @@
 {
   "name": "@form-eng/examples",
-  "version": "1.5.3",
+  "version": "1.6.0",
   "private": true,
   "description": "Example apps demonstrating @form-eng/core",
   "scripts": {

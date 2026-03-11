@@ -54,9 +54,10 @@
 | [performance-debugging.md](./performance-debugging.md) | RenderTracker, EventTimeline, DevTools tabs |
 | [analytics-telemetry.md](./analytics-telemetry.md) | IAnalyticsCallbacks, useFormAnalytics integration |
 
-## Tier 2 Planning (Current)
+## Historical (Tier 2 Planning)
 
 | Document | Purpose |
 |----------|---------|
-| [tier2-handoff.md](./tier2-handoff.md) | Feasibility matrix, rollout waves, adapter priorities, go/no-go |
-| [tier1-baseline-report.md](./tier1-baseline-report.md) | Final Tier 1 audit, scorecard, gap register |
+| [tier2-handoff.md](./tier2-handoff.md) | Pre-expansion planning document (completed in v1.6.0) |
+| [tier1-baseline-report.md](./tier1-baseline-report.md) | Pre-expansion Tier 1 baseline (completed in v1.6.0) |
+| [tier1-patterns.md](./tier1-patterns.md) | Implementation patterns reference (still relevant) |

@@ -2,7 +2,7 @@
 
 Chakra UI v3 field components for [@form-eng/core](https://www.npmjs.com/package/@form-eng/core).
 
-This package provides 13 field types using **Chakra UI v3** components. Some fields use semantic HTML fallbacks where Chakra v3's compound components have TypeScript DTS compatibility issues with Ark UI's `Assign` type.
+This package provides 28 field types using **Chakra UI v3** components. Includes 7 native Chakra components and 21 semantic HTML fallbacks (due to Ark UI DTS compatibility issues with compound components).
 
 ## Installation
 

@@ -49,14 +49,14 @@ See [docs/comparison.md](./docs/comparison.md) for a detailed comparison with mi
 | [`@form-eng/fluent`](./packages/fluent) | Fluent UI v9 field components (28 field types). | ~39 KB ESM |
 | [`@form-eng/mui`](./packages/mui) | Material UI field components (28 field types). | ~39 KB ESM |
 | [`@form-eng/headless`](./packages/headless) | Unstyled semantic HTML field components (28 field types). | ~36 KB ESM |
-| [`@form-eng/antd`](./packages/antd) | Ant Design v5 field components (13 Tier 1 field types). | ~18 KB ESM |
-| [`@form-eng/chakra`](./packages/chakra) | Chakra UI v3 field components (13 Tier 1 field types). | ~18 KB ESM |
-| [`@form-eng/mantine`](./packages/mantine) | Mantine v7 field components (13 Tier 1 field types). | ~18 KB ESM |
-| [`@form-eng/atlaskit`](./packages/atlaskit) | Atlassian Design System field components (13 Tier 1 field types). | ~16 KB ESM |
-| [`@form-eng/base-web`](./packages/base-web) | Uber Base Web field components (13 Tier 1 field types). | ~16 KB ESM |
-| [`@form-eng/heroui`](./packages/heroui) | HeroUI field components (13 Tier 1 field types). | ~16 KB ESM |
-| [`@form-eng/radix`](./packages/radix) | Radix UI primitives field components (13 Tier 1 field types). Unstyled. | ~26 KB ESM |
-| [`@form-eng/react-aria`](./packages/react-aria) | React Aria Components field components (13 Tier 1 field types). | ~25 KB ESM |
+| [`@form-eng/antd`](./packages/antd) | Ant Design v5 field components (28 field types). | ~24 KB ESM |
+| [`@form-eng/chakra`](./packages/chakra) | Chakra UI v3 field components (28 field types). | ~24 KB ESM |
+| [`@form-eng/mantine`](./packages/mantine) | Mantine v7 field components (28 field types). | ~24 KB ESM |
+| [`@form-eng/atlaskit`](./packages/atlaskit) | Atlassian Design System field components (28 field types). | ~22 KB ESM |
+| [`@form-eng/base-web`](./packages/base-web) | Uber Base Web field components (28 field types). | ~22 KB ESM |
+| [`@form-eng/heroui`](./packages/heroui) | HeroUI field components (28 field types). | ~22 KB ESM |
+| [`@form-eng/radix`](./packages/radix) | Radix UI primitives field components (28 field types). Unstyled. | ~32 KB ESM |
+| [`@form-eng/react-aria`](./packages/react-aria) | React Aria Components field components (28 field types). | ~31 KB ESM |
 | [`@form-eng/designer`](./packages/designer) | Visual drag-and-drop form builder with rule editor and JSON export. | ~65 KB ESM |
 | [`@form-eng/examples`](./packages/examples) | 3 example apps (login+MFA, checkout wizard, data entry). | -- |
 
@@ -887,14 +887,14 @@ packages/
   fluent/     -- @form-eng/fluent (Fluent UI v9 adapter, 28 field types)
   mui/        -- @form-eng/mui (Material UI adapter, 28 field types)
   headless/   -- @form-eng/headless (semantic HTML adapter, 28 field types)
-  antd/       -- @form-eng/antd (Ant Design v5 adapter, 13 Tier 1 types)
-  chakra/     -- @form-eng/chakra (Chakra UI v3 adapter, 13 Tier 1 types)
-  mantine/    -- @form-eng/mantine (Mantine v7 adapter, 13 Tier 1 types)
-  atlaskit/   -- @form-eng/atlaskit (Atlassian Design System adapter, 13 Tier 1 types)
-  base-web/   -- @form-eng/base-web (Uber Base Web adapter, 13 Tier 1 types)
-  heroui/     -- @form-eng/heroui (HeroUI adapter, 13 Tier 1 types)
-  radix/      -- @form-eng/radix (Radix UI primitives adapter, 13 Tier 1 types)
-  react-aria/ -- @form-eng/react-aria (React Aria Components adapter, 13 Tier 1 types)
+  antd/       -- @form-eng/antd (Ant Design v5 adapter, 28 field types)
+  chakra/     -- @form-eng/chakra (Chakra UI v3 adapter, 28 field types)
+  mantine/    -- @form-eng/mantine (Mantine v7 adapter, 28 field types)
+  atlaskit/   -- @form-eng/atlaskit (Atlassian Design System adapter, 28 field types)
+  base-web/   -- @form-eng/base-web (Uber Base Web adapter, 28 field types)
+  heroui/     -- @form-eng/heroui (HeroUI adapter, 28 field types)
+  radix/      -- @form-eng/radix (Radix UI primitives adapter, 28 field types)
+  react-aria/ -- @form-eng/react-aria (React Aria Components adapter, 28 field types)
   designer/   -- @form-eng/designer (visual form builder)
   examples/   -- 3 example apps (login+MFA, checkout wizard, data entry)
 e2e/          -- Playwright end-to-end tests

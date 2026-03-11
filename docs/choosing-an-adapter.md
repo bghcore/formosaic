@@ -20,23 +20,23 @@ form-engine supports 11 UI-library adapters. Each adapter maps the same `IFormCo
 
 ## Adapter Classification Grid
 
-| Adapter | Category | Native Components | Semantic HTML Fallbacks | Tier 1 Fields | Wrapper Required | Bundle Impact |
+| Adapter | Category | Native Components | Semantic HTML Fallbacks | Total Fields | Wrapper Required | Bundle Impact |
 |---|---|---|---|---|---|---|
-| fluent | Framework-native | 13 | 0 | 13 | FluentProvider | Medium |
-| mui | Framework-native | 13 | 0 | 13 | ThemeProvider (optional) | Medium |
-| headless | Reference | 0 | 13 | 13 | None | Minimal |
-| antd | Framework-native | 13 | 0 | 13 | None | Medium |
-| chakra | Hybrid | 7 | 6 | 13 | ChakraProvider | Medium |
-| mantine | Framework-native | 13 | 0 | 13 | MantineProvider | Medium |
-| atlaskit | Compatibility | 0 | 13 | 13 | None | Minimal |
-| base-web | Framework-native | 10 | 3 | 13 | BaseProvider + StyletronProvider | Medium |
-| heroui | Compatibility | 0 | 13 | 13 | None | Minimal |
-| radix | Primitives-first | 6 | 7 | 13 | None | Small |
-| react-aria | Primitives-first | 10 | 3 | 13 | None | Small |
+| fluent | Framework-native | 28 | 0 | 28 | FluentProvider | Medium |
+| mui | Framework-native | 28 | 0 | 28 | ThemeProvider (optional) | Medium |
+| headless | Reference | 0 | 28 | 28 | None | Minimal |
+| antd | Framework-native | 19 | 9 | 28 | None | Medium |
+| chakra | Hybrid | 7 | 21 | 28 | ChakraProvider | Medium |
+| mantine | Framework-native | 18 | 10 | 28 | MantineProvider | Medium |
+| atlaskit | Compatibility | 0 | 28 | 28 | None | Minimal |
+| base-web | Framework-native | 10 | 18 | 28 | BaseProvider + StyletronProvider | Medium |
+| heroui | Compatibility | 0 | 28 | 28 | None | Minimal |
+| radix | Primitives-first | 6 | 22 | 28 | None | Small |
+| react-aria | Primitives-first | 11 | 17 | 28 | None | Small |
 
 ### Category Definitions
 
-- **Framework-native**: All 13 Tier 1 fields use the UI library's native components.
+- **Framework-native**: Uses the UI library's native components for the majority of fields. Tier 2 fields may use semantic HTML fallbacks where no native equivalent exists.
 - **Primitives-first**: Uses unstyled primitives -- bring your own styling (Tailwind, CSS modules, etc.).
 - **Hybrid**: Mix of native components and semantic HTML fallbacks (due to upstream library issues).
 - **Compatibility**: Uses semantic HTML with data attributes matching the UI library's patterns.

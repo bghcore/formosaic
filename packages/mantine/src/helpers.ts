@@ -2,6 +2,7 @@
 export {
   FieldClassName,
   GetFieldDataTestId,
+  getFieldState,
   formatDateTime,
   DocumentLinksStrings,
   convertBooleanToYesOrNoText,

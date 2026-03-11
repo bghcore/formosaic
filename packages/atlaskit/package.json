@@ -1,6 +1,6 @@
 {
   "name": "@form-eng/atlaskit",
-  "version": "1.5.3",
+  "version": "1.6.0",
   "description": "Atlassian Design System compatible field components for @form-eng/core (semantic HTML)",
   "repository": {
     "type": "git",

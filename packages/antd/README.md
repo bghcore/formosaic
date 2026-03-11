@@ -2,7 +2,7 @@
 
 Ant Design v5 field components for [@form-eng/core](https://www.npmjs.com/package/@form-eng/core).
 
-This package provides 13 field types using **Ant Design v5** components, with `dayjs` for date handling. All fields integrate with `@form-eng/core`'s rules engine and form orchestration.
+This package provides 28 field types using **Ant Design v5** components, with `dayjs` for date handling. Includes 19 native antd components and 9 semantic HTML fallbacks. All fields integrate with `@form-eng/core`'s rules engine and form orchestration.
 
 ## Installation
 

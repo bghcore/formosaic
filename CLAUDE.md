@@ -218,49 +218,49 @@ packages/
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, FormLoading)
-      fields/ (13 Tier 1 editable + 1 read-only, Ant Design v5 components)
+      fields/ (22 editable + 6 read-only, Ant Design v5 components)
 
   chakra/                        -- @form-eng/chakra
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, FormLoading)
-      fields/ (13 Tier 1 editable + 1 read-only, Chakra UI v3 + semantic HTML)
+      fields/ (22 editable + 6 read-only, Chakra UI v3 + semantic HTML)
 
   mantine/                       -- @form-eng/mantine
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, FormLoading)
-      fields/ (13 Tier 1 editable + 1 read-only, Mantine v7 components)
+      fields/ (22 editable + 6 read-only, Mantine v7 components)
 
   atlaskit/                      -- @form-eng/atlaskit
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, FormLoading)
-      fields/ (13 Tier 1 editable + 1 read-only, Atlassian Design System components)
+      fields/ (22 editable + 6 read-only, Atlassian Design System components)
 
   base-web/                      -- @form-eng/base-web
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, FormLoading)
-      fields/ (13 Tier 1 editable + 1 read-only, semantic HTML for Base Web integration)
+      fields/ (22 editable + 6 read-only, semantic HTML for Base Web integration)
 
   heroui/                        -- @form-eng/heroui
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, FormLoading)
-      fields/ (13 Tier 1 editable + 1 read-only, HeroUI components)
+      fields/ (22 editable + 6 read-only, HeroUI components)
 
   radix/                         -- @form-eng/radix
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, FormLoading)
-      fields/ (6 Radix UI primitives + 7 semantic HTML)
+      fields/ (6 Radix UI primitives + 22 semantic HTML)
 
   react-aria/                    -- @form-eng/react-aria
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, FormLoading)
-      fields/ (10 React Aria Components + 3 semantic HTML, 1 read-only)
+      fields/ (11 React Aria Components + 17 semantic HTML)
 
   designer/                      -- @form-eng/designer
     src/
@@ -298,7 +298,7 @@ npm run build:heroui     # Build HeroUI package only
 npm run build:radix      # Build Radix package only
 npm run build:react-aria # Build React Aria package only
 npm run clean            # Remove all dist/ directories
-npm run test             # Run all tests (vitest, 4774 tests)
+npm run test             # Run all tests (vitest, 6296 tests)
 npm run test:watch       # Run tests in watch mode
 npm run test:coverage    # Run tests with coverage report
 npm run test:e2e         # Run Playwright E2E tests (54 tests)
@@ -318,7 +318,7 @@ npm run build-storybook  # Build static Storybook
 - **Fluent UI v9** (`@fluentui/react-components`) for UI components (fluent package)
 - **MUI v5/v6** (`@mui/material`) for UI components (mui package)
 - **TypeScript** with `strict: true`
-- **Vitest** for testing (4774 tests across 55 files)
+- **Vitest** for testing (6296 tests across 55 files)
 - **Playwright** for E2E testing (54 tests across 7 specs)
 - **Storybook 10** for visual component documentation (67+ stories)
 - **tsup** for bundling (CJS + ESM + .d.ts)

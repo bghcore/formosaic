@@ -1,6 +1,6 @@
 # @form-eng/react-aria
 
-React Aria Components adapter for `@form-eng/core`. Provides accessible field components using [React Aria Components](https://react-spectrum.adobe.com/react-aria/) for best-in-class ARIA patterns.
+React Aria Components adapter for `@form-eng/core`. Provides 28 accessible field components using [React Aria Components](https://react-spectrum.adobe.com/react-aria/) for best-in-class ARIA patterns. Includes 11 native React Aria components and 17 semantic HTML fallbacks.
 
 ## Installation
 

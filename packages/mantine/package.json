@@ -1,6 +1,6 @@
 {
   "name": "@form-eng/mantine",
-  "version": "1.5.3",
+  "version": "1.6.0",
   "description": "Mantine v7 field components for @form-eng/core",
   "repository": {
     "type": "git",

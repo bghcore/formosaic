@@ -1,6 +1,6 @@
 # @form-eng/radix
 
-Radix UI primitives adapter for `@form-eng/core`. Provides accessible, unstyled field components using [Radix UI](https://www.radix-ui.com/) primitives for behavior and semantic HTML for simple inputs.
+Radix UI primitives adapter for `@form-eng/core`. Provides 28 accessible, unstyled field components using [Radix UI](https://www.radix-ui.com/) primitives (6 native) and semantic HTML (22 fallbacks). Ideal for Tailwind CSS and shadcn/ui projects.
 
 ## Installation
 

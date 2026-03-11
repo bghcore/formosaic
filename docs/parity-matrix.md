@@ -1,6 +1,6 @@
 # Adapter Parity Matrix
 
-Implementation status of 32 field types across 11 adapter packages (+ shadcn recipe model).
+Implementation status of 32 field types across 11 adapter packages. All adapters now support 28 of 32 types (v1.6.0).
 
 ## Legend
 
@@ -27,25 +27,25 @@ Implementation status of 32 field types across 11 adapter packages (+ shadcn rec
 | 12 | DynamicFragment | `DynamicFragment` | Y | Y | FB | Y | Y | Y | FB | FB | FB | FB | FB |
 | 13 | ReadOnly | `ReadOnly` | Y | Y | FB | Y | Y | Y | FB | FB | FB | FB | FB |
 | | **Tier 2 (Extended)** | | | | | | | | | | | | |
-| 14 | MultiSelectSearch | `MultiSelectSearch` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
-| 15 | PopOutEditor / Textarea | `Textarea`* | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
-| 16 | DocumentLinks | `DocumentLinks` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
-| 17 | StatusDropdown | `StatusDropdown` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
-| 18 | Rating | `Rating` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
-| 19 | ColorPicker | `ColorPicker` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
-| 20 | Autocomplete | `Autocomplete` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
-| 21 | FileUpload | `FileUpload` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
-| 22 | DateRange | `DateRange` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
-| 23 | DateTime | `DateTime` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
-| 24 | PhoneInput | `PhoneInput` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
+| 14 | Rating | `Rating` | Y | Y | FB | Y | FB | Y | FB | FB | FB | FB | FB |
+| 15 | Autocomplete | `Autocomplete` | Y | Y | FB | Y | FB | Y | FB | FB | FB | FB | Y |
+| 16 | DateTime | `DateTime` | Y | Y | FB | Y | FB | Y | FB | FB | FB | FB | FB |
+| 17 | DateRange | `DateRange` | Y | Y | FB | Y | FB | FB | FB | FB | FB | FB | FB |
+| 18 | PhoneInput | `PhoneInput` | Y | Y | FB | FB | FB | FB | FB | FB | FB | FB | FB |
+| 19 | FileUpload | `FileUpload` | Y | Y | FB | Y | FB | Y | FB | FB | FB | FB | FB |
+| 20 | ColorPicker | `ColorPicker` | Y | Y | FB | Y | FB | Y | FB | FB | FB | FB | FB |
+| 21 | MultiSelectSearch | `MultiSelectSearch` | Y | Y | FB | FB | FB | FB | FB | FB | FB | FB | FB |
+| 22 | StatusDropdown | `StatusDropdown` | Y | Y | FB | FB | FB | FB | FB | FB | FB | FB | FB |
+| 23 | DocumentLinks | `DocumentLinks` | Y | Y | FB | FB | FB | FB | FB | FB | FB | FB | FB |
+| 24 | PopOutEditor / Textarea | `Textarea`* | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
 | 25 | ChoiceSet | `ChoiceSet` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
 | 26 | FieldArray | `FieldArray` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
 | | **Tier 3 (Read-Only)** | | | | | | | | | | | | |
-| 27 | ReadOnlyArray | `ReadOnlyArray` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
-| 28 | ReadOnlyDateTime | `ReadOnlyDateTime` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
-| 29 | ReadOnlyCumulativeNumber | `ReadOnlyCumulativeNumber` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
-| 30 | ReadOnlyRichText | `ReadOnlyRichText` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
-| 31 | ReadOnlyWithButton | `ReadOnlyWithButton` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
+| 27 | ReadOnlyArray | `ReadOnlyArray` | Y | Y | FB | FB | FB | FB | FB | FB | FB | FB | FB |
+| 28 | ReadOnlyDateTime | `ReadOnlyDateTime` | Y | Y | FB | FB | FB | FB | FB | FB | FB | FB | FB |
+| 29 | ReadOnlyCumulativeNumber | `ReadOnlyCumulativeNumber` | Y | Y | FB | FB | FB | FB | FB | FB | FB | FB | FB |
+| 30 | ReadOnlyRichText | `ReadOnlyRichText` | Y | Y | FB | FB | FB | FB | FB | FB | FB | FB | FB |
+| 31 | ReadOnlyWithButton | `ReadOnlyWithButton` | Y | Y | FB | FB | FB | FB | FB | FB | FB | FB | FB |
 | 32 | RichText | `RichText` | Y | Y | FB | --- | --- | --- | --- | --- | --- | --- | --- |
 
 \* The `Textarea` type key maps to `PopOutEditor` in the fluent adapter (rich textarea with modal) and to `Textarea` in all other adapters.
@@ -93,33 +93,35 @@ The Chakra UI v3 adapter uses semantic HTML fallbacks for several field types du
 
 Ark UI's `Assign<T, U>` type merges two types but produces a conditional type that TypeScript cannot resolve when generating `.d.ts` files through tsup/rollup-plugin-dts. This is a known upstream issue. The fallback components are fully functional and styled with Chakra's CSS custom properties for visual consistency.
 
-## Tier 2 Gap Summary
+## Remaining Gaps
 
-The following Tier 2 field types are only implemented in fluent, mui, and headless adapters. All other adapters do not yet support these:
+The following field types remain implemented only in fluent, mui, and headless:
 
-| Type | Description | Complexity |
+| Type | Description | Notes |
 |---|---|---|
-| MultiSelectSearch | Searchable multi-select with async options | High -- requires combobox pattern |
-| DocumentLinks | Dynamic link list with add/delete | Medium -- structured data UI |
-| StatusDropdown | Dropdown with color-coded status indicators | Low -- styled dropdown variant |
-| Rating | Star/numeric rating input | Low -- simple range input |
-| ColorPicker | Color selection with preview | Medium -- requires color picker widget |
-| Autocomplete | Typeahead search input | High -- requires combobox pattern |
-| FileUpload | File selection with drag-and-drop | Medium -- file input + preview |
-| DateRange | Start/end date pair picker | Medium -- dual date inputs |
-| DateTime | Date + time picker | Medium -- date + time inputs |
-| PhoneInput | Formatted phone number input | Low -- masked input |
+| PopOutEditor | Rich textarea with modal editing | fluent/mui-specific pattern |
+| ChoiceSet | Adaptive Card choice set | Legacy compatibility type |
+| FieldArray | Dynamic field array with add/remove | Uses react-hook-form useFieldArray |
+| RichText | WYSIWYG rich text editor | Requires editor library dependency |
 
-Tier 3 read-only types (ReadOnlyArray, ReadOnlyDateTime, ReadOnlyCumulativeNumber, ReadOnlyRichText, ReadOnlyWithButton) are display-only and relatively low complexity to implement.
+These are specialized types that either depend on adapter-specific features or require additional library dependencies.
 
 ## Adapter Strength Summary
 
-**Full Tier 1 + Tier 2 (26+ field types):** fluent, mui, headless -- all fields native or reference HTML.
+**Full coverage (28 field types):** All 11 adapters now implement 28 field types (13 Tier 1 + 10 Tier 2 extended + 5 read-only variants). The remaining 4 types (PopOutEditor, ChoiceSet, FieldArray, RichText) are fluent/mui/headless only.
 
-**Native Tier 1 (13 types):** antd (Ant Design v5), mantine (Mantine v7) -- all 13 use real library components.
+**Native Tier 2 implementations:**
+- **antd** -- 6 native: Rate, AutoComplete, DatePicker+showTime, RangePicker, Upload, ColorPicker
+- **mantine** -- 5 native: Rating, Autocomplete, DateTimePicker, FileInput, ColorInput
+- **react-aria** -- 1 native: ComboBox for Autocomplete
+- All other Tier 2 fields use semantic HTML fallbacks across all adapters
 
-**Hybrid Tier 1 (13 types, mix):** chakra (7 native + 6 HTML fallback due to Ark UI DTS), base-web (10 native baseui + 3 HTML).
-
-**Primitives-first (13 types, unstyled):** radix (6 Radix primitives + 7 HTML), react-aria (10 React Aria Components + 3 HTML).
-
-**Compatibility (13 types, all semantic HTML):** atlaskit, heroui.
+**Overall native counts (Tier 1 + Tier 2):**
+- antd: 19 native + 9 HTML
+- mantine: 18 native + 10 HTML
+- chakra: 7 native + 21 HTML
+- base-web: 10 native + 18 HTML
+- radix: 6 native + 22 HTML
+- react-aria: 11 native + 17 HTML
+- atlaskit: 0 native / 28 HTML (compatibility)
+- heroui: 0 native / 28 HTML (compatibility)

@@ -1,0 +1,30 @@
+import { IFieldProps, IRatingConfig } from "@form-eng/core";
+import React from "react";
+import { ReadOnlyText } from "../components/ReadOnlyText";
+import { GetFieldDataTestId } from "../helpers";
+import { Rate } from "antd";
+
+const Rating = (props: IFieldProps<IRatingConfig>) => {
+  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, config, setFieldValue } = props;
+
+  const max = config?.max ?? 5;
+  const rating = (value as number) ?? 0;
+
+  if (readOnly) {
+    return <ReadOnlyText fieldName={fieldName} value={String(rating)} />;
+  }
+
+  return (
+    <Rate
+      className="fe-rating"
+      count={max}
+      value={rating}
+      onChange={(val) => setFieldValue(fieldName, val)}
+      disabled={false}
+      aria-label={`Rating, ${rating} of ${max}`}
+      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+    />
+  );
+};
+
+export default Rating;

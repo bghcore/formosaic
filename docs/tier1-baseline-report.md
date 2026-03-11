@@ -1,5 +1,7 @@
 # Tier 1 Baseline Report
 
+> **Status: HISTORICAL** -- This was the pre-Tier-2 baseline. Tier 2 expansion completed in v1.6.0. See `parity-matrix.md` for current field support.
+
 Final Tier 1 stabilization assessment as of v1.5.2. This is the definitive pre-Tier-2 reference.
 
 ## 1. Tier 1 Field Audit

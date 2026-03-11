@@ -183,6 +183,137 @@ export const PARITY_MIXED_FORM: IFormConfig = {
   ],
 };
 
+/** Rating field with configurable max */
+export const PARITY_RATING_FORM: IFormConfig = {
+  version: 2,
+  fields: {
+    rating: { type: "Rating", label: "Stars", config: { max: 5 } },
+    ratingReadOnly: { type: "Rating", label: "Score", readOnly: true, config: { max: 5 } },
+  },
+  fieldOrder: ["rating", "ratingReadOnly"],
+};
+
+/** Autocomplete field with options */
+export const PARITY_AUTOCOMPLETE_FORM: IFormConfig = {
+  version: 2,
+  fields: {
+    autocomplete: {
+      type: "Autocomplete",
+      label: "Country",
+      options: [
+        { value: "us", label: "United States" },
+        { value: "uk", label: "United Kingdom" },
+        { value: "ca", label: "Canada" },
+      ],
+    },
+    autocompleteReadOnly: {
+      type: "Autocomplete",
+      label: "Region",
+      readOnly: true,
+      options: [
+        { value: "na", label: "North America" },
+        { value: "eu", label: "Europe" },
+      ],
+    },
+  },
+  fieldOrder: ["autocomplete", "autocompleteReadOnly"],
+};
+
+/** DateRange field */
+export const PARITY_DATERANGE_FORM: IFormConfig = {
+  version: 2,
+  fields: {
+    dateRange: { type: "DateRange", label: "Travel Dates" },
+    dateRangeReadOnly: { type: "DateRange", label: "Booking Period", readOnly: true },
+  },
+  fieldOrder: ["dateRange", "dateRangeReadOnly"],
+};
+
+/** PhoneInput field */
+export const PARITY_PHONEINPUT_FORM: IFormConfig = {
+  version: 2,
+  fields: {
+    phone: { type: "PhoneInput", label: "Phone Number" },
+    phoneReadOnly: { type: "PhoneInput", label: "Contact", readOnly: true },
+  },
+  fieldOrder: ["phone", "phoneReadOnly"],
+};
+
+/** ColorPicker field */
+export const PARITY_COLORPICKER_FORM: IFormConfig = {
+  version: 2,
+  fields: {
+    colorPicker: { type: "ColorPicker", label: "Brand Color" },
+    colorPickerReadOnly: { type: "ColorPicker", label: "Theme", readOnly: true },
+  },
+  fieldOrder: ["colorPicker", "colorPickerReadOnly"],
+};
+
+/** MultiSelectSearch field */
+export const PARITY_MULTISELECTSEARCH_FORM: IFormConfig = {
+  version: 2,
+  fields: {
+    multiSelectSearch: {
+      type: "MultiSelectSearch",
+      label: "Skills",
+      options: [
+        { value: "js", label: "JavaScript" },
+        { value: "ts", label: "TypeScript" },
+        { value: "py", label: "Python" },
+      ],
+    },
+  },
+  fieldOrder: ["multiSelectSearch"],
+};
+
+/** StatusDropdown field */
+export const PARITY_STATUSDROPDOWN_FORM: IFormConfig = {
+  version: 2,
+  fields: {
+    statusDropdown: {
+      type: "StatusDropdown",
+      label: "Status",
+      options: [
+        { value: "open", label: "Open" },
+        { value: "closed", label: "Closed" },
+      ],
+    },
+  },
+  fieldOrder: ["statusDropdown"],
+};
+
+/** ReadOnly variant fields */
+export const PARITY_READONLY_VARIANTS_FORM: IFormConfig = {
+  version: 2,
+  fields: {
+    readOnlyArray: { type: "ReadOnlyArray", label: "Tags" },
+    readOnlyDateTime: { type: "ReadOnlyDateTime", label: "Created" },
+    readOnlyRichText: { type: "ReadOnlyRichText", label: "Description" },
+    readOnlyWithButton: { type: "ReadOnlyWithButton", label: "Reference" },
+  },
+  fieldOrder: ["readOnlyArray", "readOnlyDateTime", "readOnlyRichText", "readOnlyWithButton"],
+};
+
+/** FileUpload field */
+export const PARITY_FILEUPLOAD_FORM: IFormConfig = {
+  version: 2,
+  fields: {
+    fileUpload: { type: "FileUpload", label: "Attachment" },
+    fileUploadReadOnly: { type: "FileUpload", label: "Document", readOnly: true },
+  },
+  fieldOrder: ["fileUpload", "fileUploadReadOnly"],
+};
+
+/** DateTime field */
+export const PARITY_DATETIME_FORM: IFormConfig = {
+  version: 2,
+  fields: {
+    dateTime: { type: "DateTime", label: "Event Time" },
+    dateTimeReadOnly: { type: "DateTime", label: "Created At", readOnly: true },
+  },
+  fieldOrder: ["dateTime", "dateTimeReadOnly"],
+};
+
 /** All Tier 1 types forced readOnly with representative values */
 export const PARITY_READONLY_FORM: IFormConfig = {
   version: 2,

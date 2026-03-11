@@ -2,7 +2,7 @@
 
 Mantine v7 field components for [@form-eng/core](https://www.npmjs.com/package/@form-eng/core).
 
-This package provides 13 field types using **Mantine v7** components. Mantine offers strong 1:1 component mappings for most field types (TextInput, NumberInput, Select, MultiSelect, Switch, Slider, etc.).
+This package provides 28 field types using **Mantine v7** components. Includes 18 native Mantine components (Rating, Autocomplete, DateTimePicker, FileInput, ColorInput for Tier 2) and 10 semantic HTML fallbacks.
 
 ## Installation
 

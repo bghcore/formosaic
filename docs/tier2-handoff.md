@@ -1,5 +1,7 @@
 # Tier 2 Handoff Document
 
+> **Status: HISTORICAL** -- Tier 2 expansion completed in v1.6.0. All 8 non-reference adapters expanded to 28 fields. This document is retained as a planning reference.
+
 Tier 1 stabilization complete (v1.5.2). This document consolidates all Tier 2 planning: readiness status, feasibility matrix, rollout waves, adapter priorities, and go/no-go assessment.
 
 ## 1. Tier 1 Parity Status

@@ -33,6 +33,6 @@ const MantineWrapper = ({ children }: { children: React.ReactNode }) =>
 
 runAdapterContractTests(createMantineFieldRegistry, {
   suiteName: "Mantine",
-  onlyTypes: [...TIER_1_FIELDS],
+  onlyTypes: [...TIER_1_FIELDS, "Rating", "Autocomplete", "DateTime", "DateRange", "PhoneInput", "FileUpload", "ColorPicker", "MultiSelectSearch", "StatusDropdown", "ReadOnlyArray", "ReadOnlyDateTime", "ReadOnlyRichText", "ReadOnlyWithButton"],
   wrapper: MantineWrapper,
 });

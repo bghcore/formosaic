@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-03-11
+
+### Added
+
+- **Tier 2 field expansion** -- All 8 non-reference adapters (antd, chakra, mantine, atlaskit, base-web, heroui, radix, react-aria) expanded from 13 to 28 field types, matching fluent/mui/headless. 15 new field types per adapter: Rating, Autocomplete, DateTime, DateRange, PhoneInput, FileUpload, ColorPicker, MultiSelectSearch, StatusDropdown, DocumentLinks, ReadOnlyArray, ReadOnlyDateTime, ReadOnlyCumulativeNumber, ReadOnlyRichText, ReadOnlyWithButton.
+- **Native Tier 2 implementations** where UI libraries provide suitable components:
+  - **antd**: Rate, AutoComplete, DatePicker+showTime, DatePicker.RangePicker, Upload, ColorPicker (6 native)
+  - **mantine**: Rating, Autocomplete, DateTimePicker, FileInput, ColorInput (5 native)
+  - **react-aria**: ComboBox for Autocomplete (1 native)
+  - All other Tier 2 fields use semantic HTML fallbacks with adapter-specific CSS class prefixes
+- **Parity test fixtures** for all 15 new field types (`PARITY_RATING_FORM`, `PARITY_AUTOCOMPLETE_FORM`, `PARITY_DATETIME_FORM`, `PARITY_DATERANGE_FORM`, `PARITY_PHONEINPUT_FORM`, `PARITY_FILEUPLOAD_FORM`, `PARITY_COLORPICKER_FORM`, `PARITY_MULTISELECTSEARCH_FORM`, `PARITY_STATUSDROPDOWN_FORM`, `PARITY_READONLY_VARIANTS_FORM`).
+- **Contract tests updated** for all 8 adapters to cover all 28 field types.
+- **Parity harness extended** with Wave 1-4 value mappings, option field registrations, and display-only field classifications.
+
+### Changed
+
+- 6,296 tests passing across 55 files (up from 4,774 in v1.5.3).
+- Parity matrix updated: all 11 adapters now show 28-field coverage. Only 4 specialized types (PopOutEditor, ChoiceSet, FieldArray, RichText) remain fluent/mui/headless-only.
+- README package table updated with 28 field type counts for all adapters.
+- `choosing-an-adapter.md` adapter grid updated with new field counts and native/fallback ratios.
+- `tier2-handoff.md` marked as historical (expansion complete).
+- All packages bumped to 1.6.0.
+
+### Known Caveats
+
+- Antd native components (Rate, AutoComplete, DatePicker, ColorPicker) do not surface `aria-required` in the same way as HTML fallbacks -- documented as acceptable parity gap.
+- Mantine native Rating does not surface required indicator in standalone rendering -- documented as acceptable parity gap.
+- DocumentLinks and ReadOnlyCumulativeNumber require `react-hook-form` FormProvider context and cannot be rendered standalone in contract tests.
+- Chakra Tier 2 fields all use HTML fallbacks (same Ark UI DTS issue as Tier 1 compound components).
+
 ## [1.5.3] - 2026-03-10
 
 ### Added

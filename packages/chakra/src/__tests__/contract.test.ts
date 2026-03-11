@@ -8,6 +8,6 @@ const ChakraWrapper = ({ children }: { children: React.ReactNode }) =>
 
 runAdapterContractTests(createChakraFieldRegistry, {
   suiteName: "Chakra UI",
-  onlyTypes: [...TIER_1_FIELDS],
+  onlyTypes: [...TIER_1_FIELDS, "Rating", "Autocomplete", "DateTime", "DateRange", "PhoneInput", "FileUpload", "ColorPicker", "MultiSelectSearch", "StatusDropdown", "ReadOnlyArray", "ReadOnlyDateTime", "ReadOnlyRichText", "ReadOnlyWithButton"],
   wrapper: ChakraWrapper,
 });
