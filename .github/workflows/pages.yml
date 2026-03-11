@@ -45,7 +45,7 @@ jobs:
           <head>
             <meta charset="UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title>Dynamic Forms Designer Demo</title>
+            <title>Formosaic Designer Demo</title>
             <style>
               body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
               #root { height: 100vh; }
@@ -78,7 +78,7 @@ jobs:
           <head>
             <meta charset="UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title>Form Engine</title>
+            <title>Formosaic</title>
             <style>
               body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f9fa; }
               .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
@@ -95,7 +95,7 @@ jobs:
           </head>
           <body>
             <div class="container">
-              <h1>Form Engine</h1>
+              <h1>Formosaic</h1>
               <p class="subtitle">Configuration-driven forms with a built-in rules engine</p>
               <div class="badges">
                 <a href="https://www.npmjs.com/package/@formosaic/core"><img src="https://img.shields.io/npm/v/@formosaic/core?label=core" alt="npm core"></a>
@@ -107,7 +107,7 @@ jobs:
               <div class="cards">
                 <a class="card" href="./storybook/">
                   <h2>Storybook</h2>
-                  <p>Interactive component catalog with all 19 field types, composites, and documentation.</p>
+                  <p>Interactive component catalog with all 28 field types, composites, and documentation.</p>
                 </a>
                 <a class="card" href="./designer/">
                   <h2>Form Designer Demo</h2>
