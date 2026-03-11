@@ -17,7 +17,7 @@
 [![React](https://img.shields.io/badge/react-19-61dafb.svg?logo=react)](https://react.dev/)
 [![Tests](https://img.shields.io/badge/tests-6%2C296%20passing-brightgreen.svg)](https://github.com/bghcore/formosaic/actions/workflows/ci.yml)
 [![Storybook](https://img.shields.io/badge/storybook-deployed-ff4785.svg?logo=storybook)](https://bghcore.github.io/formosaic/storybook/)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/bghcore/formosaic/badge)](https://scorecard.dev/viewer/?uri=github.com/bghcore/formosaic)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/bghcore/formosaic/badge)](https://scorecard.dev/viewer/?uri=github.com/bghcore/formosaic)
 [![CodeQL](https://github.com/bghcore/formosaic/actions/workflows/codeql.yml/badge.svg)](https://github.com/bghcore/formosaic/actions/workflows/codeql.yml)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/bghcore/formosaic/pulls)
 
