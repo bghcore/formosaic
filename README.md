@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="formosaic-brand.png" alt="Formosaic" width="360">
+  <img src="./docs/formosaic-brand.png" alt="Formosaic" width="360">
 </p>
 
 <p align="center">
