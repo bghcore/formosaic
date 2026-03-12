@@ -1,0 +1,121 @@
+name: Bug Report
+description: Report a bug in Formosaic
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please fill out the fields below so we can reproduce and fix the issue.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of the bug.
+      placeholder: Describe what went wrong.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Minimal steps to reproduce the behavior.
+      placeholder: |
+        1. Create a form config with...
+        2. Render the form using...
+        3. Interact with the field by...
+        4. Observe the error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: What actually happened. Include error messages or console output if applicable.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package / Adapter
+      description: Which Formosaic package is affected?
+      options:
+        - "@formosaic/core"
+        - "@formosaic/fluent"
+        - "@formosaic/mui"
+        - "@formosaic/headless"
+        - "@formosaic/antd"
+        - "@formosaic/chakra"
+        - "@formosaic/mantine"
+        - "@formosaic/atlaskit"
+        - "@formosaic/base-web"
+        - "@formosaic/heroui"
+        - "@formosaic/radix"
+        - "@formosaic/react-aria"
+        - "Other"
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Package Version
+      description: The version of the Formosaic package you are using.
+      placeholder: "e.g. 1.0.1"
+    validations:
+      required: true
+
+  - type: input
+    id: react-version
+    attributes:
+      label: React Version
+      description: The version of React in your project.
+      placeholder: "e.g. 19.2.4"
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      description: Which browser(s) did you observe this in?
+      placeholder: "e.g. Chrome 131, Firefox 133, Safari 18"
+    validations:
+      required: false
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      description: Which OS are you running?
+      placeholder: "e.g. Windows 11, macOS 15, Ubuntu 24.04"
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots or screen recordings to help illustrate the problem.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context about the problem (form config snippet, related issues, workarounds tried).
+    validations:
+      required: false

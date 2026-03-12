@@ -1,0 +1,72 @@
+name: Feature Request
+description: Suggest a new feature or enhancement for Formosaic
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement. Please describe the feature and why it would be valuable.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of the feature you would like.
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation / Use Case
+      description: Why do you need this feature? What problem does it solve? Describe the use case.
+      placeholder: "I'm trying to build a form that... and currently I have to..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: How do you think this could work? Include API sketches, config examples, or pseudocode if helpful.
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What other approaches or workarounds have you considered?
+    validations:
+      required: false
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Affected Package
+      description: Which package does this feature apply to?
+      options:
+        - "@formosaic/core"
+        - "@formosaic/fluent"
+        - "@formosaic/mui"
+        - "@formosaic/headless"
+        - "@formosaic/antd"
+        - "@formosaic/chakra"
+        - "@formosaic/mantine"
+        - "@formosaic/atlaskit"
+        - "@formosaic/base-web"
+        - "@formosaic/heroui"
+        - "@formosaic/radix"
+        - "@formosaic/react-aria"
+        - "Other / Multiple"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context, screenshots, or references that would help us understand the request.
+    validations:
+      required: false

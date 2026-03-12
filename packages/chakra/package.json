@@ -12,20 +12,21 @@
     "url": "https://github.com/bghcore/formosaic/issues"
   },
   "keywords": [
+    "formosaic",
     "react",
     "forms",
-    "chakra-ui",
-    "dynamic-forms",
+    "config-driven",
+    "rules-engine",
+    "typescript",
     "react-hook-form",
+    "chakra-ui",
+    "chakra",
+    "dynamic-forms",
     "form-builder",
     "field-components",
     "business-forms",
-    "rules-engine",
-    "config-driven",
     "conditional-fields",
-    "form-validation",
-    "typescript",
-    "formosaic"
+    "form-validation"
   ],
   "main": "dist/index.js",
   "module": "dist/index.mjs",

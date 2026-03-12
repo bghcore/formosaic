@@ -1,0 +1,57 @@
+---
+title: Adapter Parity Matrix
+---
+
+# Adapter Parity Matrix
+
+Implementation status of field types across 11 adapter packages. All adapters support 28 of 32 types.
+
+## Legend
+
+- **Y** -- Native UI library component
+- **FB** -- HTML fallback (semantic HTML, data-* attributes, ARIA)
+- **---** -- Not implemented
+
+## Matrix
+
+| # | Type Key | fluent | mui | headless | antd | chakra | mantine | atlaskit | base-web | heroui | radix | react-aria |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| | **Tier 1 (Core)** | | | | | | | | | | | |
+| 1 | `Textbox` | Y | Y | FB | Y | Y | Y | FB | Y | FB | FB | Y |
+| 2 | `Number` | Y | Y | FB | Y | FB | Y | FB | Y | FB | FB | Y |
+| 3 | `Toggle` | Y | Y | FB | Y | FB | Y | FB | Y | FB | Y | Y |
+| 4 | `Dropdown` | Y | Y | FB | Y | Y | Y | FB | Y | FB | Y | Y |
+| 5 | `SimpleDropdown` | Y | Y | FB | Y | Y | Y | FB | Y | FB | Y | Y |
+| 6 | `MultiSelect` | Y | Y | FB | Y | FB | Y | FB | Y | FB | FB | FB |
+| 7 | `DateControl` | Y | Y | FB | Y | Y | Y | FB | FB | FB | FB | FB |
+| 8 | `Slider` | Y | Y | FB | Y | FB | Y | FB | Y | FB | Y | Y |
+| 9 | `RadioGroup` | Y | Y | FB | Y | FB | Y | FB | Y | FB | Y | Y |
+| 10 | `CheckboxGroup` | Y | Y | FB | Y | FB | Y | FB | Y | FB | Y | Y |
+| 11 | `Textarea` | Y | Y | FB | Y | Y | Y | FB | Y | FB | FB | FB |
+| 12 | `DynamicFragment` | Y | Y | FB | Y | Y | Y | FB | FB | FB | FB | FB |
+| 13 | `ReadOnly` | Y | Y | FB | Y | Y | Y | FB | FB | FB | FB | FB |
+| | **Tier 2 (Extended)** | | | | | | | | | | | |
+| 14 | `Rating` | Y | Y | FB | Y | FB | Y | FB | FB | FB | FB | FB |
+| 15 | `Autocomplete` | Y | Y | FB | Y | FB | Y | FB | FB | FB | FB | Y |
+| 16 | `DateTime` | Y | Y | FB | Y | FB | Y | FB | FB | FB | FB | FB |
+| 17 | `DateRange` | Y | Y | FB | Y | FB | FB | FB | FB | FB | FB | FB |
+| 18 | `PhoneInput` | Y | Y | FB | FB | FB | FB | FB | FB | FB | FB | FB |
+| 19 | `FileUpload` | Y | Y | FB | Y | FB | Y | FB | FB | FB | FB | FB |
+| 20 | `ColorPicker` | Y | Y | FB | Y | FB | Y | FB | FB | FB | FB | FB |
+
+**Notes:**
+- fluent and mui use framework-native components for all fields.
+- headless uses semantic HTML for all fields (this IS its native implementation).
+- antd uses native Ant Design v5 components; 6 Chakra fields use HTML fallbacks due to Ark UI DTS issues.
+- radix uses 6 native Radix UI primitives + semantic HTML (primitives-first, unstyled).
+- react-aria uses 10 native React Aria Components + semantic HTML (accessibility-first).
+- shadcn/ui: No dedicated package. Use @formosaic/radix as a base with local Tailwind/shadcn wrappers.
+
+## Adapter Strength Summary
+
+**Full coverage (28 field types):** All 11 adapters implement 28 field types (13 Tier 1 + 10 Tier 2 extended + 5 read-only variants).
+
+**Native Tier 2 implementations:**
+- **antd** -- 6 native: Rate, AutoComplete, DatePicker+showTime, RangePicker, Upload, ColorPicker
+- **mantine** -- 5 native: Rating, Autocomplete, DateTimePicker, FileInput, ColorInput
+- **react-aria** -- 1 native: ComboBox for Autocomplete

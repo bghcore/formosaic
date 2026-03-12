@@ -3,6 +3,18 @@
   "version": "1.0.1",
   "private": true,
   "description": "Example apps demonstrating @formosaic/core",
+  "keywords": [
+    "formosaic",
+    "react",
+    "forms",
+    "config-driven",
+    "rules-engine",
+    "typescript",
+    "react-hook-form",
+    "examples",
+    "demo",
+    "starter"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",

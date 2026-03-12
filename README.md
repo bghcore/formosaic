@@ -20,6 +20,7 @@
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/bghcore/formosaic/badge)](https://scorecard.dev/viewer/?uri=github.com/bghcore/formosaic)
 [![CodeQL](https://github.com/bghcore/formosaic/actions/workflows/codeql.yml/badge.svg)](https://github.com/bghcore/formosaic/actions/workflows/codeql.yml)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/bghcore/formosaic/pulls)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/bghcore/formosaic/tree/main/packages/examples?file=src%2Fcheckout%2FApp.tsx)
 
 [![npm core](https://img.shields.io/npm/v/@formosaic/core?label=core)](https://www.npmjs.com/package/@formosaic/core)
 [![npm mui](https://img.shields.io/npm/v/@formosaic/mui?label=mui)](https://www.npmjs.com/package/@formosaic/mui)
@@ -158,6 +159,11 @@ function App() {
   );
 }
 ```
+
+## Try It Live
+
+- [Open in StackBlitz](https://stackblitz.com/github/bghcore/formosaic/tree/main/packages/examples?file=src%2Fcheckout%2FApp.tsx) -- edit and run the checkout wizard example in your browser
+- [Storybook](https://bghcore.github.io/formosaic/storybook/) -- interactive component gallery with all 28 field types across 11 adapters
 
 ## How It Works
 

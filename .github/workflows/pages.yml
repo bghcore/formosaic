@@ -1,4 +1,4 @@
-name: Deploy Storybook & Demo to GitHub Pages
+name: Deploy Docs & Storybook to GitHub Pages
 
 on:
   push:
@@ -31,62 +31,16 @@ jobs:
       - name: Build packages (needed for Storybook)
         run: npm run build
 
+      - name: Build docs site (VitePress)
+        run: npm run docs:build
+
+      - name: Prepare deployment
+        run: mv website/.vitepress/dist _site
+
       - name: Build Storybook
         run: npx storybook build -o _site/storybook
         env:
           STORYBOOK_BASE: /formosaic/storybook/
-
-      - name: Create landing page
-        run: |
-          cat > _site/index.html << 'LANDINGEOF'
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-            <meta charset="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title>Formosaic</title>
-            <style>
-              body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f9fa; }
-              .container { max-width: 800px; margin: 0 auto; padding: 60px 20px; }
-              h1 { font-size: 2rem; margin-bottom: 0.5rem; }
-              .subtitle { color: #666; font-size: 1.1rem; margin-bottom: 2rem; }
-              .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
-              .card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 24px; text-decoration: none; color: inherit; transition: box-shadow 0.2s; }
-              .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-              .card h2 { margin: 0 0 8px; font-size: 1.2rem; }
-              .card p { margin: 0; color: #666; font-size: 0.9rem; }
-              .badges { margin-bottom: 2rem; }
-              .badges img { margin-right: 4px; }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <h1>Formosaic</h1>
-              <p class="subtitle">Configuration-driven forms with a built-in rules engine</p>
-              <div class="badges">
-                <a href="https://www.npmjs.com/package/@formosaic/core"><img src="https://img.shields.io/npm/v/@formosaic/core?label=core" alt="npm core"></a>
-                <a href="https://www.npmjs.com/package/@formosaic/fluent"><img src="https://img.shields.io/npm/v/@formosaic/fluent?label=fluent" alt="npm fluent"></a>
-                <a href="https://www.npmjs.com/package/@formosaic/mui"><img src="https://img.shields.io/npm/v/@formosaic/mui?label=mui" alt="npm mui"></a>
-                <a href="https://www.npmjs.com/package/@formosaic/headless"><img src="https://img.shields.io/npm/v/@formosaic/headless?label=headless" alt="npm headless"></a>
-              </div>
-              <div class="cards">
-                <a class="card" href="./storybook/">
-                  <h2>Storybook</h2>
-                  <p>Interactive component catalog with all 28 field types, composites, and documentation.</p>
-                </a>
-                <a class="card" href="https://github.com/bghcore/formosaic">
-                  <h2>GitHub Repository</h2>
-                  <p>Source code, documentation, examples, and contribution guide.</p>
-                </a>
-                <a class="card" href="https://www.npmjs.com/package/@formosaic/core">
-                  <h2>npm Packages</h2>
-                  <p>Install: npm install @formosaic/core</p>
-                </a>
-              </div>
-            </div>
-          </body>
-          </html>
-          LANDINGEOF
 
       - uses: actions/configure-pages@1f0c5cde4bc74cd7e1254d0cb4de8d49e9068c7d # v4
 

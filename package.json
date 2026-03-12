@@ -2,7 +2,8 @@
   "name": "formosaic",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "website"
   ],
   "scripts": {
     "build": "npm run build:core && npm run build --workspace=packages/fluent --workspace=packages/mui --workspace=packages/headless --workspace=packages/antd --workspace=packages/chakra --workspace=packages/mantine --workspace=packages/atlaskit --workspace=packages/base-web --workspace=packages/heroui --workspace=packages/radix --workspace=packages/react-aria && npm run build --workspace=packages/examples",
@@ -26,7 +27,9 @@
     "bench:report": "npx tsx benchmarks/run.ts",
     "test:e2e": "playwright test --config=e2e/playwright.config.ts",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "docs:dev": "npm run dev --workspace=website",
+    "docs:build": "npm run build --workspace=website"
   },
   "devDependencies": {
     "@fluentui/react-components": "^9.73.2",
