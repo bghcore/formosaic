@@ -14,7 +14,7 @@ How does Formosaic compare to other React form libraries? This guide provides an
 | Conditional field visibility | Declarative | JSON-based | JSON Schema | Code | Code | JSON Schema | JSON | JSON |
 | Computed values | `$values`, `$fn` | MobX-based | No | No | No | No | Expressions | Calculated |
 | Wizard / multi-step | Built-in | Layout-based | Add-on | Manual | Manual | No | Built-in | Built-in |
-| Visual form builder | Yes (MIT) | Yes (paid) | No | No | No | No | Yes (paid) | Yes (paid) |
+| Visual form builder | No | Yes (paid) | No | No | No | No | Yes (paid) | Yes (paid) |
 | AI form generation | No | ChatGPT custom GPT | No | No | No | No | No | No |
 | Async validation | Debounced | Zod/Yup/AJV | No | Yes | Yes | Yes | Yes | Yes |
 | Field arrays / repeaters | Built-in | Repeater component | Built-in | Built-in | FieldArray | ListField | Matrix | DataGrid |
@@ -180,7 +180,7 @@ How does Formosaic compare to other React form libraries? This guide provides an
 
 **Choose uniforms when:** you use GraphQL schemas or SimpleSchema and want auto-generated forms from those formats, or you prefer the uniforms bridge API.
 
-**Choose Formosaic when:** you need a declarative rules engine, computed values, wizard forms, or a visual builder. Also consider Formosaic if you need adapters for Fluent UI, Mantine, Radix, React Aria, or other design systems that uniforms doesn't support.
+**Choose Formosaic when:** you need a declarative rules engine, computed values, or wizard forms. Also consider Formosaic if you need adapters for Fluent UI, Mantine, Radix, React Aria, or other design systems that uniforms doesn't support.
 
 ---
 

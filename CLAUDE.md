@@ -4,7 +4,7 @@
 
 A React library for rendering complex, configuration-driven forms with a built-in rules engine. Forms are defined as a single `IFormConfig` JSON object (field definitions, rules with rich conditions, validation, ordering) and the library handles rendering, validation, auto-save, and field interactions automatically.
 
-Published as fourteen npm packages:
+Published as thirteen npm packages:
 - `@formosaic/core` -- UI-library agnostic rules engine and form orchestration (React + react-hook-form only)
 - `@formosaic/fluent` -- Fluent UI v9 field component implementations
 - `@formosaic/mui` -- Material UI (MUI) field component implementations
@@ -261,12 +261,6 @@ packages/
       components/ (ReadOnlyText, StatusMessage, FormLoading)
       fields/ (11 React Aria Components + 17 semantic HTML)
 
-    src/
-      types/ (IDesignerState, IDesignerAction)
-      components/ (FormDesigner, FieldPalette, FormCanvas, FieldConfigPanel,
-                   RuleBuilder, ConfigPreview, WizardConfigurator, ImportExport)
-      styles.css
-
   examples/                      -- @formosaic/examples
     src/
       login-mfa/ (conditional MFA fields, dynamic labels)
@@ -306,7 +300,7 @@ npm run build-storybook  # Build static Storybook
 
 **Build output per package:** `dist/index.js` (CJS), `dist/index.mjs` (ESM), `dist/index.d.ts` (types)
 
-**Monorepo:** npm workspaces with `packages/core`, `packages/fluent`, `packages/mui`, `packages/headless`, `packages/antd`, `packages/chakra`, `packages/mantine`, `packages/atlaskit`, `packages/base-web`, `packages/heroui`, `packages/radix`, `packages/react-aria`, `packages/examples`
+**Monorepo:** npm workspaces with `packages/core`, `packages/fluent`, `packages/mui`, `packages/headless`, `packages/antd`, `packages/chakra`, `packages/mantine`, `packages/atlaskit`, `packages/base-web`, `packages/heroui`, `packages/radix`, `packages/react-aria`, `packages/examples` (13 packages)
 
 ## Tech Stack
 

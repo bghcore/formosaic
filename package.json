@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build:core && npm run build --workspace=packages/fluent --workspace=packages/mui --workspace=packages/headless --workspace=packages/antd --workspace=packages/chakra --workspace=packages/mantine --workspace=packages/atlaskit --workspace=packages/base-web --workspace=packages/heroui --workspace=packages/radix --workspace=packages/react-aria --workspace=packages/designer && npm run build --workspace=packages/examples",
+    "build": "npm run build:core && npm run build --workspace=packages/fluent --workspace=packages/mui --workspace=packages/headless --workspace=packages/antd --workspace=packages/chakra --workspace=packages/mantine --workspace=packages/atlaskit --workspace=packages/base-web --workspace=packages/heroui --workspace=packages/radix --workspace=packages/react-aria && npm run build --workspace=packages/examples",
     "build:core": "npm run build --workspace=packages/core",
     "build:fluent": "npm run build --workspace=packages/fluent",
     "build:mui": "npm run build --workspace=packages/mui",
