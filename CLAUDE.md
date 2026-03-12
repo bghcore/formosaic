@@ -17,7 +17,6 @@ Published as fourteen npm packages:
 - `@formosaic/heroui` -- HeroUI (formerly NextUI) field component implementations
 - `@formosaic/radix` -- Radix UI primitives field implementations (unstyled, ideal for Tailwind/shadcn)
 - `@formosaic/react-aria` -- React Aria Components field implementations (accessibility-first)
-- `@formosaic/designer` -- Visual drag-and-drop form builder that outputs IFormConfig v2
 - `@formosaic/examples` -- 3 example apps (login+MFA, checkout wizard, data entry)
 
 ## Architecture
@@ -262,10 +261,8 @@ packages/
       components/ (ReadOnlyText, StatusMessage, FormLoading)
       fields/ (11 React Aria Components + 17 semantic HTML)
 
-  designer/                      -- @formosaic/designer
     src/
       types/ (IDesignerState, IDesignerAction)
-      state/ (designerReducer, DesignerProvider, useDesigner)
       components/ (FormDesigner, FieldPalette, FormCanvas, FieldConfigPanel,
                    RuleBuilder, ConfigPreview, WizardConfigurator, ImportExport)
       styles.css
@@ -309,7 +306,7 @@ npm run build-storybook  # Build static Storybook
 
 **Build output per package:** `dist/index.js` (CJS), `dist/index.mjs` (ESM), `dist/index.d.ts` (types)
 
-**Monorepo:** npm workspaces with `packages/core`, `packages/fluent`, `packages/mui`, `packages/headless`, `packages/antd`, `packages/chakra`, `packages/mantine`, `packages/atlaskit`, `packages/base-web`, `packages/heroui`, `packages/radix`, `packages/react-aria`, `packages/designer`, `packages/examples`
+**Monorepo:** npm workspaces with `packages/core`, `packages/fluent`, `packages/mui`, `packages/headless`, `packages/antd`, `packages/chakra`, `packages/mantine`, `packages/atlaskit`, `packages/base-web`, `packages/heroui`, `packages/radix`, `packages/react-aria`, `packages/examples`
 
 ## Tech Stack
 
