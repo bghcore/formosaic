@@ -128,8 +128,8 @@ packages/
       constants.ts               -- ComponentTypes, FormConstants
       strings.ts                 -- FormStrings (i18n-aware, getters over LocaleRegistry)
       components/
-        InlineForm.tsx       -- Formosaic (main form component)
-        InlineFormFields.tsx -- FormFields (field list rendering)
+        Formosaic.tsx        -- Formosaic (main form component)
+        FormosaicFields.tsx  -- FormFields (field list rendering)
         RenderField.tsx      -- RenderField (per-field routing + Controller)
         FieldWrapper.tsx     -- FieldWrapper (label, error, status chrome)
         ConfirmInputsModal.tsx -- ConfirmInputsModal (native <dialog>, focus trap)
@@ -140,7 +140,7 @@ packages/
       helpers/
         ConditionEvaluator.ts    -- evaluateCondition (20 operators + AND/OR/NOT)
         RuleEngine.ts            -- buildDependencyGraph, evaluateAllRules, evaluateAffectedFields, topologicalSort
-        InlineFormHelper.ts  -- Form init, validation, computed values, field rendering
+        FormosaicHelper.ts   -- Form init, validation, computed values, field rendering
         ValidationRegistry.ts    -- Unified ValidatorFn registry (sync+async+cross-field)
         ValueFunctionRegistry.ts -- $fn.name() value function registry
         ExpressionEngine.ts      -- $values, $fn, $parent, $root expression evaluation

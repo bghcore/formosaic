@@ -2,7 +2,7 @@ import { isEmpty, isNull } from "../utils";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { ComponentTypes } from "../constants";
-import { CheckFieldValidationRules, CheckAsyncFieldValidationRules, ShowField } from "../helpers/InlineFormHelper";
+import { CheckFieldValidationRules, CheckAsyncFieldValidationRules, ShowField } from "../helpers/FormosaicHelper";
 import { IOption } from "../types/IOption";
 import { IValidationRule } from "../types/IValidationRule";
 import { IRuntimeFieldState } from "../types/IRuntimeFieldState";

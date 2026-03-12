@@ -11,8 +11,6 @@ export const ComponentTypes = {
   Slider: "Slider",
   Fragment: "DynamicFragment",
   MultiSelectSearch: "MultiSelectSearch",
-  PopOutEditor: "PopOutEditor",
-  RichText: "RichText",
   Textarea: "Textarea",
   DocumentLinks: "DocumentLinks",
   StatusDropdown: "StatusDropdown",
@@ -22,7 +20,6 @@ export const ComponentTypes = {
   ReadOnlyCumulativeNumber: "ReadOnlyCumulativeNumber",
   ReadOnlyRichText: "ReadOnlyRichText",
   ReadOnlyWithButton: "ReadOnlyWithButton",
-  ChoiceSet: "ChoiceSet",
   FieldArray: "FieldArray",
   RadioGroup: "RadioGroup",
   CheckboxGroup: "CheckboxGroup",
@@ -41,13 +38,6 @@ export const FormConstants = {
   loadingShimmerCount: 12,
   loadingFieldShimmerHeight: 32,
   na: "n/a",
-  panelActionKeys: {
-    cancel: "Cancel",
-    close: "Close",
-    create: "Create",
-    update: "Update",
-  },
   urlRegex: /(http(s?)):\/\//i,
-  errorColor: "#a4262c",
 } as const;
 

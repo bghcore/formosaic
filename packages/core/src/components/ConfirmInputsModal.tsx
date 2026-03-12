@@ -74,9 +74,9 @@ const ConfirmInputsModal = (props: IConfirmInputsModalProps) => {
   };
 
   const content = (
-    <div className="fe-form-wrapper">
-      <div className="fe-form-container">
-        <form className="fe-form fe-modal">
+    <div className="formosaic-form-wrapper">
+      <div className="formosaic-form-container">
+        <form className="formosaic-form formosaic-modal">
           {confirmInputFields?.map(confirmInputField => {
             const fieldState = rulesState.configs[configName]?.fieldStates[confirmInputField];
             const fieldConfig = fields[confirmInputField];
@@ -109,9 +109,9 @@ const ConfirmInputsModal = (props: IConfirmInputsModalProps) => {
   }
 
   return (
-    <dialog ref={dialogRef} className="fe-modal" role="dialog" aria-modal="true" aria-label={FormStrings.confirm} onKeyDown={handleKeyDown}>
+    <dialog ref={dialogRef} className="formosaic-modal" role="dialog" aria-modal="true" aria-label={FormStrings.confirm} onKeyDown={handleKeyDown}>
       {content}
-      <div className="fe-modal-actions">
+      <div className="formosaic-modal-actions">
         <button type="button" ref={saveButtonRef} onClick={saveConfirmInputFields}>{FormStrings.save}</button>
         <button type="button" onClick={cancelConfirmInputFields}>{FormStrings.cancel}</button>
       </div>

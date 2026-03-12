@@ -266,11 +266,3 @@ export const GetFieldsToRender = (
   return fieldOrder?.map(fieldName => ({ fieldName, softHidden: false }));
 };
 
-/** Sort options alphabetically by label */
-export const SortOptions = (options: IOption[]): IOption[] => {
-  return [...options].sort((a, b) => {
-    const aLabel = a.label?.toLowerCase() ?? "";
-    const bLabel = b.label?.toLowerCase() ?? "";
-    return aLabel < bLabel ? -1 : aLabel > bLabel ? 1 : 0;
-  });
-};

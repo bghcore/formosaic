@@ -84,7 +84,7 @@
 ### Constants
 - `FormConstants` -- Form constants (expand cutoff, shimmer config, panel actions, regex patterns)
 - `ComponentTypes` -- Component type string keys (Textbox, Dropdown, Toggle, Number, etc.)
-- `FIELD_PARENT_PREFIX` -- Prefix for parent field references ("Parent.")
+- `FIELD_PARENT_PREFIX` -- Prefix for parent field references ("Parent.") (internal, not publicly exported)
 - `FormStrings` -- i18n-aware string literals (getters over LocaleRegistry)
 
 ### Types

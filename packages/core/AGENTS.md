@@ -30,7 +30,7 @@ RulesEngineProvider (useReducer for rules engine state)
 |------|---------|
 | `src/helpers/RuleEngine.ts` | Core rules engine (~800 lines, largest file). Builds dependency graph via topological sort, evaluates all rules, evaluates affected fields incrementally, priority-based conflict resolution. Exports `buildDependencyGraph`, `evaluateAllRules`, `evaluateAffectedFields`, `processFieldChange`, `topologicalSort`. |
 | `src/helpers/ConditionEvaluator.ts` | Evaluates rule conditions. 20 operators (equals, notEquals, greaterThan, lessThan, greaterThanOrEqual, lessThanOrEqual, contains, notContains, startsWith, endsWith, in, notIn, isEmpty, isNotEmpty, matches, arrayContains, arrayNotContains, arrayLengthEquals, arrayLengthGreaterThan, arrayLengthLessThan) + AND/OR/NOT logical composition. Exports `evaluateCondition`. |
-| `src/helpers/InlineFormHelper.ts` | Form initialization, validation execution, value functions, schema merging. Exports `GetFieldsToRender`, `CheckFieldValidationRules`, `ExecuteValueFunction`, etc. |
+| `src/helpers/FormosaicHelper.ts` | Form initialization, validation execution, value functions, schema merging. Exports `GetFieldsToRender`, `CheckFieldValidationRules`, `ExecuteValueFunction`, etc. |
 | `src/helpers/ValidationRegistry.ts` | Unified sync/async/cross-field validation registry. Register custom validators via `registerValidators()`. Includes factory functions: `createMinLengthValidation`, `createMaxLengthValidation`, `createNumericRangeValidation`, `createPatternValidation`, `createRequiredIfValidation`. |
 | `src/helpers/ValueFunctionRegistry.ts` | Pluggable value function registry. Register custom value functions via `registerValueFunctions()`. Built-in: `setDate`, `setDateIfNull`, `setLoggedInUser`. |
 | `src/helpers/ExpressionEngine.ts` | Expression evaluation for computed values. Handles `$values.field`, `$fn.name()`, `$parent.field`, `$root.field` syntax. |
@@ -42,7 +42,7 @@ RulesEngineProvider (useReducer for rules engine state)
 | `src/helpers/RuleTracer.ts` | Rule evaluation tracing/debugging. |
 | `src/helpers/RenderTracker.ts` | Per-field render count tracking for DevTools Perf tab. |
 | `src/helpers/EventTimeline.ts` | Chronological event log for DevTools Timeline tab. |
-| `src/components/InlineForm.tsx` | Formosaic component. Orchestrates react-hook-form, auto-save (AbortController, timeout via `saveTimeoutMs`, retry via `maxSaveRetries`), expand/collapse, confirm modal. Supports `formErrors` prop for form-level error banner. |
+| `src/components/Formosaic.tsx` | Formosaic component. Orchestrates react-hook-form, auto-save (AbortController, timeout via `saveTimeoutMs`, retry via `maxSaveRetries`), expand/collapse, confirm modal. Supports `formErrors` prop for form-level error banner. |
 | `src/components/WizardForm.tsx` | WizardForm component. Multi-step wizard with render props for step content, navigation, and header. Screen reader step announcements. |
 | `src/components/FieldArray.tsx` | FieldArray component. Wraps react-hook-form's `useFieldArray` with min/max/reorder support. Items use full `IFieldConfig`. |
 | `src/components/RenderField.tsx` | RenderField component. Per-field rendering with useMemo for component resolution. Async validation wired with AbortController -- sync runs first, async only if sync passes. |
@@ -71,12 +71,12 @@ RulesEngineProvider (useReducer for rules engine state)
 | `src/types/ILocaleStrings.ts` | `ICoreLocaleStrings` (~50 keys). |
 | `src/types/IAnalyticsCallbacks.ts` | `IAnalyticsCallbacks` (8 event hooks for analytics/telemetry). |
 | `src/types/TypedFieldConfig.ts` | `defineFormConfig()` type-safe builder. |
-| `src/styles.css` | Optional CSS custom properties for theming: `--fe-error-color`, `--fe-warning-color`, `--fe-saving-color`, `--fe-label-color`, `--fe-required-color`, `--fe-border-radius`, `--fe-field-gap`, `--fe-font-size`. |
+| `src/styles.css` | Optional CSS custom properties for theming: `--formosaic-error-color`, `--formosaic-warning-color`, `--formosaic-saving-color`, `--formosaic-label-color`, `--formosaic-required-color`, `--formosaic-border-radius`, `--formosaic-field-gap`, `--formosaic-font-size`. |
 | `src/providers/RulesEngineProvider.tsx` | RulesEngineProvider (React context provider owning rules engine state via useReducer). |
 | `src/providers/InjectedFieldProvider.tsx` | InjectedFieldProvider (React context provider for component injection registry). |
 | `src/reducers/RulesEngineReducer.ts` | Reducer for rules engine state mutations. |
 | `src/utils/index.ts` | Local utilities: `isEmpty`, `isNull`, `deepCopy` (structuredClone), `Dictionary<T>`, `IEntityData`, `SubEntityType`, option helpers. |
-| `src/constants.ts` | `ComponentTypes` enum (all component type string keys), `FormConstants`, `FIELD_PARENT_PREFIX`. |
+| `src/constants.ts` | `ComponentTypes` enum (28 component type string keys), `FormConstants`, `FIELD_PARENT_PREFIX` (internal). |
 | `src/strings.ts` | `FormStrings` (i18n-aware, getters over LocaleRegistry). |
 
 ## Testing
@@ -84,7 +84,7 @@ RulesEngineProvider (useReducer for rules engine state)
 - **709 tests** across 34 test files using Vitest
 - Run: `npm test` (from monorepo root or `packages/core`)
 - Test files are in `src/__tests__/`
-- Coverage targets: helpers (RuleEngine, ConditionEvaluator, InlineFormHelper, ValidationRegistry, ValueFunctionRegistry, DependencyGraphValidator, ConfigValidator, LocaleRegistry, WizardHelper), reducers (RulesEngineReducer), hooks (useDraftPersistence, useBeforeUnload, useFormAnalytics), utils (formStateSerialization, jsonSchemaImport, lazyFieldRegistry, zodSchemaImport), components (FormErrorBoundary, FormDevTools)
+- Coverage targets: helpers (RuleEngine, ConditionEvaluator, FormosaicHelper, ValidationRegistry, ValueFunctionRegistry, DependencyGraphValidator, ConfigValidator, LocaleRegistry, WizardHelper), reducers (RulesEngineReducer), hooks (useDraftPersistence, useBeforeUnload, useFormAnalytics), utils (formStateSerialization, jsonSchemaImport, lazyFieldRegistry, zodSchemaImport), components (FormErrorBoundary, FormDevTools)
 - All tests must pass before committing
 
 ## Known Issues

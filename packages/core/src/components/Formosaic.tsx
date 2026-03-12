@@ -11,7 +11,7 @@ import {
   InitOnCreateFormState,
   InitOnEditFormState,
   IsExpandVisible,
-} from "../helpers/InlineFormHelper";
+} from "../helpers/FormosaicHelper";
 import { IRulesEngineState, IRuntimeFormState } from "../types/IRuntimeFieldState";
 import { IConfirmInputModalProps } from "../types/IConfirmInputModalProps";
 import { IFieldConfig } from "../types/IFieldConfig";
@@ -21,7 +21,7 @@ import { UseRulesEngineContext } from "../providers/RulesEngineProvider";
 import { FormStrings } from "../strings";
 import { useFormAnalytics } from "../hooks/useFormAnalytics";
 import ConfirmInputsModal from "./ConfirmInputsModal";
-import { FormFields } from "./InlineFormFields";
+import { FormFields } from "./FormosaicFields";
 
 interface IFormosaicComponentProps extends IFormosaicProps {
   /** v2 form config (preferred). If provided, fieldConfigs is ignored. */
@@ -331,18 +331,18 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
         {statusMessage}
       </div>
       {enableFilter && (
-        <div className="fe-filter">
+        <div className="formosaic-filter">
           {renderFilterInput ? renderFilterInput({ onChange: onFilterChange }) : (
-            <input type="text" placeholder={FormStrings.filterFields} aria-label={FormStrings.filterFields} onChange={(e) => onFilterChange(e.target.value)} className="fe-filter-input" />
+            <input type="text" placeholder={FormStrings.filterFields} aria-label={FormStrings.filterFields} onChange={(e) => onFilterChange(e.target.value)} className="formosaic-filter-input" />
           )}
         </div>
       )}
       {formErrors && formErrors.length > 0 && (
-        <div className="form-errors" role="alert" style={{ color: "var(--fe-error-color, #d13438)", padding: "8px", marginBottom: "8px" }}>
+        <div className="form-errors" role="alert" style={{ color: "var(--formosaic-error-color, #d13438)", padding: "8px", marginBottom: "8px" }}>
           {formErrors.map((err, i) => (<div key={i} className="form-error-item">{err}</div>))}
         </div>
       )}
-      <div className="fe-form-wrapper">
+      <div className="formosaic-form-wrapper">
         <FormFields
           testId={testId}
           isExpanded={isExpanded}
@@ -370,7 +370,7 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
         )}
         {effectiveManualSave && (
           renderSaveButton ? renderSaveButton({ onSave: manualSave, isDirty, isValid, isSubmitting }) : (
-            <div className="fe-save-actions" style={{ marginTop: "16px", display: "flex", gap: "8px" }}>
+            <div className="formosaic-save-actions" style={{ marginTop: "16px", display: "flex", gap: "8px" }}>
               <button type="button" className="save-button" onClick={manualSave} disabled={!isDirty || isSubmitting}>
                 {isCreate ? FormStrings.create : FormStrings.save}
               </button>
@@ -382,7 +382,7 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
         )}
         {onSubmitProp && (
           renderSubmitButton ? renderSubmitButton({ onSubmit: handleFormSubmit, isDirty, isValid, isSubmitting }) : (
-            <div className="fe-submit-actions" style={{ marginTop: "16px" }}>
+            <div className="formosaic-submit-actions" style={{ marginTop: "16px" }}>
               <button type="button" className="submit-button" onClick={handleFormSubmit} disabled={isSubmitting}>
                 {FormStrings.save}
               </button>

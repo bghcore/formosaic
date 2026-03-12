@@ -1,6 +1,6 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { GetFieldsToRender } from "../helpers/InlineFormHelper";
+import { GetFieldsToRender } from "../helpers/FormosaicHelper";
 import { IRuntimeFormState } from "../types/IRuntimeFieldState";
 import { IFieldConfig } from "../types/IFieldConfig";
 import { IOption } from "../types/IOption";
@@ -77,9 +77,9 @@ export const FormFields = (props: IFormFieldsProps) => {
   const loadingKey = `${testId ? testId + "-" : ""}form-loaded`;
 
   return (
-    <div className={`fe-form-container ${collapsedClass}`}>
+    <div className={`formosaic-form-container ${collapsedClass}`}>
       <form
-        className={`fe-form ${collapsedClass} ${inPanel ? "in-panel" : ""}`}
+        className={`formosaic-form ${collapsedClass} ${inPanel ? "in-panel" : ""}`}
         style={collapsedClass && collapsedMaxHeight ? { maxHeight: `${collapsedMaxHeight}px` } : undefined}
         data-testid={`${testId ? testId + "-" : ""}form`}
       >

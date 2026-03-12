@@ -7,14 +7,14 @@
  * Override any variable on a parent element or :root to customize colors.
  */
 :root {
-  --fe-error-color: #d13438;
-  --fe-warning-color: #ffb900;
-  --fe-saving-color: #0078d4;
-  --fe-label-color: #323130;
-  --fe-required-color: #d13438;
-  --fe-border-radius: 4px;
-  --fe-field-gap: 8px;
-  --fe-font-size: 14px;
+  --formosaic-error-color: #d13438;
+  --formosaic-warning-color: #ffb900;
+  --formosaic-saving-color: #0078d4;
+  --formosaic-label-color: #323130;
+  --formosaic-required-color: #d13438;
+  --formosaic-border-radius: 4px;
+  --formosaic-field-gap: 8px;
+  --formosaic-font-size: 14px;
 }
 
 /* Screen-reader-only utility (visually hidden, accessible to assistive technology) */
@@ -31,7 +31,7 @@
 }
 
 /* Focus styles for keyboard navigation */
-.fe-form :focus-visible {
-  outline: 2px solid var(--fe-saving-color, #0078d4);
+.formosaic-form :focus-visible {
+  outline: 2px solid var(--formosaic-saving-color, #0078d4);
   outline-offset: 2px;
 }

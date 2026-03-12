@@ -638,14 +638,14 @@ CSS custom properties for global theming (import optional `styles.css`):
 
 ```css
 :root {
-  --fe-error-color: #d32f2f;
-  --fe-warning-color: #ed6c02;
-  --fe-saving-color: #0288d1;
-  --fe-label-color: #333;
-  --fe-required-color: #d32f2f;
-  --fe-border-radius: 4px;
-  --fe-field-gap: 12px;
-  --fe-font-size: 14px;
+  --formosaic-error-color: #d32f2f;
+  --formosaic-warning-color: #ed6c02;
+  --formosaic-saving-color: #0288d1;
+  --formosaic-label-color: #333;
+  --formosaic-required-color: #d32f2f;
+  --formosaic-border-radius: 4px;
+  --formosaic-field-gap: 12px;
+  --formosaic-font-size: 14px;
 }
 ```
 

@@ -21,7 +21,7 @@
         "Slider",
         "DynamicFragment",
         "MultiSelectSearch",
-        "PopOutEditor",
+        "Textarea",
         "DocumentLinks",
         "StatusDropdown",
         "ReadOnly",
@@ -31,9 +31,15 @@
         "ReadOnlyRichText",
         "ReadOnlyWithButton",
         "FieldArray",
-        "ChoiceSet",
-        "RichText",
-        "Textarea"
+        "RadioGroup",
+        "CheckboxGroup",
+        "Rating",
+        "ColorPicker",
+        "Autocomplete",
+        "FileUpload",
+        "DateRange",
+        "DateTime",
+        "PhoneInput"
       ]
     },
     "Option": {

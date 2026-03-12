@@ -12,8 +12,8 @@ import {
   CheckValidDropdownOptions,
   ExecuteComputedValue,
   InitOnEditFormState,
-  SortOptions,
-} from "../../helpers/InlineFormHelper";
+} from "../../helpers/FormosaicHelper";
+import { SortOptions } from "../../helpers/FieldHelper";
 import { IEntityData } from "../../utils";
 import { IRuntimeFieldState, IRuntimeFormState } from "../../types/IRuntimeFieldState";
 import { IFieldConfig } from "../../types/IFieldConfig";

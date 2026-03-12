@@ -386,10 +386,8 @@ function mergeEffect(target: IFieldEffect, source: IFieldEffect): void {
   if (source.label !== undefined && target.label === undefined) {
     target.label = source.label;
   }
-  const sourceType = source.type ?? source.component;
-  const targetType = target.type ?? target.component;
-  if (sourceType !== undefined && targetType === undefined) {
-    target.type = sourceType;
+  if (source.type !== undefined && target.type === undefined) {
+    target.type = source.type;
   }
   if (source.options !== undefined && target.options === undefined) {
     target.options = source.options;
@@ -416,8 +414,7 @@ function applyEffectToState(
   if (effect.hidden !== undefined) state.hidden = effect.hidden;
   if (effect.readOnly !== undefined) state.readOnly = effect.readOnly;
   if (effect.label !== undefined) state.label = effect.label;
-  const effectType = effect.type ?? effect.component;
-  if (effectType !== undefined) state.type = effectType;
+  if (effect.type !== undefined) state.type = effect.type;
   if (effect.options !== undefined) state.options = effect.options;
   if (effect.validate !== undefined) state.validate = effect.validate;
   if (effect.computedValue !== undefined) state.computedValue = effect.computedValue;

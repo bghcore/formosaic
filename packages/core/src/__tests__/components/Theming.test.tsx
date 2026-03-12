@@ -3,7 +3,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { FieldWrapper } from "../../components/FieldWrapper";
 import { FormProvider, useForm } from "react-hook-form";
-import { Formosaic } from "../../components/InlineForm";
+import { Formosaic } from "../../components/Formosaic";
 import { RulesEngineProvider } from "../../providers/RulesEngineProvider";
 import { InjectedFieldProvider } from "../../providers/InjectedFieldProvider";
 

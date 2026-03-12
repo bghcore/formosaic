@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-03-12
+
+### Breaking Changes
+- **CSS custom properties renamed:** `--fe-*` prefix changed to `--formosaic-*` (e.g., `--fe-error-color` → `--formosaic-error-color`)
+- **CSS class names renamed:** `fe-*` prefix changed to `formosaic-*` (e.g., `fe-form` → `formosaic-form`, `fe-modal` → `formosaic-modal`)
+- **DevTools moved to subpath export:** `FormDevTools`, `RuleTracer`, `RenderTracker`, and `EventTimeline` exports moved from `@formosaic/core` to `@formosaic/core/devtools`
+- **RJSF moved to subpath export:** `fromRjsfSchema`, `toRjsfSchema`, and related types moved from `@formosaic/core` to `@formosaic/core/rjsf`
+- **Zod moved to subpath export:** `zodSchemaToFieldConfig` moved from `@formosaic/core` to `@formosaic/core/zod`
+- **Removed `FIELD_PARENT_PREFIX` from public exports** (still available internally)
+- **Removed deprecated `IFieldEffect.component`** property — use `type` instead
+
+### Removed
+- **Ghost component types:** `RichText`, `ChoiceSet`, `PopOutEditor` removed from `ComponentTypes`
+- **Dead form constants:** `panelActionKeys` and `errorColor` removed from `FormConstants`
+- **Duplicate `SortOptions`** removed from `InlineFormHelper` — use the canonical export from `FieldHelper`
+
+### Added
+- **`@formosaic/core/devtools`** subpath export for tree-shaking dev tools out of production bundles
+- **`@formosaic/core/rjsf`** subpath export for RJSF schema conversion
+- **`@formosaic/core/zod`** subpath export for Zod schema conversion
+
+### Changed
+- Internal file renames: `InlineForm.tsx` → `Formosaic.tsx`, `InlineFormFields.tsx` → `FormosaicFields.tsx`, `InlineFormHelper.ts` → `FormosaicHelper.ts` (no public API change)
+- `ComponentTypes` now has 28 entries (was 31)
+- JSON schema (`field-config.schema.json`) updated to reflect current field types including Phase 1 and Phase 2 additions
+
+### Migration
+- Search and replace `--fe-` with `--formosaic-` in your CSS overrides
+- Search and replace CSS class selectors: `fe-form` → `formosaic-form`, `fe-modal` → `formosaic-modal`, etc.
+- Change `import { FormDevTools } from "@formosaic/core"` to `import { FormDevTools } from "@formosaic/core/devtools"`
+- Change `import { fromRjsfSchema } from "@formosaic/core"` to `import { fromRjsfSchema } from "@formosaic/core/rjsf"`
+- Change `import { zodSchemaToFieldConfig } from "@formosaic/core"` to `import { zodSchemaToFieldConfig } from "@formosaic/core/zod"`
+- Replace `IFieldEffect.component` with `IFieldEffect.type`
+
 ## [1.1.1] - 2026-03-12
 
 ### Removed

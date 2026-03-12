@@ -1,6 +1,6 @@
 {
   "name": "@formosaic/core",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Core business rules engine and form orchestration for dynamic React forms",
   "repository": {
     "type": "git",
@@ -60,6 +60,21 @@
       "types": "./dist/testing.d.ts",
       "import": "./dist/testing.mjs",
       "require": "./dist/testing.js"
+    },
+    "./devtools": {
+      "types": "./dist/devtools.d.ts",
+      "import": "./dist/devtools.mjs",
+      "require": "./dist/devtools.js"
+    },
+    "./rjsf": {
+      "types": "./dist/rjsf.d.ts",
+      "import": "./dist/rjsf.mjs",
+      "require": "./dist/rjsf.js"
+    },
+    "./zod": {
+      "types": "./dist/zod.d.ts",
+      "import": "./dist/zod.mjs",
+      "require": "./dist/zod.js"
     }
   },
   "files": [
