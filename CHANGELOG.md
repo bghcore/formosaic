@@ -20,6 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Dependabot configuration** -- Automated dependency update PRs for npm and GitHub Actions.
 - **Brand logo** added to README header.
 - **Adapter badges reordered by popularity** in README (MUI, Ant Design, Mantine, Headless, Fluent, Chakra, Radix, React Aria, Base Web, HeroUI, Atlaskit).
+- **CONTRIBUTING.md** -- Comprehensive contributor guide covering dev setup, code style, PR process, and adapter development.
+- **CODE_OF_CONDUCT.md** -- Contributor Covenant-based code of conduct.
+- **GitHub issue templates** -- YAML-based bug report and feature request forms with adapter dropdowns.
+- **Pull request template** -- Standardized PR description with type checkboxes and review checklist.
+- **VitePress docs site** -- 24-page documentation site scaffolded under `website/`, deployed to GitHub Pages alongside Storybook.
+- **StackBlitz badge and "Try It Live" section** in README for instant browser-based demos.
 
 ### Changed
 
@@ -28,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Workflow token permissions scoped to minimum required (`contents: read`).
 - `docs/comparison.md`: "Visual form builder" row updated from "Yes (MIT)" to "No".
 - Package count updated across docs: 14 packages → 13 packages.
+- GitHub Pages workflow now deploys VitePress docs site as the main landing page (replaces hand-rolled HTML), with Storybook at `/storybook/`.
+- npm `keywords` enriched across all 13 packages for improved discoverability.
 
 ### Fixed
 
