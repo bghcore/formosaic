@@ -33,7 +33,7 @@ Shows per-field render counts. **Hot fields** (render count exceeds 1.5x the ave
 `RenderField` calls `trackRender(fieldName)` on every render. Call `flushRenderCycle()` in a `useEffect` to get accurate "Last Cycle" data:
 
 ```tsx
-import { flushRenderCycle } from "@formosaic/core";
+import { flushRenderCycle } from "@formosaic/core/devtools";
 
 function MyFormWrapper(props) {
   React.useEffect(() => { flushRenderCycle(); });
@@ -83,13 +83,13 @@ import {
   getLastRenderedFields,
   getTotalFormRenders,
   resetRenderTracker,
-} from "@formosaic/core";
+} from "@formosaic/core/devtools";
 ```
 
 ### EventTimeline API
 
 ```tsx
-import { logEvent, getTimeline, clearTimeline } from "@formosaic/core";
+import { logEvent, getTimeline, clearTimeline } from "@formosaic/core/devtools";
 
 // Log a custom event
 logEvent("form_submit", "form", `submitted with ${Object.keys(values).length} fields`);
@@ -103,7 +103,7 @@ import {
   disableRuleTracing,
   getRuleTraceLog,
   clearRuleTraceLog,
-} from "@formosaic/core";
+} from "@formosaic/core/devtools";
 
 enableRuleTracing((event) => {
   console.log(`[Rule Trace] ${event.type}: ${event.triggerField} -> ${event.affectedField}`);

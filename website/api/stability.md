@@ -124,5 +124,6 @@ This document classifies every public export from the `@formosaic/*` packages by
 
 ## Notes
 
-- Internal exports are tree-shakeable and will not appear in production bundles when unused.
+- Internal/DevTools exports live in `@formosaic/core/devtools` and are fully tree-shakeable — they will not appear in production bundles when unused.
+- Schema importers live in `@formosaic/core/rjsf` and `@formosaic/core/zod` subpath exports.
 - The `@formosaic/core/adapter-utils` and `@formosaic/core/testing` subpath exports keep adapter and test dependencies isolated from the main bundle.

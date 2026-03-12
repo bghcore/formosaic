@@ -20,7 +20,7 @@ import {
   disableRuleTracing,
   getRuleTraceLog,
   clearRuleTraceLog,
-} from "@formosaic/core";
+} from "@formosaic/core/devtools";
 
 enableRuleTracing();
 
@@ -73,7 +73,7 @@ The built-in DevTools panel provides a visual inspector with 7 tabs:
 | **Timeline** | Chronological event log with filtering |
 
 ```typescript
-import { FormDevTools } from "@formosaic/core";
+import { FormDevTools } from "@formosaic/core/devtools";
 
 <FormDevTools
   configName="myForm"
