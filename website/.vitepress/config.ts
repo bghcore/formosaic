@@ -27,7 +27,8 @@ export default defineConfig({
           text: 'Introduction',
           items: [
             { text: 'Getting Started', link: '/guide/getting-started' },
-            { text: 'Comparison', link: '/guide/comparison' }
+            { text: 'Comparison', link: '/guide/comparison' },
+            { text: 'Migrating from @form-eng', link: '/guide/migrating' }
           ]
         },
         {
@@ -49,7 +50,9 @@ export default defineConfig({
             { text: 'i18n / Localization', link: '/guide/i18n' },
             { text: 'SSR / Next.js', link: '/guide/ssr' },
             { text: 'Debugging Rules', link: '/guide/debugging-rules' },
-            { text: 'Performance', link: '/guide/performance' }
+            { text: 'Performance', link: '/guide/performance' },
+            { text: 'Accessibility', link: '/guide/accessibility' },
+            { text: 'Date Policy', link: '/guide/date-policy' }
           ]
         }
       ],
@@ -61,6 +64,8 @@ export default defineConfig({
             { text: 'Creating an Adapter', link: '/adapters/creating' },
             { text: 'Adapter Architecture', link: '/adapters/architecture' },
             { text: 'Parity Matrix', link: '/adapters/parity-matrix' },
+            { text: 'Field Contracts', link: '/adapters/field-contracts' },
+            { text: 'Divergence Register', link: '/adapters/divergence-register' },
             { text: 'shadcn Integration', link: '/adapters/shadcn' }
           ]
         }

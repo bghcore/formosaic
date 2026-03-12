@@ -1,3 +1,7 @@
+---
+title: Migrating from @form-eng
+---
+
 # Migrating to Formosaic
 
 The library previously published as `@form-eng/*` has been rebranded to **Formosaic** (`@formosaic/*`). This guide covers how to update your project.

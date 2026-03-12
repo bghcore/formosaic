@@ -1,12 +1,12 @@
 # Formosaic
 
-> A config-driven React form library with a built-in declarative rules engine. Define forms as JSON (`IFormConfig`), swap UI libraries without rewriting logic, and let the engine handle conditional visibility, computed values, validation, and auto-save. 12 UI adapters (Fluent UI, MUI, Ant Design, Mantine, Chakra, Radix, React Aria, headless HTML, and more), a visual drag-and-drop form builder, and 4,700+ tests. MIT licensed. Built on react-hook-form v7.
+> A config-driven React form library with a built-in declarative rules engine. Define forms as JSON (`IFormConfig`), swap UI libraries without rewriting logic, and let the engine handle conditional visibility, computed values, validation, and auto-save. 11 UI adapters (Fluent UI, MUI, Ant Design, Mantine, Chakra, Radix, React Aria, headless HTML, Base Web, Atlaskit, HeroUI) and 6,296+ tests. MIT licensed. Built on react-hook-form v7.
 
 ## Key Capabilities
 
 - **Declarative rules engine** -- 20 condition operators, AND/OR/NOT logic, priority-based conflict resolution, cross-field effects
 - **Config-driven** -- forms defined as JSON data, not JSX; store in a database, generate from a builder, or configure at runtime
-- **12 UI adapters** -- swap between Fluent UI, MUI, Ant Design, Mantine, Chakra, Radix, React Aria, headless HTML, Base Web, Atlaskit, HeroUI with one import change
+- **11 UI adapters** -- swap between Fluent UI, MUI, Ant Design, Mantine, Chakra, Radix, React Aria, headless HTML, Base Web, Atlaskit, HeroUI with one import change
 - **Computed values** -- `$values.qty * $values.price`, custom `$fn.name()` functions, `$parent` references
 - **Wizard forms** -- multi-step with conditional step visibility, per-step validation, cross-step rules
 - **Validation registry** -- 14 built-in validators + custom sync/async/cross-field; debounce, AbortController, conditional `when`
@@ -67,17 +67,17 @@ const formConfig = {
 ## Docs
 
 - [README](https://github.com/bghcore/formosaic/blob/main/README.md): Full usage guide, field types, architecture, examples
-- [Comparison](https://github.com/bghcore/formosaic/blob/main/docs/comparison.md): Honest comparison vs RJSF, TanStack Form, Formik, uniforms, SurveyJS, Form.io
-- [Choosing an Adapter](https://github.com/bghcore/formosaic/blob/main/docs/choosing-an-adapter.md): Which adapter for your UI framework
-- [Field Config Reference](https://github.com/bghcore/formosaic/blob/main/docs/field-config-reference.md): IFieldConfig v2 properties
-- [Rules Engine](https://github.com/bghcore/formosaic/blob/main/docs/rules-engine.md): Lifecycle, dependency graph, evaluation
-- [Expression Syntax](https://github.com/bghcore/formosaic/blob/main/docs/expression-syntax.md): $values, $fn, $parent expressions
-- [Condition Operators](https://github.com/bghcore/formosaic/blob/main/docs/condition-operators.md): All 20 operators
-- [Accessibility](https://github.com/bghcore/formosaic/blob/main/docs/ACCESSIBILITY.md): WCAG 2.1 AA, ARIA, keyboard
-- [SSR / Next.js](https://github.com/bghcore/formosaic/blob/main/docs/ssr-guide.md): App Router, Pages Router, lazy loading
-- [shadcn Integration](https://github.com/bghcore/formosaic/blob/main/docs/shadcn-integration.md): Radix + Tailwind setup
-- [Creating an Adapter](https://github.com/bghcore/formosaic/blob/main/docs/creating-an-adapter.md): Build a custom UI adapter
-- [Documentation Index](https://github.com/bghcore/formosaic/blob/main/docs/README.md): Full doc listing
+- [Comparison](https://bghcore.github.io/formosaic/guide/comparison): Honest comparison vs RJSF, TanStack Form, Formik, uniforms, SurveyJS, Form.io
+- [Choosing an Adapter](https://bghcore.github.io/formosaic/adapters/choosing): Which adapter for your UI framework
+- [Field Config Reference](https://bghcore.github.io/formosaic/guide/field-config): IFieldConfig v2 properties
+- [Rules Engine](https://bghcore.github.io/formosaic/guide/rules-engine): Lifecycle, dependency graph, evaluation
+- [Expression Syntax](https://bghcore.github.io/formosaic/guide/expression-syntax): $values, $fn, $parent expressions
+- [Condition Operators](https://bghcore.github.io/formosaic/guide/condition-operators): All 20 operators
+- [Accessibility](https://bghcore.github.io/formosaic/guide/accessibility): WCAG 2.1 AA, ARIA, keyboard
+- [SSR / Next.js](https://bghcore.github.io/formosaic/guide/ssr): App Router, Pages Router, lazy loading
+- [shadcn Integration](https://bghcore.github.io/formosaic/adapters/shadcn): Radix + Tailwind setup
+- [Creating an Adapter](https://bghcore.github.io/formosaic/adapters/creating): Build a custom UI adapter
+- [Documentation Site](https://bghcore.github.io/formosaic/): Full documentation
 
 ## Packages
 

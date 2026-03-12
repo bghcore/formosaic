@@ -1,6 +1,6 @@
 # Formosaic -- Full Reference
 
-> A config-driven React form library with a built-in declarative rules engine. Define forms as JSON (`IFormConfig`), swap UI libraries without rewriting logic, and let the engine handle conditional visibility, computed values, validation, and auto-save. 12 UI adapters (Fluent UI, MUI, Ant Design, Mantine, Chakra, Radix, React Aria, headless HTML, and more), a visual drag-and-drop form builder, and 4,700+ tests. MIT licensed. Built on react-hook-form v7.
+> A config-driven React form library with a built-in declarative rules engine. Define forms as JSON (`IFormConfig`), swap UI libraries without rewriting logic, and let the engine handle conditional visibility, computed values, validation, and auto-save. 11 UI adapters (Fluent UI, MUI, Ant Design, Mantine, Chakra, Radix, React Aria, headless HTML, Base Web, Atlaskit, HeroUI) and 6,296+ tests. MIT licensed. Built on react-hook-form v7.
 
 This is the extended reference for AI models. For the concise version, see [llms.txt](https://github.com/bghcore/formosaic/blob/main/llms.txt).
 
@@ -118,13 +118,13 @@ type ICondition = IFieldCondition | ILogicalCondition;
 |---------|:-----------:|:----:|:-------------:|:------:|:--------:|
 | Config-driven | Yes | Yes | No | No | Yes |
 | Declarative rules engine | Yes (20 ops) | Partial | No | No | No |
-| UI adapter system | 12 adapters | 5 themes | Headless | N/A | 6 bridges |
+| UI adapter system | 11 adapters | 5 themes | Headless | N/A | 6 bridges |
 | Computed values | `$values`, `$fn` | No | No | No | No |
 | Wizard / multi-step | Built-in | Add-on | Manual | Manual | No |
-| Visual form builder | Yes (MIT) | No | No | No | No |
+| Visual form builder | No | No | No | No | No |
 | Bundle (core) | ~114 KB | ~85 KB | ~12 KB | ~13 KB | ~45 KB |
 
-See [docs/comparison.md](https://github.com/bghcore/formosaic/blob/main/docs/comparison.md) for full comparison with migration paths.
+See the [comparison guide](https://bghcore.github.io/formosaic/guide/comparison) for full comparison with migration paths.
 
 ## Package API Reference
 
@@ -521,20 +521,20 @@ const lazyFields = createLazyFieldRegistry({
 
 - [README.md](https://github.com/bghcore/formosaic/blob/main/README.md): Full usage guide with quick start, field types, architecture, and examples
 - [CLAUDE.md](https://github.com/bghcore/formosaic/blob/main/CLAUDE.md): Detailed architecture, rendering pipeline, key directories, coding conventions
-- [docs/comparison.md](https://github.com/bghcore/formosaic/blob/main/docs/comparison.md): Comparison vs RJSF, TanStack Form, Formik, uniforms, SurveyJS, Form.io
-- [docs/choosing-an-adapter.md](https://github.com/bghcore/formosaic/blob/main/docs/choosing-an-adapter.md): Adapter recommendation guide
-- [docs/creating-an-adapter.md](https://github.com/bghcore/formosaic/blob/main/docs/creating-an-adapter.md): Guide for building custom UI library adapters
-- [docs/field-config-reference.md](https://github.com/bghcore/formosaic/blob/main/docs/field-config-reference.md): IFieldConfig v2 reference
-- [docs/rules-engine.md](https://github.com/bghcore/formosaic/blob/main/docs/rules-engine.md): Rules engine lifecycle, dependency graph, evaluation
-- [docs/condition-operators.md](https://github.com/bghcore/formosaic/blob/main/docs/condition-operators.md): All 20 condition operators
-- [docs/expression-syntax.md](https://github.com/bghcore/formosaic/blob/main/docs/expression-syntax.md): Expression syntax ($values, $fn, $parent)
-- [docs/ACCESSIBILITY.md](https://github.com/bghcore/formosaic/blob/main/docs/ACCESSIBILITY.md): Accessibility guide (ARIA, keyboard, screen readers)
-- [docs/ssr-guide.md](https://github.com/bghcore/formosaic/blob/main/docs/ssr-guide.md): Server-side rendering guide
-- [docs/shadcn-integration.md](https://github.com/bghcore/formosaic/blob/main/docs/shadcn-integration.md): shadcn/ui integration guide
-- [docs/analytics-telemetry.md](https://github.com/bghcore/formosaic/blob/main/docs/analytics-telemetry.md): Analytics and telemetry integration
-- [docs/performance-debugging.md](https://github.com/bghcore/formosaic/blob/main/docs/performance-debugging.md): Performance debugging with DevTools
-- [docs/adapter-architecture.md](https://github.com/bghcore/formosaic/blob/main/docs/adapter-architecture.md): Adapter classification and architecture
-- [docs/canonical-field-contracts.md](https://github.com/bghcore/formosaic/blob/main/docs/canonical-field-contracts.md): Canonical field behavior contracts
-- [docs/parity-matrix.md](https://github.com/bghcore/formosaic/blob/main/docs/parity-matrix.md): Per-field, per-adapter parity matrix
-- [docs/api-stability.md](https://github.com/bghcore/formosaic/blob/main/docs/api-stability.md): Public API stability classification
-- [docs/divergence-register.md](https://github.com/bghcore/formosaic/blob/main/docs/divergence-register.md): Cross-adapter divergence register
+- [Comparison](https://bghcore.github.io/formosaic/guide/comparison): Comparison vs RJSF, TanStack Form, Formik, uniforms, SurveyJS, Form.io
+- [Choosing an Adapter](https://bghcore.github.io/formosaic/adapters/choosing): Adapter recommendation guide
+- [Creating an Adapter](https://bghcore.github.io/formosaic/adapters/creating): Guide for building custom UI library adapters
+- [Field Config Reference](https://bghcore.github.io/formosaic/guide/field-config): IFieldConfig v2 reference
+- [Rules Engine](https://bghcore.github.io/formosaic/guide/rules-engine): Rules engine lifecycle, dependency graph, evaluation
+- [Condition Operators](https://bghcore.github.io/formosaic/guide/condition-operators): All 20 condition operators
+- [Expression Syntax](https://bghcore.github.io/formosaic/guide/expression-syntax): Expression syntax ($values, $fn, $parent)
+- [Accessibility](https://bghcore.github.io/formosaic/guide/accessibility): Accessibility guide (ARIA, keyboard, screen readers)
+- [SSR / Next.js](https://bghcore.github.io/formosaic/guide/ssr): Server-side rendering guide
+- [shadcn Integration](https://bghcore.github.io/formosaic/adapters/shadcn): shadcn/ui integration guide
+- [Analytics & Telemetry](https://bghcore.github.io/formosaic/guide/analytics): Analytics and telemetry integration
+- [Performance](https://bghcore.github.io/formosaic/guide/performance): Performance debugging with DevTools
+- [Adapter Architecture](https://bghcore.github.io/formosaic/adapters/architecture): Adapter classification and architecture
+- [Field Contracts](https://bghcore.github.io/formosaic/adapters/field-contracts): Canonical field behavior contracts
+- [Parity Matrix](https://bghcore.github.io/formosaic/adapters/parity-matrix): Per-field, per-adapter parity matrix
+- [API Stability](https://bghcore.github.io/formosaic/api/stability): Public API stability classification
+- [Divergence Register](https://bghcore.github.io/formosaic/adapters/divergence-register): Cross-adapter divergence register

@@ -1,3 +1,7 @@
+---
+title: Divergence Register
+---
+
 # Divergence Register
 
 Structured tracking of all known behavioral differences across Formosaic adapters.

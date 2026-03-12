@@ -1,3 +1,7 @@
+---
+title: Date Policy
+---
+
 # Date Policy
 
 This document defines the canonical date handling contract for all Formosaic adapter packages.

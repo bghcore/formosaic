@@ -340,7 +340,7 @@ const formConfig: IFormConfig = {
 };
 ```
 
-All callbacks are optional. Zero overhead when not provided. See [docs/analytics-telemetry.md](https://github.com/bghcore/formosaic/blob/main/docs/analytics-telemetry.md).
+All callbacks are optional. Zero overhead when not provided. See the [analytics & telemetry guide](https://bghcore.github.io/formosaic/guide/analytics).
 
 ## DevTools
 
@@ -369,7 +369,7 @@ import { FormDevTools } from "@formosaic/core";
 | Deps | Dependency adjacency table, color-coded by effect type, cycle detection |
 | Timeline | Chronological event log via `EventTimeline`, filterable by field name |
 
-See [docs/performance-debugging.md](https://github.com/bghcore/formosaic/blob/main/docs/performance-debugging.md).
+See the [performance guide](https://bghcore.github.io/formosaic/guide/performance).
 
 ## JSON Schema Import
 
@@ -488,11 +488,11 @@ setInjectedFields(lazyFields);
 
 ## SSR / Next.js
 
-All core components are SSR-safe with proper `typeof window` guards. See [docs/ssr-guide.md](https://github.com/bghcore/formosaic/blob/main/docs/ssr-guide.md) for Next.js App Router and Pages Router integration guides.
+All core components are SSR-safe with proper `typeof window` guards. See the [SSR / Next.js guide](https://bghcore.github.io/formosaic/guide/ssr) for Next.js App Router and Pages Router integration guides.
 
 ## Building a Custom UI Adapter
 
-See [docs/creating-an-adapter.md](https://github.com/bghcore/formosaic/blob/main/docs/creating-an-adapter.md) for a complete guide.
+See the [creating an adapter guide](https://bghcore.github.io/formosaic/adapters/creating) for a complete guide.
 
 ## License
 

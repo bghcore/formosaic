@@ -1,3 +1,7 @@
+---
+title: Accessibility
+---
+
 # Accessibility (WCAG 2.1 AA) -- @formosaic
 
 This document covers the WCAG 2.1 Level AA compliance status of the Formosaic library, including what is supported, known gaps, and guidance for consumers.

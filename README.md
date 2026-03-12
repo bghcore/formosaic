@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/formosaic-brand.png" alt="Formosaic" width="360">
+  <img src="./website/public/formosaic-brand.png" alt="Formosaic" width="360">
 </p>
 
 <p align="center">
@@ -53,7 +53,7 @@ A React library for rendering complex, configuration-driven forms with a built-i
 - Pure JSON Schema rendering with no rules engine -- use [RJSF](https://github.com/rjsf-team/react-jsonschema-form) (but if you want RJSF's schema format with our rules engine, use `fromRjsfSchema()` to migrate)
 - Headless form state with zero opinions -- use [TanStack Form](https://tanstack.com/form)
 
-See [docs/comparison.md](./docs/comparison.md) for a detailed comparison with migration paths.
+See the [comparison guide](https://bghcore.github.io/formosaic/guide/comparison) for a detailed comparison with migration paths.
 
 ### Feature Comparison
 
@@ -691,7 +691,7 @@ All core components are SSR-safe. Browser-only API access (`localStorage`, `docu
 
 For Next.js App Router, add `"use client"` to files containing form components. Server-fetched data can be passed as props across the client boundary.
 
-See the [SSR / Next.js integration guide](./docs/ssr-guide.md) for full setup instructions covering App Router, Pages Router, draft persistence, lazy loading, and common pitfalls.
+See the [SSR / Next.js integration guide](https://bghcore.github.io/formosaic/guide/ssr) for full setup instructions covering App Router, Pages Router, draft persistence, lazy loading, and common pitfalls.
 
 ### RJSF Schema Import
 
@@ -843,7 +843,7 @@ Form-engine separates **what** a form contains (the `IFormConfig` JSON object) f
 
 ## Building a Custom UI Adapter
 
-See [docs/creating-an-adapter.md](./docs/creating-an-adapter.md) for a complete guide. The short version:
+See the [creating an adapter guide](https://bghcore.github.io/formosaic/adapters/creating) for a complete guide. The short version:
 
 1. Create field components that accept `IFieldProps<T>`
 2. Build a registry mapping `ComponentTypes` to your field elements
@@ -911,19 +911,8 @@ packages/
 e2e/          -- Playwright end-to-end tests
 benchmarks/   -- Vitest benchmarks for rules engine performance
 stories/      -- Storybook stories for field components
-docs/
-  choosing-an-adapter.md      -- Adapter recommendation guide
-  creating-an-adapter.md      -- Guide for building custom UI adapters
-  adapter-architecture.md     -- Adapter classification and architecture
-  canonical-field-contracts.md -- Canonical field behavior contracts
-  parity-matrix.md            -- Field implementation matrix across all adapters
-  divergence-register.md      -- Cross-adapter divergence register
-  api-stability.md            -- Public API stability classification
-  tier2-handoff.md            -- Tier 2 planning (feasibility, waves, go/no-go)
-  tier1-patterns.md           -- Implementation patterns for Tier 2
-  shadcn-integration.md       -- shadcn/ui integration guide
-  ssr-guide.md                -- SSR / Next.js integration guide
-  ACCESSIBILITY.md            -- Accessibility documentation
+website/      -- VitePress docs site (https://bghcore.github.io/formosaic/)
+docs/         -- Internal planning docs (tier1-baseline-report, tier1-patterns, tier2-handoff)
 ```
 
 ## License

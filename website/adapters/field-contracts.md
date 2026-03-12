@@ -1,3 +1,7 @@
+---
+title: Canonical Field Contracts
+---
+
 # Canonical Field Contracts
 
 This document defines the canonical contract for each of the 13 Tier 1 field types. Every adapter package must conform to these contracts. The contracts specify value types, empty semantics, serialization, and rendering behavior that all adapters share.
@@ -164,7 +168,7 @@ This document defines the canonical contract for each of the 13 Tier 1 field typ
 - `null` means "no date selected" -- this is the canonical empty value
 - `undefined` also renders as empty
 - Clearing a date calls `setFieldValue(fieldName, null)`
-- Adapters must convert their date library objects to ISO strings at the boundary (see `docs/date-policy.md`)
+- Adapters must convert their date library objects to ISO strings at the boundary (see [Date Policy](../guide/date-policy))
 
 **Adapter boundary rule:**
 - All adapters store ISO 8601 strings in form state

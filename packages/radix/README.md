@@ -60,7 +60,7 @@ All fields emit `data-field-type` and `data-field-state` attributes for targeted
 
 ## shadcn/ui Integration
 
-This adapter is the recommended base for shadcn/ui projects. See [shadcn Integration Guide](../../docs/shadcn-integration.md) for details.
+This adapter is the recommended base for shadcn/ui projects. See the [shadcn integration guide](https://bghcore.github.io/formosaic/adapters/shadcn) for details.
 
 ## License
 

@@ -1,4 +1,4 @@
-# AGENTS.md -- Form Engine
+# AGENTS.md -- Formosaic
 
 ## Setup
 
@@ -11,6 +11,8 @@ npm run test:e2e       # Run 54 Playwright E2E tests
 npm run bench          # Run performance benchmarks
 npm run storybook      # Start Storybook dev server
 npm run build-storybook # Build static Storybook
+npm run docs:dev       # Start VitePress docs dev server
+npm run docs:build     # Build static docs site
 npm run clean          # Remove all dist/ directories
 ```
 
@@ -33,7 +35,7 @@ npm run build:react-aria # packages/react-aria only
 
 ## Project Structure
 
-Monorepo using npm workspaces. Fourteen packages:
+Monorepo using npm workspaces. Thirteen packages:
 
 ```
 packages/
@@ -50,33 +52,40 @@ packages/
   radix/     -- @formosaic/radix (Radix UI primitives, 28 types, unstyled)
   react-aria/ -- @formosaic/react-aria (React Aria Components, 28 types)
   examples/  -- @formosaic/examples (3 example apps)
-docs/
-  creating-an-adapter.md      -- Guide for building custom UI library adapters
-  ACCESSIBILITY.md            -- Accessibility guide (ARIA, keyboard, screen readers)
-  ssr-guide.md                -- Server-side rendering guide
-  analytics-telemetry.md      -- Analytics and telemetry integration guide
-  performance-debugging.md    -- Performance debugging with DevTools
-  field-config-reference.md   -- IFieldConfig v2 reference
-  expression-syntax.md        -- $values, $fn, $parent expression syntax
-  validators-reference.md     -- Built-in and custom validators
-  value-functions-reference.md -- Value function registry reference
-  i18n-reference.md           -- Internationalization guide
-  debugging-rules.md          -- Rules engine debugging guide
-  condition-operators.md      -- Condition operator reference
-  rules-engine.md             -- Rules engine architecture
-  adapter-architecture.md     -- Adapter classification and architecture
-  canonical-field-contracts.md -- Canonical field behavior contracts
-  parity-matrix.md            -- Field implementation matrix (Y/FB/---) across all adapters
-  api-stability.md            -- Public API stability classification
-  divergence-register.md      -- Cross-adapter divergence register (12 entries)
-  choosing-an-adapter.md      -- Adapter recommendation guide
-  date-policy.md              -- ISO 8601 date handling policy
-  tier2-handoff.md            -- Tier 2 planning (feasibility, waves, go/no-go)
+docs/                          -- Internal planning docs only
   tier1-baseline-report.md    -- Tier 1 stabilization assessment
   tier1-patterns.md           -- Implementation patterns for Tier 2
-  shadcn-integration.md       -- shadcn/ui integration guide
-  field-types-reference.md    -- All field type reference
-  date-policy.md              -- Date handling and serialization policy
+  tier2-handoff.md            -- Tier 2 planning (feasibility, waves, go/no-go)
+website/                       -- VitePress docs site (deployed to GitHub Pages)
+  guide/
+    getting-started.md        -- Quick start and setup
+    comparison.md             -- Comparison vs RJSF, TanStack Form, Formik, etc.
+    migrating.md              -- Migration from @form-eng/* to @formosaic/*
+    rules-engine.md           -- Rules engine architecture and lifecycle
+    condition-operators.md    -- All 20 condition operators
+    expression-syntax.md      -- $values, $fn, $parent expressions
+    validation.md             -- Built-in and custom validators
+    value-functions.md        -- Value function registry
+    field-types.md            -- All 28 field types
+    field-config.md           -- IFieldConfig v2 reference
+    analytics.md              -- Analytics and telemetry integration
+    i18n.md                   -- Internationalization guide
+    ssr.md                    -- SSR / Next.js guide
+    debugging-rules.md        -- Rules engine debugging
+    performance.md            -- Performance debugging with DevTools
+    accessibility.md          -- WCAG 2.1 AA, ARIA, keyboard
+    date-policy.md            -- ISO 8601 date handling policy
+  adapters/
+    choosing.md               -- Adapter recommendation guide
+    creating.md               -- Building custom UI adapters
+    architecture.md           -- Adapter classification and architecture
+    parity-matrix.md          -- Field implementation matrix across all adapters
+    field-contracts.md        -- Canonical field behavior contracts
+    divergence-register.md    -- Cross-adapter divergence register (12 entries)
+    shadcn.md                 -- shadcn/ui integration guide
+  api/
+    field-config.md           -- Field config API reference
+    stability.md              -- Public API stability classification
 e2e/                           -- Playwright E2E tests (54 tests, 7 specs)
 benchmarks/                    -- Performance benchmark suite (vitest bench)
 stories/                       -- Storybook stories (67+ stories + MDX docs)

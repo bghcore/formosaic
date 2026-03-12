@@ -105,7 +105,8 @@ packages/
 e2e/           Playwright end-to-end tests
 benchmarks/    Vitest benchmarks for rules engine performance
 stories/       Storybook stories for visual documentation
-docs/          Architecture docs, API references, guides
+website/       VitePress docs site (public documentation)
+docs/          Internal planning docs (tier1-baseline-report, tier1-patterns, tier2-handoff)
 ```
 
 Each adapter package follows the same internal structure:
@@ -188,7 +189,7 @@ The deployed Storybook is available at [bghcore.github.io/formosaic/storybook/](
 
 ### Field Component Props
 
-All field components receive `IFieldProps<T>` via `React.cloneElement`. This is the standard contract between core and adapter packages. See [docs/canonical-field-contracts.md](./docs/canonical-field-contracts.md) for the full specification.
+All field components receive `IFieldProps<T>` via `React.cloneElement`. This is the standard contract between core and adapter packages. See the [canonical field contracts](https://bghcore.github.io/formosaic/adapters/field-contracts) for the full specification.
 
 ### Naming Conventions
 
@@ -224,7 +225,7 @@ IFormConfig
 
 An adapter package provides a registry -- a `Record<string, JSX.Element>` mapping field type keys (like `"Textbox"`, `"Dropdown"`) to JSX elements. Consumers pass this registry to `InjectedFieldProvider`, and `RenderField` looks up the correct component at render time.
 
-To create a new adapter, see [docs/creating-an-adapter.md](./docs/creating-an-adapter.md). For implementation patterns to follow, see [docs/tier1-patterns.md](./docs/tier1-patterns.md).
+To create a new adapter, see the [creating an adapter guide](https://bghcore.github.io/formosaic/adapters/creating). For implementation patterns to follow, see [docs/tier1-patterns.md](./docs/tier1-patterns.md).
 
 ## Adding a New Field Type
 
@@ -232,7 +233,7 @@ If you want to add a new field type (not a new adapter, but a new kind of field 
 
 1. **Define the component type key** in `packages/core/src/constants.ts` (e.g., `"MyNewField"`).
 
-2. **Define the field contract** -- document the value type, empty semantics, serialization, readOnly behavior, and config shape. Follow the format in [docs/canonical-field-contracts.md](./docs/canonical-field-contracts.md).
+2. **Define the field contract** -- document the value type, empty semantics, serialization, readOnly behavior, and config shape. Follow the format in the [canonical field contracts](https://bghcore.github.io/formosaic/adapters/field-contracts).
 
 3. **Implement in at least one adapter** -- start with `headless` since it has no UI framework dependency. The component must accept `IFieldProps<T>` and handle:
    - Editable mode (renders an interactive control)
@@ -344,7 +345,7 @@ docs: add SSR / Next.js integration guide
 
 - **Small and focused.** One feature, one bug fix, or one refactor. Not all three.
 - **Tested.** New features need tests. Bug fixes need regression tests.
-- **Documented.** If the change affects the public API, update the relevant docs in `docs/`.
+- **Documented.** If the change affects the public API, update the relevant docs in `website/`.
 - **Backward compatible.** Breaking changes require discussion in an issue first.
 
 ## Reporting Issues
@@ -366,7 +367,7 @@ Do **not** report security vulnerabilities through public GitHub issues. Instead
 
 ## Getting Help
 
-- Read the [documentation](./docs/README.md) -- it covers architecture, API reference, and guides
+- Read the [documentation](https://bghcore.github.io/formosaic/) -- it covers architecture, API reference, and guides
 - Browse the [Storybook](https://bghcore.github.io/formosaic/storybook/) to see components in action
 - Check the [examples](./packages/examples) for real-world usage patterns
 - Open a [discussion](https://github.com/bghcore/formosaic/discussions) for questions that are not bug reports

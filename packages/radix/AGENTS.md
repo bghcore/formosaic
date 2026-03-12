@@ -85,4 +85,4 @@ export default MyField;
 
 ## shadcn/ui Integration
 
-This adapter is the recommended base for shadcn/ui projects. See `docs/shadcn-integration.md` and the reference implementation in `stories/examples/shadcn-fields/` for the registry spread pattern.
+This adapter is the recommended base for shadcn/ui projects. See the [shadcn integration guide](https://bghcore.github.io/formosaic/adapters/shadcn) and the reference implementation in `stories/examples/shadcn-fields/` for the registry spread pattern.
