@@ -26,15 +26,15 @@
     "react-hook-form": "^7.71.2",
     "@formosaic/core": "*",
     "@formosaic/mui": "*",
-    "@mui/material": "^6.4.11",
+    "@mui/material": "^7.3.9",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0"
   },
   "devDependencies": {
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^4.5.2",
+    "@vitejs/plugin-react": "^6.0.0",
     "typescript": "^5.9.3",
-    "vite": "^6.3.5"
+    "vite": "^8.0.0"
   }
 }
