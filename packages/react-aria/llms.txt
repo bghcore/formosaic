@@ -16,7 +16,6 @@
 - `Number` -- React Aria `NumberField` + `Input`. NaN guard on onChange. ReadOnly shows `String(value)`. Props: `IFieldProps<{}>`
 - `Toggle` -- React Aria `Switch`. Props: `IFieldProps<{}>`
 - `Dropdown` -- React Aria `Select` + `Button` + `Popover` + `ListBox` + `ListBoxItem`. Key type cast via `String(key)` (DIV-012). Props: `IFieldProps<{ placeHolder?, setDefaultKeyIfOnlyOneOption? }>`
-- `SimpleDropdown` -- React Aria `Select` with `config.dropdownOptions` string array. Props: `IFieldProps<{ dropdownOptions? }>`
 - `MultiSelect` -- `<select multiple>` (semantic HTML). Value: `string[]`. Props: `IFieldProps<{}>`
 - `DateControl` -- `<input type="date">` (semantic HTML) with clear button. Serializes to ISO string. Props: `IFieldProps<{}>`
 - `Slider` -- React Aria `Slider` + `SliderTrack` + `SliderThumb`. Props: `IFieldProps<{ max?, min?, step? }>`

@@ -156,59 +156,59 @@ UI-library agnostic engine built for React. Depends only on `react` and `react-h
 
 ### @formosaic/fluent
 
-Fluent UI v9 adapter. Provides 28 field components (22 editable + 6 read-only).
+Fluent UI v9 adapter. Provides 27 field components (21 editable + 6 read-only).
 
 - **Registry**: `createFluentFieldRegistry()` -- returns a complete field map for `InjectedFieldProvider`
-- **Editable Fields**: Textbox, Dropdown, Toggle, Number, MultiSelect, DateControl, Slider, SimpleDropdown, MultiSelectSearch, Textarea, DocumentLinks, StatusDropdown, DynamicFragment, RadioGroup, CheckboxGroup, Rating, ColorPicker, Autocomplete, FileUpload, DateRange, DateTime, PhoneInput
+- **Editable Fields**: Textbox, Dropdown, Toggle, Number, MultiSelect, DateControl, Slider, MultiSelectSearch, Textarea, DocumentLinks, StatusDropdown, DynamicFragment, RadioGroup, CheckboxGroup, Rating, ColorPicker, Autocomplete, FileUpload, DateRange, DateTime, PhoneInput (21 types)
 - **Read-Only Fields**: ReadOnly, ReadOnlyArray, ReadOnlyDateTime, ReadOnlyCumulativeNumber, ReadOnlyRichText, ReadOnlyWithButton
 
 ### @formosaic/mui
 
-Material UI (MUI) adapter. Provides 28 field components (22 editable + 6 read-only).
+Material UI (MUI) adapter. Provides 27 field components (21 editable + 6 read-only).
 
 - **Registry**: `createMuiFieldRegistry()` -- returns a complete field map for `InjectedFieldProvider`
-- **Editable Fields**: Same 22 types as fluent adapter, using @mui/material components
+- **Editable Fields**: Same 21 types as fluent adapter, using @mui/material components
 - **Read-Only Fields**: Same 6 types as fluent adapter
 
 ### @formosaic/headless
 
-Unstyled semantic HTML adapter. No UI framework dependency. Provides 28 field components (22 editable + 6 read-only) using plain HTML elements with data-* attributes and ARIA roles.
+Unstyled semantic HTML adapter. No UI framework dependency. Provides 27 field components (21 editable + 6 read-only) using plain HTML elements with data-* attributes and ARIA roles.
 
 - **Registry**: `createHeadlessFieldRegistry()` -- returns a complete field map for `InjectedFieldProvider`
-- **Editable Fields**: Same 22 types, semantic HTML elements
+- **Editable Fields**: Same 21 types, semantic HTML elements
 - **Read-Only Fields**: Same 6 types
 - **Optional CSS**: `styles.css` with CSS custom properties for basic styling
 
 ### @formosaic/antd
-Ant Design v5 adapter. Provides 28 field components (19 native antd + 9 semantic HTML). Native Tier 2: Rate, AutoComplete, DatePicker+showTime, RangePicker, Upload, ColorPicker.
+Ant Design v5 adapter. Provides 27 field components (18 native antd + 9 semantic HTML). Native Tier 2: Rate, AutoComplete, DatePicker+showTime, RangePicker, Upload, ColorPicker.
 - **Registry**: `createAntdFieldRegistry()`
 
 ### @formosaic/chakra
-Chakra UI v3 adapter. Provides 28 field components (7 native Chakra + 21 semantic HTML fallbacks due to Ark UI DTS issues).
+Chakra UI v3 adapter. Provides 27 field components (6 native Chakra + 21 semantic HTML fallbacks due to Ark UI DTS issues).
 - **Registry**: `createChakraFieldRegistry()`
 
 ### @formosaic/mantine
-Mantine v7 adapter. Provides 28 field components (18 native Mantine + 10 semantic HTML). Native Tier 2: Rating, Autocomplete, DateTimePicker, FileInput, ColorInput.
+Mantine v7 adapter. Provides 27 field components (17 native Mantine + 10 semantic HTML). Native Tier 2: Rating, Autocomplete, DateTimePicker, FileInput, ColorInput.
 - **Registry**: `createMantineFieldRegistry()`
 
 ### @formosaic/atlaskit
-Atlassian Design System adapter. Provides 28 field components using semantic HTML.
+Atlassian Design System adapter. Provides 27 field components using semantic HTML.
 - **Registry**: `createAtlaskitFieldRegistry()`
 
 ### @formosaic/base-web
-Uber Base Web adapter. Provides 28 field components (10 native baseui + 18 semantic HTML).
+Uber Base Web adapter. Provides 27 field components (9 native baseui + 18 semantic HTML).
 - **Registry**: `createBaseWebFieldRegistry()`
 
 ### @formosaic/heroui
-HeroUI (formerly NextUI) adapter. Provides 28 field components using semantic HTML.
+HeroUI (formerly NextUI) adapter. Provides 27 field components using semantic HTML.
 - **Registry**: `createHeroUIFieldRegistry()`
 
 ### @formosaic/radix
-Radix UI primitives adapter. Provides 28 field components (6 Radix UI native + 22 semantic HTML). Ships with no styles, ideal for Tailwind/shadcn. No provider wrapper needed.
+Radix UI primitives adapter. Provides 27 field components (5 Radix UI native + 22 semantic HTML). Ships with no styles, ideal for Tailwind/shadcn. No provider wrapper needed.
 - **Registry**: `createRadixFieldRegistry()`
 
 ### @formosaic/react-aria
-React Aria Components adapter. Provides 28 field components (11 React Aria native + 17 semantic HTML). Native Tier 2: ComboBox for Autocomplete. Best-in-class ARIA accessibility. No provider wrapper needed.
+React Aria Components adapter. Provides 27 field components (10 React Aria native + 17 semantic HTML). Native Tier 2: ComboBox for Autocomplete. Best-in-class ARIA accessibility. No provider wrapper needed.
 - **Registry**: `createReactAriaFieldRegistry()`
 
 ### @formosaic/examples
@@ -476,7 +476,7 @@ const lazyFields = createLazyFieldRegistry({
 
 ## Available Field Types
 
-22 editable + 6 read-only field types. All 28 are available across all 11 adapters (fluent, mui, headless, antd, chakra, mantine, atlaskit, base-web, heroui, radix, react-aria). 4 additional specialized types (PopOutEditor, ChoiceSet, FieldArray, RichText) are fluent/mui/headless only.
+21 editable + 6 read-only field types. All 27 are available across all 11 adapters (fluent, mui, headless, antd, chakra, mantine, atlaskit, base-web, heroui, radix, react-aria). 4 additional specialized types (PopOutEditor, ChoiceSet, FieldArray, RichText) are fluent/mui/headless only.
 
 ### Editable Fields
 
@@ -489,7 +489,6 @@ const lazyFields = createLazyFieldRegistry({
 | `Multiselect` | Multi-select dropdown |
 | `DateControl` | Date picker with clear button |
 | `Slider` | Numeric slider |
-| `SimpleDropdown` | Dropdown from string array in config |
 | `MultiSelectSearch` | Searchable multi-select |
 | `Textarea` | Multiline text with expand-to-modal |
 | `DocumentLinks` | URL link CRUD |

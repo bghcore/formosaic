@@ -16,7 +16,6 @@
 - `Number` -- `<input type="number">` (semantic HTML). ReadOnly shows `String(value)`. Props: `IFieldProps<{}>`
 - `Toggle` -- `@radix-ui/react-switch` (Switch.Root + Switch.Thumb). Checked/unchecked state. ReadOnly shows "Yes"/"No". Props: `IFieldProps<{}>`
 - `Dropdown` -- `@radix-ui/react-select` (Select.Root + Trigger + Content + Items). Empty value coerced to `undefined` (DIV-010). Props: `IFieldProps<{ placeHolder?, setDefaultKeyIfOnlyOneOption? }>`
-- `SimpleDropdown` -- `@radix-ui/react-select` with `config.dropdownOptions` string array. Props: `IFieldProps<{ dropdownOptions? }>`
 - `MultiSelect` -- `<select multiple>` (semantic HTML). Value: `string[]`. Props: `IFieldProps<{}>`
 - `DateControl` -- `<input type="date">` (semantic HTML) with clear button. Serializes to ISO string. Props: `IFieldProps<{}>`
 - `Slider` -- `@radix-ui/react-slider` (Slider.Root + Track + Range + Thumb). Value wrapped as `[number]` array (DIV-011). Props: `IFieldProps<{ max?, min?, step? }>`

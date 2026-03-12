@@ -2,7 +2,7 @@
 
 HeroUI field components for [@formosaic/core](https://www.npmjs.com/package/@formosaic/core).
 
-This package provides 28 field types using **HeroUI**-styled semantic HTML components. All fields integrate with `@formosaic/core`'s rules engine and form orchestration.
+This package provides 27 field types using **HeroUI**-styled semantic HTML components. All fields integrate with `@formosaic/core`'s rules engine and form orchestration.
 
 > **Implementation note:** Field components use semantic HTML elements with appropriate ARIA attributes rather than `@heroui/react` components directly. This ensures compatibility across all environments including SSR and test runners (jsdom). In production, you can wrap the form in a `HeroUIProvider` for theme integration.
 
@@ -44,7 +44,6 @@ function App() {
 | `Number` | `<input type="number">` | `Number` |
 | `Toggle` | `<input type="checkbox" role="switch">` | `Toggle` |
 | `Dropdown` | `<select>` | `Dropdown` |
-| `SimpleDropdown` | `<select>` | `SimpleDropdown` |
 | `MultiSelect` | `<select multiple>` | `Multiselect` |
 | `DateControl` | `<input type="date">` | `DateControl` |
 | `Slider` | `<input type="range">` | `Slider` |

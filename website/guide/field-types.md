@@ -6,7 +6,7 @@ title: Field Types Reference
 
 This document provides a comprehensive reference for every component type supported by Formosaic. Component types are defined in `packages/core/src/constants.ts` as the `ComponentTypes` object, and each maps to a string key used in `IFieldConfig.type`.
 
-There are **22 total component keys**: 13 editable, 6 read-only, and 3 structural/abstract types (Fragment, FieldArray, ChoiceSet).
+There are **21 total component keys**: 12 editable, 6 read-only, and 3 structural/abstract types (Fragment, FieldArray, ChoiceSet).
 
 ---
 
@@ -22,7 +22,7 @@ There are **22 total component keys**: 13 editable, 6 read-only, and 3 structura
 | `"DateControl"` | Date picker with clear button | `string` (ISO 8601) | No |
 | `"Slider"` | Range slider input | `number` | No |
 | `"DynamicFragment"` | Hidden field (no visible UI) | `string` | No |
-| `"SimpleDropdown"` | Dropdown from simple string array in config | `string` | No (uses `config.options`) |
+
 | `"MultiSelectSearch"` | Searchable multi-select with free-form | `string[]` | Yes |
 | `"Textarea"` | Multi-line text with expand-to-modal | `string` | No |
 | `"DocumentLinks"` | CRUD list of URL links | `IDocumentLink[]` | No |

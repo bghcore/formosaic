@@ -35,7 +35,6 @@ function App() {
 | Number | React Aria `NumberField` + `Input` |
 | Toggle | React Aria `Switch` |
 | Dropdown | React Aria `Select` + `ListBox` + `Popover` |
-| SimpleDropdown | React Aria `Select` + `ListBox` + `Popover` |
 | MultiSelect | `<select multiple>` (semantic HTML) |
 | DateControl | `<input type="date">` (semantic HTML) |
 | Slider | React Aria `Slider` + `SliderTrack` + `SliderThumb` |

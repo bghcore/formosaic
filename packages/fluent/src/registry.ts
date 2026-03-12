@@ -7,7 +7,6 @@ import MultiSelect from "./fields/MultiSelect";
 import DateControl from "./fields/DateControl";
 import SliderField from "./fields/Slider";
 import Fragment from "./fields/DynamicFragment";
-import SimpleDropdown from "./fields/SimpleDropdown";
 import MultiSelectSearch from "./fields/MultiSelectSearch";
 import PopOutEditor from "./fields/PopOutEditor";
 import DocumentLinksField from "./fields/DocumentLinks";
@@ -40,7 +39,6 @@ export function createFluentFieldRegistry(): Dictionary<React.JSX.Element> {
     [ComponentTypes.DateControl]: React.createElement(DateControl),
     [ComponentTypes.Slider]: React.createElement(SliderField),
     [ComponentTypes.Fragment]: React.createElement(Fragment),
-    [ComponentTypes.SimpleDropdown]: React.createElement(SimpleDropdown),
     [ComponentTypes.MultiSelectSearch]: React.createElement(MultiSelectSearch),
     [ComponentTypes.Textarea]: React.createElement(PopOutEditor),
     [ComponentTypes.DocumentLinks]: React.createElement(DocumentLinksField),

@@ -256,30 +256,6 @@ describe("Edge-case canonical values", () => {
   });
 
   // ---------------------------------------------------------------
-  // SimpleDropdown
-  // ---------------------------------------------------------------
-  describe("SimpleDropdown edge cases", () => {
-    const type = ComponentTypes.SimpleDropdown;
-
-    it("renders undefined as placeholder", () => {
-      const { container } = renderField(type, { value: undefined, config: { dropdownOptions: ["A", "B"] } });
-      const select = container.querySelector("select") as HTMLSelectElement;
-      expect(select.value).toBe("");
-    });
-
-    it("renders selected value", () => {
-      const { container } = renderField(type, { value: "A", config: { dropdownOptions: ["A", "B"] } });
-      const select = container.querySelector("select") as HTMLSelectElement;
-      expect(select.value).toBe("A");
-    });
-
-    it("readOnly with missing value shows sentinel", () => {
-      const { container } = renderField(type, { readOnly: true, value: undefined });
-      expect(container.textContent).toContain("-");
-    });
-  });
-
-  // ---------------------------------------------------------------
   // MultiSelect
   // ---------------------------------------------------------------
   describe("MultiSelect edge cases", () => {

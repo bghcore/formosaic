@@ -103,7 +103,6 @@ After processing, each `IFieldConfig` becomes an `IRuntimeFieldState` at runtime
 | `"DateControl"` | `ComponentTypes.DateControl` | Date picker |
 | `"Slider"` | `ComponentTypes.Slider` | Range slider |
 | `"DynamicFragment"` | `ComponentTypes.Fragment` | Hidden fragment |
-| `"SimpleDropdown"` | `ComponentTypes.SimpleDropdown` | Simplified dropdown |
 | `"MultiSelectSearch"` | `ComponentTypes.MultiSelectSearch` | Multi-select with search |
 | `"Textarea"` | `ComponentTypes.Textarea` | Multi-line text input |
 | `"DocumentLinks"` | `ComponentTypes.DocumentLinks` | URL link CRUD |

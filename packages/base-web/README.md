@@ -2,7 +2,7 @@
 
 Base Web (Uber) field components for [@formosaic/core](https://www.npmjs.com/package/@formosaic/core).
 
-This package provides 28 field types using **Base Web (baseui)** components. Includes 10 native baseui components and 18 semantic HTML fallbacks. All fields integrate with `@formosaic/core`'s rules engine and form orchestration.
+This package provides 27 field types using **Base Web (baseui)** components. Includes 9 native baseui components and 18 semantic HTML fallbacks. All fields integrate with `@formosaic/core`'s rules engine and form orchestration.
 
 ## Installation
 
@@ -50,7 +50,6 @@ function App() {
 | `Number` | `Input` (baseui/input, type="number") | `Number` |
 | `Toggle` | `Checkbox` (baseui/checkbox, toggle mode) | `Toggle` |
 | `Dropdown` | `Select` (baseui/select) | `Dropdown` |
-| `SimpleDropdown` | `Select` (baseui/select) | `SimpleDropdown` |
 | `MultiSelect` | `Select` (baseui/select, multi) | `Multiselect` |
 | `DateControl` | `<input type="date">` (native fallback) | `DateControl` |
 | `Slider` | `Slider` (baseui/slider) | `Slider` |

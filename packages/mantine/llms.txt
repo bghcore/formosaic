@@ -18,7 +18,6 @@
 - `Number` -- Mantine `NumberInput`
 - `Toggle` -- Mantine `Switch`
 - `Dropdown` -- Mantine `Select`
-- `SimpleDropdown` -- Mantine `Select` for string arrays
 - `MultiSelect` -- Mantine `MultiSelect`
 - `DateControl` -- Native `<input type="date">`
 - `Slider` -- Mantine `Slider`

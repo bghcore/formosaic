@@ -474,16 +474,16 @@ describe("Business form round-trip tests", () => {
         });
 
         // ---------------------------------------------------------------
-        // SimpleDropdown with 20 string options
+        // Dropdown with 20 string options
         // ---------------------------------------------------------------
-        describe("SimpleDropdown with 20 string options", () => {
-          const simpleConfig = optionFields.simpleChoices.config;
+        describe("Dropdown with 20 string options", () => {
+          const simpleOptions = optionFields.simpleChoices.options;
 
-          it("renders with config.dropdownOptions and value 'Choice 5'", () => {
+          it("renders with options and value 'Choice 5'", () => {
             const { container } = renderField(
               adapter,
-              ComponentTypes.SimpleDropdown,
-              { value: "Choice 5", config: simpleConfig }
+              ComponentTypes.Dropdown,
+              { value: "Choice 5", options: simpleOptions }
             );
             expect(container.innerHTML).toBeTruthy();
           });

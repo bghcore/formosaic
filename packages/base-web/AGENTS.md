@@ -28,7 +28,6 @@ Base Web (Uber) field components for `@formosaic/core`. Provides 12 editable and
 | `src/fields/Number.tsx` | baseui `Input` with type="number" |
 | `src/fields/Toggle.tsx` | baseui `Checkbox` with `STYLE_TYPE.toggle` |
 | `src/fields/Dropdown.tsx` | baseui `Select` |
-| `src/fields/SimpleDropdown.tsx` | baseui `Select` for string arrays |
 | `src/fields/MultiSelect.tsx` | baseui `Select` with `multi` prop |
 | `src/fields/DateControl.tsx` | Native `<input type="date">` (React 19 fallback) |
 | `src/fields/Slider.tsx` | baseui `Slider` |

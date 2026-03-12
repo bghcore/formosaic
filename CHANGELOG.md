@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-03-12
+
+### Removed
+- **SimpleDropdown field type** -- Use `type: "Dropdown"` with `options: [{ value, label }]` instead. Reduces field types from 28 to 27 per adapter.
+
 ## [1.1.0] - 2026-03-12
 
 ### Breaking Changes

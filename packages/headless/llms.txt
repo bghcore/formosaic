@@ -21,7 +21,6 @@
 - `HookMultiSelect` -- `<select multiple>`
 - `HookDateControl` -- `<input type="date">` + clear button
 - `HookSlider` -- `<input type="range">` + `<output>`
-- `HookSimpleDropdown` -- `<select>` for string arrays
 - `HookMultiSelectSearch` -- `<input type="search">` + checkbox list
 - `HookTextarea` -- `<textarea>` + native `<dialog>` expand
 - `HookDocumentLinks` -- URL list with add/remove

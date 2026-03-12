@@ -150,7 +150,7 @@ export const workflowFormConfig: IFormConfig = {
 
 /**
  * Option-heavy form: stress-tests rendering with large option lists.
- * 100-option Dropdown, 50-option Multiselect, 20-option SimpleDropdown.
+ * 100-option Dropdown, 50-option Multiselect, 20-option Dropdown.
  */
 const manyOptions = Array.from({ length: 100 }, (_, i) => ({
   value: `opt${i}`,
@@ -162,7 +162,10 @@ const mediumOptions = Array.from({ length: 50 }, (_, i) => ({
   label: `Tag ${i + 1}`,
 }));
 
-const smallOptions = Array.from({ length: 20 }, (_, i) => `Choice ${i + 1}`);
+const smallOptions = Array.from({ length: 20 }, (_, i) => ({
+  value: `Choice ${i + 1}`,
+  label: `Choice ${i + 1}`,
+}));
 
 export const optionHeavyFormConfig: IFormConfig = {
   version: 2,
@@ -178,9 +181,9 @@ export const optionHeavyFormConfig: IFormConfig = {
       options: mediumOptions,
     },
     simpleChoices: {
-      type: "SimpleDropdown",
+      type: "Dropdown",
       label: "Simple Choices (20 options)",
-      config: { dropdownOptions: smallOptions },
+      options: smallOptions,
     },
   },
   fieldOrder: ["largeDropdown", "largeMultiSelect", "simpleChoices"],

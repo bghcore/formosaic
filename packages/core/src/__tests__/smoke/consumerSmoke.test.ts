@@ -49,7 +49,6 @@ const TIER_1_KEYS = [
   ComponentTypes.DateControl,
   ComponentTypes.Slider,
   ComponentTypes.Fragment,
-  ComponentTypes.SimpleDropdown,
   ComponentTypes.Textarea,
   ComponentTypes.RadioGroup,
   ComponentTypes.CheckboxGroup,
@@ -92,7 +91,7 @@ describe("Consumer smoke tests", () => {
 
   describe("Registry shape", () => {
     adapters.forEach(({ name, factory }) => {
-      it(`${name} contains all 13 Tier 1 keys`, () => {
+      it(`${name} contains all 12 Tier 1 keys`, () => {
         const registry = factory();
         for (const key of TIER_1_KEYS) {
           expect(registry[key], `${name} missing key: ${key}`).toBeDefined();

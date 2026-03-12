@@ -16,7 +16,6 @@ export const TIER_1_FIELDS = [
   ComponentTypes.Number,
   ComponentTypes.Toggle,
   ComponentTypes.Dropdown,
-  ComponentTypes.SimpleDropdown,
   ComponentTypes.MultiSelect,
   ComponentTypes.DateControl,
   ComponentTypes.Slider,

@@ -18,7 +18,6 @@
 - `Number` -- Chakra `Input` (`type="number"`)
 - `Toggle` -- Semantic `<input type="checkbox" role="switch">` (HTML fallback)
 - `Dropdown` -- Chakra `NativeSelect`
-- `SimpleDropdown` -- Chakra `NativeSelect` for string arrays
 - `MultiSelect` -- Semantic `<select multiple>` (HTML fallback)
 - `DateControl` -- Chakra `Input` (`type="date"`)
 - `Slider` -- Semantic `<input type="range">` (HTML fallback)

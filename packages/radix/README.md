@@ -37,7 +37,6 @@ function App() {
 | Number | `<input type="number">` (semantic HTML) |
 | Toggle | `@radix-ui/react-switch` |
 | Dropdown | `@radix-ui/react-select` |
-| SimpleDropdown | `@radix-ui/react-select` |
 | MultiSelect | `<select multiple>` (semantic HTML) |
 | DateControl | `<input type="date">` (semantic HTML) |
 | Slider | `@radix-ui/react-slider` |

@@ -1,6 +1,6 @@
 {
   "name": "@formosaic/atlaskit",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Atlassian Design System compatible field components for @formosaic/core (semantic HTML)",
   "repository": {
     "type": "git",

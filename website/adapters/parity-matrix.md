@@ -4,7 +4,7 @@ title: Adapter Parity Matrix
 
 # Adapter Parity Matrix
 
-Implementation status of field types across 11 adapter packages. All adapters support 28 of 32 types.
+Implementation status of field types across 11 adapter packages. All adapters support 27 of 31 types.
 
 ## Legend
 
@@ -21,7 +21,7 @@ Implementation status of field types across 11 adapter packages. All adapters su
 | 2 | `Number` | Y | Y | FB | Y | FB | Y | FB | Y | FB | FB | Y |
 | 3 | `Toggle` | Y | Y | FB | Y | FB | Y | FB | Y | FB | Y | Y |
 | 4 | `Dropdown` | Y | Y | FB | Y | Y | Y | FB | Y | FB | Y | Y |
-| 5 | `SimpleDropdown` | Y | Y | FB | Y | Y | Y | FB | Y | FB | Y | Y |
+
 | 6 | `MultiSelect` | Y | Y | FB | Y | FB | Y | FB | Y | FB | FB | FB |
 | 7 | `DateControl` | Y | Y | FB | Y | Y | Y | FB | FB | FB | FB | FB |
 | 8 | `Slider` | Y | Y | FB | Y | FB | Y | FB | Y | FB | Y | Y |
@@ -49,7 +49,7 @@ Implementation status of field types across 11 adapter packages. All adapters su
 
 ## Adapter Strength Summary
 
-**Full coverage (28 field types):** All 11 adapters implement 28 field types (13 Tier 1 + 10 Tier 2 extended + 5 read-only variants).
+**Full coverage (27 field types):** All 11 adapters implement 27 field types (13 Tier 1 + 10 Tier 2 extended + 5 read-only variants).
 
 **Native Tier 2 implementations:**
 - **antd** -- 6 native: Rate, AutoComplete, DatePicker+showTime, RangePicker, Upload, ColorPicker

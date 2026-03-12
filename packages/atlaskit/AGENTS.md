@@ -26,7 +26,6 @@ Atlassian Design System compatible field components for `@formosaic/core`. Provi
 | `src/fields/Number.tsx` | `<input type="number">` |
 | `src/fields/Toggle.tsx` | `<input type="checkbox" role="switch">` |
 | `src/fields/Dropdown.tsx` | `<select>` + `<option>` |
-| `src/fields/SimpleDropdown.tsx` | `<select>` for string arrays |
 | `src/fields/MultiSelect.tsx` | `<select multiple>` |
 | `src/fields/DateControl.tsx` | `<input type="date">` + clear button |
 | `src/fields/Slider.tsx` | `<input type="range">` + `<output>` |

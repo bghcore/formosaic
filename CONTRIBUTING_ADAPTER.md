@@ -29,7 +29,6 @@ packages/{your-lib}/
       Number.tsx
       Toggle.tsx
       Dropdown.tsx
-      SimpleDropdown.tsx
       MultiSelect.tsx
       DateControl.tsx
       Slider.tsx
@@ -128,8 +127,8 @@ export function createYourLibFieldRegistry(): Dictionary<React.JSX.Element> {
 
 ## Field Implementation Tiers
 
-### Tier 1 (Required for launch — 13 types)
-Textbox, Number, Toggle, Dropdown, SimpleDropdown, MultiSelect, DateControl, Slider, RadioGroup, CheckboxGroup, Textarea, ReadOnly, DynamicFragment
+### Tier 1 (Required for launch — 12 types)
+Textbox, Number, Toggle, Dropdown, MultiSelect, DateControl, Slider, RadioGroup, CheckboxGroup, Textarea, ReadOnly, DynamicFragment
 
 ### Tier 2 (Follow-up)
 Autocomplete, FileUpload, Rating, ColorPicker, PhoneInput, DateRange, DateTime

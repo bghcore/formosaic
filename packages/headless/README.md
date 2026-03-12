@@ -2,7 +2,7 @@
 
 Headless (unstyled) semantic HTML field components for [@formosaic/core](https://www.npmjs.com/package/@formosaic/core).
 
-This package renders all 28 field types using **only native HTML elements** -- no UI framework required. Every field outputs semantic HTML with `data-field-type` and `data-field-state` attributes for CSS targeting, ARIA attributes for accessibility, and CSS class names for styling.
+This package renders all 27 field types using **only native HTML elements** -- no UI framework required. Every field outputs semantic HTML with `data-field-type` and `data-field-state` attributes for CSS targeting, ARIA attributes for accessibility, and CSS class names for styling.
 
 ## Installation
 
@@ -48,7 +48,6 @@ function App() {
 | `HookMultiSelect` | `<select multiple>` | `Multiselect` |
 | `HookDateControl` | `<input type="date">` + clear button | `DateControl` |
 | `HookSlider` | `<input type="range">` + `<output>` | `Slider` |
-| `HookSimpleDropdown` | `<select>` for string arrays | `SimpleDropdown` |
 | `HookMultiSelectSearch` | `<input type="search">` + checkbox list | `MultiSelectSearch` |
 | `HookTextarea` | `<textarea>` + expand `<dialog>` | `Textarea` |
 | `HookDocumentLinks` | URL list with add/remove | `DocumentLinks` |

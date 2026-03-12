@@ -41,7 +41,7 @@ export const PARITY_BOOLEAN_FORM: IFormConfig = {
   fieldOrder: ["toggleTrue", "toggleFalse", "toggleEmpty"],
 };
 
-/** Dropdown, SimpleDropdown, and Multiselect with shared options */
+/** Dropdown and Multiselect with shared options */
 export const PARITY_SELECT_FORM: IFormConfig = {
   version: 2,
   fields: {
@@ -54,14 +54,6 @@ export const PARITY_SELECT_FORM: IFormConfig = {
         { value: "opt3", label: "Option 3" },
       ],
     },
-    simpleDropdown: {
-      type: "SimpleDropdown",
-      label: "Simple Dropdown",
-      options: [
-        { value: "opt1", label: "Option 1" },
-        { value: "opt2", label: "Option 2" },
-      ],
-    },
     multiselect: {
       type: "Multiselect",
       label: "Multi Select",
@@ -72,7 +64,7 @@ export const PARITY_SELECT_FORM: IFormConfig = {
       ],
     },
   },
-  fieldOrder: ["dropdown", "simpleDropdown", "multiselect"],
+  fieldOrder: ["dropdown", "multiselect"],
 };
 
 /** DateControl with ISO string and empty value */
@@ -111,7 +103,7 @@ export const PARITY_CHOICE_FORM: IFormConfig = {
   fieldOrder: ["radioGroup", "checkboxGroup"],
 };
 
-/** All 13 Tier 1 field types in a single config */
+/** All 12 Tier 1 field types in a single config */
 export const PARITY_MIXED_FORM: IFormConfig = {
   version: 2,
   fields: {
@@ -124,15 +116,6 @@ export const PARITY_MIXED_FORM: IFormConfig = {
       options: [
         { value: "us", label: "United States" },
         { value: "uk", label: "United Kingdom" },
-      ],
-    },
-    simpleDropdown: {
-      type: "SimpleDropdown",
-      label: "Size",
-      options: [
-        { value: "s", label: "Small" },
-        { value: "m", label: "Medium" },
-        { value: "l", label: "Large" },
       ],
     },
     multiselect: {
@@ -171,7 +154,6 @@ export const PARITY_MIXED_FORM: IFormConfig = {
     "number",
     "toggle",
     "dropdown",
-    "simpleDropdown",
     "multiselect",
     "dateControl",
     "slider",
@@ -330,15 +312,6 @@ export const PARITY_READONLY_FORM: IFormConfig = {
         { value: "inactive", label: "Inactive" },
       ],
     },
-    simpleDropdown: {
-      type: "SimpleDropdown",
-      label: "Type",
-      readOnly: true,
-      options: [
-        { value: "a", label: "Type A" },
-        { value: "b", label: "Type B" },
-      ],
-    },
     multiselect: {
       type: "Multiselect",
       label: "Tags",
@@ -377,7 +350,6 @@ export const PARITY_READONLY_FORM: IFormConfig = {
     "number",
     "toggle",
     "dropdown",
-    "simpleDropdown",
     "multiselect",
     "dateControl",
     "slider",

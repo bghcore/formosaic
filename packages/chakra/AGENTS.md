@@ -21,7 +21,6 @@ Chakra UI v3 field components for `@formosaic/core`. Provides 12 editable and 1 
 | Number | `<input type="number">` | Temporary fallback | Chakra `NumberInput` compound component DTS issue |
 | Toggle | `<input type="checkbox" role="switch">` | Temporary fallback | Chakra `Switch` compound component DTS issue |
 | Dropdown | Chakra `NativeSelect` | Native | - |
-| SimpleDropdown | Chakra `NativeSelect` | Native | - |
 | MultiSelect | `<select multiple>` | Temporary fallback | Chakra `Select` compound component DTS issue |
 | DateControl | Chakra `Input` (`type="date"`) | Native | - |
 | Slider | `<input type="range">` | Temporary fallback | Chakra `Slider` compound component DTS issue |
@@ -44,7 +43,6 @@ Temporary fallbacks are styled with Chakra CSS variables for visual consistency 
 | `src/fields/Number.tsx` | Chakra `Input` (`type="number"`) -- HTML fallback |
 | `src/fields/Toggle.tsx` | Semantic `<input type="checkbox" role="switch">` -- HTML fallback |
 | `src/fields/Dropdown.tsx` | Chakra `NativeSelect` |
-| `src/fields/SimpleDropdown.tsx` | Chakra `NativeSelect` for string arrays |
 | `src/fields/MultiSelect.tsx` | Semantic `<select multiple>` -- HTML fallback |
 | `src/fields/DateControl.tsx` | Chakra `Input` (`type="date"`) |
 | `src/fields/Slider.tsx` | Semantic `<input type="range">` -- HTML fallback |

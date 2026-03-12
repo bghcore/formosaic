@@ -10,7 +10,7 @@ global.ResizeObserver = class {
 
 // Only test Tier 1 fields present in the Radix registry
 const INCLUDED = [
-  "Textbox", "Number", "Toggle", "Dropdown", "SimpleDropdown",
+  "Textbox", "Number", "Toggle", "Dropdown",
   "Multiselect", "DateControl", "Slider", "RadioGroup", "CheckboxGroup",
   "Textarea", "DynamicFragment", "ReadOnly",
   "Rating", "Autocomplete", "DateTime",

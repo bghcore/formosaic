@@ -75,17 +75,17 @@ See the [comparison guide](https://bghcore.github.io/formosaic/guide/comparison)
 | Package | Description | Size |
 |---------|-------------|------|
 | [`@formosaic/core`](./packages/core) | UI-agnostic rules engine, form orchestration, validation, analytics, devtools. React + react-hook-form only, no UI library dependency. | ~114 KB ESM |
-| [`@formosaic/fluent`](./packages/fluent) | Fluent UI v9 field components (28 field types). | ~39 KB ESM |
-| [`@formosaic/mui`](./packages/mui) | Material UI field components (28 field types). | ~39 KB ESM |
-| [`@formosaic/headless`](./packages/headless) | Unstyled semantic HTML field components (28 field types). | ~36 KB ESM |
-| [`@formosaic/antd`](./packages/antd) | Ant Design v5 field components (28 field types). | ~24 KB ESM |
-| [`@formosaic/chakra`](./packages/chakra) | Chakra UI v3 field components (28 field types). | ~24 KB ESM |
-| [`@formosaic/mantine`](./packages/mantine) | Mantine v7 field components (28 field types). | ~24 KB ESM |
-| [`@formosaic/atlaskit`](./packages/atlaskit) | Atlassian Design System field components (28 field types). | ~22 KB ESM |
-| [`@formosaic/base-web`](./packages/base-web) | Uber Base Web field components (28 field types). | ~22 KB ESM |
-| [`@formosaic/heroui`](./packages/heroui) | HeroUI field components (28 field types). | ~22 KB ESM |
-| [`@formosaic/radix`](./packages/radix) | Radix UI primitives field components (28 field types). Unstyled. | ~32 KB ESM |
-| [`@formosaic/react-aria`](./packages/react-aria) | React Aria Components field components (28 field types). | ~31 KB ESM |
+| [`@formosaic/fluent`](./packages/fluent) | Fluent UI v9 field components (27 field types). | ~39 KB ESM |
+| [`@formosaic/mui`](./packages/mui) | Material UI field components (27 field types). | ~39 KB ESM |
+| [`@formosaic/headless`](./packages/headless) | Unstyled semantic HTML field components (27 field types). | ~36 KB ESM |
+| [`@formosaic/antd`](./packages/antd) | Ant Design v5 field components (27 field types). | ~24 KB ESM |
+| [`@formosaic/chakra`](./packages/chakra) | Chakra UI v3 field components (27 field types). | ~24 KB ESM |
+| [`@formosaic/mantine`](./packages/mantine) | Mantine v7 field components (27 field types). | ~24 KB ESM |
+| [`@formosaic/atlaskit`](./packages/atlaskit) | Atlassian Design System field components (27 field types). | ~22 KB ESM |
+| [`@formosaic/base-web`](./packages/base-web) | Uber Base Web field components (27 field types). | ~22 KB ESM |
+| [`@formosaic/heroui`](./packages/heroui) | HeroUI field components (27 field types). | ~22 KB ESM |
+| [`@formosaic/radix`](./packages/radix) | Radix UI primitives field components (27 field types). Unstyled. | ~32 KB ESM |
+| [`@formosaic/react-aria`](./packages/react-aria) | React Aria Components field components (27 field types). | ~31 KB ESM |
 | [`@formosaic/examples`](./packages/examples) | 3 example apps (login+MFA, checkout wizard, data entry). | -- |
 
 ## Quick Start
@@ -162,7 +162,7 @@ function App() {
 ## Try It Live
 
 - [Open in StackBlitz](https://stackblitz.com/github/bghcore/formosaic/tree/main/packages/examples?file=src%2Fcheckout%2FApp.tsx) -- edit and run the checkout wizard example in your browser
-- [Storybook](https://bghcore.github.io/formosaic/storybook/) -- interactive component gallery with all 28 field types across 11 adapters
+- [Storybook](https://bghcore.github.io/formosaic/storybook/) -- interactive component gallery with all 27 field types across 11 adapters
 
 ## How It Works
 
@@ -660,7 +660,7 @@ Form-level error banner via `formErrors` prop on `Formosaic`:
 
 ### Headless Adapter
 
-The headless package renders all 28 field types using native HTML elements with `data-field-type` and `data-field-state` attributes for CSS targeting. No UI framework required.
+The headless package renders all 27 field types using native HTML elements with `data-field-type` and `data-field-state` attributes for CSS targeting. No UI framework required.
 
 ```tsx
 import { createHeadlessFieldRegistry } from "@formosaic/headless";
@@ -784,7 +784,7 @@ const lazyFields = createLazyFieldRegistry({
 
 ## Available Field Types
 
-All 28 field types (22 editable + 6 read-only) are available in the Fluent UI, MUI, and headless adapters:
+All 27 field types (21 editable + 6 read-only) are available in the Fluent UI, MUI, and headless adapters:
 
 ### Editable Fields
 
@@ -797,7 +797,7 @@ All 28 field types (22 editable + 6 read-only) are available in the Fluent UI, M
 | `Multiselect` | Multi-select dropdown |
 | `DateControl` | Date picker with clear button |
 | `Slider` | Numeric slider |
-| `SimpleDropdown` | Dropdown from string array in config |
+
 | `MultiSelectSearch` | Searchable multi-select |
 | `Textarea` | Multiline text with expand-to-modal |
 | `DocumentLinks` | URL link CRUD |
@@ -895,17 +895,17 @@ npm run clean
 ```
 packages/
   core/       -- @formosaic/core (React + react-hook-form only)
-  fluent/     -- @formosaic/fluent (Fluent UI v9 adapter, 28 field types)
-  mui/        -- @formosaic/mui (Material UI adapter, 28 field types)
-  headless/   -- @formosaic/headless (semantic HTML adapter, 28 field types)
-  antd/       -- @formosaic/antd (Ant Design v5 adapter, 28 field types)
-  chakra/     -- @formosaic/chakra (Chakra UI v3 adapter, 28 field types)
-  mantine/    -- @formosaic/mantine (Mantine v7 adapter, 28 field types)
-  atlaskit/   -- @formosaic/atlaskit (Atlassian Design System adapter, 28 field types)
-  base-web/   -- @formosaic/base-web (Uber Base Web adapter, 28 field types)
-  heroui/     -- @formosaic/heroui (HeroUI adapter, 28 field types)
-  radix/      -- @formosaic/radix (Radix UI primitives adapter, 28 field types)
-  react-aria/ -- @formosaic/react-aria (React Aria Components adapter, 28 field types)
+  fluent/     -- @formosaic/fluent (Fluent UI v9 adapter, 27 field types)
+  mui/        -- @formosaic/mui (Material UI adapter, 27 field types)
+  headless/   -- @formosaic/headless (semantic HTML adapter, 27 field types)
+  antd/       -- @formosaic/antd (Ant Design v5 adapter, 27 field types)
+  chakra/     -- @formosaic/chakra (Chakra UI v3 adapter, 27 field types)
+  mantine/    -- @formosaic/mantine (Mantine v7 adapter, 27 field types)
+  atlaskit/   -- @formosaic/atlaskit (Atlassian Design System adapter, 27 field types)
+  base-web/   -- @formosaic/base-web (Uber Base Web adapter, 27 field types)
+  heroui/     -- @formosaic/heroui (HeroUI adapter, 27 field types)
+  radix/      -- @formosaic/radix (Radix UI primitives adapter, 27 field types)
+  react-aria/ -- @formosaic/react-aria (React Aria Components adapter, 27 field types)
   examples/   -- 3 example apps (login+MFA, checkout wizard, data entry)
 e2e/          -- Playwright end-to-end tests
 benchmarks/   -- Vitest benchmarks for rules engine performance

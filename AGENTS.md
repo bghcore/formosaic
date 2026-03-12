@@ -40,17 +40,17 @@ Monorepo using npm workspaces. Thirteen packages:
 ```
 packages/
   core/      -- @formosaic/core (React + react-hook-form, NO UI library deps)
-  fluent/    -- @formosaic/fluent (Fluent UI v9 field components, 28 types)
-  mui/       -- @formosaic/mui (Material UI field components, 28 types)
-  headless/  -- @formosaic/headless (unstyled semantic HTML, 28 types)
-  antd/      -- @formosaic/antd (Ant Design v5 field components, 28 types)
-  chakra/    -- @formosaic/chakra (Chakra UI v3 field components, 28 types)
-  mantine/   -- @formosaic/mantine (Mantine v7 field components, 28 types)
-  atlaskit/  -- @formosaic/atlaskit (Atlassian Design System, 28 types)
-  base-web/  -- @formosaic/base-web (Uber Base Web, 28 types)
-  heroui/    -- @formosaic/heroui (HeroUI, 28 types)
-  radix/     -- @formosaic/radix (Radix UI primitives, 28 types, unstyled)
-  react-aria/ -- @formosaic/react-aria (React Aria Components, 28 types)
+  fluent/    -- @formosaic/fluent (Fluent UI v9 field components, 27 types)
+  mui/       -- @formosaic/mui (Material UI field components, 27 types)
+  headless/  -- @formosaic/headless (unstyled semantic HTML, 27 types)
+  antd/      -- @formosaic/antd (Ant Design v5 field components, 27 types)
+  chakra/    -- @formosaic/chakra (Chakra UI v3 field components, 27 types)
+  mantine/   -- @formosaic/mantine (Mantine v7 field components, 27 types)
+  atlaskit/  -- @formosaic/atlaskit (Atlassian Design System, 27 types)
+  base-web/  -- @formosaic/base-web (Uber Base Web, 27 types)
+  heroui/    -- @formosaic/heroui (HeroUI, 27 types)
+  radix/     -- @formosaic/radix (Radix UI primitives, 27 types, unstyled)
+  react-aria/ -- @formosaic/react-aria (React Aria Components, 27 types)
   examples/  -- @formosaic/examples (3 example apps)
 docs/                          -- Internal planning docs only
   tier1-baseline-report.md    -- Tier 1 stabilization assessment
@@ -66,7 +66,7 @@ website/                       -- VitePress docs site (deployed to GitHub Pages)
     expression-syntax.md      -- $values, $fn, $parent expressions
     validation.md             -- Built-in and custom validators
     value-functions.md        -- Value function registry
-    field-types.md            -- All 28 field types
+    field-types.md            -- All 27 field types
     field-config.md           -- IFieldConfig v2 reference
     analytics.md              -- Analytics and telemetry integration
     i18n.md                   -- Internationalization guide

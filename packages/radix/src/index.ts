@@ -7,7 +7,6 @@ export { default as MultiSelect } from "./fields/MultiSelect";
 export { default as DateControl } from "./fields/DateControl";
 export { default as Slider } from "./fields/Slider";
 export { default as DynamicFragment } from "./fields/DynamicFragment";
-export { default as SimpleDropdown } from "./fields/SimpleDropdown";
 export { default as Textarea } from "./fields/Textarea";
 export { default as RadioGroup } from "./fields/RadioGroup";
 export { default as CheckboxGroup } from "./fields/CheckboxGroup";

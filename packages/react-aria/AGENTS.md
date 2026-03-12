@@ -28,7 +28,6 @@ React Aria Components field components for `@formosaic/core`. Provides 10 native
 | `src/fields/Number.tsx` | React Aria `NumberField` + `Input` (NaN guard on onChange) |
 | `src/fields/Toggle.tsx` | React Aria `Switch` |
 | `src/fields/Dropdown.tsx` | React Aria `Select` + `Button` + `Popover` + `ListBox` + `ListBoxItem` |
-| `src/fields/SimpleDropdown.tsx` | React Aria `Select` for string arrays |
 | `src/fields/MultiSelect.tsx` | `<select multiple>` (semantic HTML) |
 | `src/fields/DateControl.tsx` | `<input type="date">` (semantic HTML) with clear button |
 | `src/fields/Slider.tsx` | React Aria `Slider` + `SliderTrack` + `SliderThumb` |

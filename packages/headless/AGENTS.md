@@ -27,7 +27,6 @@ Unstyled, semantic HTML field components for `@formosaic/core`. Provides 22 edit
 | `src/fields/MultiSelect.tsx` | `<select multiple>` |
 | `src/fields/DateControl.tsx` | `<input type="date">` + clear button |
 | `src/fields/Slider.tsx` | `<input type="range">` + `<output>` |
-| `src/fields/SimpleDropdown.tsx` | `<select>` for string arrays |
 | `src/fields/MultiSelectSearch.tsx` | `<input type="search">` + checkbox list |
 | `src/fields/Textarea.tsx` | `<textarea>` + native `<dialog>` expand |
 | `src/fields/DocumentLinks.tsx` | URL list with add/remove |

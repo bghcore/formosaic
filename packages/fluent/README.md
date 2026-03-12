@@ -74,7 +74,6 @@ function App() {
 | `Multiselect` | `HookMultiSelect` | Multi-select dropdown |
 | `DateControl` | `HookDateControl` | Date picker with clear button |
 | `Slider` | `HookSlider` | Numeric slider |
-| `SimpleDropdown` | `HookSimpleDropdown` | Dropdown from string array in config |
 | `MultiSelectSearch` | `HookMultiSelectSearch` | Searchable multi-select (ComboBox) |
 | `Textarea` | `HookPopOutEditor` | Multiline text with expand-to-modal |
 | `DocumentLinks` | `HookDocumentLinks` | URL link CRUD |

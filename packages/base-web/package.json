@@ -1,6 +1,6 @@
 {
   "name": "@formosaic/base-web",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Base Web (Uber) field components for @formosaic/core",
   "repository": {
     "type": "git",

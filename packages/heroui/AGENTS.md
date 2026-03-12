@@ -24,7 +24,6 @@ HeroUI field components for `@formosaic/core`. Provides 12 editable and 1 read-o
 | `src/fields/Number.tsx` | `<input type="number">` |
 | `src/fields/Toggle.tsx` | `<input type="checkbox" role="switch">` |
 | `src/fields/Dropdown.tsx` | `<select>` |
-| `src/fields/SimpleDropdown.tsx` | `<select>` for string arrays |
 | `src/fields/MultiSelect.tsx` | `<select multiple>` |
 | `src/fields/DateControl.tsx` | `<input type="date">` |
 | `src/fields/Slider.tsx` | `<input type="range">` |

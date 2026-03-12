@@ -16,7 +16,6 @@ All 13 Tier 1 fields verified across all 11 adapters.
 | **Number** | Y | Y | FB | Y | FB | Y | FB | Y | FB | FB | Y |
 | **Toggle** | Y | Y | FB | Y | FB | Y | FB | Y | FB | Y | Y |
 | **Dropdown** | Y | Y | FB | Y | Y | Y | FB | Y | FB | Y | Y |
-| **SimpleDropdown** | Y | Y | FB | Y | Y | Y | FB | Y | FB | Y | Y |
 | **MultiSelect** | Y | Y | FB | Y | FB | Y | FB | Y | FB | FB | FB |
 | **DateControl** | Y | Y | FB | Y | Y | Y | FB | FB | FB | FB | FB |
 | **Slider** | Y | Y | FB | Y | FB | Y | FB | Y | FB | Y | Y |

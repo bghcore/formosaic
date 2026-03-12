@@ -64,12 +64,16 @@ const contactFormConfig: IFormConfig = {
       ],
     },
     role: {
-      type: "SimpleDropdown",
+      type: "Dropdown",
       required: false,
       label: "Role",
-      config: {
-        dropdownOptions: ["Manager", "Lead", "Senior", "Junior", "Intern"],
-      },
+      options: [
+        { value: "Manager", label: "Manager" },
+        { value: "Lead", label: "Lead" },
+        { value: "Senior", label: "Senior" },
+        { value: "Junior", label: "Junior" },
+        { value: "Intern", label: "Intern" },
+      ],
     },
     isActive: {
       type: "Toggle",

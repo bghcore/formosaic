@@ -90,17 +90,17 @@ npm run build:react-aria # Build React Aria adapter only
 ```
 packages/
   core/        @formosaic/core       -- Rules engine, form orchestration, validation (no UI dependency)
-  fluent/      @formosaic/fluent     -- Fluent UI v9 adapter (28 field types)
-  mui/         @formosaic/mui        -- Material UI adapter (28 field types)
-  headless/    @formosaic/headless   -- Semantic HTML adapter (28 field types)
-  antd/        @formosaic/antd       -- Ant Design v5 adapter (28 field types)
-  chakra/      @formosaic/chakra     -- Chakra UI v3 adapter (28 field types)
-  mantine/     @formosaic/mantine    -- Mantine v7 adapter (28 field types)
-  atlaskit/    @formosaic/atlaskit   -- Atlassian Design System adapter (28 field types)
-  base-web/    @formosaic/base-web   -- Uber Base Web adapter (28 field types)
-  heroui/      @formosaic/heroui     -- HeroUI adapter (28 field types)
-  radix/       @formosaic/radix      -- Radix UI primitives adapter (28 field types)
-  react-aria/  @formosaic/react-aria -- React Aria Components adapter (28 field types)
+  fluent/      @formosaic/fluent     -- Fluent UI v9 adapter (27 field types)
+  mui/         @formosaic/mui        -- Material UI adapter (27 field types)
+  headless/    @formosaic/headless   -- Semantic HTML adapter (27 field types)
+  antd/        @formosaic/antd       -- Ant Design v5 adapter (27 field types)
+  chakra/      @formosaic/chakra     -- Chakra UI v3 adapter (27 field types)
+  mantine/     @formosaic/mantine    -- Mantine v7 adapter (27 field types)
+  atlaskit/    @formosaic/atlaskit   -- Atlassian Design System adapter (27 field types)
+  base-web/    @formosaic/base-web   -- Uber Base Web adapter (27 field types)
+  heroui/      @formosaic/heroui     -- HeroUI adapter (27 field types)
+  radix/       @formosaic/radix      -- Radix UI primitives adapter (27 field types)
+  react-aria/  @formosaic/react-aria -- React Aria Components adapter (27 field types)
   examples/    @formosaic/examples   -- 3 example apps (login+MFA, checkout wizard, data entry)
 e2e/           Playwright end-to-end tests
 benchmarks/    Vitest benchmarks for rules engine performance

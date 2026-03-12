@@ -2,7 +2,7 @@
 
 Atlassian Design System compatible field components for [@formosaic/core](https://www.npmjs.com/package/@formosaic/core).
 
-This package provides 28 field types using **semantic HTML elements** with Atlassian Design System compatible CSS class names (prefixed `ak-`). All fields integrate with `@formosaic/core`'s rules engine and form orchestration. No `@atlaskit/*` packages are required -- fields render native HTML with `data-field-type` and `data-field-state` attributes for CSS targeting and ARIA attributes for accessibility.
+This package provides 27 field types using **semantic HTML elements** with Atlassian Design System compatible CSS class names (prefixed `ak-`). All fields integrate with `@formosaic/core`'s rules engine and form orchestration. No `@atlaskit/*` packages are required -- fields render native HTML with `data-field-type` and `data-field-state` attributes for CSS targeting and ARIA attributes for accessibility.
 
 ## Installation
 
@@ -42,7 +42,6 @@ function App() {
 | `Number` | `<input type="number">` | `Number` |
 | `Toggle` | `<input type="checkbox" role="switch">` | `Toggle` |
 | `Dropdown` | `<select>` + `<option>` | `Dropdown` |
-| `SimpleDropdown` | `<select>` for string arrays | `SimpleDropdown` |
 | `MultiSelect` | `<select multiple>` | `Multiselect` |
 | `DateControl` | `<input type="date">` + clear button | `DateControl` |
 | `Slider` | `<input type="range">` + `<output>` | `Slider` |

@@ -18,7 +18,6 @@
 - `Number` -- `<input type="number">`
 - `Toggle` -- `<input type="checkbox" role="switch">`
 - `Dropdown` -- `<select>`
-- `SimpleDropdown` -- `<select>` for string arrays
 - `MultiSelect` -- `<select multiple>`
 - `DateControl` -- `<input type="date">`
 - `Slider` -- `<input type="range">`

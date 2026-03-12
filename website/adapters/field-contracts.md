@@ -4,7 +4,7 @@ title: Canonical Field Contracts
 
 # Canonical Field Contracts
 
-This document defines the canonical contract for each of the 13 Tier 1 field types. Every adapter package must conform to these contracts. The contracts specify value types, empty semantics, serialization, and rendering behavior that all adapters share.
+This document defines the canonical contract for each of the 12 Tier 1 field types. Every adapter package must conform to these contracts. The contracts specify value types, empty semantics, serialization, and rendering behavior that all adapters share.
 
 ## General Rules
 
@@ -103,29 +103,6 @@ This document defines the canonical contract for each of the 13 Tier 1 field typ
 - Options are `IOption[]` with `{ value: string | number; label: string; disabled?: boolean; group?: string }`
 - Option values are coerced to strings via `String(option.value)` for `<option>` elements
 - Selected value comparison uses string equality
-
----
-
-## SimpleDropdown
-
-| Property | Value |
-|---|---|
-| **Type key** | `"SimpleDropdown"` |
-| **Value type** | `string` |
-| **Empty value** | `undefined`, `null`, `""` |
-| **Default value** | `undefined` (renders as `""` placeholder option) |
-| **Serialization** | Plain string |
-| **Uses options** | No -- uses `config.dropdownOptions: string[]` instead of `IOption[]` |
-| **Config shape** | `{ dropdownOptions?: string[]; placeHolder?: string }` |
-| **ReadOnly display** | `ReadOnlyText` with the raw value string |
-| **Save debounce** | None (immediate) |
-
-**Null/undefined/empty string behavior:**
-- Same as Dropdown: `null`/`undefined` coerce to `""`, which selects the placeholder
-
-**Key difference from Dropdown:**
-- Options come from `config.dropdownOptions` as a simple `string[]`, not from the `options` prop
-- Each string serves as both the display label and the stored value
 
 ---
 
@@ -308,7 +285,7 @@ This document defines the canonical contract for each of the 13 Tier 1 field typ
 | Number | `number` | `undefined` / `null` | No | 1500ms |
 | Toggle | `boolean` | `undefined` / `null` / `false` | No | Immediate |
 | Dropdown | `string` | `undefined` / `null` / `""` | `IOption[]` | Immediate |
-| SimpleDropdown | `string` | `undefined` / `null` / `""` | `config.dropdownOptions` | Immediate |
+
 | Multiselect | `string[]` | `undefined` / `null` / `[]` | `IOption[]` | 1500ms |
 | DateControl | `string` (ISO) | `undefined` / `null` | No | Immediate |
 | Slider | `number` | `undefined` / `null` | No | Immediate |
@@ -345,9 +322,9 @@ All fields must render `"-"` (a single hyphen) as the display text for missing, 
 
 Renders `"Yes"` or `"No"` via `convertBooleanToYesOrNoText()`. An undefined/null value renders as `""` (empty string from the conversion function).
 
-### 6. Single-select fields (Dropdown, SimpleDropdown, RadioGroup)
+### 6. Single-select fields (Dropdown, RadioGroup)
 
-Renders the selected option **label** (not the option value), or `"-"` if no option is selected. For `RadioGroup`, the adapter looks up the matching option label via `options.find()`. For `Dropdown` and `SimpleDropdown`, the raw value string is passed to `ReadOnlyText` (the label lookup may happen at a higher level).
+Renders the selected option **label** (not the option value), or `"-"` if no option is selected. For `RadioGroup`, the adapter looks up the matching option label via `options.find()`. For `Dropdown`, the label lookup is performed via `options.find()` before passing to `ReadOnlyText`.
 
 ### 7. Multi-select fields (MultiSelect, CheckboxGroup)
 

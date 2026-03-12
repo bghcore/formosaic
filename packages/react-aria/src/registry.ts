@@ -7,7 +7,6 @@ import MultiSelect from "./fields/MultiSelect";
 import DateControl from "./fields/DateControl";
 import Slider from "./fields/Slider";
 import DynamicFragment from "./fields/DynamicFragment";
-import SimpleDropdown from "./fields/SimpleDropdown";
 import Textarea from "./fields/Textarea";
 import RadioGroup from "./fields/RadioGroup";
 import CheckboxGroup from "./fields/CheckboxGroup";
@@ -40,7 +39,6 @@ export function createReactAriaFieldRegistry(): Dictionary<React.JSX.Element> {
     [ComponentTypes.DateControl]: React.createElement(DateControl),
     [ComponentTypes.Slider]: React.createElement(Slider),
     [ComponentTypes.Fragment]: React.createElement(DynamicFragment),
-    [ComponentTypes.SimpleDropdown]: React.createElement(SimpleDropdown),
     [ComponentTypes.Textarea]: React.createElement(Textarea),
     [ComponentTypes.RadioGroup]: React.createElement(RadioGroup),
     [ComponentTypes.CheckboxGroup]: React.createElement(CheckboxGroup),

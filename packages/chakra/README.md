@@ -2,7 +2,7 @@
 
 Chakra UI v3 field components for [@formosaic/core](https://www.npmjs.com/package/@formosaic/core).
 
-This package provides 28 field types using **Chakra UI v3** components. Includes 7 native Chakra components and 21 semantic HTML fallbacks (due to Ark UI DTS compatibility issues with compound components).
+This package provides 27 field types using **Chakra UI v3** components. Includes 6 native Chakra components and 21 semantic HTML fallbacks (due to Ark UI DTS compatibility issues with compound components).
 
 ## Installation
 
@@ -42,7 +42,6 @@ function App() {
 | `Number` | Chakra `Input` (`type="number"`) | `Number` | Native Chakra |
 | `Toggle` | Semantic `<input type="checkbox" role="switch">` | `Toggle` | Temporary - awaiting Chakra v3 DTS fix |
 | `Dropdown` | Chakra `NativeSelect` | `Dropdown` | Native Chakra |
-| `SimpleDropdown` | Chakra `NativeSelect` | `SimpleDropdown` | Native Chakra |
 | `MultiSelect` | Semantic `<select multiple>` | `Multiselect` | Temporary - awaiting Chakra v3 DTS fix |
 | `DateControl` | Chakra `Input` (`type="date"`) | `DateControl` | Native Chakra |
 | `Slider` | Semantic `<input type="range">` | `Slider` | Temporary - awaiting Chakra v3 DTS fix |

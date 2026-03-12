@@ -7,7 +7,6 @@ export { default as MultiSelect } from "./fields/MultiSelect";
 export { default as DateControl } from "./fields/DateControl";
 export { default as SliderField } from "./fields/Slider";
 export { default as Fragment } from "./fields/DynamicFragment";
-export { default as SimpleDropdown } from "./fields/SimpleDropdown";
 export { default as MultiSelectSearch } from "./fields/MultiSelectSearch";
 export { default as PopOutEditor } from "./fields/PopOutEditor";
 export { default as DocumentLinksField } from "./fields/DocumentLinks";

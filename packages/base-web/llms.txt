@@ -18,7 +18,6 @@
 - `Number` -- baseui `Input` (type="number")
 - `Toggle` -- baseui `Checkbox` with `STYLE_TYPE.toggle`
 - `Dropdown` -- baseui `Select`
-- `SimpleDropdown` -- baseui `Select` for string arrays
 - `MultiSelect` -- baseui `Select` with `multi` prop
 - `DateControl` -- Native `<input type="date">` (React 19 fallback)
 - `Slider` -- baseui `Slider`

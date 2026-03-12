@@ -280,7 +280,7 @@ website/                         -- VitePress docs site (https://bghcore.github.
     expression-syntax.md         -- $values, $fn, $parent expression syntax
     validation.md                -- Built-in and custom validators reference
     value-functions.md           -- Value function registry reference
-    field-types.md               -- All 28 field types reference
+    field-types.md               -- All 27 field types reference
     field-config.md              -- IFieldConfig v2 property reference
     analytics.md                 -- Analytics and telemetry integration
     i18n.md                      -- Internationalization / localization guide

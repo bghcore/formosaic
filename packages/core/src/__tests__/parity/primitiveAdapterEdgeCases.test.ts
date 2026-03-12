@@ -93,13 +93,6 @@ describe("Primitive adapter edge cases", () => {
       expect(container.innerHTML).not.toBe("");
     });
 
-    it("SimpleDropdown renders with null value without crash", () => {
-      const { container } = renderWithAdapter(radix, ComponentTypes.SimpleDropdown, {
-        value: null,
-        config: { dropdownOptions: ["A", "B", "C"] },
-      });
-      expect(container.innerHTML).not.toBe("");
-    });
   });
 
   // -----------------------------------------------------------------
@@ -161,14 +154,6 @@ describe("Primitive adapter edge cases", () => {
       const { container } = renderWithAdapter(reactAria, ComponentTypes.Dropdown, {
         value: "1",
         options: numericOptions,
-      });
-      expect(container.innerHTML).not.toBe("");
-    });
-
-    it("SimpleDropdown renders with value", () => {
-      const { container } = renderWithAdapter(reactAria, ComponentTypes.SimpleDropdown, {
-        value: "Alpha",
-        config: { dropdownOptions: ["Alpha", "Beta", "Gamma"] },
       });
       expect(container.innerHTML).not.toBe("");
     });

@@ -18,7 +18,6 @@
 - `Number` -- `@atlaskit/textfield` with type=number
 - `Toggle` -- `@atlaskit/toggle`
 - `Dropdown` -- `@atlaskit/select`
-- `SimpleDropdown` -- `@atlaskit/select` for string arrays
 - `MultiSelect` -- `@atlaskit/select` with `isMulti`
 - `DateControl` -- `@atlaskit/datetime-picker`
 - `Slider` -- `@atlaskit/range`

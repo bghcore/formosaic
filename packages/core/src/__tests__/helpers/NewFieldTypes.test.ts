@@ -63,8 +63,8 @@ describe("New Field Types - ComponentTypes constants", () => {
 
     it("has the expected total count of types", () => {
       const values = Object.values(ComponentTypes);
-      // 23 original + 5 phase1 + 4 phase2 = 32 total
-      expect(values.length).toBe(32);
+      // 22 original + 5 phase1 + 4 phase2 = 31 total (SimpleDropdown removed in v1.1.1)
+      expect(values.length).toBe(31);
     });
   });
 });

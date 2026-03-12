@@ -117,7 +117,6 @@ See the [Expression Syntax](/guide/expression-syntax) page for the full expressi
 | `"DateControl"` | Date picker |
 | `"Slider"` | Range slider |
 | `"DynamicFragment"` | Hidden fragment |
-| `"SimpleDropdown"` | Simplified dropdown |
 | `"MultiSelectSearch"` | Multi-select with search |
 | `"Textarea"` | Multi-line text input |
 | `"DocumentLinks"` | URL link CRUD |

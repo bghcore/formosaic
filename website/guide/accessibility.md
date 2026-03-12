@@ -106,7 +106,7 @@ Adapter fields (Fluent, MUI, and Headless) receive ARIA attributes from `FieldWr
 - `aria-invalid` -- reflects whether the field has a validation error
 - `aria-describedby` -- points to the error/status message element
 
-> **v3.0.4 improvement:** In previous versions, only the first child element received ARIA attributes from `FieldWrapper`. As of v3.0.4, all sibling children receive `aria-labelledby`, `aria-required`, `aria-invalid`, and `aria-describedby`. Additionally, all 9 Fluent and 9 MUI field components (Textbox, Number, Dropdown, SimpleDropdown, MultiSelect, MultiSelectSearch, DateControl, Slider, Toggle) now explicitly set `aria-invalid` and `aria-required` on their inner controls, ensuring screen readers announce validation state even when the underlying UI library component does not propagate cloned ARIA props.
+> **v3.0.4 improvement:** In previous versions, only the first child element received ARIA attributes from `FieldWrapper`. As of v3.0.4, all sibling children receive `aria-labelledby`, `aria-required`, `aria-invalid`, and `aria-describedby`. Additionally, all 8 Fluent and 8 MUI field components (Textbox, Number, Dropdown, MultiSelect, MultiSelectSearch, DateControl, Slider, Toggle) now explicitly set `aria-invalid` and `aria-required` on their inner controls, ensuring screen readers announce validation state even when the underlying UI library component does not propagate cloned ARIA props.
 
 ### When creating custom field components
 

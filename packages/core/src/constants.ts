@@ -10,7 +10,6 @@ export const ComponentTypes = {
   DateControl: "DateControl",
   Slider: "Slider",
   Fragment: "DynamicFragment",
-  SimpleDropdown: "SimpleDropdown",
   MultiSelectSearch: "MultiSelectSearch",
   PopOutEditor: "PopOutEditor",
   RichText: "RichText",

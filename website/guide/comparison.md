@@ -47,7 +47,7 @@ How does Formosaic compare to other React form libraries? This guide provides an
 **Key differences:**
 - **Rules engine**: Formosaic has a purpose-built declarative rules engine with 20 condition operators, priority-based conflict resolution, computed values, and cross-field effects. RJSF relies on JSON Schema `dependencies` and `if/then/else`, which are powerful but limited to visibility and required toggling.
 - **Computed values**: Formosaic supports `$values.qty * $values.price` expressions and custom `$fn` functions. RJSF has no built-in computed value system.
-- **UI adapters**: Formosaic has 11 first-party adapters with 28 field types each. RJSF has 5 official themes (antd, chakra, fluent, mui, semantic).
+- **UI adapters**: Formosaic has 11 first-party adapters with 27 field types each. RJSF has 5 official themes (antd, chakra, fluent, mui, semantic).
 - **Schema interop**: Formosaic can import RJSF schemas via `fromRjsfSchema()` and export via `toRjsfSchema()`, so migration is straightforward.
 - **Community**: RJSF has a much larger community (~14k GitHub stars) and longer track record.
 
@@ -72,7 +72,7 @@ How does Formosaic compare to other React form libraries? This guide provides an
 
 **Where we lead:**
 - **Rules engine**: Formosaic has a purpose-built declarative rules engine with 20 condition operators, dependency graph evaluation, priority-based conflict resolution, computed values with `$values`/`$fn` expressions, and cross-field effects. FormEngine.io uses MobX-based dynamic properties -- more flexible for simple cases but lacks declarative semantics, priority resolution, and tracing/debugging tools.
-- **UI adapter count**: 11 first-party adapters (fluent, mui, headless, antd, chakra, mantine, atlaskit, base-web, heroui, radix, react-aria) with 28 field types each. FormEngine.io ships 4 adapters (MUI, Mantine, React Suite, shadcn/ui) with others listed as "coming soon."
+- **UI adapter count**: 11 first-party adapters (fluent, mui, headless, antd, chakra, mantine, atlaskit, base-web, heroui, radix, react-aria) with 27 field types each. FormEngine.io ships 4 adapters (MUI, Mantine, React Suite, shadcn/ui) with others listed as "coming soon."
 - **Accessibility-first adapters**: Formosaic has dedicated radix (unstyled primitives) and react-aria (ARIA-first) adapters. FormEngine.io has no accessibility-specialized adapter.
 - **Contract-tested parity**: All 11 adapters run the same contract + parity test suite (6,296 tests). FormEngine.io's adapter parity is not publicly documented.
 - **Schema interop**: Formosaic imports JSON Schema (via `fromRjsfSchema()`) and Zod schemas. FormEngine.io uses a proprietary JSON format with no documented import from standard schemas.
@@ -95,7 +95,7 @@ How does Formosaic compare to other React form libraries? This guide provides an
 
 **Choose FormEngine.io when:** you want a commercial-grade visual designer with AI generation, need specialized components like data grids or signature capture, or are in the Optimajet workflow ecosystem.
 
-**Choose Formosaic when:** you need a declarative rules engine with formal semantics, want the widest UI adapter ecosystem (11 adapters, 28 fields each), need accessibility-first adapters (radix, react-aria), or need contract-tested cross-adapter parity.
+**Choose Formosaic when:** you need a declarative rules engine with formal semantics, want the widest UI adapter ecosystem (11 adapters, 27 fields each), need accessibility-first adapters (radix, react-aria), or need contract-tested cross-adapter parity.
 
 ---
 

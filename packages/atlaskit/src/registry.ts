@@ -3,7 +3,6 @@ import Textbox from "./fields/Textbox";
 import NumberField from "./fields/Number";
 import Toggle from "./fields/Toggle";
 import Dropdown from "./fields/Dropdown";
-import SimpleDropdown from "./fields/SimpleDropdown";
 import MultiSelect from "./fields/MultiSelect";
 import DateControl from "./fields/DateControl";
 import Slider from "./fields/Slider";
@@ -36,7 +35,6 @@ export function createAtlaskitFieldRegistry(): Dictionary<React.JSX.Element> {
     [ComponentTypes.Number]: React.createElement(NumberField),
     [ComponentTypes.Toggle]: React.createElement(Toggle),
     [ComponentTypes.Dropdown]: React.createElement(Dropdown),
-    [ComponentTypes.SimpleDropdown]: React.createElement(SimpleDropdown),
     [ComponentTypes.MultiSelect]: React.createElement(MultiSelect),
     [ComponentTypes.DateControl]: React.createElement(DateControl),
     [ComponentTypes.Slider]: React.createElement(Slider),

@@ -108,7 +108,7 @@ Each entry is classified by severity and recommended action for Tier 2 readiness
 | User-visible | ~~Yes~~ **No (fixed)** |
 | jsdom-only | No |
 | Category | ~~Should normalize before Tier 2~~ **Resolved** |
-| Resolution | All 11 adapters now perform `options?.find(o => String(o.value) === String(value))?.label` before passing to ReadOnlyText. Falls back to raw value if label lookup fails. SimpleDropdown was not affected (string options where value equals label). |
+| Resolution | All 11 adapters now perform `options?.find(o => String(o.value) === String(value))?.label` before passing to ReadOnlyText. Falls back to raw value if label lookup fails. |
 
 ### DIV-007: Semantic HTML adapter classification honesty
 
@@ -123,7 +123,7 @@ Each entry is classified by severity and recommended action for Tier 2 readiness
 | User-visible | No — behavior is correct, just classification |
 | jsdom-only | No |
 | Category | Permanent acceptable |
-| Recommended action | Package READMEs clarify this. Note: base-web was previously listed here but actually uses native baseui components for 10/13 Tier 1 fields (Textbox, Number, Toggle, Dropdown, SimpleDropdown, MultiSelect, Slider, RadioGroup, CheckboxGroup, Textarea). Only DateControl, DynamicFragment, and ReadOnly use HTML fallbacks. |
+| Recommended action | Package READMEs clarify this. Note: base-web was previously listed here but actually uses native baseui components for 9/12 Tier 1 fields (Textbox, Number, Toggle, Dropdown, MultiSelect, Slider, RadioGroup, CheckboxGroup, Textarea). Only DateControl, DynamicFragment, and ReadOnly use HTML fallbacks. |
 
 ### DIV-008: Chakra compound component DTS fallbacks
 
@@ -159,7 +159,7 @@ Each entry is classified by severity and recommended action for Tier 2 readiness
 | Property | Value |
 |----------|-------|
 | Affected adapters | radix |
-| Affected fields | Dropdown, SimpleDropdown |
+| Affected fields | Dropdown |
 | Observed behavior | Radix Select.Root does not support `""` as a value; uses `undefined` for no selection. Empty trigger text displayed instead of empty string. |
 | Canonical expectation | Empty string `""` for no selection |
 | Root cause | Radix Select uses `undefined` internally for uncontrolled/empty state; `""` is not a valid value |
@@ -189,7 +189,7 @@ Each entry is classified by severity and recommended action for Tier 2 readiness
 | Property | Value |
 |----------|-------|
 | Affected adapters | react-aria |
-| Affected fields | Dropdown, SimpleDropdown |
+| Affected fields | Dropdown |
 | Observed behavior | React Aria Select uses `Key` type (string \| number) for selectedKey/onSelectionChange; Formosaic uses string |
 | Canonical expectation | String value |
 | Root cause | React Aria's Key type is a union of string and number to support both use cases |

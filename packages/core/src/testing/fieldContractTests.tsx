@@ -18,7 +18,6 @@ export const TIER_1_FIELDS = [
   ComponentTypes.Number,
   ComponentTypes.Toggle,
   ComponentTypes.Dropdown,
-  ComponentTypes.SimpleDropdown,
   ComponentTypes.MultiSelect,
   ComponentTypes.DateControl,
   ComponentTypes.Slider,
@@ -38,7 +37,6 @@ export const VALUE_BY_TYPE: Record<string, unknown> = {
   [ComponentTypes.Number]: 42,
   [ComponentTypes.Toggle]: true,
   [ComponentTypes.Dropdown]: "opt1",
-  [ComponentTypes.SimpleDropdown]: "opt1",
   [ComponentTypes.MultiSelect]: ["opt1"],
   [ComponentTypes.DateControl]: "2024-01-15",
   [ComponentTypes.Slider]: 50,
@@ -71,7 +69,6 @@ const TEST_OPTIONS: IOption[] = [
 /** Fields that use options */
 const OPTION_FIELDS: Set<string> = new Set([
   ComponentTypes.Dropdown,
-  ComponentTypes.SimpleDropdown,
   ComponentTypes.MultiSelect,
   ComponentTypes.MultiSelectSearch,
   ComponentTypes.RadioGroup,

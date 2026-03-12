@@ -24,7 +24,6 @@ Ant Design v5 field components for `@formosaic/core`. Provides 12 editable and 1
 | `src/fields/Number.tsx` | antd `InputNumber` |
 | `src/fields/Toggle.tsx` | antd `Switch` |
 | `src/fields/Dropdown.tsx` | antd `Select` |
-| `src/fields/SimpleDropdown.tsx` | antd `Select` for string arrays |
 | `src/fields/MultiSelect.tsx` | antd `Select` with `mode="multiple"` |
 | `src/fields/DateControl.tsx` | antd `DatePicker` with dayjs |
 | `src/fields/Slider.tsx` | antd `Slider` |

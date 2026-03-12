@@ -25,7 +25,6 @@ Mantine v7 field components for `@formosaic/core`. Provides 12 editable and 1 re
 | `src/fields/Number.tsx` | Mantine `NumberInput` |
 | `src/fields/Toggle.tsx` | Mantine `Switch` |
 | `src/fields/Dropdown.tsx` | Mantine `Select` |
-| `src/fields/SimpleDropdown.tsx` | Mantine `Select` for string arrays |
 | `src/fields/MultiSelect.tsx` | Mantine `MultiSelect` |
 | `src/fields/DateControl.tsx` | Native `<input type="date">` |
 | `src/fields/Slider.tsx` | Mantine `Slider` |

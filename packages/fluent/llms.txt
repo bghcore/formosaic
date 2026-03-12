@@ -18,7 +18,6 @@
 - `HookNumber` -- Numeric input
 - `HookToggle` -- Boolean toggle switch
 - `HookDropdown` -- Single-select dropdown
-- `HookSimpleDropdown` -- Simplified single-select dropdown
 - `HookMultiSelect` -- Multi-select checkboxes
 - `HookMultiSelectSearch` -- Multi-select with search/filter
 - `HookDateControl` -- Date picker

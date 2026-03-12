@@ -20,7 +20,6 @@
         "DateControl",
         "Slider",
         "DynamicFragment",
-        "SimpleDropdown",
         "MultiSelectSearch",
         "PopOutEditor",
         "DocumentLinks",
@@ -39,7 +38,7 @@
     },
     "Option": {
       "type": "object",
-      "description": "A single option for Dropdown, StatusDropdown, Multiselect, or SimpleDropdown components.",
+      "description": "A single option for Dropdown, StatusDropdown, or Multiselect components.",
       "properties": {
         "value": {
           "oneOf": [
@@ -238,7 +237,7 @@
           "items": {
             "$ref": "#/definitions/Option"
           },
-          "description": "Static dropdown options for Dropdown, StatusDropdown, SimpleDropdown, and Multiselect components. Each option has a value (stored value) and label (display value). Options can be filtered at runtime by rules."
+          "description": "Static dropdown options for Dropdown, StatusDropdown, and Multiselect components. Each option has a value (stored value) and label (display value). Options can be filtered at runtime by rules."
         },
         "defaultValue": {
           "oneOf": [

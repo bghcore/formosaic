@@ -18,7 +18,6 @@
 - `Number` -- antd `InputNumber`
 - `Toggle` -- antd `Switch`
 - `Dropdown` -- antd `Select`
-- `SimpleDropdown` -- antd `Select` for string arrays
 - `MultiSelect` -- antd `Select` with `mode="multiple"`
 - `DateControl` -- antd `DatePicker` with dayjs
 - `Slider` -- antd `Slider`

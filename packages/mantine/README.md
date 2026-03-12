@@ -2,7 +2,7 @@
 
 Mantine v7 field components for [@formosaic/core](https://www.npmjs.com/package/@formosaic/core).
 
-This package provides 28 field types using **Mantine v7** components. Includes 18 native Mantine components (Rating, Autocomplete, DateTimePicker, FileInput, ColorInput for Tier 2) and 10 semantic HTML fallbacks.
+This package provides 27 field types using **Mantine v7** components. Includes 17 native Mantine components (Rating, Autocomplete, DateTimePicker, FileInput, ColorInput for Tier 2) and 10 semantic HTML fallbacks.
 
 ## Installation
 
@@ -45,7 +45,6 @@ function App() {
 | `Number` | `NumberInput` | `Number` |
 | `Toggle` | `Switch` | `Toggle` |
 | `Dropdown` | `Select` | `Dropdown` |
-| `SimpleDropdown` | `Select` | `SimpleDropdown` |
 | `MultiSelect` | `MultiSelect` | `Multiselect` |
 | `DateControl` | Native `<input type="date">` | `DateControl` |
 | `Slider` | `Slider` | `Slider` |

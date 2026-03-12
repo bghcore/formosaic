@@ -7,7 +7,6 @@ import MultiSelect from "./fields/MultiSelect";
 import DateControl from "./fields/DateControl";
 import Slider from "./fields/Slider";
 import DynamicFragment from "./fields/DynamicFragment";
-import SimpleDropdown from "./fields/SimpleDropdown";
 import MultiSelectSearch from "./fields/MultiSelectSearch";
 import PopOutEditor from "./fields/PopOutEditor";
 import DocumentLinks from "./fields/DocumentLinks";
@@ -40,7 +39,6 @@ export function createMuiFieldRegistry(): Dictionary<React.JSX.Element> {
     [ComponentTypes.DateControl]: React.createElement(DateControl),
     [ComponentTypes.Slider]: React.createElement(Slider),
     [ComponentTypes.Fragment]: React.createElement(DynamicFragment),
-    [ComponentTypes.SimpleDropdown]: React.createElement(SimpleDropdown),
     [ComponentTypes.MultiSelectSearch]: React.createElement(MultiSelectSearch),
     [ComponentTypes.Textarea]: React.createElement(PopOutEditor),
     [ComponentTypes.DocumentLinks]: React.createElement(DocumentLinks),

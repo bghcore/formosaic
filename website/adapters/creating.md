@@ -123,7 +123,6 @@ All adapters must implement these 13 Tier 1 fields:
 | `Number` | Numeric input | `number` |
 | `Toggle` | Boolean switch | `boolean` |
 | `Dropdown` | Single-select from `options` | `string` |
-| `SimpleDropdown` | Single-select from `config.dropdownOptions` | `string` |
 | `MultiSelect` | Multi-select from `options` | `string[]` |
 | `DateControl` | Date picker | `string` (ISO 8601) |
 | `Slider` | Range slider | `number` |

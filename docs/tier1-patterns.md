@@ -45,7 +45,7 @@ const Field = (props: IFieldProps<IConfig>) => {
 
 **Reference:** `packages/headless/src/fields/Dropdown.tsx` (post-DIV-006 fix)
 
-**Applies to:** Dropdown, SimpleDropdown, StatusDropdown, and any single-select field
+**Applies to:** Dropdown, StatusDropdown, and any single-select field
 
 ```tsx
 const Field = (props: IFieldProps<IConfig>) => {

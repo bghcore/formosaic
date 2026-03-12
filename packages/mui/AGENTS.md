@@ -23,7 +23,6 @@ Material UI (MUI) field component implementations for `@formosaic/core`. Provide
 | `src/fields/Number.tsx` | Numeric input. |
 | `src/fields/Toggle.tsx` | Boolean toggle switch. |
 | `src/fields/Dropdown.tsx` | Single-select dropdown. |
-| `src/fields/SimpleDropdown.tsx` | Simplified single-select dropdown. |
 | `src/fields/MultiSelect.tsx` | Multi-select checkboxes. |
 | `src/fields/MultiSelectSearch.tsx` | Multi-select with search/filter. |
 | `src/fields/DateControl.tsx` | Date picker. |

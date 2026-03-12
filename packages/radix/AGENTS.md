@@ -2,7 +2,7 @@
 
 ## Package Purpose
 
-Radix UI primitives field components for `@formosaic/core`. Provides 6 native Radix fields (Toggle, Dropdown, SimpleDropdown, Slider, RadioGroup, CheckboxGroup) and 7 semantic HTML fields. Ships with **no styles** -- ideal as the base for Tailwind CSS, shadcn/ui, and custom design systems. No provider wrapper needed.
+Radix UI primitives field components for `@formosaic/core`. Provides 5 native Radix fields (Toggle, Dropdown, Slider, RadioGroup, CheckboxGroup) and 7 semantic HTML fields. Ships with **no styles** -- ideal as the base for Tailwind CSS, shadcn/ui, and custom design systems. No provider wrapper needed.
 
 ## Critical Constraints
 
@@ -30,7 +30,6 @@ Radix UI primitives field components for `@formosaic/core`. Provides 6 native Ra
 | `src/fields/Number.tsx` | `<input type="number">` (semantic HTML) |
 | `src/fields/Toggle.tsx` | `@radix-ui/react-switch` (Switch.Root + Switch.Thumb) |
 | `src/fields/Dropdown.tsx` | `@radix-ui/react-select` (Select.Root + Trigger + Content + Items) |
-| `src/fields/SimpleDropdown.tsx` | `@radix-ui/react-select` for string arrays |
 | `src/fields/MultiSelect.tsx` | `<select multiple>` (semantic HTML) |
 | `src/fields/DateControl.tsx` | `<input type="date">` (semantic HTML) with clear button |
 | `src/fields/Slider.tsx` | `@radix-ui/react-slider` (Slider.Root + Track + Range + Thumb) |
