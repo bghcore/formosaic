@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Updated Storybook `FormDevTools.stories.tsx` to import from `@formosaic/core/devtools` subpath
+- Updated website docs (`debugging-rules.md`, `performance.md`) to use `@formosaic/core/devtools` import paths
+- Updated `stability.md` to document `@formosaic/core/devtools`, `@formosaic/core/rjsf`, and `@formosaic/core/zod` subpath exports
+
 ## [1.2.0] - 2026-03-12
 
 ### Breaking Changes
