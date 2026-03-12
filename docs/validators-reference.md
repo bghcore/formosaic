@@ -642,7 +642,7 @@ function getValidationRegistry(): Record<string, ValidatorFn>;
 
 ## Validator Metadata
 
-Custom validators registered via `registerValidators()` are not visible to the designer by default. Use `registerValidatorMetadata()` to attach display metadata so the designer can surface them in its UI.
+Use `registerValidatorMetadata()` to attach display metadata to custom validators for use in tooling.
 
 ### IValidatorMetadata
 
@@ -683,7 +683,7 @@ registerValidators({
   },
 });
 
-// 2. Register metadata so the designer can display it
+// 2. Register display metadata
 registerValidatorMetadata("minWords", {
   label: "Minimum Word Count",
   description: "Ensures the field contains a minimum number of words.",
@@ -693,4 +693,4 @@ registerValidatorMetadata("minWords", {
 });
 ```
 
-The designer's Validation tab will now include `minWords` in its validator dropdown alongside the built-ins.
+Registered validators will be available for `minWords` alongside the built-ins.

@@ -30,7 +30,7 @@ No APIs, types, components, or behavior changed. This is a name-only migration.
 | `@form-eng/heroui` | `@formosaic/heroui` |
 | `@form-eng/radix` | `@formosaic/radix` |
 | `@form-eng/react-aria` | `@formosaic/react-aria` |
-| `@form-eng/designer` | `@formosaic/designer` |
+
 
 Subpath exports are unchanged:
 - `@formosaic/core/adapter-utils`
