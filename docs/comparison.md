@@ -43,7 +43,6 @@ How does Formosaic compare to other React form libraries? This guide provides an
 **Key differences:**
 - **Rules engine**: Formosaic has a purpose-built declarative rules engine with 20 condition operators, priority-based conflict resolution, computed values, and cross-field effects. RJSF relies on JSON Schema `dependencies` and `if/then/else`, which are powerful but limited to visibility and required toggling.
 - **Computed values**: Formosaic supports `$values.qty * $values.price` expressions and custom `$fn` functions. RJSF has no built-in computed value system.
-- **Visual builder**: Formosaic includes `@formosaic/designer`. RJSF has community playground tools but no official builder.
 - **UI adapters**: Formosaic has 11 first-party adapters with 28 field types each. RJSF has 5 official themes (antd, chakra, fluent, mui, semantic).
 - **Schema interop**: Formosaic can import RJSF schemas via `fromRjsfSchema()` and export via `toRjsfSchema()`, so migration is straightforward.
 - **Community**: RJSF has a much larger community (~14k GitHub stars) and longer track record.
@@ -71,7 +70,6 @@ How does Formosaic compare to other React form libraries? This guide provides an
 - **Rules engine**: Formosaic has a purpose-built declarative rules engine with 20 condition operators, dependency graph evaluation, priority-based conflict resolution, computed values with `$values`/`$fn` expressions, and cross-field effects. FormEngine.io uses MobX-based dynamic properties -- more flexible for simple cases but lacks declarative semantics, priority resolution, and tracing/debugging tools.
 - **UI adapter count**: 11 first-party adapters (fluent, mui, headless, antd, chakra, mantine, atlaskit, base-web, heroui, radix, react-aria) with 28 field types each. FormEngine.io ships 4 adapters (MUI, Mantine, React Suite, shadcn/ui) with others listed as "coming soon."
 - **Accessibility-first adapters**: Formosaic has dedicated radix (unstyled primitives) and react-aria (ARIA-first) adapters. FormEngine.io has no accessibility-specialized adapter.
-- **Open-source designer**: Formosaic's `@formosaic/designer` is MIT-licensed. FormEngine.io's designer is commercial ($1,299-$5,999 perpetual license).
 - **Contract-tested parity**: All 11 adapters run the same contract + parity test suite (6,296 tests). FormEngine.io's adapter parity is not publicly documented.
 - **Schema interop**: Formosaic imports JSON Schema (via `fromRjsfSchema()`) and Zod schemas. FormEngine.io uses a proprietary JSON format with no documented import from standard schemas.
 - **DevTools**: Formosaic includes FormDevTools for runtime rule tracing, value inspection, and performance tracking. FormEngine.io has no equivalent.
@@ -93,7 +91,7 @@ How does Formosaic compare to other React form libraries? This guide provides an
 
 **Choose FormEngine.io when:** you want a commercial-grade visual designer with AI generation, need specialized components like data grids or signature capture, or are in the Optimajet workflow ecosystem.
 
-**Choose Formosaic when:** you need a declarative rules engine with formal semantics, want the widest UI adapter ecosystem (11 adapters, 28 fields each), need accessibility-first adapters (radix, react-aria), want everything MIT-licensed including the designer, or need contract-tested cross-adapter parity.
+**Choose Formosaic when:** you need a declarative rules engine with formal semantics, want the widest UI adapter ecosystem (11 adapters, 28 fields each), need accessibility-first adapters (radix, react-aria), or need contract-tested cross-adapter parity.
 
 ---
 
@@ -176,7 +174,6 @@ How does Formosaic compare to other React form libraries? This guide provides an
 **Key differences:**
 - **Rules engine**: Formosaic has a declarative rules engine with 20 operators. uniforms uses JSON Schema conditionals or requires imperative code for complex conditions.
 - **Computed values**: Formosaic supports computed expressions. uniforms does not.
-- **Visual builder**: Formosaic includes `@formosaic/designer`. uniforms has no visual builder.
 - **Schema sources**: uniforms supports JSON Schema, GraphQL, and SimpleSchema. Formosaic uses its own IFormConfig format but can import JSON Schema and Zod schemas.
 - **Adapter count**: Formosaic has 11 adapters with 28 field types each. uniforms has 6 bridges.
 - **Wizard**: Formosaic has built-in wizard support with conditional step visibility. uniforms requires custom implementation.
@@ -198,7 +195,7 @@ How does Formosaic compare to other React form libraries? This guide provides an
 - Multi-step / wizard forms
 
 **Key differences:**
-- **Licensing**: SurveyJS form library is MIT, but the Creator (visual builder), PDF generator, and analytics dashboard are commercial licenses. Formosaic is MIT for everything including the designer.
+- **Licensing**: SurveyJS form library is MIT, but the Creator (visual builder), PDF generator, and analytics dashboard are commercial licenses. Formosaic core and all adapter packages are MIT-licensed.
 - **Scope**: SurveyJS is a full survey platform. Formosaic is a form rendering library that integrates into your existing React app.
 - **UI integration**: SurveyJS provides its own themed UI. Formosaic renders through your existing design system (Fluent, MUI, Ant, etc.).
 - **Bundle size**: SurveyJS is significantly larger (~200 KB+).

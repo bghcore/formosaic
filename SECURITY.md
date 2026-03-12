@@ -44,4 +44,3 @@ This policy applies to all packages in the Formosaic monorepo:
 - `@formosaic/heroui`
 - `@formosaic/radix`
 - `@formosaic/react-aria`
-- `@formosaic/designer`

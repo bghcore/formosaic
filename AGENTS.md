@@ -49,7 +49,6 @@ packages/
   heroui/    -- @formosaic/heroui (HeroUI, 28 types)
   radix/     -- @formosaic/radix (Radix UI primitives, 28 types, unstyled)
   react-aria/ -- @formosaic/react-aria (React Aria Components, 28 types)
-  designer/  -- @formosaic/designer (visual drag-and-drop form builder)
   examples/  -- @formosaic/examples (3 example apps)
 docs/
   creating-an-adapter.md      -- Guide for building custom UI library adapters
@@ -98,7 +97,6 @@ Build output per package: `dist/index.js` (CJS), `dist/index.mjs` (ESM), `dist/i
 - [packages/heroui/AGENTS.md](./packages/heroui/AGENTS.md) -- HeroUI adapter patterns
 - [packages/radix/AGENTS.md](./packages/radix/AGENTS.md) -- Radix UI adapter patterns
 - [packages/react-aria/AGENTS.md](./packages/react-aria/AGENTS.md) -- React Aria adapter patterns
-- [packages/designer/AGENTS.md](./packages/designer/AGENTS.md) -- Visual form designer architecture
 
 ## Code Style
 
@@ -145,7 +143,7 @@ All packages should build cleanly and all 6296 tests should pass.
 
 - Conventional commits: `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`
 - Single `main` branch
-- Per-package tags for publishing: `core-v1.0.0`, `fluent-v1.0.0`, `mui-v1.0.0`, `headless-v1.0.0`, `antd-v1.0.0`, `chakra-v1.0.0`, `mantine-v1.0.0`, `atlaskit-v1.0.0`, `base-web-v1.0.0`, `heroui-v1.0.0`, `radix-v1.0.0`, `react-aria-v1.0.0`, `designer-v1.0.0`
+- Per-package tags for publishing: `core-v1.0.0`, `fluent-v1.0.0`, `mui-v1.0.0`, `headless-v1.0.0`, `antd-v1.0.0`, `chakra-v1.0.0`, `mantine-v1.0.0`, `atlaskit-v1.0.0`, `base-web-v1.0.0`, `heroui-v1.0.0`, `radix-v1.0.0`, `react-aria-v1.0.0`
 - Unified tag for all packages: `v1.0.0`
 - Run `npm run build && npm run test` before committing
 

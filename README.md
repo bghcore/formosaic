@@ -33,9 +33,8 @@
 [![npm base-web](https://img.shields.io/npm/v/@formosaic/base-web?label=base-web)](https://www.npmjs.com/package/@formosaic/base-web)
 [![npm atlaskit](https://img.shields.io/npm/v/@formosaic/atlaskit?label=atlaskit)](https://www.npmjs.com/package/@formosaic/atlaskit)
 [![npm heroui](https://img.shields.io/npm/v/@formosaic/heroui?label=heroui)](https://www.npmjs.com/package/@formosaic/heroui)
-[![npm designer](https://img.shields.io/npm/v/@formosaic/designer?label=designer)](https://www.npmjs.com/package/@formosaic/designer)
 
-[Storybook](https://bghcore.github.io/formosaic/storybook/) | [Designer Demo](https://bghcore.github.io/formosaic/designer/) | [npm](https://www.npmjs.com/org/formosaic)
+[Storybook](https://bghcore.github.io/formosaic/storybook/) | [npm](https://www.npmjs.com/org/formosaic)
 
 A React library for rendering complex, configuration-driven forms with a built-in rules engine. Define your forms as a single `IFormConfig` JSON object -- field definitions, declarative rules with rich conditions, validation, ordering -- and the library handles rendering, validation, auto-save, and field interactions automatically.
 
@@ -47,7 +46,6 @@ A React library for rendering complex, configuration-driven forms with a built-i
 - Multi-step wizards with conditional step visibility and cross-step rules
 - Auto-save with debounce, retry, and abort -- not just "submit on click"
 - To swap UI libraries (Fluent UI, MUI, headless HTML, custom) without rewriting form logic
-- A visual drag-and-drop form builder for non-technical users
 
 **Don't use this if you need:**
 - Simple forms with 3-5 static fields -- use react-hook-form directly
@@ -65,10 +63,10 @@ See [docs/comparison.md](./docs/comparison.md) for a detailed comparison with mi
 | UI adapter system | 11 adapters | 4 adapters | 5 themes | Headless | 6 bridges |
 | Computed values | `$values`, `$fn` | MobX-based | No | No | No |
 | Wizard / multi-step | Built-in | Layout-based | Add-on | Manual | No |
-| Visual form builder | Yes (MIT) | Yes (paid) | No | No | No |
+| Visual form builder | No | Yes (paid) | No | No | No |
 | AI form generation | No | ChatGPT GPT | No | No | No |
 | Schema import (JSON/Zod) | Both | Proprietary | JSON Schema | No | JSON Schema |
-| License | MIT (all) | MIT core / Paid builder | Apache 2.0 | MIT | MIT |
+| License | MIT | MIT core / Paid builder | Apache 2.0 | MIT | MIT |
 | Bundle (core) | ~114 KB | ~189 KB | ~85 KB | ~12 KB | ~45 KB |
 
 ## Packages
@@ -87,7 +85,6 @@ See [docs/comparison.md](./docs/comparison.md) for a detailed comparison with mi
 | [`@formosaic/heroui`](./packages/heroui) | HeroUI field components (28 field types). | ~22 KB ESM |
 | [`@formosaic/radix`](./packages/radix) | Radix UI primitives field components (28 field types). Unstyled. | ~32 KB ESM |
 | [`@formosaic/react-aria`](./packages/react-aria) | React Aria Components field components (28 field types). | ~31 KB ESM |
-| [`@formosaic/designer`](./packages/designer) | Visual drag-and-drop form builder with rule editor and JSON export. | ~65 KB ESM |
 | [`@formosaic/examples`](./packages/examples) | 3 example apps (login+MFA, checkout wizard, data entry). | -- |
 
 ## Quick Start
@@ -417,7 +414,7 @@ fields: {
 
 Built-in validators: `EmailValidation`, `PhoneNumberValidation`, `YearValidation`, `Max150KbValidation`, `Max32KbValidation`, `isValidUrl`, `NoSpecialCharactersValidation`, `CurrencyValidation`, `UniqueInArrayValidation` + factory functions: `createMinLengthValidation`, `createMaxLengthValidation`, `createNumericRangeValidation`, `createPatternValidation`, `createRequiredIfValidation`
 
-Use `registerValidatorMetadata()` to attach human-readable metadata (label, description, parameter schema) to validators for use in the visual form designer's RuleBuilder UI:
+Use `registerValidatorMetadata()` to attach human-readable metadata (label, description, parameter schema) to validators for display in tooling or documentation:
 
 ```tsx
 import { registerValidatorMetadata } from "@formosaic/core";
@@ -682,27 +679,6 @@ Style with Tailwind CSS, your own stylesheet, or CSS custom properties:
 
 See the [headless package README](./packages/headless/README.md) for full details.
 
-### Visual Form Builder
-
-The designer package provides a drag-and-drop form builder that exports valid `IFormConfig` v2 JSON:
-
-```tsx
-import { DesignerProvider, FormDesigner } from "@formosaic/designer";
-import "@formosaic/designer/dist/styles.css";
-
-function Builder() {
-  return (
-    <DesignerProvider>
-      <FormDesigner style={{ height: "100vh" }} />
-    </DesignerProvider>
-  );
-}
-```
-
-Features: field palette, drag-and-drop canvas, property editor, rule builder (full v2 condition system), wizard configurator, live JSON preview, import/export, undo/redo.
-
-Use `useDesigner()` to access the exported config programmatically. See the [designer package README](./packages/designer/README.md) for full details.
-
 ### SSR / Next.js
 
 All core components are SSR-safe. Browser-only API access (`localStorage`, `document.activeElement`, `window.addEventListener`) is guarded behind `typeof` checks or confined to `useEffect` callbacks.
@@ -925,7 +901,6 @@ packages/
   heroui/     -- @formosaic/heroui (HeroUI adapter, 28 field types)
   radix/      -- @formosaic/radix (Radix UI primitives adapter, 28 field types)
   react-aria/ -- @formosaic/react-aria (React Aria Components adapter, 28 field types)
-  designer/   -- @formosaic/designer (visual form builder)
   examples/   -- 3 example apps (login+MFA, checkout wizard, data entry)
 e2e/          -- Playwright end-to-end tests
 benchmarks/   -- Vitest benchmarks for rules engine performance

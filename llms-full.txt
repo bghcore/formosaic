@@ -135,7 +135,7 @@ UI-library agnostic engine built for React. Depends only on `react` and `react-h
 - **Providers**: `RulesEngineProvider`, `InjectedFieldProvider` -- React context providers that must wrap the form tree (memoized)
 - **Components**: `FormEngine` (entry point, save with AbortController/retry/timeout), `FormFields`, `RenderField` (useMemo, async validation wired), `FieldWrapper` (React.memo, render props for theming), `ConfirmInputsModal` (focus trap), `WizardForm` (multi-step wizard, step announcements), `FieldArray` (repeating sections), `FormErrorBoundary` (per-field crash isolation), `FormDevTools` (dev-only debugging panel with Rules, Values, Errors, Graph, Perf, Deps, Timeline tabs)
 - **Rules Engine**: `buildDependencyGraph`, `evaluateAllRules`, `evaluateAffectedFields`, `processFieldChange`, `topologicalSort`, `evaluateCondition` (20 operators + AND/OR/NOT), priority-based conflict resolution. Rule effects: required, hidden, readOnly, component swap, options, validate, computedValue, setValue, fieldOrder. Array operators: `arrayContains`, `arrayNotContains`, `arrayLength`.
-- **Validation**: 14 built-in validators + `registerValidators()` for custom sync/async/cross-field. Per-rule `when` condition, `debounceMs`, `async` flag. Factory functions: `createMinLengthValidation`, `createMaxLengthValidation`, `createNumericRangeValidation`, `createPatternValidation`, `createRequiredIfValidation`. `registerValidatorMetadata()` for attaching label/description/paramSchema to validators (used by designer RuleBuilder).
+- **Validation**: 14 built-in validators + `registerValidators()` for custom sync/async/cross-field. Per-rule `when` condition, `debounceMs`, `async` flag. Factory functions: `createMinLengthValidation`, `createMaxLengthValidation`, `createNumericRangeValidation`, `createPatternValidation`, `createRequiredIfValidation`. `registerValidatorMetadata()` for attaching label/description/paramSchema to validators.
 - **Config Validation**: `validateFieldConfigs()` -- dev-mode checks for missing deps, unregistered components/validators, circular deps
 - **Cycle Detection**: `validateDependencyGraph()` -- Kahn's algorithm on dependency graphs
 - **i18n**: `registerLocale()`, `getLocaleString()`, `resetLocale()` -- partial locale overrides with English fallback
@@ -210,14 +210,6 @@ Radix UI primitives adapter. Provides 28 field components (6 Radix UI native + 2
 ### @formosaic/react-aria
 React Aria Components adapter. Provides 28 field components (11 React Aria native + 17 semantic HTML). Native Tier 2: ComboBox for Autocomplete. Best-in-class ARIA accessibility. No provider wrapper needed.
 - **Registry**: `createReactAriaFieldRegistry()`
-
-### @formosaic/designer
-
-Visual drag-and-drop form builder that outputs IFormConfig v2 JSON.
-
-- **Components**: `FormDesigner` (main entry), `FieldPalette` (drag source), `FormCanvas` (drop target), `FieldConfigPanel` (field property editor), `RuleBuilder` (visual rule editor), `ConfigPreview` (live JSON preview), `WizardConfigurator` (step editor), `ImportExport` (JSON import/export)
-- **State**: `DesignerProvider`, `useDesigner` hook, `designerReducer`
-- **Types**: `IDesignerState`, `IDesignerAction`
 
 ### @formosaic/examples
 
@@ -468,21 +460,6 @@ const UserSchema = z.object({
 
 const fieldConfigs = zodSchemaToFieldConfig(UserSchema);
 // ZodString->Textbox, ZodNumber->Number, ZodBoolean->Toggle, ZodEnum->Dropdown
-```
-
-### Visual Form Builder
-
-```tsx
-import { DesignerProvider, FormDesigner } from "@formosaic/designer";
-import "@formosaic/designer/dist/styles.css";
-
-function Builder() {
-  return (
-    <DesignerProvider>
-      <FormDesigner style={{ height: "100vh" }} />
-    </DesignerProvider>
-  );
-}
 ```
 
 ### Lazy Field Registry
