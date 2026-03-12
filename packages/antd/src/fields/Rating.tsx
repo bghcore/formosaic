@@ -5,7 +5,7 @@ import { GetFieldDataTestId } from "../helpers";
 import { Rate } from "antd";
 
 const Rating = (props: IFieldProps<IRatingConfig>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, config, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
 
   const max = config?.max ?? 5;
   const rating = (value as number) ?? 0;
@@ -22,7 +22,7 @@ const Rating = (props: IFieldProps<IRatingConfig>) => {
       onChange={(val) => setFieldValue(fieldName, val)}
       disabled={false}
       aria-label={`Rating, ${rating} of ${max}`}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );
 };

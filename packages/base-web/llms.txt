@@ -44,7 +44,7 @@
 ## Code Example
 
 ```tsx
-import { RulesEngineProvider, InjectedFieldProvider, FormEngine } from "@formosaic/core";
+import { RulesEngineProvider, InjectedFieldProvider, Formosaic } from "@formosaic/core";
 import { createBaseWebFieldRegistry } from "@formosaic/base-web";
 import { Client as Styletron } from "styletron-engine-monolithic";
 import { Provider as StyletronProvider } from "styletron-react";
@@ -70,7 +70,7 @@ function App() {
       <BaseProvider theme={LightTheme}>
         <RulesEngineProvider>
           <InjectedFieldProvider injectedFields={createBaseWebFieldRegistry()}>
-            <FormEngine formConfig={formConfig} saveData={async (data) => data} />
+            <Formosaic formConfig={formConfig} saveData={async (data) => data} />
           </InjectedFieldProvider>
         </RulesEngineProvider>
       </BaseProvider>

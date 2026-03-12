@@ -4,7 +4,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const ColorPicker = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
 
   const color = (value as string) ?? "#000000";
 
@@ -28,7 +28,7 @@ const ColorPicker = (props: IFieldProps<{}>) => {
         onChange={onChange}
         aria-invalid={!!error}
         aria-required={required}
-        data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+        data-testid={GetFieldDataTestId(fieldName, testId)}
       />
       <span className="fe-color-picker__value">{color}</span>
     </div>

@@ -4,7 +4,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const Rating = (props: IFieldProps<IRatingConfig>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, config, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
 
   const max = config?.max ?? 5;
   const rating = (value as number) ?? 0;
@@ -22,7 +22,7 @@ const Rating = (props: IFieldProps<IRatingConfig>) => {
       aria-label={`Rating, ${rating} of ${max}`}
       aria-invalid={!!error}
       aria-required={required}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       {stars.map(star => (
         <button

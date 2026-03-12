@@ -5,7 +5,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const PhoneInput = (props: IFieldProps<IPhoneInputConfig>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, config, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
 
   const format = config?.format ?? "us";
 
@@ -30,7 +30,7 @@ const PhoneInput = (props: IFieldProps<IPhoneInputConfig>) => {
       inputProps={{
         "aria-invalid": !!error,
         "aria-required": required,
-        "data-testid": GetFieldDataTestId(fieldName, programName, entityType, entityId),
+        "data-testid": GetFieldDataTestId(fieldName, testId),
       }}
       size="small"
       fullWidth

@@ -4,7 +4,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const DateTime = (props: IFieldProps<IDateTimeConfig>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, config, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
 
   const minDateTime = config?.minDateTime;
   const maxDateTime = config?.maxDateTime;
@@ -29,7 +29,7 @@ const DateTime = (props: IFieldProps<IDateTimeConfig>) => {
       onChange={onChange}
       aria-invalid={!!error}
       aria-required={required}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );
 };

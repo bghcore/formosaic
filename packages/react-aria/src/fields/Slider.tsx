@@ -11,7 +11,7 @@ interface ISliderProps {
 }
 
 const Slider = (props: IFieldProps<ISliderProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, config, error, required, setFieldValue } = props;
 
   if (readOnly) {
     return <ReadOnlyText fieldName={fieldName} value={String(value)} />;
@@ -27,7 +27,7 @@ const Slider = (props: IFieldProps<ISliderProps>) => {
       step={config?.step}
       data-field-type="Slider"
       data-field-state={getFieldState({ error, required, readOnly })}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       <SliderTrack className="df-slider__track">
         <SliderThumb className="df-slider__thumb" />

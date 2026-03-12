@@ -11,7 +11,7 @@ interface ITextareaProps {
 }
 
 const Textarea = (props: IFieldProps<ITextareaProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, config, error, required, setFieldValue } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFieldValue(fieldName, event.target.value, false, 3000);
@@ -37,7 +37,7 @@ const Textarea = (props: IFieldProps<ITextareaProps>) => {
       maxLength={config?.maxLimit}
       aria-invalid={!!error}
       aria-required={required}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );
 };

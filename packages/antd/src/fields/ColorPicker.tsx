@@ -5,7 +5,7 @@ import { GetFieldDataTestId } from "../helpers";
 import { ColorPicker as AntdColorPicker } from "antd";
 
 const ColorPicker = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
   const color = (value as string) ?? "#000000";
   if (readOnly) {
     return <ReadOnlyText fieldName={fieldName} value={color} />;
@@ -15,7 +15,7 @@ const ColorPicker = (props: IFieldProps<{}>) => {
       className="fe-color-picker"
       value={color}
       onChange={(_, hex) => setFieldValue(fieldName, hex)}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );
 };

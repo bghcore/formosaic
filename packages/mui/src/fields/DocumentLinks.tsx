@@ -14,9 +14,7 @@ export interface IDocumentLink {
 
 interface IDocumentLinkItemProps {
   fieldName: string;
-  programName?: string;
-  entityType?: string;
-  entityId?: string;
+  testId?: string;
   readOnly?: boolean;
   index?: number;
   title?: string;
@@ -29,7 +27,7 @@ interface IDocumentLinkItemProps {
 
 const DocumentLinkItem = (props: IDocumentLinkItemProps) => {
   const {
-    fieldName, programName, entityType, entityId, readOnly, index, title, url, addNewLink,
+    fieldName, testId, readOnly, index, title, url, addNewLink,
     saveLinks, onCancelAddLink, onConfirmDeleteLink
   } = props;
   const { confirm, cancel, linkTitleLabel, linkUrlLabel, add, edit, deleteLabel } = FormStrings;
@@ -81,7 +79,7 @@ const DocumentLinkItem = (props: IDocumentLinkItemProps) => {
                 error={!!error}
                 helperText={error?.message}
                 inputProps={{
-                  "data-testid": `${GetFieldDataTestId(fieldName, programName, entityType, entityId)}-link-title`,
+                  "data-testid": `${GetFieldDataTestId(fieldName, testId)}-link-title`,
                 }}
               />
             </div>
@@ -103,7 +101,7 @@ const DocumentLinkItem = (props: IDocumentLinkItemProps) => {
                 error={!!error}
                 helperText={error?.message}
                 inputProps={{
-                  "data-testid": `${GetFieldDataTestId(fieldName, programName, entityType, entityId)}-link-url`,
+                  "data-testid": `${GetFieldDataTestId(fieldName, testId)}-link-url`,
                 }}
               />
             </div>
@@ -133,7 +131,7 @@ const DocumentLinkItem = (props: IDocumentLinkItemProps) => {
 };
 
 const DocumentLinks = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, setFieldValue } = props;
 
   const { watch } = useFormContext();
   const documentLinks = watch(`${fieldName}` as const);
@@ -174,14 +172,14 @@ const DocumentLinks = (props: IFieldProps<{}>) => {
       <List disablePadding>
         {links?.length > 0 ? links.map((link, index) => (
           <DocumentLinkItem
-            key={`${link.url}-${index}`} fieldName={fieldName} programName={programName}
-            entityType={entityType} entityId={entityId} index={index} title={link.title}
+            key={`${link.url}-${index}`} fieldName={fieldName} testId={testId}
+            index={index} title={link.title}
             url={link.url} saveLinks={saveLinks} onConfirmDeleteLink={onConfirmDeleteLink} readOnly={readOnly}
           />
         )) : null}
       </List>
       {addNewLink ? (
-        <DocumentLinkItem fieldName={fieldName} programName={programName} entityType={entityType} entityId={entityId}
+        <DocumentLinkItem fieldName={fieldName} testId={testId}
           addNewLink saveLinks={saveLinks} onCancelAddLink={onCancelAddLink} />
       ) : !readOnly ? (
         <div className="add-link" style={{ marginTop: "8px" }}>
@@ -190,7 +188,7 @@ const DocumentLinks = (props: IFieldProps<{}>) => {
               variant="outlined"
               size="small"
               onClick={onAddNewLink}
-              data-testid={`${GetFieldDataTestId(fieldName, programName, entityType, entityId)}-add-link`}
+              data-testid={`${GetFieldDataTestId(fieldName, testId)}-add-link`}
             >
               {links?.length > 0 ? DocumentLinksStrings.addAnotherLink : DocumentLinksStrings.addLink}
             </Button>

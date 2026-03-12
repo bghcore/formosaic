@@ -6,7 +6,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const Autocomplete = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, placeholder, options, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, placeholder, options, setFieldValue } = props;
 
   const selectedText = options?.find(o => String(o.value) === String(value))?.label ?? (value as string) ?? "";
 
@@ -35,7 +35,7 @@ const Autocomplete = (props: IFieldProps<{}>) => {
       freeform
       aria-invalid={!!error}
       aria-required={required}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       {options?.map(option => (
         <Option key={String(option.value)} value={String(option.value)} disabled={option.disabled}>

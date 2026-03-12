@@ -109,7 +109,7 @@ Build output per package: `dist/index.js` (CJS), `dist/index.mjs` (ESM), `dist/i
 
 ## Code Style
 
-- Core components: `FormEngine`, `FormFields`, `RenderField`, `FieldWrapper`, `WizardForm`, `FieldArray`
+- Core components: `Formosaic`, `FormFields`, `RenderField`, `FieldWrapper`, `WizardForm`, `FieldArray`
 - Adapter field components: `Textbox`, `Dropdown`, `Toggle`, etc. (no `Hook*` prefix)
 - Read-only variants in `fields/readonly/`: `ReadOnly`, `ReadOnlyArray`, etc.
 - Interfaces use `I` prefix: `IFieldConfig`, `IRuntimeFieldState`, `IFieldProps`

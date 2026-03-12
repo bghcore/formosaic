@@ -13,7 +13,7 @@ npm install @formosaic/headless @formosaic/core react react-dom react-hook-form
 ## Quick Start
 
 ```tsx
-import { FormEngine, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
+import { Formosaic, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
 import { createHeadlessFieldRegistry } from "@formosaic/headless";
 
 // Optional: import the minimal default styles
@@ -25,9 +25,8 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider fields={fields}>
-        <FormEngine
+        <Formosaic
           formConfig={myFormConfig}
-          entityData={myEntityData}
           onSave={handleSave}
         />
       </InjectedFieldProvider>

@@ -132,9 +132,7 @@ export function runAdapterContractTests(
     describe("field rendering", () => {
       const minimalProps = {
         fieldName: "testField",
-        programName: "testProg",
-        entityType: "testEntity",
-        entityId: "123",
+        testId: "contract-test",
         value: undefined,
         readOnly: false,
         required: false,

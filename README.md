@@ -117,7 +117,7 @@ npm install @formosaic/core @formosaic/react-aria react-aria-components
 import {
   RulesEngineProvider,
   InjectedFieldProvider,
-  FormEngine,
+  Formosaic,
 } from "@formosaic/core";
 import { createFluentFieldRegistry } from "@formosaic/fluent";
 // Or: import { createMuiFieldRegistry } from "@formosaic/mui";
@@ -144,9 +144,8 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider injectedFields={createFluentFieldRegistry()}>
-        <FormEngine
+        <Formosaic
           configName="myForm"
-          programName="myApp"
           formConfig={formConfig}
           defaultValues={{ name: "", status: "Active", notes: "" }}
           saveData={async (data) => {
@@ -540,7 +539,7 @@ By default, forms auto-save on every field change (debounced). Set `isManualSave
 
 ```tsx
 // Auto-save (default) -- saves on every field change with debounce
-<FormEngine
+<Formosaic
   configName="myForm"
   formConfig={formConfig}
   defaultValues={defaultValues}
@@ -548,7 +547,7 @@ By default, forms auto-save on every field change (debounced). Set `isManualSave
 />
 
 // Manual save -- shows Save/Cancel buttons, no auto-save
-<FormEngine
+<Formosaic
   configName="myForm"
   formConfig={formConfig}
   defaultValues={defaultValues}
@@ -557,7 +556,7 @@ By default, forms auto-save on every field change (debounced). Set `isManualSave
 />
 
 // Manual save with custom button
-<FormEngine
+<Formosaic
   isManualSave={true}
   renderSaveButton={({ onSave, isDirty, isSubmitting }) => (
     <button onClick={onSave} disabled={!isDirty || isSubmitting}>
@@ -570,14 +569,14 @@ By default, forms auto-save on every field change (debounced). Set `isManualSave
 
 ### Save Reliability
 
-FormEngine includes robust save handling:
+Formosaic includes robust save handling:
 
 - **AbortController** cancels previous in-flight saves when a new save is triggered
 - **Configurable timeout** via `saveTimeoutMs` prop (default 30 seconds)
 - **Retry with exponential backoff** via `maxSaveRetries` prop (default 3 retries)
 
 ```tsx
-<FormEngine
+<Formosaic
   saveTimeoutMs={15000}   // 15 second timeout
   maxSaveRetries={5}      // Retry up to 5 times with exponential backoff
   saveData={async (data) => { /* ... */ }}
@@ -616,7 +615,7 @@ function MyForm() {
   // Warn user before leaving page with unsaved changes
   useBeforeUnload(isDirty, "You have unsaved changes.");
 
-  return <FormEngine /* ... */ />;
+  return <Formosaic /* ... */ />;
 }
 ```
 
@@ -650,10 +649,10 @@ CSS custom properties for global theming (import optional `styles.css`):
 }
 ```
 
-Form-level error banner via `formErrors` prop on `FormEngine`:
+Form-level error banner via `formErrors` prop on `Formosaic`:
 
 ```tsx
-<FormEngine
+<Formosaic
   formErrors={["End date must be after start date"]}
   /* ... */
 />
@@ -735,8 +734,8 @@ const uiSchema = {
 const formConfig = fromRjsfSchema(schema, uiSchema, existingFormData);
 // formConfig.fields.adminCode has rules for conditional visibility based on role
 
-// Use directly with FormEngine
-<FormEngine formConfig={formConfig} /* ... */ />
+// Use directly with Formosaic
+<Formosaic formConfig={formConfig} /* ... */ />
 ```
 
 Also exports `toRjsfSchema(config)` for converting back to JSON Schema + uiSchema (best-effort, structural fidelity only).
@@ -828,12 +827,12 @@ All 28 field types (22 editable + 6 read-only) are available in the Fluent UI, M
 
 ## Architecture
 
-Form-engine separates **what** a form contains (the `IFormConfig` JSON object) from **how** it renders (UI adapter packages). The core package owns form state (via react-hook-form), evaluates declarative rules to compute field visibility/required/readOnly state, and delegates rendering to pluggable field components registered through the component injection system. This means you can swap your entire UI layer -- from Fluent UI to MUI to headless HTML -- by changing one import.
+Formosaic separates **what** a form contains (the `IFormConfig` JSON object) from **how** it renders (UI adapter packages). The core package owns form state (via react-hook-form), evaluates declarative rules to compute field visibility/required/readOnly state, and delegates rendering to pluggable field components registered through the component injection system. This means you can swap your entire UI layer -- from Fluent UI to MUI to headless HTML -- by changing one import.
 
 ```
 <RulesEngineProvider>           -- Owns rule state via useReducer (memoized)
   <InjectedFieldProvider>       -- Component injection registry (memoized)
-    <FormEngine>               -- Form state (react-hook-form), auto-save with retry, rules
+    <Formosaic>                -- Form state (react-hook-form), auto-save with retry, rules
       <FormFields>              -- Renders ordered field list
         <FormErrorBoundary>     -- Per-field error boundary (crash isolation)
           <RenderField>         -- Per-field: Controller + component lookup (useMemo)

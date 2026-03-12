@@ -17,7 +17,7 @@ import {
   RulesEngineProvider,
   InjectedFieldProvider,
   UseInjectedFieldContext,
-  FormEngine,
+  Formosaic,
 } from "@formosaic/core";
 import { createMuiFieldRegistry } from "@formosaic/mui";
 import { ThemeProvider, createTheme } from "@mui/material";
@@ -39,9 +39,8 @@ function App() {
       <RulesEngineProvider>
         <InjectedFieldProvider>
           <FieldRegistrar>
-            <FormEngine
+            <Formosaic
               configName="myForm"
-              programName="myApp"
               fieldConfigs={{
                 name: { type: "Textbox", label: "Name", required: true },
                 status: {

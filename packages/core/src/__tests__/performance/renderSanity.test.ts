@@ -35,9 +35,7 @@ function createSimpleFormConfig(fieldCount: number, rulesPerField = 0): IFormCon
 
 const baseProps = {
   fieldName: "perfField",
-  programName: "perfTest",
-  entityType: "test",
-  entityId: "perf-1",
+  testId: "perf-test",
   value: undefined as unknown,
   readOnly: false,
   required: false,

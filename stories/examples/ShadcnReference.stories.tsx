@@ -1,7 +1,7 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import {
-  FormEngine,
+  Formosaic,
   RulesEngineProvider,
   InjectedFieldProvider,
 } from "@formosaic/core";
@@ -28,8 +28,8 @@ export default meta;
 
 export const HybridRegistry: StoryObj = {
   render: () => (
-    <FormEngine
-      programName="storybook"
+    <Formosaic
+
       configName="shadcnProfile"
       formConfig={profileFormConfig}
       defaultValues={{
@@ -50,8 +50,8 @@ export const HybridRegistry: StoryObj = {
 
 export const Empty: StoryObj = {
   render: () => (
-    <FormEngine
-      programName="storybook"
+    <Formosaic
+
       configName="shadcnProfile"
       formConfig={profileFormConfig}
       defaultValues={{}}

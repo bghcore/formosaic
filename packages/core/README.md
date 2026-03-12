@@ -16,7 +16,7 @@ Peer dependencies: `react` (18 or 19), `react-hook-form` (v7)
 import {
   RulesEngineProvider,
   InjectedFieldProvider,
-  FormEngine,
+  Formosaic,
 } from "@formosaic/core";
 
 const fieldConfigs = {
@@ -35,9 +35,8 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider>
-        <FormEngine
+        <Formosaic
           configName="myForm"
-          programName="myApp"
           fieldConfigs={fieldConfigs}
           defaultValues={{ name: "", status: "Active" }}
           saveData={async (data) => {
@@ -192,13 +191,13 @@ All strings in `FormStrings` and validation error messages resolve through the l
 
 ```tsx
 // Auto-save (default) -- saves on every field change with debounce
-<FormEngine saveData={async (data) => data} />
+<Formosaic saveData={async (data) => data} />
 
 // Manual save -- shows Save/Cancel buttons, no auto-save
-<FormEngine isManualSave={true} saveData={async (data) => data} />
+<Formosaic isManualSave={true} saveData={async (data) => data} />
 
 // Manual save with custom buttons
-<FormEngine
+<Formosaic
   isManualSave={true}
   renderSaveButton={({ onSave, isDirty, isSubmitting }) => (
     <button onClick={onSave} disabled={!isDirty || isSubmitting}>Submit</button>
@@ -230,14 +229,14 @@ Built into the core rendering pipeline automatically.
 
 ## Save Reliability
 
-FormEngine includes robust save handling:
+Formosaic includes robust save handling:
 
 - **AbortController** cancels previous in-flight saves when a new save triggers
 - **Configurable timeout** via `saveTimeoutMs` prop (default 30 seconds)
 - **Retry with exponential backoff** via `maxSaveRetries` prop (default 3 retries)
 
 ```tsx
-<FormEngine
+<Formosaic
   saveTimeoutMs={15000}
   maxSaveRetries={5}
   saveData={async (data) => { /* ... */ }}
@@ -311,7 +310,7 @@ Import the optional `styles.css` and override CSS custom properties:
 Display a form-level error banner for cross-field validation:
 
 ```tsx
-<FormEngine
+<Formosaic
   formErrors={["End date must be after start date"]}
   /* ... */
 />
@@ -478,7 +477,7 @@ setInjectedFields(lazyFields);
 ```
 <RulesEngineProvider>            -- Owns rule state via useReducer (memoized)
   <InjectedFieldProvider>        -- Component injection registry (memoized)
-    <FormEngine>                -- Form state (react-hook-form), auto-save with retry, business rules
+    <Formosaic>                 -- Form state (react-hook-form), auto-save with retry, business rules
       <FormFields>               -- Renders ordered field list
         <FormErrorBoundary>      -- Per-field error boundary (crash isolation)
           <RenderField>          -- Per-field: Controller + component lookup (useMemo)

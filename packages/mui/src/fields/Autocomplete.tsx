@@ -10,7 +10,7 @@ interface IAutocompleteOption {
 }
 
 const Autocomplete = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, placeholder, options, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, placeholder, options, setFieldValue } = props;
 
   const muiOptions: IAutocompleteOption[] = (options ?? []).map(o => ({
     value: String(o.value),
@@ -45,7 +45,7 @@ const Autocomplete = (props: IFieldProps<{}>) => {
           inputProps={{
             ...params.inputProps,
             "aria-invalid": !!error,
-            "data-testid": GetFieldDataTestId(fieldName, programName, entityType, entityId),
+            "data-testid": GetFieldDataTestId(fieldName, testId),
           }}
         />
       )}

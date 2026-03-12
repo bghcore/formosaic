@@ -16,7 +16,7 @@ interface ITextareaProps {
 
 const Textarea = (props: IFieldProps<ITextareaProps>) => {
   const {
-    error, fieldName, programName, entityType, entityId, config, readOnly,
+    error, fieldName, testId, config, readOnly,
     required, savePending, saving, value, label, setFieldValue
   } = props;
 
@@ -86,7 +86,7 @@ const Textarea = (props: IFieldProps<ITextareaProps>) => {
           rows={config?.numberOfRows ?? 4}
           aria-invalid={!!error}
           aria-required={required}
-          data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+          data-testid={GetFieldDataTestId(fieldName, testId)}
         />
         <button
           type="button"
@@ -135,7 +135,7 @@ const Textarea = (props: IFieldProps<ITextareaProps>) => {
             className="df-btn df-btn--primary"
             onClick={onSave}
             disabled={!config?.saveCallback && modalValue === (value as string)}
-            data-testid={`${programName}-${entityType}-${entityId}-save-note`}
+            data-testid={`${testId ? testId + "-" : ""}save-note`}
           >
             {FormStrings.save}
           </button>

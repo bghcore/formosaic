@@ -15,7 +15,7 @@ npm install @formosaic/heroui @formosaic/core @heroui/react @internationalized/d
 ## Quick Start
 
 ```tsx
-import { FormEngine, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
+import { Formosaic, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
 import { createHeroUIFieldRegistry } from "@formosaic/heroui";
 
 const fields = createHeroUIFieldRegistry();
@@ -24,9 +24,8 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider fields={fields}>
-        <FormEngine
+        <Formosaic
           formConfig={myFormConfig}
-          entityData={myEntityData}
           onSave={handleSave}
         />
       </InjectedFieldProvider>

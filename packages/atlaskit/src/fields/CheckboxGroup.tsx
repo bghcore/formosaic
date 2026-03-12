@@ -4,7 +4,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const CheckboxGroup = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, options, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
 
   const selected = Array.isArray(value) ? (value as string[]) : [];
 
@@ -30,7 +30,7 @@ const CheckboxGroup = (props: IFieldProps<{}>) => {
       aria-required={required}
       data-field-type="CheckboxGroup"
       data-field-state={getFieldState({ error, required, readOnly })}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       {options?.map(option => (
         <label key={String(option.value)} className="ak-checkbox-group__option">

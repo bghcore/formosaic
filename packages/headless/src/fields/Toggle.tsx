@@ -5,7 +5,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const Toggle = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, label, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, label, setFieldValue } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(fieldName, event.target.checked);
@@ -29,7 +29,7 @@ const Toggle = (props: IFieldProps<{}>) => {
         onChange={onChange}
         aria-invalid={!!error}
         aria-required={required}
-        data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+        data-testid={GetFieldDataTestId(fieldName, testId)}
       />
       <span className="df-toggle__label">{label}</span>
     </label>

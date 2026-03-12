@@ -1,24 +1,18 @@
 import { IEntityData } from "../utils";
 
-export interface IFormEngineSharedProps {
-  entityId?: string;
-  entityType?: string;
-  programName: string;
+export interface IFormosaicProps {
   configName: string;
-  parentEntityId?: string;
-  parentEntityType?: string;
-  entityPath?: string;
+  /** Optional test ID prefix for data-testid attributes */
+  testId?: string;
   areAllFieldsReadonly?: boolean;
   expandCutoffCount?: number;
   collapsedMaxHeight?: number;
   isCreate?: boolean;
-  customSaveKey?: string;
-  customSaveCallbackKey?: string;
   enableFilter?: boolean;
   /** Current user's identifier for value functions like setLoggedInUser */
   currentUserId?: string;
   /** Callback when save error occurs */
   onSaveError?: (error: string) => void;
-  /** Parent entity data for value functions like inheritFromParent */
+  /** Parent entity data for $parent expressions */
   parentEntity?: IEntityData;
 }

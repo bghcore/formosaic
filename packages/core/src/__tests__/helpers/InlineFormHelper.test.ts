@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import {
-  GetChildEntity,
   IsExpandVisible,
   GetConfirmInputModalProps,
   GetComputedValuesOnDirtyFields,
@@ -21,63 +20,6 @@ import { IFieldConfig } from "../../types/IFieldConfig";
 import { IOption } from "../../types/IOption";
 
 describe("InlineFormHelper", () => {
-  describe("GetChildEntity", () => {
-    const parentEntity: IEntityData = {
-      items: [
-        { id: "child-1", name: "First" },
-        { id: "child-2", name: "Second" },
-        { id: "child-3", name: "Third" },
-      ],
-    };
-
-    it("finds and returns the child entity with Parent reference when exactly one match", () => {
-      const result = GetChildEntity("child-2", parentEntity, "items");
-      expect(result).toBeDefined();
-      expect(result!.id).toBe("child-2");
-      expect(result!.name).toBe("Second");
-      expect(result!.Parent).toEqual(parentEntity);
-    });
-
-    it("returns undefined when entityId does not match any child", () => {
-      const result = GetChildEntity("nonexistent", parentEntity, "items");
-      expect(result).toBeUndefined();
-    });
-
-    it("returns undefined when entity is undefined", () => {
-      const result = GetChildEntity("child-1", undefined, "items");
-      expect(result).toBeUndefined();
-    });
-
-    it("returns undefined when entityPath is undefined", () => {
-      const result = GetChildEntity("child-1", parentEntity, undefined);
-      expect(result).toBeUndefined();
-    });
-
-    it("returns undefined when multiple children match (ambiguous)", () => {
-      const entityWithDuplicates: IEntityData = {
-        items: [
-          { id: "dup", name: "First" },
-          { id: "dup", name: "Second" },
-        ],
-      };
-      const result = GetChildEntity("dup", entityWithDuplicates, "items");
-      expect(result).toBeUndefined();
-    });
-
-    it("supports custom idField parameter", () => {
-      const entityWithCustomId: IEntityData = {
-        records: [
-          { code: "REC-1", title: "Record One" },
-          { code: "REC-2", title: "Record Two" },
-        ],
-      };
-      const result = GetChildEntity("REC-1", entityWithCustomId, "records", "code");
-      expect(result).toBeDefined();
-      expect(result!.code).toBe("REC-1");
-      expect(result!.title).toBe("Record One");
-    });
-  });
-
   describe("IsExpandVisible", () => {
     it("returns true when visible (non-hidden) fields exceed the default cutoff", () => {
       const fieldStates: Record<string, IRuntimeFieldState> = {};

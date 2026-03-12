@@ -13,7 +13,7 @@ npm install @formosaic/atlaskit @formosaic/core react react-dom react-hook-form
 ## Quick Start
 
 ```tsx
-import { FormEngine, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
+import { Formosaic, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
 import { createAtlaskitFieldRegistry } from "@formosaic/atlaskit";
 
 const fields = createAtlaskitFieldRegistry();
@@ -22,9 +22,8 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider fields={fields}>
-        <FormEngine
+        <Formosaic
           formConfig={myFormConfig}
-          entityData={myEntityData}
           onSave={handleSave}
         />
       </InjectedFieldProvider>

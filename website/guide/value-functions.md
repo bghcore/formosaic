@@ -17,7 +17,6 @@ All value function infrastructure is in `packages/core/src/helpers/ValueFunction
 | `setDate` | Sets the field to the current date/time | `new Date()` | On create / on dependency trigger |
 | `setDateIfNull` | Sets the field to the current date/time only if the field has no existing value | `new Date()` if value is falsy; otherwise existing value | On create / on dependency trigger |
 | `setLoggedInUser` | Sets the field to the current user's identity object | `{ id: currentUserId }` | On create |
-| `inheritFromParent` | Copies the value from the parent entity using the same field name | `parentEntity[fieldName]` | On create |
 
 ### Example config
 

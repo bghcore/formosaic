@@ -11,7 +11,7 @@ interface ITextboxProps {
 }
 
 const Textbox = (props: IFieldProps<ITextboxProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, placeholder, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, config, error, required, placeholder, setFieldValue } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(fieldName, event.target.value, false, 3000);
@@ -37,7 +37,7 @@ const Textbox = (props: IFieldProps<ITextboxProps>) => {
       required={required}
       aria-invalid={!!error}
       aria-required={required}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );
 };

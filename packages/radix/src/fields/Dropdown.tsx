@@ -10,7 +10,7 @@ interface IDropdownProps {
 }
 
 const Dropdown = (props: IFieldProps<IDropdownProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, options, placeholder, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, config, error, required, options, placeholder, setFieldValue } = props;
 
   React.useEffect(() => {
     if (!value && !readOnly && config?.setDefaultKeyIfOnlyOneOption && options?.length === 1) {
@@ -37,7 +37,7 @@ const Dropdown = (props: IFieldProps<IDropdownProps>) => {
           className="df-dropdown"
           aria-invalid={!!error}
           aria-required={required}
-          data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+          data-testid={GetFieldDataTestId(fieldName, testId)}
         >
           <Select.Value placeholder={placeholder ?? config?.placeHolder ?? ""} />
           <Select.Icon className="df-dropdown__icon">&#9660;</Select.Icon>

@@ -19,7 +19,7 @@ npm install @formosaic/core @formosaic/radix
 ```
 
 ```tsx
-import { FormEngine, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
+import { Formosaic, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
 import { createRadixFieldRegistry } from "@formosaic/radix";
 
 const fields = createRadixFieldRegistry();
@@ -28,7 +28,7 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider fields={fields}>
-        <FormEngine config={formConfig} entityData={data} />
+        <Formosaic config={formConfig} />
       </InjectedFieldProvider>
     </RulesEngineProvider>
   );

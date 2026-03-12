@@ -11,7 +11,7 @@ interface IDropdownProps {
 }
 
 const Dropdown = (props: IFieldProps<IDropdownProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, options, placeholder, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, config, error, required, options, placeholder, setFieldValue } = props;
 
   React.useEffect(() => {
     if (!value && !readOnly && config?.setDefaultKeyIfOnlyOneOption && options?.length === 1) {
@@ -37,7 +37,7 @@ const Dropdown = (props: IFieldProps<IDropdownProps>) => {
     >
       <Button
         className="df-dropdown__trigger"
-        data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+        data-testid={GetFieldDataTestId(fieldName, testId)}
       >
         <SelectValue>{placeholder ?? config?.placeHolder ?? ""}</SelectValue>
         <span className="df-dropdown__icon" aria-hidden="true">&#9660;</span>

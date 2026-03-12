@@ -16,12 +16,12 @@ import {
 
 describe("FieldUtils", () => {
   describe("GetFieldDataTestId", () => {
-    it("concatenates parts with hyphens", () => {
-      expect(GetFieldDataTestId("name", "prog", "entity", "123")).toBe("prog-entity-123-name");
+    it("returns testId-fieldName when testId is provided", () => {
+      expect(GetFieldDataTestId("name", "my-form")).toBe("my-form-name");
     });
 
-    it("handles undefined optional params", () => {
-      expect(GetFieldDataTestId("name")).toBe("undefined-undefined-undefined-name");
+    it("returns just fieldName when testId is undefined", () => {
+      expect(GetFieldDataTestId("name")).toBe("name");
     });
   });
 

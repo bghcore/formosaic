@@ -6,7 +6,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const NumberField = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, config, error, required, setFieldValue } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const number = Number(event.target.value);
@@ -30,7 +30,7 @@ const NumberField = (props: IFieldProps<{}>) => {
       required={required}
       helperText={error?.message}
       inputProps={{
-        "data-testid": GetFieldDataTestId(fieldName, programName, entityType, entityId),
+        "data-testid": GetFieldDataTestId(fieldName, testId),
       }}
     />
   );

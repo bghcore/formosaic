@@ -9,11 +9,7 @@ import RenderField from "./RenderField";
 import { FormErrorBoundary } from "./FormErrorBoundary";
 
 interface IFormFieldsProps {
-  entityId?: string;
-  entityType?: string;
-  programName?: string;
-  parentEntityId?: string;
-  parentEntityType?: string;
+  testId?: string;
   isExpanded?: boolean;
   expandEnabled?: boolean;
   fieldOrder?: string[];
@@ -34,7 +30,7 @@ interface IFormFieldsProps {
 
 export const FormFields = (props: IFormFieldsProps) => {
   const {
-    entityId, entityType, programName, parentEntityId, parentEntityType,
+    testId,
     isExpanded, expandEnabled, fieldOrder, inPanel, collapsedMaxHeight,
     formState, fields, setFieldValue, isManualSave, isCreate, filterText,
     fieldRenderLimit, renderLabel, renderError, renderStatus, analytics,
@@ -78,14 +74,14 @@ export const FormFields = (props: IFormFieldsProps) => {
 
   const collapsedClass = !isExpanded && (expandEnabled || expandEnabled === undefined) ? "collapsed" : "";
   const fieldsToRender = GetFieldsToRender(fieldRenderLimit ?? 0, fieldOrder ?? [], formState?.fieldStates);
-  const loadingKey = `${programName}-${entityType}-${entityId}-form-loaded`;
+  const loadingKey = `${testId ? testId + "-" : ""}form-loaded`;
 
   return (
     <div className={`fe-form-container ${collapsedClass}`}>
       <form
         className={`fe-form ${collapsedClass} ${inPanel ? "in-panel" : ""}`}
         style={collapsedClass && collapsedMaxHeight ? { maxHeight: `${collapsedMaxHeight}px` } : undefined}
-        data-testid={`${programName}-${entityType}-${entityId}-form`}
+        data-testid={`${testId ? testId + "-" : ""}form`}
       >
         <input type="hidden" id={loadingKey} name={loadingKey} data-testid={loadingKey} />
         {fieldsToRender?.map(fieldToRender => {
@@ -95,12 +91,10 @@ export const FormFields = (props: IFormFieldsProps) => {
 
           const fieldConfig = fields![fieldName];
           return (
-            <FormErrorBoundary key={`${fieldName}-${entityId}-form`}>
+            <FormErrorBoundary key={`${fieldName}-form`}>
               <RenderField
                 fieldName={fieldName}
-                entityId={entityId}
-                entityType={entityType}
-                programName={programName}
+                testId={testId}
                 type={fieldState.type ?? ""}
                 hidden={fieldState.hidden}
                 required={fieldState.required}
@@ -108,8 +102,6 @@ export const FormFields = (props: IFormFieldsProps) => {
                 options={asyncOptions[fieldName] ?? fieldState.options}
                 optionsLoading={asyncOptionsLoading[fieldName] ?? false}
                 validate={fieldState.validate}
-                parentEntityId={parentEntityId}
-                parentEntityType={parentEntityType}
                 setFieldValue={setFieldValue}
                 isManualSave={isManualSave}
                 isCreate={isCreate}

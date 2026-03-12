@@ -14,7 +14,7 @@ import { IOption } from "../../types/IOption";
 // ─── Feature 1: Server-Side Field Error Injection ──────────────────────────
 
 describe("Feature 1 – Server-Side Field Error Injection (fieldErrors prop)", () => {
-  it("IFormEngineProps accepts fieldErrors as Record<string, string>", () => {
+  it("IFormosaicComponentProps accepts fieldErrors as Record<string, string>", () => {
     // This is a compile-time check — if the type is correct, the object assignment succeeds.
     const fieldErrors: Record<string, string> = {
       email: "Email already taken",

@@ -28,7 +28,7 @@ export * from "./IConfirmInputModalProps";
 export * from "./IFieldToRender";
 
 // Form shared props
-export * from "./IFormEngineSharedProps";
+export * from "./IFormosaicProps";
 
 // Analytics
 export * from "./IAnalyticsCallbacks";

@@ -14,7 +14,7 @@ The core library is **SSR-safe**. All browser-only API access is guarded behind 
 |---|---|---|
 | Rules engine | Yes | Pure logic, no DOM access |
 | `ExpressionEngine` | Yes | Uses `new Function()` which works in Node.js |
-| `FormEngine` | Yes | `document` access is guarded |
+| `Formosaic` | Yes | `document` access is guarded |
 | `ConfirmInputsModal` | Yes | `document.activeElement` is inside `useEffect` |
 | `WizardForm` | Yes | No browser APIs |
 | `useBeforeUnload` | Yes | `window` access guarded with `typeof` check |
@@ -31,7 +31,7 @@ With the App Router (React Server Components), form components must be rendered 
 "use client";
 
 import {
-  FormEngine,
+  Formosaic,
   RulesEngineProvider,
   InjectedFieldProvider,
 } from "@formosaic/core";
@@ -41,7 +41,7 @@ export function MyForm({ defaultValues }: { defaultValues: Record<string, unknow
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider injectedFields={createFluentFieldRegistry()}>
-        <FormEngine
+        <Formosaic
           configName="my-form"
           defaultValues={defaultValues}
           formConfig={formConfig}

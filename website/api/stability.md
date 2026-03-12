@@ -41,7 +41,7 @@ This document classifies every public export from the `@formosaic/*` packages by
 
 | Export | Stability | Audience |
 |--------|-----------|----------|
-| `FormEngine` | Stable | All consumers |
+| `Formosaic` | Stable | All consumers |
 | `FormFields` | Stable | All consumers |
 | `FieldWrapper` | Stable | All consumers |
 | `WizardForm` | Stable | All consumers |

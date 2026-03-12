@@ -5,7 +5,7 @@ import { GetFieldDataTestId } from "../helpers";
 import { Upload, Button } from "antd";
 
 const FileUpload = (props: IFieldProps<IFileUploadConfig>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, config, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
 
   const multiple = config?.multiple ?? false;
   const accept = config?.accept;
@@ -32,7 +32,7 @@ const FileUpload = (props: IFieldProps<IFileUploadConfig>) => {
     <div
       className="fe-file-upload"
       data-field-type="FileUpload"
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       <Upload
         beforeUpload={beforeUpload}

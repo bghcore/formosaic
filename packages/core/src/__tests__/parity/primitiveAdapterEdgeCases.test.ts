@@ -39,9 +39,7 @@ const TEST_OPTIONS = [
 
 const baseProps = {
   fieldName: "testField",
-  programName: "primitiveEdge",
-  entityType: "test",
-  entityId: "prim-1",
+  testId: "prim-test",
   readOnly: false,
   required: false,
   setFieldValue: vi.fn(),

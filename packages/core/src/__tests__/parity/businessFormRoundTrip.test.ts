@@ -77,9 +77,7 @@ const adapters: AdapterConfig[] = [
 
 const baseProps = {
   fieldName: "testField",
-  programName: "roundTrip",
-  entityType: "test",
-  entityId: "rt-1",
+  testId: "roundtrip-test",
   readOnly: false,
   required: false,
   setFieldValue: vi.fn(),

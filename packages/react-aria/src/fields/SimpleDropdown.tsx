@@ -11,7 +11,7 @@ interface ISimpleDropdownProps {
 }
 
 const SimpleDropdown = (props: IFieldProps<ISimpleDropdownProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, placeholder, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, config, error, required, placeholder, setFieldValue } = props;
 
   const simpleOptions = config?.dropdownOptions ?? [];
 
@@ -31,7 +31,7 @@ const SimpleDropdown = (props: IFieldProps<ISimpleDropdownProps>) => {
     >
       <Button
         className="df-simple-dropdown__trigger"
-        data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+        data-testid={GetFieldDataTestId(fieldName, testId)}
       >
         <SelectValue>{placeholder ?? config?.placeHolder ?? ""}</SelectValue>
         <span className="df-simple-dropdown__icon" aria-hidden="true">&#9660;</span>

@@ -8,16 +8,8 @@ import { IOption } from "./IOption";
 export interface IFieldProps<T = Record<string, unknown>> {
   /** Field name (unique identifier within the form) */
   fieldName?: string;
-  /** Entity ID */
-  entityId?: string;
-  /** Entity type */
-  entityType?: string;
-  /** Program name */
-  programName?: string;
-  /** Parent entity ID */
-  parentEntityId?: string;
-  /** Parent entity type */
-  parentEntityType?: string;
+  /** Optional test ID prefix for data-testid attributes */
+  testId?: string;
   /** Whether the field is read-only */
   readOnly?: boolean;
   /** Whether the field is required */

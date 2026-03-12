@@ -16,7 +16,7 @@ UI-library agnostic React library for rendering configuration-driven forms with 
 ```
 RulesEngineProvider (useReducer for rules engine state)
   -> InjectedFieldProvider (component registry)
-    -> FormEngine (react-hook-form, auto-save, rules engine init)
+    -> Formosaic (react-hook-form, auto-save, rules engine init)
       -> FormFields (ordered field list)
         -> FormErrorBoundary (per-field crash isolation)
           -> RenderField (Controller + component injection lookup)
@@ -32,7 +32,7 @@ RulesEngineProvider (useReducer for rules engine state)
 | `src/helpers/ConditionEvaluator.ts` | Evaluates rule conditions. 20 operators (equals, notEquals, greaterThan, lessThan, greaterThanOrEqual, lessThanOrEqual, contains, notContains, startsWith, endsWith, in, notIn, isEmpty, isNotEmpty, matches, arrayContains, arrayNotContains, arrayLengthEquals, arrayLengthGreaterThan, arrayLengthLessThan) + AND/OR/NOT logical composition. Exports `evaluateCondition`. |
 | `src/helpers/InlineFormHelper.ts` | Form initialization, validation execution, value functions, schema merging. Exports `GetFieldsToRender`, `CheckFieldValidationRules`, `ExecuteValueFunction`, etc. |
 | `src/helpers/ValidationRegistry.ts` | Unified sync/async/cross-field validation registry. Register custom validators via `registerValidators()`. Includes factory functions: `createMinLengthValidation`, `createMaxLengthValidation`, `createNumericRangeValidation`, `createPatternValidation`, `createRequiredIfValidation`. |
-| `src/helpers/ValueFunctionRegistry.ts` | Pluggable value function registry. Register custom value functions via `registerValueFunctions()`. Built-in: `setDate`, `setDateIfNull`, `setLoggedInUser`, `inheritFromParent`. |
+| `src/helpers/ValueFunctionRegistry.ts` | Pluggable value function registry. Register custom value functions via `registerValueFunctions()`. Built-in: `setDate`, `setDateIfNull`, `setLoggedInUser`. |
 | `src/helpers/ExpressionEngine.ts` | Expression evaluation for computed values. Handles `$values.field`, `$fn.name()`, `$parent.field`, `$root.field` syntax. |
 | `src/helpers/DependencyGraphValidator.ts` | Cycle detection for field dependencies using Kahn's algorithm. Exports `validateDependencyGraph`. |
 | `src/helpers/ConfigValidator.ts` | Dev-mode config validation. Checks missing dependency targets, unregistered components/validators, circular deps. Exports `validateFieldConfigs`. |
@@ -42,7 +42,7 @@ RulesEngineProvider (useReducer for rules engine state)
 | `src/helpers/RuleTracer.ts` | Rule evaluation tracing/debugging. |
 | `src/helpers/RenderTracker.ts` | Per-field render count tracking for DevTools Perf tab. |
 | `src/helpers/EventTimeline.ts` | Chronological event log for DevTools Timeline tab. |
-| `src/components/InlineForm.tsx` | FormEngine component. Orchestrates react-hook-form, auto-save (AbortController, timeout via `saveTimeoutMs`, retry via `maxSaveRetries`), expand/collapse, confirm modal. Supports `formErrors` prop for form-level error banner. |
+| `src/components/InlineForm.tsx` | Formosaic component. Orchestrates react-hook-form, auto-save (AbortController, timeout via `saveTimeoutMs`, retry via `maxSaveRetries`), expand/collapse, confirm modal. Supports `formErrors` prop for form-level error banner. |
 | `src/components/WizardForm.tsx` | WizardForm component. Multi-step wizard with render props for step content, navigation, and header. Screen reader step announcements. |
 | `src/components/FieldArray.tsx` | FieldArray component. Wraps react-hook-form's `useFieldArray` with min/max/reorder support. Items use full `IFieldConfig`. |
 | `src/components/RenderField.tsx` | RenderField component. Per-field rendering with useMemo for component resolution. Async validation wired with AbortController -- sync runs first, async only if sync passes. |

@@ -6,7 +6,7 @@ import { GetFieldDataTestId, getFieldState } from "../helpers";
 import { Switch } from "react-aria-components";
 
 const Toggle = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, label, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, label, setFieldValue } = props;
 
   if (readOnly) {
     return <ReadOnlyText fieldName={fieldName} value={convertBooleanToYesOrNoText(value as boolean)} />;
@@ -19,7 +19,7 @@ const Toggle = (props: IFieldProps<{}>) => {
       onChange={(checked) => setFieldValue(fieldName, checked)}
       data-field-type="Toggle"
       data-field-state={getFieldState({ error, required, readOnly })}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       <span className="df-toggle__label">{label}</span>
     </Switch>

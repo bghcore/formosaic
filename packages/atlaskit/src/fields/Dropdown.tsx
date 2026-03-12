@@ -9,7 +9,7 @@ interface IDropdownProps {
 }
 
 const Dropdown = (props: IFieldProps<IDropdownProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, options, placeholder, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, config, error, required, options, placeholder, setFieldValue } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setFieldValue(fieldName, event.target.value);
@@ -36,7 +36,7 @@ const Dropdown = (props: IFieldProps<IDropdownProps>) => {
       aria-required={required}
       data-field-type="Dropdown"
       data-field-state={getFieldState({ error, required, readOnly })}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       <option value="">{placeholder ?? config?.placeHolder ?? ""}</option>
       {options?.map(option => (

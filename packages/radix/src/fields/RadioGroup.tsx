@@ -5,7 +5,7 @@ import { GetFieldDataTestId, getFieldState } from "../helpers";
 import * as RadixRadioGroup from "@radix-ui/react-radio-group";
 
 const RadioGroup = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, options, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
 
   if (readOnly) {
     const label = options?.find(o => String(o.value) === String(value))?.label ?? (value as string);
@@ -21,7 +21,7 @@ const RadioGroup = (props: IFieldProps<{}>) => {
       aria-required={required}
       data-field-type="RadioGroup"
       data-field-state={getFieldState({ error, required, readOnly })}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       {options?.map(option => (
         <label key={String(option.value)} className="df-radio-group__option">

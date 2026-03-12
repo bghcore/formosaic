@@ -13,7 +13,7 @@ npm install @formosaic/chakra @formosaic/core @chakra-ui/react react react-dom r
 ## Quick Start
 
 ```tsx
-import { FormEngine, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
+import { Formosaic, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
 import { createChakraFieldRegistry } from "@formosaic/chakra";
 
 const fields = createChakraFieldRegistry();
@@ -22,9 +22,8 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider fields={fields}>
-        <FormEngine
+        <Formosaic
           formConfig={myFormConfig}
-          entityData={myEntityData}
           onSave={handleSave}
         />
       </InjectedFieldProvider>

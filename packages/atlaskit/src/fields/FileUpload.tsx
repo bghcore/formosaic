@@ -4,7 +4,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const FileUpload = (props: IFieldProps<IFileUploadConfig>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, config, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
   const inputRef = useRef<HTMLInputElement>(null);
 
   const multiple = config?.multiple ?? false;
@@ -43,7 +43,7 @@ const FileUpload = (props: IFieldProps<IFileUploadConfig>) => {
       className="ak-file-upload"
       data-field-type="FileUpload"
       data-field-state={getFieldState({ error, required, readOnly })}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       <input
         ref={inputRef}

@@ -15,9 +15,7 @@ const registry = createHeadlessFieldRegistry();
 
 const baseProps = {
   fieldName: "testField",
-  programName: "edgeCase",
-  entityType: "test",
-  entityId: "edge-1",
+  testId: "edge-test",
   readOnly: false,
   required: false,
   setFieldValue: vi.fn(),

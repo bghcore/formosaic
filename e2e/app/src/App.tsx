@@ -3,7 +3,7 @@ import {
   RulesEngineProvider,
   InjectedFieldProvider,
   UseInjectedFieldContext,
-  FormEngine,
+  Formosaic,
   WizardForm,
   useDraftPersistence,
 } from "@formosaic/core";
@@ -70,11 +70,9 @@ function FormShell(props: {
 
   return (
     <div data-testid="form-shell">
-      <FormEngine
+      <Formosaic
         configName="e2e-test"
-        entityId="e2e-1"
-        entityType="TestEntity"
-        programName="E2ETest"
+        testId="e2e-test"
         formConfig={config}
         defaultValues={draftData}
         isManualSave={config.settings?.manualSave}

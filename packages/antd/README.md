@@ -13,7 +13,7 @@ npm install @formosaic/antd @formosaic/core antd dayjs react react-dom react-hoo
 ## Quick Start
 
 ```tsx
-import { FormEngine, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
+import { Formosaic, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
 import { createAntdFieldRegistry } from "@formosaic/antd";
 
 const fields = createAntdFieldRegistry();
@@ -22,9 +22,8 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider fields={fields}>
-        <FormEngine
+        <Formosaic
           formConfig={myFormConfig}
-          entityData={myEntityData}
           onSave={handleSave}
         />
       </InjectedFieldProvider>

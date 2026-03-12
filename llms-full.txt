@@ -10,7 +10,7 @@ This is the extended reference for AI models. For the concise version, see [llms
 
 ```
 IFormConfig (v2)
-  -> FormEngine (form state via react-hook-form, save with AbortController/retry)
+  -> Formosaic (form state via react-hook-form, save with AbortController/retry)
     -> evaluateAllRules() -> IRuntimeFormState
     -> FormFields (ordered field list)
       -> FormErrorBoundary (per-field crash isolation)
@@ -28,7 +28,7 @@ Two React context providers must wrap the form tree (both memoized via useMemo):
 ```
 <RulesEngineProvider>          -- Owns rule state via useReducer (memoized context value)
   <InjectedFieldProvider>      -- Component injection registry (memoized context value)
-    <FormEngine>              -- Entry point
+    <Formosaic>               -- Entry point
 ```
 
 ### Component Injection System
@@ -133,7 +133,7 @@ See the [comparison guide](https://bghcore.github.io/formosaic/guide/comparison)
 UI-library agnostic engine built for React. Depends only on `react` and `react-hook-form`.
 
 - **Providers**: `RulesEngineProvider`, `InjectedFieldProvider` -- React context providers that must wrap the form tree (memoized)
-- **Components**: `FormEngine` (entry point, save with AbortController/retry/timeout), `FormFields`, `RenderField` (useMemo, async validation wired), `FieldWrapper` (React.memo, render props for theming), `ConfirmInputsModal` (focus trap), `WizardForm` (multi-step wizard, step announcements), `FieldArray` (repeating sections), `FormErrorBoundary` (per-field crash isolation), `FormDevTools` (dev-only debugging panel with Rules, Values, Errors, Graph, Perf, Deps, Timeline tabs)
+- **Components**: `Formosaic` (entry point, save with AbortController/retry/timeout), `FormFields`, `RenderField` (useMemo, async validation wired), `FieldWrapper` (React.memo, render props for theming), `ConfirmInputsModal` (focus trap), `WizardForm` (multi-step wizard, step announcements), `FieldArray` (repeating sections), `FormErrorBoundary` (per-field crash isolation), `FormDevTools` (dev-only debugging panel with Rules, Values, Errors, Graph, Perf, Deps, Timeline tabs)
 - **Rules Engine**: `buildDependencyGraph`, `evaluateAllRules`, `evaluateAffectedFields`, `processFieldChange`, `topologicalSort`, `evaluateCondition` (20 operators + AND/OR/NOT), priority-based conflict resolution. Rule effects: required, hidden, readOnly, component swap, options, validate, computedValue, setValue, fieldOrder. Array operators: `arrayContains`, `arrayNotContains`, `arrayLength`.
 - **Validation**: 14 built-in validators + `registerValidators()` for custom sync/async/cross-field. Per-rule `when` condition, `debounceMs`, `async` flag. Factory functions: `createMinLengthValidation`, `createMaxLengthValidation`, `createNumericRangeValidation`, `createPatternValidation`, `createRequiredIfValidation`. `registerValidatorMetadata()` for attaching label/description/paramSchema to validators.
 - **Config Validation**: `validateFieldConfigs()` -- dev-mode checks for missing deps, unregistered components/validators, circular deps
@@ -224,7 +224,7 @@ Three example applications demonstrating common form patterns.
 ### Minimal Setup (Fluent UI)
 
 ```tsx
-import { RulesEngineProvider, InjectedFieldProvider, UseInjectedFieldContext, FormEngine } from "@formosaic/core";
+import { RulesEngineProvider, InjectedFieldProvider, UseInjectedFieldContext, Formosaic } from "@formosaic/core";
 import { createFluentFieldRegistry } from "@formosaic/fluent";
 
 function FieldRegistrar({ children }) {
@@ -244,9 +244,8 @@ const formConfig: IFormConfig = {
 <RulesEngineProvider>
   <InjectedFieldProvider>
     <FieldRegistrar>
-      <FormEngine
+      <Formosaic
         configName="myForm"
-        programName="myApp"
         formConfig={formConfig}
         defaultValues={{ name: "" }}
         saveData={async (data) => data}

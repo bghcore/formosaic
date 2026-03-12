@@ -13,7 +13,7 @@ export interface IStatusDropdownProps {
 }
 
 const StatusDropdownField = (props: IFieldProps<IStatusDropdownProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, config, options, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, config, options, setFieldValue } = props;
 
   const onOptionSelect = (_: unknown, data: OptionOnSelectData) => {
     setFieldValue(fieldName, data.optionValue);
@@ -28,9 +28,7 @@ const StatusDropdownField = (props: IFieldProps<IStatusDropdownProps>) => {
     <StatusDropdown
       className={FieldClassName("fe-status-dropdown", error)}
       fieldName={fieldName}
-      programName={programName}
-      entityType={entityType}
-      entityId={entityId}
+      testId={testId}
       dropdownOptions={options}
       status={value as string}
       onOptionSelect={onOptionSelect}

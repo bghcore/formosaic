@@ -9,9 +9,7 @@ const registry = createHeadlessFieldRegistry();
 
 const baseProps = {
   fieldName: "benchField",
-  programName: "bench",
-  entityType: "test",
-  entityId: "bench-1",
+  testId: "bench-test",
   value: undefined as unknown,
   readOnly: false,
   required: false,

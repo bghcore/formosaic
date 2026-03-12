@@ -7,9 +7,7 @@ import StatusColor from "./StatusColor";
 
 interface IStatusDropdownProps {
   className: string;
-  entityId?: string;
-  entityType?: string;
-  programName?: string;
+  testId?: string;
   fieldName: string;
   status: string;
   dropdownOptions: IOption[];
@@ -18,7 +16,7 @@ interface IStatusDropdownProps {
 }
 
 const StatusDropdown = (props: IStatusDropdownProps) => {
-  const { fieldName, programName, entityType, entityId, className, status, meta, dropdownOptions, onOptionSelect } = props;
+  const { fieldName, testId, className, status, meta, dropdownOptions, onOptionSelect } = props;
   const statusColors = (meta?.statusColors ?? {}) as Dictionary<string>;
 
   const selectedText = dropdownOptions?.find(o => String(o.value) === status)?.label;
@@ -30,7 +28,7 @@ const StatusDropdown = (props: IStatusDropdownProps) => {
         value={selectedText ?? ""}
         selectedOptions={status ? [status] : []}
         onOptionSelect={onOptionSelect}
-        data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+        data-testid={GetFieldDataTestId(fieldName, testId)}
       >
         {dropdownOptions?.map(option => (
           <Option key={String(option.value)} value={String(option.value)} disabled={option.disabled}>

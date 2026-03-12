@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import {
-  FormEngine,
+  Formosaic,
   UseInjectedFieldContext,
   IFormConfig,
 } from "@formosaic/core";
 import { createFluentFieldRegistry } from "@formosaic/fluent";
 
 /**
- * **FormEngine** is the main form component. It accepts an `IFormConfig`
+ * **Formosaic** is the main form component. It accepts an `IFormConfig`
  * (v2 schema) and renders the full form with validation, auto-save,
  * rules evaluation, and field interactions.
  */
 const meta: Meta = {
-  title: "Composite/FormEngine",
+  title: "Composite/Formosaic",
   argTypes: {
     areAllFieldsReadonly: { control: "boolean" },
     isManualSave: { control: "boolean" },
@@ -138,11 +138,8 @@ const defaultValues = {
 export const Default: StoryObj = {
   render: (args) => (
     <FieldRegistrar>
-      <FormEngine
+      <Formosaic
         configName="contact-form"
-        entityId="1"
-        entityType="contact"
-        programName="storybook"
         formConfig={contactFormConfig}
         defaultValues={defaultValues}
         isManualSave={(args.isManualSave as boolean) ?? true}
@@ -163,11 +160,8 @@ export const Default: StoryObj = {
 export const ReadOnlyForm: StoryObj = {
   render: () => (
     <FieldRegistrar>
-      <FormEngine
+      <Formosaic
         configName="contact-form-readonly"
-        entityId="1"
-        entityType="contact"
-        programName="storybook"
         formConfig={contactFormConfig}
         defaultValues={defaultValues}
         areAllFieldsReadonly={true}
@@ -225,11 +219,8 @@ export const WithRules: StoryObj = {
         <p style={{ color: "#666", marginBottom: "16px", fontSize: "14px" }}>
           Change Status to "Active" to reveal the Priority field (rules engine demo).
         </p>
-        <FormEngine
+        <Formosaic
           configName="rules-demo"
-          entityId="2"
-          entityType="demo"
-          programName="storybook"
           formConfig={rulesFormConfig}
           defaultValues={{ status: "Inactive", priority: "", notes: "" }}
           isManualSave={true}

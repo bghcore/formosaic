@@ -1,6 +1,6 @@
 {
   "name": "@formosaic/examples",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "private": true,
   "description": "Example apps demonstrating @formosaic/core",
   "keywords": [

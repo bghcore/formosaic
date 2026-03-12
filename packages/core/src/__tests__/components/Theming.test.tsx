@@ -3,7 +3,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { FieldWrapper } from "../../components/FieldWrapper";
 import { FormProvider, useForm } from "react-hook-form";
-import { FormEngine } from "../../components/InlineForm";
+import { Formosaic } from "../../components/InlineForm";
 import { RulesEngineProvider } from "../../providers/RulesEngineProvider";
 import { InjectedFieldProvider } from "../../providers/InjectedFieldProvider";
 
@@ -166,17 +166,14 @@ describe("FieldWrapper render props", () => {
   });
 });
 
-describe("FormEngine formErrors", () => {
-  /** Wraps FormEngine with necessary providers */
+describe("Formosaic formErrors", () => {
+  /** Wraps Formosaic with necessary providers */
   const renderWithProviders = (formErrors?: string[]) => {
     return render(
       <RulesEngineProvider>
         <InjectedFieldProvider>
-          <FormEngine
+          <Formosaic
             configName="test"
-            programName="testProgram"
-            entityId="entity-1"
-            entityType="TestEntity"
             fieldConfigs={{}}
             defaultValues={{}}
             formErrors={formErrors}

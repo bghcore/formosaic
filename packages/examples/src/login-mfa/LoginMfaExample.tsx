@@ -3,7 +3,7 @@ import { Typography, Paper, Button, Alert, Box } from "@mui/material";
 import {
   RulesEngineProvider,
   InjectedFieldProvider,
-  FormEngine,
+  Formosaic,
 } from "@formosaic/core";
 import { createMuiFieldRegistry } from "@formosaic/mui";
 import { loginMfaFormConfig } from "./loginMfaConfig";
@@ -38,10 +38,9 @@ export const LoginMfaExample: React.FC = () => {
       <Paper variant="outlined" sx={{ p: 3 }}>
         <RulesEngineProvider>
           <InjectedFieldProvider injectedFields={fieldRegistry}>
-            <FormEngine
+            <Formosaic
               formConfig={loginMfaFormConfig}
               defaultValues={{}}
-              programName="examples"
               configName="login-mfa"
               isCreate={true}
               isManualSave={true}
@@ -61,6 +60,7 @@ export const LoginMfaExample: React.FC = () => {
           </InjectedFieldProvider>
         </RulesEngineProvider>
       </Paper>
+
 
       <Alert severity="info" sx={{ mt: 3 }}>
         <Typography variant="subtitle2">What this example shows:</Typography>

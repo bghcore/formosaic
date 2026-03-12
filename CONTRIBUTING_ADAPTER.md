@@ -50,7 +50,7 @@ Every field component must:
 3. **Call `setFieldValue(fieldName, newValue)`** — To update values in react-hook-form
 4. **Handle `readOnly` mode** — Render `<ReadOnlyText>` when `readOnly` is true
 5. **Set ARIA attributes** — `aria-invalid={!!error}`, `aria-required={required}`
-6. **Set `data-testid`** — Via `GetFieldDataTestId(fieldName, programName, entityType, entityId)`
+6. **Set `data-testid`** — Via `GetFieldDataTestId(fieldName, testId?)`
 7. **Export as `default`** — Each field file must have a default export
 
 ### What NOT to do
@@ -65,9 +65,7 @@ Every field component must:
 // IFieldProps<T> — injected into every field component
 interface IFieldProps<T = Record<string, unknown>> {
   fieldName?: string;
-  entityId?: string;
-  entityType?: string;
-  programName?: string;
+  testId?: string;
   readOnly?: boolean;
   required?: boolean;
   error?: FieldError;

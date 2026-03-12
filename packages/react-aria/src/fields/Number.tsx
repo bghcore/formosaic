@@ -6,7 +6,7 @@ import { GetFieldDataTestId, getFieldState } from "../helpers";
 import { NumberField, Input } from "react-aria-components";
 
 const NumberFieldComponent = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
 
   if (readOnly) {
     return <ReadOnlyText fieldName={fieldName} value={String(value)} />;
@@ -29,7 +29,7 @@ const NumberFieldComponent = (props: IFieldProps<{}>) => {
     >
       <Input
         autoComplete="off"
-        data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+        data-testid={GetFieldDataTestId(fieldName, testId)}
       />
     </NumberField>
   );

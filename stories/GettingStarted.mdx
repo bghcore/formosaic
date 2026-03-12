@@ -3,7 +3,7 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 <Meta title="Getting Started" />
 
-# Form Engine
+# Formosaic
 
 A React library for rendering complex, configuration-driven forms with a built-in rules engine.
 Forms are defined as a single `IFormConfig` JSON object and the library handles rendering,
@@ -13,14 +13,14 @@ validation, auto-save, and field interactions automatically.
 
 | Package | Description |
 | --- | --- |
-| `@form-eng/core` | UI-agnostic rules engine and form orchestration (React + react-hook-form) |
-| `@form-eng/fluent` | Fluent UI v9 field component implementations |
-| `@form-eng/mui` | Material UI (MUI) field component implementations |
+| `@formosaic/core` | UI-agnostic rules engine and form orchestration (React + react-hook-form) |
+| `@formosaic/fluent` | Fluent UI v9 field component implementations |
+| `@formosaic/mui` | Material UI (MUI) field component implementations |
 
 ## Installation
 
 ```bash
-npm install @form-eng/core @form-eng/fluent
+npm install @formosaic/core @formosaic/fluent
 npm install react react-dom react-hook-form @fluentui/react-components
 ```
 
@@ -31,7 +31,7 @@ npm install react react-dom react-hook-form @fluentui/react-components
 Two context providers must wrap your form tree:
 
 ```tsx
-import { RulesEngineProvider, InjectedFieldProvider } from "@form-eng/core";
+import { RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
 import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 
 function App() {
@@ -52,8 +52,8 @@ function App() {
 Use `createFluentFieldRegistry()` to register all built-in Fluent UI fields:
 
 ```tsx
-import { UseInjectedFieldContext } from "@form-eng/core";
-import { createFluentFieldRegistry } from "@form-eng/fluent";
+import { UseInjectedFieldContext } from "@formosaic/core";
+import { createFluentFieldRegistry } from "@formosaic/fluent";
 import { useEffect } from "react";
 
 function FormContainer() {
@@ -63,7 +63,7 @@ function FormContainer() {
     setInjectedFields(createFluentFieldRegistry());
   }, []);
 
-  return <FormEngine {...formProps} />;
+  return <Formosaic {...formProps} />;
 }
 ```
 
@@ -72,7 +72,7 @@ function FormContainer() {
 Create an `IFormConfig` object with your field definitions:
 
 ```typescript
-import type { IFormConfig } from "@form-eng/core";
+import type { IFormConfig } from "@formosaic/core";
 
 const myFormConfig: IFormConfig = {
   version: 2,
@@ -107,13 +107,10 @@ const myFormConfig: IFormConfig = {
 ### 4. Render the Form
 
 ```tsx
-import { FormEngine } from "@form-eng/core";
+import { Formosaic } from "@formosaic/core";
 
-<FormEngine
+<Formosaic
   configName="my-form"
-  entityId="123"
-  entityType="contact"
-  programName="app"
   formConfig={myFormConfig}
   defaultValues={{ name: "", status: "", isActive: false }}
   isManualSave={true}

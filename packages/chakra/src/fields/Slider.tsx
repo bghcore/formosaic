@@ -10,7 +10,7 @@ interface ISliderProps {
 }
 
 const Slider = (props: IFieldProps<ISliderProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, config, error, required, setFieldValue } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(fieldName, Number(event.target.value));
@@ -42,7 +42,7 @@ const Slider = (props: IFieldProps<ISliderProps>) => {
         aria-valuenow={(value as number) ?? 0}
         aria-valuemin={config?.min ?? 0}
         aria-valuemax={config?.max ?? 100}
-        data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+        data-testid={GetFieldDataTestId(fieldName, testId)}
       />
       <output style={{ minWidth: "32px", textAlign: "center", fontSize: "var(--chakra-fontSizes-md, 16px)" }}>
         {String(value)}

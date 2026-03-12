@@ -11,9 +11,7 @@ export interface IDocumentLink {
 
 interface IDocumentLinksProps {
   fieldName: string;
-  programName?: string;
-  entityType?: string;
-  entityId?: string;
+  testId?: string;
   className?: string;
   readOnly?: boolean;
   links: IDocumentLink[];
@@ -22,7 +20,7 @@ interface IDocumentLinksProps {
 }
 
 const DocumentLinks = (props: IDocumentLinksProps) => {
-  const { fieldName, programName, entityType, entityId, className, readOnly, links, onUpdateLinks, onDeleteLink } = props;
+  const { fieldName, testId, className, readOnly, links, onUpdateLinks, onDeleteLink } = props;
   const [addNewLink, setAddNewLink] = React.useState<boolean>(false);
   const [deleteLinkIndex, setDeleteLinkIndex] = React.useState<number | undefined>(undefined);
 
@@ -37,13 +35,13 @@ const DocumentLinks = (props: IDocumentLinksProps) => {
     <div className={className}>
       {links?.length > 0 ? links.map((link, index) => (
         <DocumentLink
-          key={`${link.url}-${index}`} fieldName={fieldName} programName={programName}
-          entityType={entityType} entityId={entityId} index={index} title={link.title}
+          key={`${link.url}-${index}`} fieldName={fieldName} testId={testId}
+          index={index} title={link.title}
           url={link.url} saveLinks={saveLinks} onConfirmDeleteLink={onConfirmDeleteLink} readOnly={readOnly}
         />
       )) : null}
       {addNewLink ? (
-        <DocumentLink fieldName={fieldName} programName={programName} entityType={entityType} entityId={entityId}
+        <DocumentLink fieldName={fieldName} testId={testId}
           addNewLink saveLinks={saveLinks} onCancelAddLink={onCancelAddLink} />
       ) : !readOnly ? (
         <div className="add-link">
@@ -52,7 +50,7 @@ const DocumentLinks = (props: IDocumentLinksProps) => {
               appearance="secondary"
               icon={<AddRegular />}
               onClick={onAddNewLink}
-              data-testid={`${GetFieldDataTestId(fieldName, programName, entityType, entityId)}-add-link`}
+              data-testid={`${GetFieldDataTestId(fieldName, testId)}-add-link`}
             >
               {links?.length > 0 ? DocumentLinksStrings.addAnotherLink : DocumentLinksStrings.addLink}
             </Button>

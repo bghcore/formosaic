@@ -4,7 +4,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const ColorPicker = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
   const color = (value as string) ?? "#000000";
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(fieldName, event.target.value);
@@ -14,7 +14,7 @@ const ColorPicker = (props: IFieldProps<{}>) => {
   }
   return (
     <div className="ak-color-picker" data-field-type="ColorPicker" data-field-state={getFieldState({ error, required, readOnly })} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-      <input type="color" className="ak-color-picker__input" value={color} onChange={onChange} aria-invalid={!!error} aria-required={required} data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)} />
+      <input type="color" className="ak-color-picker__input" value={color} onChange={onChange} aria-invalid={!!error} aria-required={required} data-testid={GetFieldDataTestId(fieldName, testId)} />
       <span className="ak-color-picker__value">{color}</span>
     </div>
   );

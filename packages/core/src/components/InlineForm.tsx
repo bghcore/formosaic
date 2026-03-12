@@ -6,7 +6,6 @@ import {
   CheckDefaultValues,
   CheckValidDropdownOptions,
   ExecuteComputedValue,
-  GetChildEntity,
   GetConfirmInputModalProps,
   GetComputedValuesOnDirtyFields,
   InitOnCreateFormState,
@@ -17,20 +16,19 @@ import { IRulesEngineState, IRuntimeFormState } from "../types/IRuntimeFieldStat
 import { IConfirmInputModalProps } from "../types/IConfirmInputModalProps";
 import { IFieldConfig } from "../types/IFieldConfig";
 import { IFormConfig } from "../types/IFormConfig";
-import { IFormEngineSharedProps } from "../types/IFormEngineSharedProps";
+import { IFormosaicProps } from "../types/IFormosaicProps";
 import { UseRulesEngineContext } from "../providers/RulesEngineProvider";
 import { FormStrings } from "../strings";
 import { useFormAnalytics } from "../hooks/useFormAnalytics";
 import ConfirmInputsModal from "./ConfirmInputsModal";
 import { FormFields } from "./InlineFormFields";
 
-interface IFormEngineProps extends IFormEngineSharedProps {
+interface IFormosaicComponentProps extends IFormosaicProps {
   /** v2 form config (preferred). If provided, fieldConfigs is ignored. */
   formConfig?: IFormConfig;
   /** v1-style field configs (for migration). Use formConfig instead. */
   fieldConfigs?: Record<string, IFieldConfig>;
   defaultValues: IEntityData;
-  isChildEntity?: boolean;
   saveData?: (entityData: IEntityData, dirtyFieldNames?: string[]) => Promise<IEntityData>;
   saveTimeoutMs?: number;
   maxSaveRetries?: number;
@@ -53,15 +51,10 @@ interface IFormEngineProps extends IFormEngineSharedProps {
   renderSubmitButton?: (props: { onSubmit: () => void; isDirty: boolean; isValid: boolean; isSubmitting: boolean }) => React.ReactNode;
 }
 
-export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps): React.JSX.Element => {
+export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicComponentProps): React.JSX.Element => {
   const {
     configName,
-    entityId,
-    entityType,
-    programName,
-    parentEntityId,
-    parentEntityType,
-    entityPath,
+    testId,
     expandCutoffCount,
     formConfig,
     defaultValues,
@@ -69,7 +62,6 @@ export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps):
     collapsedMaxHeight,
     isCreate,
     parentEntity,
-    isChildEntity,
     enableFilter,
     currentUserId,
     onSaveError,
@@ -277,7 +269,7 @@ export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps):
     const { dirtyFields } = formStateRef.current;
     const stillDirtyFields: IEntityData = {};
     Object.keys(dirtyFields).forEach(field => { stillDirtyFields[field] = getValues(field); });
-    const resetValue = isChildEntity ? (GetChildEntity(entityId, entity, entityPath) ?? entity) : entity;
+    const resetValue = entity;
     reset(resetValue);
     Object.keys(stillDirtyFields).forEach(field => {
       if (JSON.stringify(stillDirtyFields[field]) !== JSON.stringify(data[field])) {
@@ -352,11 +344,7 @@ export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps):
       )}
       <div className="fe-form-wrapper">
         <FormFields
-          entityId={entityId}
-          entityType={entityType}
-          programName={programName}
-          parentEntityId={parentEntityId}
-          parentEntityType={parentEntityType}
+          testId={testId}
           isExpanded={isExpanded}
           expandEnabled={expandEnabled}
           fieldOrder={rulesState?.configs[configName]?.fieldOrder}
@@ -375,7 +363,7 @@ export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps):
         />
         {expandEnabled && (
           renderExpandButton ? renderExpandButton({ isExpanded, onToggle: () => setIsExpanded(!isExpanded) }) : (
-            <button className="expand-button" onClick={() => setIsExpanded(!isExpanded)} aria-expanded={isExpanded} data-testid={`${programName}-${entityType}-${entityId}-expand-form`}>
+            <button className="expand-button" onClick={() => setIsExpanded(!isExpanded)} aria-expanded={isExpanded} data-testid={`${testId ? testId + "-" : ""}expand-form`}>
               {isExpanded ? FormStrings.seeLess : FormStrings.expand}
             </button>
           )
@@ -405,9 +393,7 @@ export const FormEngine: React.FC<IFormEngineProps> = (props: IFormEngineProps):
       <ConfirmInputsModal
         isOpen={confirmInputModalProps !== undefined && !inputFieldsConfirmed}
         configName={configName}
-        entityId={entityId}
-        entityType={entityType}
-        programName={programName}
+        testId={testId}
         fields={fields}
         confirmInputFields={confirmInputModalProps?.current?.dependentFieldNames ?? []}
         cancelConfirmInputFields={cancelConfirmInputFields}

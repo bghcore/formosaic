@@ -72,9 +72,7 @@ const adapters = [
 
 const baseProps = {
   fieldName: "smokeTest",
-  programName: "smoke",
-  entityType: "test",
-  entityId: "smoke-1",
+  testId: "smoke-test",
   readOnly: false,
   required: false,
   setFieldValue: vi.fn(),

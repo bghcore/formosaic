@@ -5,7 +5,7 @@ import { GetFieldDataTestId } from "../helpers";
 import { DateTimePicker } from "@mantine/dates";
 
 const DateTime = (props: IFieldProps<IDateTimeConfig>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, config, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
 
   if (readOnly) {
     return <ReadOnlyText fieldName={fieldName} value={formatDateTimeValue(value)} />;
@@ -24,7 +24,7 @@ const DateTime = (props: IFieldProps<IDateTimeConfig>) => {
       onChange={onChange}
       error={!!error}
       required={required}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );
 };

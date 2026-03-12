@@ -28,7 +28,7 @@ A simple login form with email and password. Toggling "Enable MFA" reveals MFA m
 ### 2. E-Commerce Checkout
 **Directory:** `src/checkout/`
 
-A 3-step checkout wizard (Shipping, Payment, Review) with the WizardForm component for step navigation and FormEngine for form state. Shows dropdown dependencies (country -> state), payment method branching (card vs PayPal), and cross-field validation effects.
+A 3-step checkout wizard (Shipping, Payment, Review) with the WizardForm component for step navigation and Formosaic for form state. Shows dropdown dependencies (country -> state), payment method branching (card vs PayPal), and cross-field validation effects.
 
 ### 3. Data Entry
 **Directory:** `src/data-entry/`

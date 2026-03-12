@@ -185,9 +185,7 @@ export function runParityTests(
           describe(`${fieldKey} (${fieldType})`, () => {
             const getMinimalProps = () => ({
               fieldName: fieldKey,
-              programName: "parityTest",
-              entityType: "test",
-              entityId: "parity-1",
+              testId: "parity-test",
               value: undefined as unknown,
               readOnly: false,
               required: false,

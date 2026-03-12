@@ -37,7 +37,7 @@ import { flushRenderCycle } from "@formosaic/core";
 
 function MyFormWrapper(props) {
   React.useEffect(() => { flushRenderCycle(); });
-  return <FormEngine {...props} />;
+  return <Formosaic {...props} />;
 }
 ```
 

@@ -12,7 +12,7 @@ interface ISliderProps {
 }
 
 const Slider = (props: IFieldProps<ISliderProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, config, error, required, setFieldValue } = props;
 
   const onChange = (params: SliderParams) => {
     setFieldValue(fieldName, params.value[0]);
@@ -26,7 +26,7 @@ const Slider = (props: IFieldProps<ISliderProps>) => {
     <div
       aria-invalid={!!error}
       aria-required={required}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       <BaseSlider
         value={[(value as number) ?? 0]}

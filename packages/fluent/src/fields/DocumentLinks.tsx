@@ -5,7 +5,7 @@ import DocumentLinks, { IDocumentLink } from "../components/DocumentLinks/Docume
 import { FieldClassName } from "../helpers";
 
 const DocumentLinksField = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, setFieldValue } = props;
 
   const { watch } = useFormContext();
   const documentLinks = watch(`${fieldName}` as const);
@@ -32,9 +32,7 @@ const DocumentLinksField = (props: IFieldProps<{}>) => {
   return readOnly ? (
     <DocumentLinks
       fieldName={fieldName}
-      programName={programName}
-      entityType={entityType}
-      entityId={entityId}
+      testId={testId}
       className="fe-document-links"
       links={value as IDocumentLink[]}
       readOnly
@@ -42,9 +40,7 @@ const DocumentLinksField = (props: IFieldProps<{}>) => {
   ) : (
     <DocumentLinks
       fieldName={fieldName}
-      programName={programName}
-      entityType={entityType}
-      entityId={entityId}
+      testId={testId}
       className={FieldClassName("fe-document-links", error)}
       links={value as IDocumentLink[]}
       onUpdateLinks={onUpdateLinks}

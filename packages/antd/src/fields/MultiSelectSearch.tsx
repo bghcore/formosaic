@@ -3,7 +3,7 @@ import React, { useState, useMemo } from "react";
 import { GetFieldDataTestId } from "../helpers";
 
 const MultiSelectSearch = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, options, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
   const [searchTerm, setSearchTerm] = useState("");
   const selectedValues = (value as string[]) ?? [];
   const filteredOptions = useMemo(() => {
@@ -23,7 +23,7 @@ const MultiSelectSearch = (props: IFieldProps<{}>) => {
     ) : (<span className="fe-read-only-text">-</span>);
   }
   return (
-    <div className="fe-multi-select-search" data-field-type="MultiSelectSearch" data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}>
+    <div className="fe-multi-select-search" data-field-type="MultiSelectSearch" data-testid={GetFieldDataTestId(fieldName, testId)}>
       <input type="search" className="fe-multi-select-search__input" placeholder="Search..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} aria-label={`Search options for ${fieldName}`} />
       <fieldset className="fe-multi-select-search__options" aria-invalid={!!error} aria-required={required}>
         <legend className="fe-sr-only">Options</legend>

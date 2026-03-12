@@ -13,7 +13,7 @@ npm install @formosaic/mantine @formosaic/core @mantine/core @mantine/dates reac
 ## Quick Start
 
 ```tsx
-import { FormEngine, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
+import { Formosaic, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
 import { createMantineFieldRegistry } from "@formosaic/mantine";
 
 // Required: import Mantine's core styles
@@ -25,9 +25,8 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider fields={fields}>
-        <FormEngine
+        <Formosaic
           formConfig={myFormConfig}
-          entityData={myEntityData}
           onSave={handleSave}
         />
       </InjectedFieldProvider>

@@ -16,7 +16,7 @@ export function UseRulesEngineContext() {
   if (context === undefined) {
     throw new Error(
       "UseRulesEngineContext() was called outside of <RulesEngineProvider>. " +
-      "Required hierarchy: <RulesEngineProvider> > <InjectedFieldProvider> > <FormEngine>"
+      "Required hierarchy: <RulesEngineProvider> > <InjectedFieldProvider> > <Formosaic>"
     );
   }
   return context;

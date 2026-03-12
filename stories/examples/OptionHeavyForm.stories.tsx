@@ -1,7 +1,7 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import {
-  FormEngine,
+  Formosaic,
   RulesEngineProvider,
   InjectedFieldProvider,
 } from "@formosaic/core";
@@ -26,8 +26,8 @@ export default meta;
 
 export const Default: StoryObj = {
   render: () => (
-    <FormEngine
-      programName="storybook"
+    <Formosaic
+
       configName="optionHeavyForm"
       formConfig={optionHeavyFormConfig}
       defaultValues={{
@@ -44,8 +44,8 @@ export const Default: StoryObj = {
 
 export const Empty: StoryObj = {
   render: () => (
-    <FormEngine
-      programName="storybook"
+    <Formosaic
+
       configName="optionHeavyForm"
       formConfig={optionHeavyFormConfig}
       defaultValues={{}}

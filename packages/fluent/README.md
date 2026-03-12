@@ -17,7 +17,7 @@ import {
   RulesEngineProvider,
   InjectedFieldProvider,
   UseInjectedFieldContext,
-  FormEngine,
+  Formosaic,
 } from "@formosaic/core";
 import { createFluentFieldRegistry } from "@formosaic/fluent";
 import { FluentProvider, webLightTheme } from "@fluentui/react-components";
@@ -37,9 +37,8 @@ function App() {
       <RulesEngineProvider>
         <InjectedFieldProvider>
           <FieldRegistrar>
-            <FormEngine
+            <Formosaic
               configName="myForm"
-              programName="myApp"
               fieldConfigs={{
                 name: { type: "Textbox", label: "Name", required: true },
                 status: {

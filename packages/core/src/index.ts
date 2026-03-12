@@ -39,7 +39,6 @@ export {
 
 // Helpers
 export {
-  GetChildEntity,
   IsExpandVisible,
   GetConfirmInputModalProps,
   GetComputedValuesOnDirtyFields,
@@ -113,7 +112,7 @@ export { FieldArray } from "./components/FieldArray";
 export type { IFieldArrayProps } from "./components/FieldArray";
 
 // Components
-export { FormEngine } from "./components/InlineForm";
+export { Formosaic } from "./components/InlineForm";
 export { FormFields } from "./components/InlineFormFields";
 export { FieldWrapper } from "./components/FieldWrapper";
 export { default as RenderField } from "./components/RenderField";

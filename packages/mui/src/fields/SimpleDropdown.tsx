@@ -11,7 +11,7 @@ interface ISimpleDropdownProps {
 }
 
 const SimpleDropdown = (props: IFieldProps<ISimpleDropdownProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, placeholder, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, config, error, required, placeholder, setFieldValue } = props;
 
   const simpleOptions = config?.dropdownOptions ?? [];
 
@@ -29,7 +29,7 @@ const SimpleDropdown = (props: IFieldProps<ISimpleDropdownProps>) => {
         onChange={onChange}
         displayEmpty
         aria-required={required}
-        data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+        data-testid={GetFieldDataTestId(fieldName, testId)}
       >
         {!value && (placeholder ?? config?.placeHolder) && (
           <MenuItem value="" disabled>{placeholder ?? config?.placeHolder}</MenuItem>

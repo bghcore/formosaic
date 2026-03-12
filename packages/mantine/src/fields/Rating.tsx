@@ -5,7 +5,7 @@ import { GetFieldDataTestId } from "../helpers";
 import { Rating as MantineRating } from "@mantine/core";
 
 const Rating = (props: IFieldProps<IRatingConfig>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, config, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
 
   const max = config?.max ?? 5;
   const rating = (value as number) ?? 0;
@@ -20,7 +20,7 @@ const Rating = (props: IFieldProps<IRatingConfig>) => {
       count={max}
       value={rating}
       onChange={(val) => setFieldValue(fieldName, val)}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );
 };

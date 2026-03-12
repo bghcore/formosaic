@@ -6,7 +6,7 @@ import { Dropdown } from "@fluentui/react-components";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const MultiSelectSearch = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, options, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
 
   const onOptionSelect: ComboboxProps["onOptionSelect"] = (_, data) => {
     setFieldValue(fieldName, data.selectedOptions, false, 3000);
@@ -37,7 +37,7 @@ const MultiSelectSearch = (props: IFieldProps<{}>) => {
       onOptionSelect={onOptionSelect}
       aria-invalid={!!error}
       aria-required={required}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       {options?.map(option => (
         <Option key={String(option.value)} value={String(option.value)}>

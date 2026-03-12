@@ -5,7 +5,7 @@ import { GetFieldDataTestId } from "../helpers";
 import { Autocomplete as MantineAutocomplete } from "@mantine/core";
 
 const Autocomplete = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, placeholder, options, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, placeholder, options, setFieldValue } = props;
 
   const selectedLabel = options?.find(o => String(o.value) === String(value))?.label ?? (value as string) ?? "";
 
@@ -27,7 +27,7 @@ const Autocomplete = (props: IFieldProps<{}>) => {
       placeholder={placeholder}
       error={!!error}
       required={required}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );
 };

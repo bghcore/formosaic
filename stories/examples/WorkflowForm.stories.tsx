@@ -1,7 +1,7 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import {
-  FormEngine,
+  Formosaic,
   RulesEngineProvider,
   InjectedFieldProvider,
 } from "@formosaic/core";
@@ -26,8 +26,8 @@ export default meta;
 
 export const Draft: StoryObj = {
   render: () => (
-    <FormEngine
-      programName="storybook"
+    <Formosaic
+
       configName="workflowForm"
       formConfig={workflowFormConfig}
       defaultValues={{
@@ -45,8 +45,8 @@ export const Draft: StoryObj = {
 
 export const Active: StoryObj = {
   render: () => (
-    <FormEngine
-      programName="storybook"
+    <Formosaic
+
       configName="workflowForm"
       formConfig={workflowFormConfig}
       defaultValues={{
@@ -66,8 +66,8 @@ export const Active: StoryObj = {
 
 export const Empty: StoryObj = {
   render: () => (
-    <FormEngine
-      programName="storybook"
+    <Formosaic
+
       configName="workflowForm"
       formConfig={workflowFormConfig}
       defaultValues={{}}

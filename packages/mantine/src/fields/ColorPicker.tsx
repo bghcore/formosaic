@@ -5,7 +5,7 @@ import { GetFieldDataTestId, getFieldState } from "../helpers";
 import { ColorInput } from "@mantine/core";
 
 const ColorPicker = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
   const color = (value as string) ?? "#000000";
   if (readOnly) {
     return <ReadOnlyText fieldName={fieldName} value={color} />;
@@ -19,7 +19,7 @@ const ColorPicker = (props: IFieldProps<{}>) => {
       required={required}
       data-field-type="ColorPicker"
       data-field-state={getFieldState({ error, required, readOnly })}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );
 };

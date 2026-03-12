@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 const { RangePicker } = DatePicker;
 
 const DateRange = (props: IFieldProps<IDateRangeConfig>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, config, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
 
   const rangeValue = (value as IDateRangeValue | null) ?? { start: "", end: "" };
 
@@ -38,7 +38,7 @@ const DateRange = (props: IFieldProps<IDateRangeConfig>) => {
       value={dayjsValue}
       onChange={onChange}
       status={error ? "error" : undefined}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );
 };

@@ -14,9 +14,7 @@ import { trackRender } from "../helpers/RenderTracker";
 
 interface IRenderFieldProps {
   fieldName: string;
-  entityId?: string;
-  entityType?: string;
-  programName?: string;
+  testId?: string;
   type: string;
   hidden?: boolean;
   required?: boolean;
@@ -25,8 +23,6 @@ interface IRenderFieldProps {
   options?: IOption[];
   optionsLoading?: boolean;
   validate?: IValidationRule[];
-  parentEntityId?: string;
-  parentEntityType?: string;
   isManualSave?: boolean;
   setFieldValue: (fieldName: string, fieldValue: unknown, skipSave?: boolean) => void;
   isCreate?: boolean;
@@ -47,9 +43,9 @@ interface IRenderFieldProps {
 
 const RenderField = (props: IRenderFieldProps) => {
   const {
-    type, fieldName, entityId, entityType, programName,
+    type, fieldName, testId,
     hidden, required, readOnly, disabled, options, optionsLoading, validate,
-    parentEntityId, parentEntityType, isManualSave,
+    isManualSave,
     setFieldValue, isCreate, filterText, softHidden,
     label, skipLayoutReadOnly, hideOnCreate, config,
     description, placeholder, helpText,
@@ -125,11 +121,7 @@ const RenderField = (props: IRenderFieldProps) => {
               >
                 {React.cloneElement(Comp, {
                   fieldName,
-                  entityId,
-                  entityType,
-                  parentEntityId,
-                  parentEntityType,
-                  programName,
+                  testId,
                   value,
                   readOnly: isReadOnly,
                   required,
@@ -165,7 +157,7 @@ const RenderField = (props: IRenderFieldProps) => {
   }, [type, hidden, required, readOnly, disabled, options, optionsLoading, softHidden, renderLabel, renderError, renderStatus,
     fieldName, fieldNameConst, label, validate, config, description, placeholder, helpText,
     isCreate, hideOnCreate, isManualSave, skipLayoutReadOnly,
-    entityId, entityType, programName, parentEntityId, parentEntityType,
+    testId,
     injectedFields, analytics, control, getValues, setFieldValue]);
 
   return FieldComponent;

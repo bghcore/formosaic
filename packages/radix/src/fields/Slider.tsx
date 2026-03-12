@@ -11,7 +11,7 @@ interface ISliderProps {
 }
 
 const Slider = (props: IFieldProps<ISliderProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, config, error, required, setFieldValue } = props;
 
   if (readOnly) {
     return <ReadOnlyText fieldName={fieldName} value={String(value)} />;
@@ -32,7 +32,7 @@ const Slider = (props: IFieldProps<ISliderProps>) => {
         step={config?.step}
         aria-invalid={!!error}
         aria-required={required}
-        data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+        data-testid={GetFieldDataTestId(fieldName, testId)}
       >
         <RadixSlider.Track className="df-slider__track">
           <RadixSlider.Range className="df-slider__range" />

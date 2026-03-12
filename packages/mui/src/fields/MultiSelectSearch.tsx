@@ -4,7 +4,7 @@ import React from "react";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const MultiSelectSearch = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, options: dropdownOptions, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, options: dropdownOptions, setFieldValue } = props;
 
   const selectedValues = (value as string[]) ?? [];
 
@@ -58,7 +58,7 @@ const MultiSelectSearch = (props: IFieldProps<{}>) => {
           helperText={error?.message}
           inputProps={{
             ...params.inputProps,
-            "data-testid": GetFieldDataTestId(fieldName, programName, entityType, entityId),
+            "data-testid": GetFieldDataTestId(fieldName, testId),
           }}
         />
       )}

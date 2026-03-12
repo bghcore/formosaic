@@ -5,15 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.0] - 2026-03-12
+
+### Breaking Changes
+- **Renamed `<FormEngine>` to `<Formosaic>`** — the main form component now matches the product name
+- **Renamed `IFormEngineSharedProps` to `IFormosaicProps`** — shared props interface
+- **Removed legacy entity props:** `programName`, `entityId`, `entityType`, `parentEntityId`, `parentEntityType`, `isChildEntity`, `entityPath`, `customSaveKey`, `customSaveCallbackKey` — replaced with optional `testId` prop for data-testid generation
+- **Removed `GetChildEntity`** helper function (dead child-entity feature)
+- **Removed `inheritFromParent`** built-in value function
+- **Simplified `GetFieldDataTestId`** — now takes `(fieldName, testId?)` instead of `(fieldName, programName?, entityType?, entityId?)`
+
+### Migration
+- Replace `<FormEngine programName="app" entityType="form" entityId="123" ...>` with `<Formosaic testId="app-form-123" ...>` (or omit `testId` if you don't need data-testid attributes)
+- Replace `IFormEngineSharedProps` with `IFormosaicProps` in type imports
+- If you used `GetChildEntity`, implement your own child-entity lookup
+- If you used `inheritFromParent` value function, register it manually via `registerValueFunctions()`
 
 ### Removed
-
 - **`@formosaic/designer` removed from open-source distribution** -- The visual form builder package has been moved to a private repository. All source files, build config, docs references, README mentions, and npm keywords referencing the designer have been scrubbed. The 13 remaining packages (`core` + 11 adapters + `examples`) are unaffected.
 - Designer demo removed from GitHub Pages deployment -- pages.yml now deploys Storybook and landing page only.
 
 ### Added
-
 - **CodeQL security scanning** -- GitHub-native static analysis workflow for JavaScript/TypeScript vulnerability detection.
 - **OpenSSF Scorecard** -- Automated security posture scoring via `ossf/scorecard-action`, published to the Security tab.
 - **SECURITY.md** -- Responsible disclosure policy and security contact information.
@@ -28,7 +40,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **StackBlitz badge and "Try It Live" section** in README for instant browser-based demos.
 
 ### Changed
-
 - Publish workflow optimized: single build step with parallel per-package publishing (was sequential).
 - All GitHub Actions pinned to SHA hashes for supply chain security.
 - Workflow token permissions scoped to minimum required (`contents: read`).
@@ -38,7 +49,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - npm `keywords` enriched across all 13 packages for improved discoverability.
 
 ### Fixed
-
 - Cross-platform `package-lock.json` compatibility -- lockfile now includes Linux-specific optional dependencies (`@rollup/rollup-linux-x64-gnu`) required by CI.
 
 ## [1.0.1] - 2026-03-11

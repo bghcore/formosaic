@@ -26,7 +26,7 @@ const StatusDot = ({ color }: { color?: string }) => (
 );
 
 const StatusDropdown = (props: IFieldProps<IStatusDropdownProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, config, options, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, config, options, setFieldValue } = props;
 
   const statusColors = (config?.statusColors ?? {}) as Dictionary<string>;
 
@@ -47,7 +47,7 @@ const StatusDropdown = (props: IFieldProps<IStatusDropdownProps>) => {
           value={value ? String(value) : ""}
           onChange={onChange}
           displayEmpty
-          data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+          data-testid={GetFieldDataTestId(fieldName, testId)}
           renderValue={(selected) => {
             const option = options?.find(o => String(o.value) === selected);
             return option?.label ?? "";

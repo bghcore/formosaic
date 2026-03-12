@@ -3,7 +3,7 @@ import { Typography, Paper, Button, Box, Alert } from "@mui/material";
 import {
   RulesEngineProvider,
   InjectedFieldProvider,
-  FormEngine,
+  Formosaic,
   registerValueFunctions,
 } from "@formosaic/core";
 import { createMuiFieldRegistry } from "@formosaic/mui";
@@ -48,7 +48,7 @@ export const DataEntryExample: React.FC = () => {
       <Paper variant="outlined" sx={{ p: 3 }}>
         <RulesEngineProvider>
           <InjectedFieldProvider injectedFields={fieldRegistry}>
-            <FormEngine
+            <Formosaic
               formConfig={dataEntryFormConfig}
               defaultValues={{
                 lineItems: [
@@ -61,7 +61,6 @@ export const DataEntryExample: React.FC = () => {
                 ],
                 taxRate: "0.08",
               }}
-              programName="examples"
               configName="data-entry"
               isCreate={true}
               isManualSave={true}

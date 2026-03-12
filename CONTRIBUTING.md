@@ -214,7 +214,7 @@ The rendering pipeline:
 
 ```
 IFormConfig
-  -> FormEngine (form state, auto-save)
+  -> Formosaic (form state, auto-save)
     -> evaluateAllRules() -> IRuntimeFormState
     -> FormFields (ordered field list)
       -> RenderField (per field, looks up injectedFields[type])

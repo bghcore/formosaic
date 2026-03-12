@@ -64,7 +64,7 @@ import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 import {
   RulesEngineProvider,
   InjectedFieldProvider,
-  FormEngine,
+  Formosaic,
   IFormConfig,
 } from "@formosaic/core";
 import { createFluentFieldRegistry } from "@formosaic/fluent";
@@ -90,8 +90,7 @@ function App() {
     <FluentProvider theme={webLightTheme}>
       <RulesEngineProvider>
         <InjectedFieldProvider injectedFields={createFluentFieldRegistry()}>
-          <FormEngine
-            programName="myApp"
+          <Formosaic
             configName="myForm"
             formConfig={formConfig}
             entityData={{ title: "", status: "draft" }}

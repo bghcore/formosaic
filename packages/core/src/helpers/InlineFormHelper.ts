@@ -11,17 +11,6 @@ import { executeValueFunction } from "./ValueFunctionRegistry";
 import { evaluateExpression } from "./ExpressionEngine";
 import { logEvent } from "./EventTimeline";
 
-export const GetChildEntity = (
-  entityId?: string,
-  entity?: IEntityData,
-  entityPath?: string,
-  idField: string = "id"
-): IEntityData | undefined => {
-  if (!entity || !entityPath) return undefined;
-  const childValues = (entity[entityPath] as IEntityData[])?.filter(child => child[idField] === entityId);
-  return childValues?.length === 1 ? { ...childValues[0], Parent: { ...entity } } : undefined;
-};
-
 export const IsExpandVisible = (
   fieldStates: Record<string, IRuntimeFieldState>,
   expandCutoffCount: number = 12

@@ -23,7 +23,7 @@ const Field = (props: IFieldProps<IConfig>) => {
       onChange={(e) => setFieldValue(fieldName, e.target.value)}
       aria-invalid={!!error}
       aria-required={required}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );
 };

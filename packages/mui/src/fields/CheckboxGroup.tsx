@@ -5,7 +5,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const CheckboxGroup = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, options, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
 
   const selected = Array.isArray(value) ? (value as string[]) : [];
 
@@ -28,7 +28,7 @@ const CheckboxGroup = (props: IFieldProps<{}>) => {
     <FormControl
       error={!!error}
       required={required}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       <FormGroup className={FieldClassName("fe-checkbox-group", error)}>
         {options?.map(option => (

@@ -6,7 +6,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId } from "../helpers";
 
 const NumberField = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const num = Number(event.target.value);
@@ -31,7 +31,7 @@ const NumberField = (props: IFieldProps<{}>) => {
       overrides={{
         Root: {
           props: {
-            "data-testid": GetFieldDataTestId(fieldName, programName, entityType, entityId),
+            "data-testid": GetFieldDataTestId(fieldName, testId),
           },
         },
       }}

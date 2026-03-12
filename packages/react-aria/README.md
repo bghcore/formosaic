@@ -11,7 +11,7 @@ npm install @formosaic/react-aria @formosaic/core react react-dom react-hook-for
 ## Quick Start
 
 ```tsx
-import { FormEngine, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
+import { Formosaic, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
 import { createReactAriaFieldRegistry } from "@formosaic/react-aria";
 
 const fields = createReactAriaFieldRegistry();
@@ -20,7 +20,7 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider fields={fields}>
-        <FormEngine config={formConfig} entityData={data} />
+        <Formosaic config={formConfig} />
       </InjectedFieldProvider>
     </RulesEngineProvider>
   );

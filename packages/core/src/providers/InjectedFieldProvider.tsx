@@ -10,7 +10,7 @@ export function UseInjectedFieldContext() {
   if (context === undefined) {
     throw new Error(
       "UseInjectedFieldContext() was called outside of <InjectedFieldProvider>. " +
-      "Required hierarchy: <RulesEngineProvider> > <InjectedFieldProvider> > <FormEngine>"
+      "Required hierarchy: <RulesEngineProvider> > <InjectedFieldProvider> > <Formosaic>"
     );
   }
   return context;

@@ -5,7 +5,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const Rating = (props: IFieldProps<IRatingConfig>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, config, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
 
   const max = config?.max ?? 5;
   const precision = config?.allowHalf ? 0.5 : 1;
@@ -27,7 +27,7 @@ const Rating = (props: IFieldProps<IRatingConfig>) => {
       precision={precision}
       onChange={onChange}
       aria-required={required}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );
 };

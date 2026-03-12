@@ -9,7 +9,7 @@ export interface IDocumentLink {
 }
 
 const DocumentLinks = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
 
   const { watch } = useFormContext();
   const documentLinks: IDocumentLink[] = watch(`${fieldName}` as const) ?? [];
@@ -52,7 +52,7 @@ const DocumentLinks = (props: IFieldProps<{}>) => {
     <div
       className="fe-document-links"
       data-field-type="DocumentLinks"
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       <ul className="fe-document-links__list">
         {documentLinks.map((link, i) => (

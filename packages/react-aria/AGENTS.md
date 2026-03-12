@@ -59,7 +59,7 @@ import { GetFieldDataTestId, getFieldState } from "../helpers";
 import { TextField, Input } from "react-aria-components";
 
 const MyField = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
 
   if (readOnly) {
     return <ReadOnlyText fieldName={fieldName} value={value as string} />;
@@ -77,7 +77,7 @@ const MyField = (props: IFieldProps<{}>) => {
     >
       <Input
         autoComplete="off"
-        data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+        data-testid={GetFieldDataTestId(fieldName, testId)}
       />
     </TextField>
   );

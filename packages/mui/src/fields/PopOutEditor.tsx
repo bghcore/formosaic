@@ -19,7 +19,7 @@ interface IPopOutEditorProps {
 
 const PopOutEditor = (props: IFieldProps<IPopOutEditorProps>) => {
   const {
-    error, fieldName, programName, entityType, entityId, config, readOnly,
+    error, fieldName, testId, config, readOnly,
     required, savePending, saving, value, label, setFieldValue
   } = props;
 
@@ -80,7 +80,7 @@ const PopOutEditor = (props: IFieldProps<IPopOutEditorProps>) => {
           error={!!error}
           helperText={error?.message}
           inputProps={{
-            "data-testid": GetFieldDataTestId(fieldName, programName, entityType, entityId),
+            "data-testid": GetFieldDataTestId(fieldName, testId),
           }}
         />
         <Button
@@ -138,7 +138,7 @@ const PopOutEditor = (props: IFieldProps<IPopOutEditorProps>) => {
             variant="contained"
             onClick={onSaveButtonClick}
             disabled={!config?.saveCallback && modalValue === (value as string)}
-            data-testid={`${programName}-${entityType}-${entityId}-save-note`}
+            data-testid={`${testId ? testId + "-" : ""}save-note`}
           >
             {FormStrings.save}
           </Button>

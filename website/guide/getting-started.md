@@ -42,7 +42,7 @@ npm install @formosaic/core @formosaic/react-aria react-aria-components
 import {
   RulesEngineProvider,
   InjectedFieldProvider,
-  FormEngine,
+  Formosaic,
 } from "@formosaic/core";
 import { createFluentFieldRegistry } from "@formosaic/fluent";
 // Or: import { createMuiFieldRegistry } from "@formosaic/mui";
@@ -69,9 +69,8 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider injectedFields={createFluentFieldRegistry()}>
-        <FormEngine
+        <Formosaic
           configName="myForm"
-          programName="myApp"
           formConfig={formConfig}
           defaultValues={{ name: "", status: "Active", notes: "" }}
           saveData={async (data) => {

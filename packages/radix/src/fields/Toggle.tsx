@@ -6,7 +6,7 @@ import { GetFieldDataTestId, getFieldState } from "../helpers";
 import * as Switch from "@radix-ui/react-switch";
 
 const Toggle = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, label, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, label, setFieldValue } = props;
 
   if (readOnly) {
     return <ReadOnlyText fieldName={fieldName} value={convertBooleanToYesOrNoText(value as boolean)} />;
@@ -24,7 +24,7 @@ const Toggle = (props: IFieldProps<{}>) => {
         onCheckedChange={(checked) => setFieldValue(fieldName, checked)}
         aria-invalid={!!error}
         aria-required={required}
-        data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+        data-testid={GetFieldDataTestId(fieldName, testId)}
       >
         <Switch.Thumb className="df-toggle__thumb" />
       </Switch.Root>

@@ -5,7 +5,7 @@ import { GetFieldDataTestId } from "../helpers";
 import { AutoComplete } from "antd";
 
 const Autocomplete = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, placeholder, options, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, placeholder, options, setFieldValue } = props;
 
   const selectedLabel = options?.find(o => String(o.value) === String(value))?.label ?? (value as string) ?? "";
   const [inputValue, setInputValue] = useState<string>(selectedLabel);
@@ -41,7 +41,7 @@ const Autocomplete = (props: IFieldProps<{}>) => {
       onChange={onChange}
       placeholder={placeholder}
       status={error ? "error" : undefined}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );
 };

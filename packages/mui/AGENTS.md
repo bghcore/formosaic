@@ -72,7 +72,7 @@ interface IMyFieldProps {
 }
 
 const MyField = (props: IFieldProps<IMyFieldProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, setFieldValue } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(fieldName, event.target.value, false, 3000);
@@ -91,7 +91,7 @@ const MyField = (props: IFieldProps<IMyFieldProps>) => {
       error={!!error}
       helperText={error?.message}
       inputProps={{
-        "data-testid": GetFieldDataTestId(fieldName, programName, entityType, entityId),
+        "data-testid": GetFieldDataTestId(fieldName, testId),
       }}
     />
   );

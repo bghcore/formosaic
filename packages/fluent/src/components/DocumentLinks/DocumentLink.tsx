@@ -8,9 +8,7 @@ import { IDocumentLink } from "./DocumentLinks";
 
 interface IDocumentLinkProps {
   fieldName: string;
-  programName?: string;
-  entityType?: string;
-  entityId?: string;
+  testId?: string;
   readOnly?: boolean;
   index?: number;
   title?: string;
@@ -28,7 +26,7 @@ interface IDocumentLinkItem {
 
 const DocumentLink = (props: IDocumentLinkProps) => {
   const {
-    fieldName, programName, entityType, entityId, readOnly, index, title, url, addNewLink,
+    fieldName, testId, readOnly, index, title, url, addNewLink,
     saveLinks, onCancelAddLink, onConfirmDeleteLink
   } = props;
   const { confirm, cancel, linkTitleLabel, linkUrlLabel, add, edit, deleteLabel } = FormStrings;
@@ -72,7 +70,7 @@ const DocumentLink = (props: IDocumentLinkProps) => {
             <div>
               <label>{linkTitleLabel}</label>
               <Input value={field.value} onChange={onLinkTitleChange} required
-                data-testid={`${GetFieldDataTestId(fieldName, programName, entityType, entityId)}-link-title`} />
+                data-testid={`${GetFieldDataTestId(fieldName, testId)}-link-title`} />
               {error && <span className="error-message">{error.message}</span>}
             </div>
           )} />
@@ -85,7 +83,7 @@ const DocumentLink = (props: IDocumentLinkProps) => {
             <div>
               <label>{linkUrlLabel}</label>
               <Input value={field.value} onChange={onLinkUrlChange} required
-                data-testid={`${GetFieldDataTestId(fieldName, programName, entityType, entityId)}-link-url`} />
+                data-testid={`${GetFieldDataTestId(fieldName, testId)}-link-url`} />
               {error && <span className="error-message">{error.message}</span>}
             </div>
           )} />

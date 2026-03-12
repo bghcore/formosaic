@@ -32,7 +32,7 @@
 - `FormLoading` -- Loading skeleton display
 
 ### Helpers (re-exported from @formosaic/core/adapter-utils)
-- `GetFieldDataTestId(fieldName, programName, entityType, entityId)` -- Generates test ID
+- `GetFieldDataTestId(fieldName, testId)` -- Generates test ID
 - `getFieldState({ error, required, readOnly })` -- Returns state string for data-field-state
 - `formatDateTime(value, options?)` -- ISO string to localized display
 - `convertBooleanToYesOrNoText(value)` -- Boolean to "Yes"/"No"

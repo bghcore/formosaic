@@ -5,7 +5,7 @@ import React from "react";
 import { GetFieldDataTestId } from "../helpers";
 
 const MultiSelect = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, options, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
 
   const selectedValues = (value as string[]) ?? [];
 
@@ -41,7 +41,7 @@ const MultiSelect = (props: IFieldProps<{}>) => {
           props: {
             "aria-invalid": !!error,
             "aria-required": required,
-            "data-testid": GetFieldDataTestId(fieldName, programName, entityType, entityId),
+            "data-testid": GetFieldDataTestId(fieldName, testId),
           },
         },
       }}

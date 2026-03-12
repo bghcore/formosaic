@@ -13,7 +13,7 @@ npm install @formosaic/base-web @formosaic/core baseui styletron-engine-monolith
 ## Quick Start
 
 ```tsx
-import { FormEngine, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
+import { Formosaic, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
 import { createBaseWebFieldRegistry } from "@formosaic/base-web";
 import { Client as Styletron } from "styletron-engine-monolithic";
 import { Provider as StyletronProvider } from "styletron-react";
@@ -28,9 +28,8 @@ function App() {
       <BaseProvider theme={LightTheme}>
         <RulesEngineProvider>
           <InjectedFieldProvider fields={fields}>
-            <FormEngine
+            <Formosaic
               formConfig={myFormConfig}
-              entityData={myEntityData}
               onSave={handleSave}
             />
           </InjectedFieldProvider>

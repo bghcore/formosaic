@@ -8,9 +8,7 @@ import RenderField from "./RenderField";
 interface IConfirmInputsModalProps {
   isOpen?: boolean;
   configName: string;
-  entityId?: string;
-  entityType?: string;
-  programName?: string;
+  testId?: string;
   fields: Record<string, IFieldConfig>;
   confirmInputFields: string[];
   saveConfirmInputFields: () => void;
@@ -25,7 +23,7 @@ function getFocusableElements(container: HTMLElement): HTMLElement[] {
 
 const ConfirmInputsModal = (props: IConfirmInputsModalProps) => {
   const {
-    isOpen, configName, entityId, entityType, programName,
+    isOpen, configName, testId,
     fields, confirmInputFields, saveConfirmInputFields,
     cancelConfirmInputFields, renderDialog,
   } = props;
@@ -85,11 +83,9 @@ const ConfirmInputsModal = (props: IConfirmInputsModalProps) => {
             if (!fieldState || !fieldConfig) return null;
             return (
               <RenderField
-                key={`${confirmInputField}-${entityId}-modal`}
+                key={`${confirmInputField}-modal`}
                 fieldName={confirmInputField}
-                entityId={entityId}
-                entityType={entityType}
-                programName={programName}
+                testId={testId}
                 type={fieldState.type ?? ""}
                 required
                 options={fieldState.options}

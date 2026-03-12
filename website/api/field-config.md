@@ -57,9 +57,7 @@ Props injected into every field component via `React.cloneElement`:
 ```typescript
 interface IFieldProps<T> {
   fieldName?: string;
-  entityId?: string;
-  entityType?: string;
-  programName?: string;
+  testId?: string;
   readOnly?: boolean;
   required?: boolean;
   error?: FieldError;

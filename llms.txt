@@ -29,7 +29,7 @@
 ## Quick Start
 
 ```tsx
-import { RulesEngineProvider, InjectedFieldProvider, FormEngine } from "@formosaic/core";
+import { RulesEngineProvider, InjectedFieldProvider, Formosaic } from "@formosaic/core";
 import { createFluentFieldRegistry } from "@formosaic/fluent";
 // Or: createMuiFieldRegistry, createHeadlessFieldRegistry, createAntdFieldRegistry, etc.
 
@@ -55,8 +55,8 @@ const formConfig = {
 
 <RulesEngineProvider>
   <InjectedFieldProvider injectedFields={createFluentFieldRegistry()}>
-    <FormEngine
-      configName="myForm" programName="myApp"
+    <Formosaic
+      configName="myForm"
       formConfig={formConfig} defaultValues={{ name: "", role: "" }}
       saveData={async (data) => data}
     />

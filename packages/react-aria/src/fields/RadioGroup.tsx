@@ -5,7 +5,7 @@ import { GetFieldDataTestId, getFieldState } from "../helpers";
 import { RadioGroup as AriaRadioGroup, Radio } from "react-aria-components";
 
 const RadioGroup = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, options, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
 
   if (readOnly) {
     const label = options?.find(o => String(o.value) === String(value))?.label ?? (value as string);
@@ -21,7 +21,7 @@ const RadioGroup = (props: IFieldProps<{}>) => {
       isRequired={required}
       data-field-type="RadioGroup"
       data-field-state={getFieldState({ error, required, readOnly })}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       {options?.map(option => (
         <Radio

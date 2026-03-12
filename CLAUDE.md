@@ -25,7 +25,7 @@ Published as thirteen npm packages:
 
 ```
 IFormConfig (v2)
-  -> FormEngine (form state via react-hook-form, save with AbortController/retry)
+  -> Formosaic (form state via react-hook-form, save with AbortController/retry)
     -> evaluateAllRules() -> IRuntimeFormState
     -> FormFields (ordered field list)
       -> FormErrorBoundary (per-field crash isolation)
@@ -43,7 +43,7 @@ Two React context providers must wrap the form tree (both memoized via useMemo):
 ```
 <RulesEngineProvider>          -- Owns rule state via useReducer (memoized context value)
   <InjectedFieldProvider>      -- Component injection registry (memoized context value)
-    <FormEngine>              -- Entry point
+    <Formosaic>               -- Entry point
 ```
 
 ### Rules Engine (v2)
@@ -128,7 +128,7 @@ packages/
       constants.ts               -- ComponentTypes, FormConstants
       strings.ts                 -- FormStrings (i18n-aware, getters over LocaleRegistry)
       components/
-        InlineForm.tsx       -- FormEngine (main form component)
+        InlineForm.tsx       -- Formosaic (main form component)
         InlineFormFields.tsx -- FormFields (field list rendering)
         RenderField.tsx      -- RenderField (per-field routing + Controller)
         FieldWrapper.tsx     -- FieldWrapper (label, error, status chrome)
@@ -167,7 +167,7 @@ packages/
         ILocaleStrings.ts        -- ICoreLocaleStrings (~50 keys)
         TypedFieldConfig.ts      -- defineFormConfig() type-safe builder
         IAnalyticsCallbacks.ts    -- Analytics/telemetry callback interface (8 event hooks)
-        IConfirmInputModalProps.ts, IFieldToRender.ts, IFormEngineSharedProps.ts
+        IConfirmInputModalProps.ts, IFieldToRender.ts, IFormosaicProps.ts
       providers/
         BusinessRulesProvider.tsx -- RulesEngineProvider (useReducer + memoized)
         InjectedHookFieldProvider.tsx -- InjectedFieldProvider (useMemo memoized)
@@ -351,7 +351,7 @@ npm run build-storybook  # Build static Storybook
 
 ## Coding Conventions
 
-- Core components: `FormEngine`, `FormFields`, `RenderField`, `FieldWrapper`, `WizardForm`, `FieldArray`
+- Core components: `Formosaic`, `FormFields`, `RenderField`, `FieldWrapper`, `WizardForm`, `FieldArray`
 - Adapter field components: `Textbox`, `Dropdown`, `Toggle`, etc.
 - Read-only variants in `fields/readonly/`: `ReadOnly`, `ReadOnlyArray`, etc.
 - Interfaces use `I` prefix (e.g., `IFieldConfig`, `IRuntimeFieldState`)

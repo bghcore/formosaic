@@ -11,7 +11,7 @@ interface IDropdownProps {
 }
 
 const DropdownField = (props: IFieldProps<IDropdownProps>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, config, error, required, placeholder, options, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, config, error, required, placeholder, options, setFieldValue } = props;
 
   const onOptionSelect = (_: unknown, data: OptionOnSelectData) => {
     setFieldValue(fieldName, data.optionValue);
@@ -36,7 +36,7 @@ const DropdownField = (props: IFieldProps<IDropdownProps>) => {
       placeholder={placeholder}
       aria-invalid={!!error}
       aria-required={required}
-      data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       {options?.map(option => (
         <Option key={String(option.value)} value={String(option.value)} disabled={option.disabled}>

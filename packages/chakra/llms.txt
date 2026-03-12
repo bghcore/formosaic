@@ -45,7 +45,7 @@
 ## Code Example
 
 ```tsx
-import { RulesEngineProvider, InjectedFieldProvider, FormEngine } from "@formosaic/core";
+import { RulesEngineProvider, InjectedFieldProvider, Formosaic } from "@formosaic/core";
 import { createChakraFieldRegistry } from "@formosaic/chakra";
 
 const formConfig = {
@@ -64,7 +64,7 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider injectedFields={createChakraFieldRegistry()}>
-        <FormEngine formConfig={formConfig} saveData={async (data) => data} />
+        <Formosaic formConfig={formConfig} saveData={async (data) => data} />
       </InjectedFieldProvider>
     </RulesEngineProvider>
   );

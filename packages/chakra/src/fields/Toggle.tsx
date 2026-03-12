@@ -5,7 +5,7 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const Toggle = (props: IFieldProps<{}>) => {
-  const { fieldName, programName, entityType, entityId, value, readOnly, error, required, label, setFieldValue } = props;
+  const { fieldName, testId, value, readOnly, error, required, label, setFieldValue } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(fieldName, event.target.checked);
@@ -33,7 +33,7 @@ const Toggle = (props: IFieldProps<{}>) => {
         onChange={onChange}
         aria-invalid={!!error}
         aria-required={required}
-        data-testid={GetFieldDataTestId(fieldName, programName, entityType, entityId)}
+        data-testid={GetFieldDataTestId(fieldName, testId)}
         style={{ accentColor: "var(--chakra-colors-blue-500, #3182CE)" }}
       />
       {label && <span style={{ fontSize: "var(--chakra-fontSizes-md, 16px)" }}>{label}</span>}

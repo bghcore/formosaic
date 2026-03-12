@@ -6,11 +6,9 @@ import { FieldError } from "react-hook-form";
  */
 export const GetFieldDataTestId = (
   fieldName: string,
-  programName?: string,
-  entityType?: string,
-  entityId?: string
+  testId?: string
 ): string => {
-  return `${programName}-${entityType}-${entityId}-${fieldName}`;
+  return testId ? `${testId}-${fieldName}` : fieldName;
 };
 
 /**

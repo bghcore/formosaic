@@ -62,7 +62,7 @@ Find and replace across your codebase:
 ```diff
 - import { FormEngine, RulesEngineProvider } from "@form-eng/core";
 - import { createMuiFieldRegistry } from "@form-eng/mui";
-+ import { FormEngine, RulesEngineProvider } from "@formosaic/core";
++ import { Formosaic, RulesEngineProvider } from "@formosaic/core";
 + import { createMuiFieldRegistry } from "@formosaic/mui";
 ```
 
@@ -77,15 +77,19 @@ A simple find-and-replace of `@form-eng/` with `@formosaic/` handles all cases.
 + import { GetFieldDataTestId } from "@formosaic/core/adapter-utils";
 ```
 
-### What did NOT change
+### What did NOT change (in 1.0.0)
 
-- All component names (`FormEngine`, `RulesEngineProvider`, `InjectedFieldProvider`, etc.)
+- All component names (`Formosaic`, `RulesEngineProvider`, `InjectedFieldProvider`, etc.)
 - All type names (`IFormConfig`, `IFieldConfig`, `IFieldProps`, etc.)
 - All function names (`createFluentFieldRegistry`, `evaluateAllRules`, etc.)
 - All CSS class prefixes (`fe-`, `df-`, `ak-`)
 - All data attributes (`data-field-type`, `data-field-state`)
 - All behavior, validation, rules, and rendering logic
 - Version number (1.0.0)
+
+::: tip Note
+In v1.1.0, the main form component was renamed from `FormEngine` to `Formosaic` to match the product name. If you are migrating from `@form-eng/*` directly to v1.1.0+, replace `FormEngine` with `Formosaic` in your imports and JSX.
+:::
 
 ## Old packages
 

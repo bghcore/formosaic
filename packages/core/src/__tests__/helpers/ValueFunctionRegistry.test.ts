@@ -17,7 +17,6 @@ describe("ValueFunctionRegistry", () => {
       "setDate",
       "setDateIfNull",
       "setLoggedInUser",
-      "inheritFromParent",
     ])("getValueFunction('%s') returns a function", (name) => {
       const fn = getValueFunction(name);
       expect(fn).toBeDefined();
@@ -92,28 +91,6 @@ describe("ValueFunctionRegistry", () => {
     it("returns undefined when currentUserId is empty string", () => {
       const fn = getValueFunction("setLoggedInUser")!;
       const result = fn({ fieldName: "owner", currentUserId: "", values: {} });
-      expect(result).toBeUndefined();
-    });
-  });
-
-  describe("inheritFromParent", () => {
-    it("returns the parent entity value for the given field name", () => {
-      const fn = getValueFunction("inheritFromParent")!;
-      const values = { Parent: { region: "East", country: "US" } };
-      const result = fn({ fieldName: "region", values });
-      expect(result).toBe("East");
-    });
-
-    it("returns undefined when Parent is not in values", () => {
-      const fn = getValueFunction("inheritFromParent")!;
-      const result = fn({ fieldName: "region", values: {} });
-      expect(result).toBeUndefined();
-    });
-
-    it("returns undefined when the field does not exist on the parent", () => {
-      const fn = getValueFunction("inheritFromParent")!;
-      const values = { Parent: { country: "US" } };
-      const result = fn({ fieldName: "nonExistent", values });
       expect(result).toBeUndefined();
     });
   });

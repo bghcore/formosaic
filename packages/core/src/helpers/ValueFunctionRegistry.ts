@@ -20,10 +20,6 @@ const defaultValueFunctions: Record<string, ValueFunction> = {
   setDate: () => new Date(),
   setDateIfNull: ({ fieldValue }) => fieldValue ? fieldValue : new Date(),
   setLoggedInUser: ({ currentUserId }) => currentUserId ? { id: currentUserId } : undefined,
-  inheritFromParent: ({ fieldName, values }) => {
-    const parent = values?.Parent as IEntityData | undefined;
-    return parent ? parent[fieldName] as SubEntityType : undefined;
-  },
 };
 
 let valueFunctionRegistry: Record<string, ValueFunction> = { ...defaultValueFunctions };

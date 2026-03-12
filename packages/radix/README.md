@@ -13,7 +13,7 @@ npm install @formosaic/radix @formosaic/core react react-dom react-hook-form \
 ## Quick Start
 
 ```tsx
-import { FormEngine, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
+import { Formosaic, RulesEngineProvider, InjectedFieldProvider } from "@formosaic/core";
 import { createRadixFieldRegistry } from "@formosaic/radix";
 
 const fields = createRadixFieldRegistry();
@@ -22,7 +22,7 @@ function App() {
   return (
     <RulesEngineProvider>
       <InjectedFieldProvider fields={fields}>
-        <FormEngine config={formConfig} entityData={data} />
+        <Formosaic config={formConfig} />
       </InjectedFieldProvider>
     </RulesEngineProvider>
   );
