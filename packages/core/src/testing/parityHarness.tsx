@@ -11,6 +11,7 @@ import { render } from "@testing-library/react";
 import React from "react";
 import { ComponentTypes } from "../constants";
 import type { Dictionary } from "../utils";
+import type { IFieldConfig } from "../types/IFieldConfig";
 import type { IFormConfig } from "../types/IFormConfig";
 import type { IOption } from "../types/IOption";
 
@@ -170,7 +171,9 @@ export function runParityTests(
         const skipFields = new Set(adapter.contextDependentFields ?? []);
         const skipRequired = new Set(adapter.skipRequiredCheck ?? []);
 
-        const fieldEntries = Object.entries(formConfig.fields).filter(
+        // Cast: parity tests run against resolved configs (no template refs)
+        const allFields = formConfig.fields as Record<string, IFieldConfig>;
+        const fieldEntries = Object.entries(allFields).filter(
           ([, config]) =>
             (!fieldTypes || fieldTypes.includes(config.type)) &&
             !skipFields.has(config.type)
