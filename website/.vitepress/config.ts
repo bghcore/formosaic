@@ -4,9 +4,9 @@ export default defineConfig({
   title: 'Formosaic',
   description: 'Configuration-driven forms with a built-in rules engine',
   base: '/formosaic/',
-  head: [['link', { rel: 'icon', href: '/formosaic/favicon.ico' }]],
+  head: [['link', { rel: 'icon', type: 'image/png', href: '/formosaic/formosaic-logo.png' }]],
   themeConfig: {
-    logo: '/logo.png',
+    logo: '/formosaic-logo.png',
     nav: [
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'API', link: '/api/field-config' },
