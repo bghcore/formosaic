@@ -35,3 +35,8 @@ export * from "./IAnalyticsCallbacks";
 
 // Shared field config interfaces (used by adapter packages)
 export * from "./IFieldConfigs";
+
+// Template & Composition
+export * from "./IFormTemplate";
+export * from "./IFormConnection";
+export * from "./IResolvedFormConfig";

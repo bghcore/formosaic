@@ -11,6 +11,16 @@ import { executeValueFunction } from "./ValueFunctionRegistry";
 import { evaluateExpression } from "./ExpressionEngine";
 import { logEvent } from "./EventTimeline";
 
+function getNestedFormValue(obj: Record<string, unknown>, path: string): unknown {
+  const parts = path.split(".");
+  let current: unknown = obj;
+  for (const part of parts) {
+    if (current === null || current === undefined) return undefined;
+    current = (current as Record<string, unknown>)[part];
+  }
+  return current;
+}
+
 export const IsExpandVisible = (
   fieldStates: Record<string, IRuntimeFieldState>,
   expandCutoffCount: number = 12
@@ -142,18 +152,19 @@ export const CheckValidDropdownOptions = (
 
   Object.keys(fieldStates).forEach(fieldName => {
     const { type, options } = fieldStates[fieldName];
+    const fieldValue = getNestedFormValue(formValues, fieldName);
     if (
       (type === "Dropdown" || type === "StatusDropdown") &&
-      !isNull(formValues[fieldName]) &&
+      !isNull(fieldValue) &&
       options &&
-      options.findIndex(o => String(o.value) === String(formValues[fieldName])) === -1
+      options.findIndex(o => String(o.value) === String(fieldValue)) === -1
     ) {
       setValue(`${fieldName}` as const, null, { shouldDirty: false });
-    } else if (type === "Multiselect" && !isNull(formValues[fieldName]) && options) {
-      const filteredValues = (formValues[fieldName] as string[])?.filter(
+    } else if (type === "Multiselect" && !isNull(fieldValue) && options) {
+      const filteredValues = (fieldValue as string[])?.filter(
         val => options.some(o => String(o.value) === val)
       );
-      if (filteredValues?.length !== (formValues[fieldName] as string[])?.length) {
+      if (filteredValues?.length !== (fieldValue as string[])?.length) {
         setValue(`${fieldName}` as const, filteredValues, { shouldDirty: false });
       }
     }
@@ -169,7 +180,7 @@ export const CheckDefaultValues = (
 
   Object.keys(fieldStates).forEach(fieldName => {
     const { defaultValue, hidden } = fieldStates[fieldName];
-    if (!isNull(defaultValue) && isNull(formValues[fieldName]) && !hidden) {
+    if (!isNull(defaultValue) && isNull(getNestedFormValue(formValues, fieldName)) && !hidden) {
       setValue(`${fieldName}` as const, defaultValue, { shouldDirty: true });
     }
   });
@@ -206,7 +217,7 @@ export const InitOnCreateFormState = (
         initEntityData[fieldName] = result;
       }
     }
-    if (config.defaultValue !== undefined && isNull(initEntityData[fieldName])) {
+    if (config.defaultValue !== undefined && isNull(getNestedFormValue(initEntityData, fieldName))) {
       setValue(`${fieldName}` as const, config.defaultValue);
       initEntityData[fieldName] = config.defaultValue;
     }

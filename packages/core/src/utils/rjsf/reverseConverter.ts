@@ -16,7 +16,13 @@ export function toRjsfSchema(config: IFormConfig): {
   const required: string[] = [];
   const uiSchema: IRjsfUiSchema = {};
 
-  for (const [fieldName, fieldConfig] of Object.entries(config.fields)) {
+  // Cast fields to Record<string, IFieldConfig>: toRjsfSchema expects resolved configs
+  // (no template refs). If unresolved templateRefs are present they are silently skipped.
+  const resolvedFields = config.fields as Record<string, IFieldConfig>;
+  for (const [fieldName, fieldConfig] of Object.entries(resolvedFields)) {
+    // Skip any unresolved template refs (safety guard)
+    if (!fieldConfig.type) continue;
+
     // Handle dot-notation (flattened nested objects)
     if (fieldName.includes(".")) {
       setNestedProperty(properties, required, uiSchema, fieldName, fieldConfig);

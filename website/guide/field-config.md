@@ -34,6 +34,58 @@ This is the complete reference for `IFieldConfig`, the primary consumer-facing t
 
 ---
 
+## Template Field References
+
+In addition to `IFieldConfig`, field entries can be template references (`ITemplateFieldRef`). The type is discriminated by the presence of `templateRef`:
+
+- If `templateRef` is present, the entry is a template reference
+- If `type` and `label` are present, the entry is a standard field config
+
+### ITemplateFieldRef Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `templateRef` | `string` | (required) | Name of a registered or inline template to expand. |
+| `templateParams` | `Record<string, unknown>` | `{}` | Parameter values passed to the template. |
+| `templateOverrides` | `Record<string, Partial<IFieldConfig>>` | `undefined` | Per-field config patches applied after template expansion. |
+| `defaultValues` | `Record<string, unknown>` | `undefined` | Default values for the expanded template fields. |
+
+### Example
+
+```typescript
+const formConfig: IFormConfig = {
+  version: 2,
+  fields: {
+    // Standard field config (type + label present)
+    name: { type: "Textbox", label: "Name", required: true },
+
+    // Template reference (templateRef present)
+    shipping: {
+      templateRef: "address",
+      templateParams: { country: "US", required: true },
+    },
+
+    // Template reference with overrides and defaults
+    billing: {
+      templateRef: "address",
+      templateParams: { country: "US" },
+      templateOverrides: {
+        zip: { required: false },
+      },
+      defaultValues: {
+        street: "123 Main St",
+      },
+    },
+  },
+};
+```
+
+During template resolution, each `templateRef` entry is expanded into the template's fields, prefixed by the entry key. For example, `shipping` expands to `shipping.street`, `shipping.city`, `shipping.state`, and `shipping.zip`.
+
+See the [Templates & Composition](/guide/templates) guide for full documentation on defining and using templates.
+
+---
+
 ## Basic Example
 
 ```typescript

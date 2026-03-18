@@ -21,6 +21,20 @@ Published as thirteen npm packages:
 
 ## Architecture
 
+### Template Resolution Pipeline (pre-processing)
+
+```
+IFormConfig (with templateRef fields)
+  -> resolveTemplates() or composeForm()
+    -> ExpressionInterpolator ({{params.*}}, {{$lookup.*}})
+    -> Path prefixing (shipping.address.street)
+    -> Rule rewriting (local refs -> prefixed)
+    -> Expression scoping ($values -> $values.prefix.*)
+    -> Port merging, wizard expansion, metadata
+  -> IResolvedFormConfig (standard IFormConfig, no template refs)
+    -> [existing rendering pipeline]
+```
+
 ### Rendering Pipeline
 
 ```
@@ -86,6 +100,8 @@ Fields are registered as a `Record<string, JSX.Element>` via `InjectedFieldProvi
 - `rjsf/` -- RJSF-compatible schema import: `fromRjsfSchema()` converts JSON Schema + uiSchema + formData to `IFormConfig` with auto-generated `IRule[]` from dependencies/if-then-else/oneOf. `toRjsfSchema()` for reverse export.
 - `zodSchemaImport` -- Convert Zod schema to `Record<string, IFieldConfig>` (no zod dependency)
 - `lazyFieldRegistry` -- Create field registries with React.lazy for on-demand loading
+- `TemplateRegistry` -- Reusable form template definitions via `registerFormTemplate()`. JSON-serializable templates with typed params, ports, and nested template support.
+- `LookupRegistry` -- Static lookup tables for template expression interpolation via `registerLookupTables()`. Referenced as `$lookup.tableName` in template expressions.
 
 ## Key Types
 
@@ -116,6 +132,22 @@ interface IFieldConfig {
 type ICondition = IFieldCondition | ILogicalCondition;
 // IFieldCondition: { field, operator, value? }
 // ILogicalCondition: { operator: "and"|"or"|"not", conditions: ICondition[] }
+
+interface IFormTemplate {
+  params?: Record<string, ITemplateParamSchema>;
+  fields: Record<string, IFieldConfig | ITemplateFieldRef>;
+  fieldOrder?: string[];
+  rules?: IRule[];
+  wizard?: IWizardConfig;
+  ports?: Record<string, string[]>;
+}
+
+interface ITemplateFieldRef {
+  templateRef: string;
+  templateParams?: Record<string, unknown>;
+  templateOverrides?: Record<string, Partial<IFieldConfig>>;
+  defaultValues?: Record<string, unknown>;
+}
 ```
 
 ## Key Directories
@@ -124,7 +156,7 @@ type ICondition = IFieldCondition | ILogicalCondition;
 packages/
   core/                          -- @formosaic/core
     src/
-      index.ts                   -- Public API barrel exports
+      index.ts                   -- Public API barrel exports (also exports: registerFormTemplate, resolveTemplates, composeForm, ComposedForm, FormFragment, FormConnection, FormField)
       constants.ts               -- ComponentTypes, FormConstants
       strings.ts                 -- FormStrings (i18n-aware, getters over LocaleRegistry)
       components/
@@ -137,6 +169,10 @@ packages/
         FieldArray.tsx       -- FieldArray (react-hook-form useFieldArray)
         FormErrorBoundary.tsx -- FormErrorBoundary (crash isolation)
         FormDevTools.tsx     -- FormDevTools (dev panel: rules, values, errors, graph)
+        ComposedForm.tsx     -- JSX composition wrapper (<ComposedForm>)
+        FormFragment.tsx     -- Declaration-only fragment component
+        FormConnection.tsx   -- Declaration-only connection component
+        FormField.tsx        -- Declaration-only standalone field component
       helpers/
         ConditionEvaluator.ts    -- evaluateCondition (20 operators + AND/OR/NOT)
         RuleEngine.ts            -- buildDependencyGraph, evaluateAllRules, evaluateAffectedFields, topologicalSort
@@ -152,6 +188,13 @@ packages/
         RuleTracer.ts            -- Rule evaluation tracing/debugging
         RenderTracker.ts         -- Per-field render count tracking for DevTools Perf tab
         EventTimeline.ts         -- Chronological event log for DevTools Timeline tab
+      templates/
+        TemplateRegistry.ts          -- registerFormTemplate, getFormTemplate, resetFormTemplates
+        LookupRegistry.ts            -- registerLookupTables, getLookupTable, resetLookupTables
+        TemplateResolver.ts          -- resolveTemplates() 11-step pipeline
+        ExpressionInterpolator.ts    -- {{expression}} evaluation (custom parser)
+        ConnectionCompiler.ts        -- IFormConnection -> IRule[] compilation
+        ComposedFormBuilder.ts       -- composeForm() orchestrator
       types/
         IFormConfig.ts           -- IFormConfig, IFormSettings
         IFieldConfig.ts          -- IFieldConfig (v2 schema)

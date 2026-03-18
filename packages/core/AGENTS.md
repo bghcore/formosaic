@@ -79,12 +79,55 @@ RulesEngineProvider (useReducer for rules engine state)
 | `src/constants.ts` | `ComponentTypes` enum (28 component type string keys), `FormConstants`, `FIELD_PARENT_PREFIX` (internal). |
 | `src/strings.ts` | `FormStrings` (i18n-aware, getters over LocaleRegistry). |
 
+## Template & Composition System
+
+The template system is a **pure pre-processing layer** that runs before the rules engine. `resolveTemplates()` converts an `IFormConfig` containing `ITemplateFieldRef` entries into a standard `IFormConfig` with only concrete `IFieldConfig` fields. The rules engine, dependency graph, validation, and rendering see only the resolved output.
+
+### New directory: `src/templates/`
+
+| File | Purpose |
+|------|---------|
+| `src/templates/TemplateRegistry.ts` | Global template store. Exports `registerFormTemplate`, `registerFormTemplates`, `getFormTemplate`, `resetFormTemplates`. Templates are `IFormTemplate` objects: typed params, fields (may include nested `ITemplateFieldRef`), ports, and optional wizard config. |
+| `src/templates/LookupRegistry.ts` | Static lookup table store for `$lookup.tableName` expressions. Exports `registerLookupTables`, `getLookupTable`, `resetLookupTables`. |
+| `src/templates/TemplateResolver.ts` | 11-step resolution pipeline: expand refs, interpolate expressions, prefix paths, rewrite rules, scope `$values` expressions, merge ports, expand wizard steps, apply overrides, apply default values, validate, attach provenance metadata. Exports `resolveTemplates(config, options?)`. |
+| `src/templates/ExpressionInterpolator.ts` | Custom parser for `{{params.name}}` and `{{$lookup.table.key}}` expression syntax used in template field labels, computedValue, and config values. |
+| `src/templates/ConnectionCompiler.ts` | Compiles `IFormConnection` declarations into concrete `IRule[]` arrays. Supports `copyValues`, `hide`, `readOnly`, `computeFrom` connection effects. |
+| `src/templates/ComposedFormBuilder.ts` | Orchestrates `composeForm(options)` and `defineComposedForm()`. Merges fragments, compiles connections, resolves templates, returns final `IFormConfig`. |
+
+### New components
+
+| File | Purpose |
+|------|---------|
+| `src/components/ComposedForm.tsx` | JSX wrapper that accepts `<FormFragment>`, `<FormConnection>`, and `<FormField>` children, compiles them via `ComposedFormBuilder`, and renders `<Formosaic>`. |
+| `src/components/FormFragment.tsx` | Declaration-only component (renders nothing). Declares a template fragment with `name`, `templateRef`, `params`, `overrides`, and `defaultValues` props. |
+| `src/components/FormConnection.tsx` | Declaration-only component (renders nothing). Declares a cross-fragment connection with `from`, `to`, and `effect` props. |
+| `src/components/FormField.tsx` | Declaration-only component (renders nothing). Declares a standalone field inline in JSX composition. |
+
+### New types
+
+- `IFormTemplate` -- Template definition with typed params, fields (union `IFieldConfig | ITemplateFieldRef`), ports, fieldOrder, rules, wizard
+- `ITemplateFieldRef` -- Reference to a registered template: `templateRef`, `templateParams`, `templateOverrides`, `defaultValues`
+- `IFormConnection` -- Cross-fragment connection declaration: `from`, `to`, `effect` (`copyValues | hide | readOnly | computeFrom`)
+- `IResolvedFormConfig` -- Standard `IFormConfig` tagged with `_resolvedFrom` provenance metadata (internal, not public API)
+- `TemplateResolutionError` -- Typed error class with `code` (string enum) for resolution failures
+
+### IFormConfig changes (v1.3.0)
+
+- `IFormConfig.fields` is now `Record<string, IFieldConfig | ITemplateFieldRef>` (union type). `Formosaic` auto-detects template refs and calls `resolveTemplates()` before init.
+- `IWizardStep.fields` is now optional; steps may use `fragments` instead.
+
+### Testing
+
+- Template tests live in `src/__tests__/templates/` (76 tests across 6 files, one per module)
+- Test pattern: each module tested in isolation; `TemplateResolver.test.ts` uses end-to-end snapshot tests for the full 11-step pipeline
+- Fixtures in `src/__tests__/__fixtures__/templates/` (address template, contact template, nested composition)
+
 ## Testing
 
-- **709 tests** across 34 test files using Vitest
+- **785 tests** across 40 test files using Vitest (709 pre-v1.3.0 + 76 template tests)
 - Run: `npm test` (from monorepo root or `packages/core`)
 - Test files are in `src/__tests__/`
-- Coverage targets: helpers (RuleEngine, ConditionEvaluator, FormosaicHelper, ValidationRegistry, ValueFunctionRegistry, DependencyGraphValidator, ConfigValidator, LocaleRegistry, WizardHelper), reducers (RulesEngineReducer), hooks (useDraftPersistence, useBeforeUnload, useFormAnalytics), utils (formStateSerialization, jsonSchemaImport, lazyFieldRegistry, zodSchemaImport), components (FormErrorBoundary, FormDevTools)
+- Coverage targets: helpers (RuleEngine, ConditionEvaluator, FormosaicHelper, ValidationRegistry, ValueFunctionRegistry, DependencyGraphValidator, ConfigValidator, LocaleRegistry, WizardHelper), reducers (RulesEngineReducer), hooks (useDraftPersistence, useBeforeUnload, useFormAnalytics), utils (formStateSerialization, jsonSchemaImport, lazyFieldRegistry, zodSchemaImport), components (FormErrorBoundary, FormDevTools), templates (TemplateRegistry, LookupRegistry, TemplateResolver, ExpressionInterpolator, ConnectionCompiler, ComposedFormBuilder)
 - All tests must pass before committing
 
 ## Known Issues

@@ -9,7 +9,11 @@ export interface IWizardStep {
   /** Optional step description */
   description?: string;
   /** Field names included in this step */
-  fields: string[];
+  fields?: string[];
+  /** Fragment prefixes included in this step (expanded during resolution). */
+  fragments?: string[];
+  /** How fragment sub-wizards render: "inline" flattens steps, "nested" keeps internal nav. */
+  fragmentWizardMode?: "inline" | "nested";
   /** Condition under which this step is visible (uses v2 condition system) */
   visibleWhen?: ICondition;
 }
