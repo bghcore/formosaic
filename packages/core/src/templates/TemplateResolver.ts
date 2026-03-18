@@ -233,6 +233,11 @@ function expandTemplateRef(
         [...resolutionStack, ref.templateRef],
         depth + 1
       );
+      // Include nested fragment's resolved fields in the parent fragment's field list
+      const nestedFields = ctx.fragmentFields[prefixedName];
+      if (nestedFields) {
+        fragmentFieldNames.push(...nestedFields);
+      }
     } else {
       let resolvedField: IFieldConfig = { ...fieldDef };
 
