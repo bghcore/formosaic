@@ -52,6 +52,7 @@ interface ITemplateFieldRef {
   templateRef: string;
   templateParams?: Record<string, unknown>;
   templateOverrides?: Record<string, Partial<IFieldConfig>>;
+  defaultValues?: Record<string, unknown>;  // shorthand for bulk default value assignment
 }
 ```
 
@@ -187,6 +188,54 @@ When referencing a template, sparse overrides can patch specific fields without 
 ```
 
 Overrides are shallow-merged into the resolved field configs after parameter interpolation.
+
+### Default Values
+
+Shorthand for pre-filling a fragment with bulk default values without the verbosity of `templateOverrides`:
+
+```json
+{
+  "templateRef": "address",
+  "templateParams": { "country": "US" },
+  "defaultValues": {
+    "street": "123 Main St",
+    "city": "Springfield",
+    "state": "IL",
+    "zip": "62701"
+  }
+}
+```
+
+Equivalent to (but more concise than):
+```json
+{
+  "templateRef": "address",
+  "templateParams": { "country": "US" },
+  "templateOverrides": {
+    "street": { "defaultValue": "123 Main St" },
+    "city": { "defaultValue": "Springfield" },
+    "state": { "defaultValue": "IL" },
+    "zip": { "defaultValue": "62701" }
+  }
+}
+```
+
+**Resolution behavior:** During resolution step 4 (Override), for each key in `defaultValues`, set `resolvedField.defaultValue = defaultValues[key]`. Applied after `templateOverrides`, so explicit `templateOverrides` on `defaultValue` take precedence. Template-internal `defaultValue` properties (from the template definition or `{{params}}` interpolation) are overridden by `defaultValues`.
+
+**Nested templates:** `defaultValues` keys use local field names relative to the template. For a `contactInfo` template containing an `address` sub-template, use dot paths:
+
+```json
+{
+  "templateRef": "contactInfo",
+  "templateParams": { "country": "US" },
+  "defaultValues": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "address.street": "123 Main St",
+    "address.city": "Springfield"
+  }
+}
+```
 
 ---
 
@@ -391,6 +440,7 @@ interface IFragmentDef {
   config?: IFormConfig;                        // inline config (alternative to template)
   params?: Record<string, unknown>;            // template parameters
   overrides?: Record<string, Partial<IFieldConfig>>;
+  defaultValues?: Record<string, unknown>;     // bulk default values for fragment fields
 }
 
 interface IFormConnection {
@@ -931,5 +981,4 @@ export type { IResolvedFormConfig, ITemplateMeta, IResolvedFieldMeta } from './t
 ## Open Questions (Deferred to Implementation)
 
 1. **Should `@formosaic/core/templates` be a separate subpath export?** Depends on bundle size impact after implementation.
-2. **Should templates support `defaultValue` at the fragment level?** (e.g., pre-fill an entire address block from saved data) — likely yes, but mechanics TBD.
-3. **Should `resolveTemplates()` be callable standalone for tooling/CLI use?** Likely yes (it's a pure function), but export strategy TBD.
+2. **Should `resolveTemplates()` be callable standalone for tooling/CLI use?** Likely yes (it's a pure function), but export strategy TBD.
