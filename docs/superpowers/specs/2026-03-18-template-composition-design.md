@@ -316,8 +316,9 @@ resolveTemplates(
 
 // IResolvedFormConfig extends IFormConfig with:
 interface IResolvedFormConfig extends IFormConfig {
-  _templateMeta?: ITemplateMeta;          // dev mode only
-  _resolvedPorts?: Record<string, string[]>;  // prefixed port mappings
+  fields: Record<string, IFieldConfig>;        // narrowed: all templateRefs resolved
+  _templateMeta?: ITemplateMeta;               // dev mode only
+  _resolvedPorts?: Record<string, string[]>;   // prefixed port mappings
 }
 ```
 
@@ -685,7 +686,7 @@ Deep paths like `shipping.lineItems.0.description`:
 |------|--------|-------|
 | `RuleEngine.ts` | Two-tier graph, `buildDefaultFieldStates` wires qualified edges into `dependentFields`, `evaluateAffectedFields` BFS uses qualified graph | ~100-150 lines modified |
 | `ConditionEvaluator.ts` | `extractConditionDependencies` returns full qualified path (not just first segment) for fragment fields | ~15 lines |
-| `ExpressionEngine.ts` | `extractExpressionDependencies` regex updated to capture full dotted paths from `$values.*` and `$root.*` | ~10 lines |
+| `ExpressionEngine.ts` | `extractExpressionDependencies` regex updated to capture full dotted paths (align with existing `[a-zA-Z0-9_.]*` pattern already used in `evaluateExpression()` for `$parent`/`$root`/`$values` replacements) | ~10 lines |
 | `DependencyGraphValidator.ts` | Accept qualified graph alongside topLevel | ~10 lines |
 | `FormosaicHelper.ts` | Pass resolution metadata to graph builder, detect templateRef in Formosaic.tsx | ~15 lines |
 | `WizardHelper.ts` | Null checks for `step.fields` (now optional), expand `step.fragments` to field lists | ~20 lines |
@@ -765,7 +766,7 @@ packages/core/src/
     TemplateRegistry.ts          — registerFormTemplate, getFormTemplate, resetFormTemplates
     LookupRegistry.ts            — registerLookupTables, getLookupTable, resetLookupTables
     TemplateResolver.ts          — resolveTemplates() pipeline (collect, expand, prefix, rewrite)
-    ExpressionInterpolator.ts    — {{expression}} evaluation using expr-eval
+    ExpressionInterpolator.ts    — {{expression}} evaluation (custom parser, not expr-eval)
     ConnectionCompiler.ts        — IFormConnection → IRule[] compilation
     ComposedFormBuilder.ts       — composeForm() orchestrator
   components/
