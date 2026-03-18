@@ -55,7 +55,7 @@
     "react-dom": "^18.0.0 || ^19.0.0",
     "react-hook-form": "^7.0.0",
     "@formosaic/core": "^1.0.0",
-    "baseui": "^14.0.0",
+    "baseui": "^16.1.1",
     "styletron-engine-monolithic": "^1.0.0",
     "styletron-react": "^6.0.0"
   },
@@ -64,7 +64,7 @@
     "react-dom": "^19.2.4",
     "react-hook-form": "^7.71.2",
     "@formosaic/core": "*",
-    "baseui": "^14.0.0",
+    "baseui": "^16.1.1",
     "styletron-engine-monolithic": "^1.0.0",
     "styletron-react": "^6.1.0",
     "tsup": "^8.5.1",
