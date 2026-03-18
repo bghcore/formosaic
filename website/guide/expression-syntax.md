@@ -183,6 +183,8 @@ const result = evaluateExpression(
 
 ---
 
+::: v-pre
+
 ## Template Expressions
 
 Template expressions use a different syntax from runtime expressions. They are resolved at **template expansion time** (before the form renders), not at runtime.
@@ -236,6 +238,8 @@ Inside template `computedValue` expressions, `$values` references are **local by
 - Use `$root.fieldName` to reference root-level form fields: `$root.globalDiscount`
 
 See the [Templates & Composition](/guide/templates) guide for full documentation.
+
+:::
 
 ---
 

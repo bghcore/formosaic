@@ -62,6 +62,8 @@ const config: IFormConfig = {
 };
 ```
 
+::: v-pre
+
 ## Template Parameters
 
 Parameters use `{{expression}}` syntax, resolved at template expansion time (before rendering).
@@ -71,6 +73,8 @@ Parameters use `{{expression}}` syntax, resolved at template expansion time (bef
 | `{{params.name}}` | Parameter value | `{{params.country}}` -> `"US"` |
 | `{{params.x == 'y' ? 'a' : 'b'}}` | Ternary | `{{params.country == 'CA' ? 'Province' : 'State'}}` |
 | `{{$lookup.table[params.key]}}` | Lookup table access | `{{$lookup.stateOptions[params.country]}}` |
+
+:::
 
 ### Lookup Tables
 
