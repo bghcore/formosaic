@@ -10,6 +10,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render } from "@testing-library/react";
 import React from "react";
 import { ComponentTypes } from "../../constants";
+import type { IFieldConfig } from "../../types/IFieldConfig";
 import type { IFormConfig } from "../../types/IFormConfig";
 import {
   profileFormConfig,
@@ -104,7 +105,7 @@ describe("Business form round-trip tests", () => {
   // Profile form round-trip
   // =================================================================
   describe("Profile form round-trip", () => {
-    const profileFields = profileFormConfig.fields;
+    const profileFields = profileFormConfig.fields as Record<string, IFieldConfig>;
 
     adapters.forEach((adapter) => {
       describe(`[${adapter.name}]`, () => {
@@ -341,7 +342,7 @@ describe("Business form round-trip tests", () => {
   // Workflow form round-trip
   // =================================================================
   describe("Workflow form round-trip", () => {
-    const workflowFields = workflowFormConfig.fields;
+    const workflowFields = workflowFormConfig.fields as Record<string, IFieldConfig>;
 
     adapters.forEach((adapter) => {
       describe(`[${adapter.name}]`, () => {
@@ -444,7 +445,7 @@ describe("Business form round-trip tests", () => {
   // Option-heavy form round-trip
   // =================================================================
   describe("Option-heavy form round-trip", () => {
-    const optionFields = optionHeavyFormConfig.fields;
+    const optionFields = optionHeavyFormConfig.fields as Record<string, IFieldConfig>;
 
     adapters.forEach((adapter) => {
       describe(`[${adapter.name}]`, () => {
