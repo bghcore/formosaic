@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Template & Composition System:** Reusable, JSON-serializable form templates with typed parameters, runtime composition, and cross-fragment connections
+  - `registerFormTemplate()` / `registerFormTemplates()` -- global template registry
+  - `registerLookupTables()` -- static lookup tables for template expressions
+  - `resolveTemplates()` -- 11-step resolution pipeline (expand, interpolate, rewrite, scope)
+  - `composeForm()` -- config-driven form assembly from fragments
+  - `defineComposedForm()` -- type-safe composition builder
+  - `<ComposedForm>`, `<FormFragment>`, `<FormConnection>`, `<FormField>` -- JSX composition API
+  - `{{params.*}}` and `{{$lookup.*}}` expression interpolation in templates
+  - Template overrides (`templateOverrides`) and default values (`defaultValues`) shorthand
+  - Cross-fragment connections: `copyValues`, `hide`, `readOnly`, `computeFrom` effects
+  - Wizard integration: `IWizardStep.fragments`, `fragmentWizardMode` (inline/nested)
+  - Template provenance in FormDevTools Deps tab
+  - `TemplateResolutionError` with typed error codes
+- **IFormConfig.fields** now accepts `IFieldConfig | ITemplateFieldRef` (union type)
+- **IWizardStep.fields** is now optional (steps can use `fragments` only)
+
+### Changed
+- `extractConditionDependencies()` now returns full dotted paths (was truncating to first segment)
+- `extractExpressionDependencies()` regex captures full dotted paths (aligned with `evaluateExpression()`)
+- `FormosaicHelper` functions use nested value access for dotted field names
+- `Formosaic` component auto-detects and resolves template references
+
 ### Fixed
 - Updated Storybook `FormDevTools.stories.tsx` to import from `@formosaic/core/devtools` subpath
 - Updated website docs (`debugging-rules.md`, `performance.md`) to use `@formosaic/core/devtools` import paths
