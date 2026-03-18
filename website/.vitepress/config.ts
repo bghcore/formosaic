@@ -1,10 +1,37 @@
 import { defineConfig } from 'vitepress'
 
+const siteBase = 'https://bghcore.github.io/formosaic'
+const siteUrl = 'https://bghcore.github.io'
+const ogDescription = 'Define forms as JSON with a declarative rules engine. 11 UI adapters, 20 condition operators, computed values, cross-field effects, auto-save, and TypeScript-first.'
+const ogImage = `${siteBase}/formosaic-brand.png`
+
 export default defineConfig({
   title: 'Formosaic',
   description: 'Configuration-driven forms with a built-in rules engine',
   base: '/formosaic/',
-  head: [['link', { rel: 'icon', type: 'image/png', href: '/formosaic/formosaic-logo.png' }]],
+  lang: 'en-US',
+  sitemap: {
+    hostname: siteUrl,
+    transformItems: (items) => items.map(item => ({
+      ...item,
+      url: `formosaic/${item.url}`
+    }))
+  },
+  head: [
+    ['link', { rel: 'icon', type: 'image/png', href: '/formosaic/formosaic-logo.png' }],
+    ['meta', { name: 'keywords', content: 'react forms, form engine, rules engine, JSON forms, config-driven forms, react-hook-form, form builder, typescript forms, formosaic' }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:title', content: 'Formosaic — Configuration-driven forms with a built-in rules engine' }],
+    ['meta', { property: 'og:description', content: ogDescription }],
+    ['meta', { property: 'og:image', content: ogImage }],
+    ['meta', { property: 'og:url', content: siteBase }],
+    ['meta', { property: 'og:site_name', content: 'Formosaic' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:title', content: 'Formosaic — Config-driven React forms with a rules engine' }],
+    ['meta', { name: 'twitter:description', content: ogDescription }],
+    ['meta', { name: 'twitter:image', content: ogImage }],
+    ['link', { rel: 'canonical', href: siteBase }],
+  ],
   themeConfig: {
     logo: '/formosaic-logo.png',
     nav: [
