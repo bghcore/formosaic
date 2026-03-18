@@ -2,6 +2,7 @@ import React from "react";
 import { IRuntimeFormState, IRuntimeFieldState } from "../types/IRuntimeFieldState";
 import { getRenderCounts, getLastRenderedFields, getTotalFormRenders, resetRenderTracker } from "../helpers/RenderTracker";
 import { getTimeline, clearTimeline, ITimelineEvent } from "../helpers/EventTimeline";
+import { ITemplateMeta } from "../types/IResolvedFormConfig";
 
 export interface IFormDevToolsProps {
   configName: string;
@@ -10,12 +11,14 @@ export interface IFormDevToolsProps {
   formErrors?: Record<string, unknown>;
   dirtyFields?: Record<string, boolean>;
   enabled?: boolean;
+  /** Template provenance metadata from IResolvedFormConfig._templateMeta */
+  templateMeta?: ITemplateMeta;
 }
 
 type TabKey = "rules" | "values" | "errors" | "graph" | "performance" | "depgraph" | "timeline";
 
 export const FormDevTools: React.FC<IFormDevToolsProps> = (props) => {
-  const { configName, formState, formValues, formErrors, dirtyFields, enabled = true } = props;
+  const { configName, formState, formValues, formErrors, dirtyFields, enabled = true, templateMeta } = props;
 
   const [isOpen, setIsOpen] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState<TabKey>("rules");
@@ -194,17 +197,26 @@ export const FormDevTools: React.FC<IFormDevToolsProps> = (props) => {
                 <th style={thStyle}>Depends On</th>
                 <th style={thStyle}>Depended By</th>
                 <th style={thStyle}>Effects</th>
+                <th style={thStyle}>Source</th>
               </tr>
             </thead>
             <tbody>
-              {depRows.map(row => (
-                <tr key={row.name} style={effectColor(row.effects)}>
-                  <td style={tdStyle}>{row.name}</td>
-                  <td style={tdStyle}>{row.dependsOn.join(", ") || "\u2014"}</td>
-                  <td style={tdStyle}>{row.dependedBy.join(", ") || "\u2014"}</td>
-                  <td style={tdStyle}>{row.effects.join(", ") || "\u2014"}</td>
-                </tr>
-              ))}
+              {depRows.map(row => {
+                const meta = templateMeta?.[row.name];
+                const source = meta ? `${meta.template} (${meta.fragment})` : "direct";
+                const sourceColor: React.CSSProperties = meta
+                  ? { color: "#9cdcfe" }
+                  : { color: "#888" };
+                return (
+                  <tr key={row.name} style={effectColor(row.effects)}>
+                    <td style={tdStyle}>{row.name}</td>
+                    <td style={tdStyle}>{row.dependsOn.join(", ") || "\u2014"}</td>
+                    <td style={tdStyle}>{row.dependedBy.join(", ") || "\u2014"}</td>
+                    <td style={tdStyle}>{row.effects.join(", ") || "\u2014"}</td>
+                    <td style={{ ...tdStyle, ...sourceColor }}>{source}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}
