@@ -146,7 +146,7 @@ function getNestedValue(obj: IEntityData, path: string): unknown {
  */
 export function extractExpressionDependencies(expression: string): string[] {
   const deps = new Set<string>();
-  const valuesRegex = /\$(?:values|root)\.([a-zA-Z_][a-zA-Z0-9_]*)/g;
+  const valuesRegex = /\$(?:values|root)\.([a-zA-Z_][a-zA-Z0-9_.]*)/g;
   let match;
   while ((match = valuesRegex.exec(expression)) !== null) {
     deps.add(match[1]);
