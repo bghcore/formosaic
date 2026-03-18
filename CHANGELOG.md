@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-03-18
+
 ### Added
 - **Template & Composition System:** Reusable, JSON-serializable form templates with typed parameters, runtime composition, and cross-fragment connections
   - `registerFormTemplate()` / `registerFormTemplates()` -- global template registry
