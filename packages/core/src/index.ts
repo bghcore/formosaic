@@ -153,9 +153,9 @@ export { evaluateExpression, extractExpressionDependencies, extractFunctionDepen
 // Template & Composition
 export { registerFormTemplate, registerFormTemplates, getFormTemplate, resetFormTemplates } from "./templates/TemplateRegistry";
 export { registerLookupTables, getLookupTable, resetLookupTables } from "./templates/LookupRegistry";
-export { resolveTemplates } from "./templates/TemplateResolver";
-export type { IResolveOptions } from "./templates/TemplateResolver";
-export { composeForm } from "./templates/ComposedFormBuilder";
+export { resolveTemplates, TemplateResolutionError } from "./templates/TemplateResolver";
+export type { IResolveOptions, TemplateErrorType } from "./templates/TemplateResolver";
+export { composeForm, defineComposedForm } from "./templates/ComposedFormBuilder";
 export { ComposedForm } from "./components/ComposedForm";
 export type { IComposedFormProps } from "./components/ComposedForm";
 export { FormFragment } from "./components/FormFragment";

@@ -68,3 +68,22 @@ export function composeForm(options: IComposeFormOptions): IFormConfig {
 
   return resolved;
 }
+
+/**
+ * Type-safe builder for composed forms. At runtime this is identical to `composeForm()`.
+ * The value is purely at the type level — IComposeFormOptions provides type checking
+ * for fragment definitions, connections, and wizard steps.
+ *
+ * @example
+ * const config = defineComposedForm({
+ *   fragments: {
+ *     shipping: { template: "address", params: { required: true } },
+ *     billing: { template: "address" },
+ *   },
+ *   fields: { sameAddr: { type: "Toggle", label: "Same as shipping?" } },
+ *   connections: [{ name: "copy", when: ..., source: ..., target: ..., effect: "copyValues" }],
+ * });
+ */
+export function defineComposedForm(options: IComposeFormOptions): IFormConfig {
+  return composeForm(options);
+}

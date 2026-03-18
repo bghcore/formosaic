@@ -7,6 +7,7 @@ import { IWizardConfig } from "../types/IWizardConfig";
 import { IFormFragmentProps } from "./FormFragment";
 import { IFormConnectionProps } from "./FormConnection";
 import { IFormFieldProps } from "./FormField";
+import { Formosaic } from "./Formosaic";
 import { IEntityData } from "../utils";
 
 export interface IComposedFormProps {
@@ -26,12 +27,28 @@ export interface IComposedFormProps {
   entityData?: IEntityData;
   /** Whether form is in read-only mode. */
   readOnly?: boolean;
+  /** Config name for the form instance. Defaults to "composed". */
+  configName?: string;
+  /** Test ID prefix. */
+  testId?: string;
   /** Children: FormFragment, FormField, FormConnection components. */
   children?: React.ReactNode;
 }
 
 export function ComposedForm(props: IComposedFormProps): React.ReactElement | null {
-  const { children, config: baseConfig, settings, wizard, fieldOrder, lookups, ...formosaicProps } = props;
+  const {
+    children,
+    config: baseConfig,
+    settings,
+    wizard,
+    fieldOrder,
+    lookups,
+    onSave,
+    entityData,
+    readOnly,
+    configName = "composed",
+    testId,
+  } = props;
 
   const composedConfig = useMemo(() => {
     const fragments: Record<string, IFragmentDef> = {};
@@ -67,27 +84,70 @@ export function ComposedForm(props: IComposedFormProps): React.ReactElement | nu
       }
     });
 
-    const options: IComposeFormOptions = {
-      fragments,
-      ...(Object.keys(fields).length > 0 && { fields }),
-      ...(connections.length > 0 && { connections }),
-      ...(fieldOrder && { fieldOrder }),
-      ...(wizard && { wizard }),
-      ...(settings && { settings }),
-      ...(lookups && { lookups }),
-    };
+    // Merge base config fields/fragments with JSX-extracted ones
+    // JSX children are merged ON TOP of the base config
+    const baseFields = baseConfig?.fields ?? {};
+    const baseTemplates = baseConfig?.templates;
+    const baseLookups = baseConfig?.lookups;
 
-    // If we have any fragments or fields from JSX, compose them
-    if (Object.keys(fragments).length > 0 || Object.keys(fields).length > 0) {
-      return composeForm(options);
+    // Separate templateRef entries from plain fields in baseConfig
+    const baseFragments: Record<string, IFragmentDef> = {};
+    const basePlainFields: Record<string, IFieldConfig> = {};
+    for (const [name, fieldDef] of Object.entries(baseFields)) {
+      if ("templateRef" in fieldDef && typeof (fieldDef as any).templateRef === "string") {
+        const ref = fieldDef as any;
+        baseFragments[name] = {
+          template: ref.templateRef,
+          ...(ref.templateParams && { params: ref.templateParams }),
+          ...(ref.templateOverrides && { overrides: ref.templateOverrides }),
+          ...(ref.defaultValues && { defaultValues: ref.defaultValues }),
+        };
+      } else {
+        basePlainFields[name] = fieldDef as IFieldConfig;
+      }
     }
 
-    // If only baseConfig provided (no JSX children), return it as-is
+    // Merge: base first, then JSX on top (JSX wins on conflict)
+    const mergedFragments = { ...baseFragments, ...fragments };
+    const mergedFields = { ...basePlainFields, ...fields };
+    const mergedLookups = { ...baseLookups, ...lookups };
+
+    const hasFragments = Object.keys(mergedFragments).length > 0;
+    const hasFields = Object.keys(mergedFields).length > 0;
+
+    if (hasFragments || hasFields) {
+      const options: IComposeFormOptions = {
+        fragments: mergedFragments,
+        ...(Object.keys(mergedFields).length > 0 && { fields: mergedFields }),
+        ...(connections.length > 0 && { connections }),
+        ...(fieldOrder ?? baseConfig?.fieldOrder ? { fieldOrder: fieldOrder ?? baseConfig?.fieldOrder } : {}),
+        ...(wizard ?? baseConfig?.wizard ? { wizard: wizard ?? baseConfig?.wizard } : {}),
+        ...(settings ?? baseConfig?.settings ? { settings: settings ?? baseConfig?.settings } : {}),
+        ...(Object.keys(mergedLookups).length > 0 && { lookups: mergedLookups }),
+      };
+      const composed = composeForm(options);
+      // Carry over inline templates if present
+      if (baseTemplates) {
+        composed.templates = { ...baseTemplates, ...composed.templates };
+      }
+      return composed;
+    }
+
+    // If only baseConfig provided (no JSX children, no fragments), return it as-is
     return baseConfig ?? { version: 2 as const, fields: {} };
   }, [children, fieldOrder, wizard, settings, lookups, baseConfig]);
 
-  // Lazy import to avoid circular deps — just render null with data-testid for now
-  // The actual Formosaic integration will be wired in Task 9
-  return React.createElement("div", { "data-testid": "composed-form" });
+  const defaultValues = entityData ?? {};
+
+  return (
+    <Formosaic
+      configName={configName}
+      testId={testId}
+      formConfig={composedConfig}
+      defaultValues={defaultValues}
+      areAllFieldsReadonly={readOnly}
+      saveData={onSave ? async (data) => { await onSave(data); return data; } : undefined}
+    />
+  );
 }
 ComposedForm.displayName = "ComposedForm";

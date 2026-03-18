@@ -22,7 +22,7 @@
 import { IFormConfig } from "../types/IFormConfig";
 import { IFieldConfig } from "../types/IFieldConfig";
 import { IFormTemplate, ITemplateFieldRef, isTemplateFieldRef } from "../types/IFormTemplate";
-import { IResolvedFormConfig, ITemplateMeta } from "../types/IResolvedFormConfig";
+import { IResolvedFormConfig, IResolvedFieldMeta, ITemplateMeta } from "../types/IResolvedFormConfig";
 import { IRule } from "../types/IRule";
 import { ICondition, IFieldCondition, isLogicalCondition } from "../types/ICondition";
 import { IFieldEffect } from "../types/IFieldEffect";
@@ -84,6 +84,10 @@ export function resolveTemplates(
     fragmentFields: {} as Record<string, string[]>,
     // Track template fieldOrder per fragment
     fragmentFieldOrders: {} as Record<string, string[]>,
+    // Track template wizard configs per fragment
+    fragmentWizards: {},
+    // Track field metadata for _fieldMeta
+    fieldMeta: {},
   };
 
   // Step 1-5: Expand all fields (recursive)
@@ -100,6 +104,8 @@ export function resolveTemplates(
       );
     } else {
       resolvedFields[fieldName] = { ...fieldDef };
+      // Issue 5: Populate _fieldMeta for direct (non-template) fields
+      ctx.fieldMeta[fieldName] = { source: "direct" };
     }
   }
 
@@ -141,7 +147,39 @@ export function resolveTemplates(
     result._resolvedPorts = ctx.resolvedPorts;
   }
 
+  // Issue 5: Attach field metadata
+  if (Object.keys(ctx.fieldMeta).length > 0) {
+    result._fieldMeta = ctx.fieldMeta;
+  }
+
   return result;
+}
+
+// ---------------------------------------------------------------------------
+// Error types (Issue 6)
+// ---------------------------------------------------------------------------
+
+export type TemplateErrorType =
+  | "template_not_found"
+  | "template_cycle"
+  | "template_max_depth";
+
+/**
+ * Structured error for template resolution failures.
+ * Mirrors the IConfigValidationError pattern from ConfigValidator.
+ */
+export class TemplateResolutionError extends Error {
+  public readonly type: TemplateErrorType;
+  public readonly fieldName: string;
+  public readonly details?: string;
+
+  constructor(type: TemplateErrorType, fieldName: string, message: string, details?: string) {
+    super(message);
+    this.name = "TemplateResolutionError";
+    this.type = type;
+    this.fieldName = fieldName;
+    this.details = details;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -156,19 +194,26 @@ interface IResolutionContext {
   resolvedPorts: Record<string, string[]>;
   fragmentFields: Record<string, string[]>;
   fragmentFieldOrders: Record<string, string[]>;
+  /** Track which fragments came from templates with sub-wizard configs. */
+  fragmentWizards: Record<string, IFormTemplate["wizard"]>;
+  /** Track field metadata for _fieldMeta. */
+  fieldMeta: Record<string, IResolvedFieldMeta>;
 }
 
 // ---------------------------------------------------------------------------
 // Core expansion logic (Steps 1-7)
 // ---------------------------------------------------------------------------
 
-function lookupTemplate(name: string, ctx: IResolutionContext): IFormTemplate {
+function lookupTemplate(name: string, prefix: string, ctx: IResolutionContext): IFormTemplate {
   // Inline/options templates take precedence over global registry
   const tmpl = ctx.mergedTemplates[name] ?? getFormTemplate(name);
   if (!tmpl) {
-    throw new Error(
+    throw new TemplateResolutionError(
+      "template_not_found",
+      prefix,
       `Template "${name}" not found. Ensure it is registered via registerFormTemplate() ` +
-      `or provided inline in config.templates.`
+      `or provided inline in config.templates.`,
+      name
     );
   }
   return tmpl;
@@ -184,21 +229,27 @@ function expandTemplateRef(
 ): void {
   // Cycle detection
   if (resolutionStack.includes(ref.templateRef)) {
-    throw new Error(
+    throw new TemplateResolutionError(
+      "template_cycle",
+      prefix,
       `Cycle detected in template resolution: ${[...resolutionStack, ref.templateRef].join(" -> ")}. ` +
-      `Templates cannot reference each other in a circular chain.`
+      `Templates cannot reference each other in a circular chain.`,
+      [...resolutionStack, ref.templateRef].join(" -> ")
     );
   }
 
   // Max depth check
   if (depth >= ctx.maxDepth) {
-    throw new Error(
+    throw new TemplateResolutionError(
+      "template_max_depth",
+      prefix,
       `Maximum template resolution depth (${ctx.maxDepth}) exceeded at "${prefix}". ` +
-      `This usually indicates deeply nested or recursive templates.`
+      `This usually indicates deeply nested or recursive templates.`,
+      String(ctx.maxDepth)
     );
   }
 
-  const template = lookupTemplate(ref.templateRef, ctx);
+  const template = lookupTemplate(ref.templateRef, prefix, ctx);
 
   // Step 2: Resolve params (merge provided params with template param defaults)
   const resolvedParams = resolveParams(template, ref.templateParams ?? {});
@@ -269,6 +320,13 @@ function expandTemplateRef(
         fragment: prefix,
         originalName: localName,
       };
+
+      // Issue 5: Populate _fieldMeta for template-sourced fields
+      ctx.fieldMeta[prefixedName] = {
+        source: "template",
+        fragmentPrefix: prefix,
+        templateName: ref.templateRef,
+      };
     }
   }
 
@@ -278,6 +336,11 @@ function expandTemplateRef(
   // Track template's fieldOrder for this fragment
   if (template.fieldOrder) {
     ctx.fragmentFieldOrders[prefix] = template.fieldOrder.map(f => `${prefix}.${f}`);
+  }
+
+  // Track template's wizard config for sub-wizard inline/nested expansion
+  if (template.wizard) {
+    ctx.fragmentWizards[prefix] = template.wizard;
   }
 
   // Step 6: Rewrite template-level rules and attach to first resolved field
@@ -537,27 +600,96 @@ function expandWizardFragments(
 ): IFormConfig["wizard"] {
   if (!wizard) return wizard;
 
+  const expandedSteps: typeof wizard.steps = [];
+
+  for (const step of wizard.steps) {
+    if (!step.fragments || step.fragments.length === 0) {
+      expandedSteps.push(step);
+      continue;
+    }
+
+    // Check if any fragment has a sub-wizard AND the step uses "inline" mode
+    const mode = step.fragmentWizardMode ?? "inline";
+
+    if (mode === "inline") {
+      // Check if any fragment has a sub-wizard to inline
+      const hasSubWizard = step.fragments.some(f => ctx.fragmentWizards[f]);
+
+      if (hasSubWizard) {
+        // Inline mode: replace this step with flattened sub-wizard steps
+        // First, collect any direct fields on the step (they go into a preamble step or first sub-step)
+        const directFields = [...(step.fields ?? [])];
+        // Also collect fields from fragments that have NO sub-wizard
+        const nonWizardFragmentFields: string[] = [];
+
+        for (const fragment of step.fragments) {
+          const subWizard = ctx.fragmentWizards[fragment];
+          if (subWizard) {
+            // Flatten sub-wizard steps into the outer wizard
+            for (const subStep of subWizard.steps) {
+              const subFields: string[] = [];
+              // Map sub-step fields to prefixed names
+              if (subStep.fields) {
+                for (const f of subStep.fields) {
+                  subFields.push(`${fragment}.${f}`);
+                }
+              }
+              // Expand sub-step fragments if any
+              if (subStep.fragments) {
+                for (const subFrag of subStep.fragments) {
+                  const prefixedFrag = `${fragment}.${subFrag}`;
+                  const fragFields = ctx.fragmentFields[prefixedFrag];
+                  if (fragFields) {
+                    subFields.push(...fragFields);
+                  }
+                }
+              }
+              expandedSteps.push({
+                id: `${fragment}.${subStep.id}`,
+                title: `${fragment} - ${subStep.title}`,
+                ...(subStep.description && { description: subStep.description }),
+                fields: subFields,
+                ...(subStep.visibleWhen && { visibleWhen: subStep.visibleWhen }),
+              });
+            }
+          } else {
+            // No sub-wizard — collect fields normally
+            const fragmentFieldNames = ctx.fragmentFields[fragment];
+            if (fragmentFieldNames) {
+              nonWizardFragmentFields.push(...fragmentFieldNames);
+            }
+          }
+        }
+
+        // If there are direct fields or non-wizard fragment fields, include them in a step
+        if (directFields.length > 0 || nonWizardFragmentFields.length > 0) {
+          expandedSteps.push({
+            ...step,
+            fields: [...directFields, ...nonWizardFragmentFields],
+          });
+        }
+        continue;
+      }
+    }
+
+    // "nested" mode or no sub-wizards: expand fragments to field lists (treat as single step)
+    const expandedFields: string[] = [...(step.fields ?? [])];
+    for (const fragment of step.fragments) {
+      const fragmentFieldNames = ctx.fragmentFields[fragment];
+      if (fragmentFieldNames) {
+        expandedFields.push(...fragmentFieldNames);
+      }
+    }
+
+    expandedSteps.push({
+      ...step,
+      fields: expandedFields,
+    });
+  }
+
   return {
     ...wizard,
-    steps: wizard.steps.map(step => {
-      if (!step.fragments || step.fragments.length === 0) {
-        return step;
-      }
-
-      // Expand fragments to field names
-      const expandedFields: string[] = [...(step.fields ?? [])];
-      for (const fragment of step.fragments) {
-        const fragmentFieldNames = ctx.fragmentFields[fragment];
-        if (fragmentFieldNames) {
-          expandedFields.push(...fragmentFieldNames);
-        }
-      }
-
-      return {
-        ...step,
-        fields: expandedFields,
-      };
-    }),
+    steps: expandedSteps,
   };
 }
 
