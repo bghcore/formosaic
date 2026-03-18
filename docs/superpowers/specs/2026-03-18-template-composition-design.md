@@ -31,6 +31,8 @@ Templates are JSON-serializable field group definitions with typed parameter con
 ### Template Schema
 
 ```typescript
+// TParams is a marker type for registerFormTemplate<T>() call-site inference only;
+// it does not constrain the params schema at compile time in this version.
 interface IFormTemplate<TParams extends Record<string, unknown> = Record<string, unknown>> {
   params?: Record<string, ITemplateParamSchema>;
   fields: Record<string, IFieldConfig | ITemplateFieldRef>;
@@ -255,8 +257,9 @@ Input: IFormConfig with templateRef fields + registered templates + lookup table
   6. Rewrite     — Prefix internal rule field references to match resolved paths
   7. Scope       — Rewrite $values references in expressions to use prefixed paths
   8. Merge ports — Collect port declarations, rewrite to prefixed paths
-  9. Attach meta — Build _templateMeta mapping for DevTools (dev mode only)
-  10. Output     — Standard IFormConfig with no template references remaining
+  9. Wizard      — Expand wizard step `fragments` arrays to resolved field name lists
+  10. Attach meta — Build _templateMeta mapping for DevTools (dev mode only)
+  11. Output      — Standard IFormConfig with no template references remaining
 ```
 
 ### Path Prefixing Example
@@ -485,6 +488,8 @@ const config = composeForm({
 ### Connection Effect Compilation
 
 Connections are sugar that compile to standard `IRule[]`. No new runtime concepts.
+
+**Port matching is by field suffix, not array index.** Source port field `shipping.name` maps to target port field `billing.name` by matching the suffix (field name within the template). If a target port field has no matching source counterpart (e.g., due to `templateOverrides` adding a field to one fragment), it is skipped with a dev-mode warning.
 
 | Effect | Compiles To |
 |--------|-------------|
@@ -734,14 +739,22 @@ Deep paths like `shipping.lineItems.0.description`:
 
 | File | Change | Scope |
 |------|--------|-------|
-| `RuleEngine.ts` | Two-tier graph, `buildDefaultFieldStates` wires qualified edges into `dependentFields`, `evaluateAffectedFields` BFS uses qualified graph | ~100-150 lines modified |
-| `ConditionEvaluator.ts` | `extractConditionDependencies` returns full qualified path (not just first segment) for fragment fields | ~15 lines |
-| `ExpressionEngine.ts` | `extractExpressionDependencies` regex updated to capture full dotted paths (align with existing `[a-zA-Z0-9_.]*` pattern already used in `evaluateExpression()` for `$parent`/`$root`/`$values` replacements) | ~10 lines |
+| `RuleEngine.ts` | Two-tier graph, all functions listed below updated for qualified key lookups | ~100-150 lines |
+| `ConditionEvaluator.ts` | `extractConditionDependencies` returns full qualified path (not just first segment) | ~15 lines |
+| `ExpressionEngine.ts` | `extractExpressionDependencies` regex bug-fix: change `[a-zA-Z0-9_]*` to `[a-zA-Z0-9_.]*` to capture full dotted paths (aligns with the regex already used in `evaluateExpression()` for `$parent`/`$root`/`$values` substitutions) | ~10 lines |
 | `DependencyGraphValidator.ts` | Accept qualified graph alongside topLevel | ~10 lines |
-| `FormosaicHelper.ts` | Pass resolution metadata to graph builder, detect templateRef in Formosaic.tsx | ~15 lines |
+| `FormosaicHelper.ts` | Resolution pipeline integration, nested value access in `CheckValidDropdownOptions`, `CheckDefaultValues`, `InitOnCreateFormState` (use `getNestedValue()` pattern from ConditionEvaluator) | ~30 lines |
 | `WizardHelper.ts` | Null checks for `step.fields` (now optional), expand `step.fragments` to field lists | ~20 lines |
 
-**Note:** The `RuleEngine.ts` scope estimate is larger than originally projected. `buildDependencyGraph`, `buildDefaultFieldStates`, `evaluateAllRules`, `evaluateAffectedFields`, and `getTransitivelyAffectedFields` all perform key lookups on `fieldStates` that must work with dotted field names. The two-tier graph affects more functions than just edge construction.
+**RuleEngine.ts functions requiring two-tier key lookup updates:**
+- `buildDependencyGraph` — graph initialization loop must populate both tiers; `if (dep in graph)` checks need two-tier lookup
+- `collectEffectTargets` — same `if (targetField in graph)` pattern
+- `buildDefaultFieldStates` — wires qualified graph edges into `dependentFields`/`dependsOnFields`
+- `evaluateAllRules` — iterates field states by key
+- `evaluateAffectedFields` — BFS traversal uses `fieldStates[current]?.dependentFields`
+- `getTransitivelyAffectedFields` — same BFS pattern
+
+**FormosaicHelper.ts nested value access:** `formValues[fieldName]` with bracket notation returns `undefined` for dotted field names on nested react-hook-form values. Functions that read form values by field name (`CheckValidDropdownOptions`, `CheckDefaultValues`, `InitOnCreateFormState`) must switch to the `getNestedValue(obj, path)` pattern already used in `ConditionEvaluator.ts`.
 
 ---
 
@@ -804,6 +817,8 @@ interface IFormConfig {
 
 `IFieldConfig` itself is **unchanged** — `type` and `label` remain required. Template references use the separate `ITemplateFieldRef` type (defined in Section 1). The `isTemplateFieldRef()` type guard discriminates between the two.
 
+**Type narrowing after resolution:** `resolveTemplates()` returns `IResolvedFormConfig`, which overrides `fields` to `Record<string, IFieldConfig>` (no union). All downstream code (`evaluateAllRules`, `buildDependencyGraph`, `RenderField`, etc.) receives the resolved type and never handles `ITemplateFieldRef`. In `Formosaic.tsx`, auto-detection of unresolved templates calls `resolveTemplates()` early, and the result is typed as `IResolvedFormConfig` for all subsequent calls. This means existing internal code does not need type guards — only the resolution pipeline itself handles the union.
+
 No version bump needed. Fields with `templateRef` are resolved before any downstream processing.
 
 ---
@@ -847,7 +862,7 @@ packages/core/src/
   helpers/ConditionEvaluator.ts      — extractConditionDependencies returns full qualified paths
   helpers/ExpressionEngine.ts        — extractExpressionDependencies captures full dotted paths
   helpers/DependencyGraphValidator.ts — accept qualified graph
-  helpers/FormosaicHelper.ts         — template resolution before init
+  helpers/FormosaicHelper.ts         — resolution pipeline, nested value access (getNestedValue) in CheckValidDropdownOptions/CheckDefaultValues/InitOnCreateFormState
   helpers/WizardHelper.ts            — step.fields optional, expand step.fragments
   components/Formosaic.tsx           — detect unresolved templateRef, call resolveTemplates()
   components/FormDevTools.tsx        — template provenance column
