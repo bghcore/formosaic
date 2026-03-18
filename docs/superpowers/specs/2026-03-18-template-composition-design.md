@@ -47,12 +47,15 @@ interface ITemplateParamSchema {
   required?: boolean;
 }
 
+// Discriminated from IFieldConfig by the presence of templateRef and absence of type/label
 interface ITemplateFieldRef {
   templateRef: string;
   templateParams?: Record<string, unknown>;
   templateOverrides?: Record<string, Partial<IFieldConfig>>;
 }
 ```
+
+**Type discrimination:** `IFieldConfig` requires `type: string` and `label: string`. `ITemplateFieldRef` has `templateRef: string` and no `type`/`label`. The `fields` record value type is `IFieldConfig | ITemplateFieldRef`. A type guard `isTemplateFieldRef(field)` checks for the presence of `templateRef` to discriminate. This avoids making `type`/`label` optional on `IFieldConfig`, which would break all existing consumers.
 
 ### JSON Example
 
@@ -107,7 +110,7 @@ interface ITemplateFieldRef {
       },
       "ports": {
         "identity": ["name", "email"],
-        "address": "address.*"
+        "address": ["address.street", "address.city", "address.state", "address.zip"]
       }
     }
   }
@@ -162,9 +165,11 @@ resetLookupTables(): void;
 
 Ports are named groups of fields that a template exposes for cross-fragment wiring. They enable controlled cross-communication without breaking template portability.
 
+- Port type is always `Record<string, string[]>` — explicit field name arrays
 - Ports reference local field names (pre-prefix)
-- Wildcard syntax: `"address.*"` expands to all fields under the `address` sub-template
 - Ports are resolved to prefixed paths during template resolution
+
+**Wildcard convenience in programmatic API only:** `registerFormTemplate()` accepts a helper `expandPorts(template)` that resolves `"address.*"` wildcards to explicit arrays at registration time. JSON configs must use explicit arrays. This keeps the runtime type simple while allowing ergonomic programmatic registration.
 
 ### Template Overrides
 
@@ -232,12 +237,47 @@ After resolution:
 
 Interpolation happens at resolution time (before rendering), not at runtime.
 
+### ExpressionInterpolator vs ExpressionEngine
+
+`ExpressionInterpolator.ts` is a **new, separate module** from the existing `ExpressionEngine.ts`. Key differences:
+
+| | ExpressionInterpolator (templates) | ExpressionEngine (runtime) |
+|---|---|---|
+| **When** | Resolution time (static) | Render time (reactive) |
+| **Variables** | `params.*`, `$lookup.*` | `$values.*`, `$fn.*`, `$parent.*`, `$root.*` |
+| **Return types** | Any JSON value (strings, booleans, arrays of `IOption[]`, objects) | Primarily scalar (string, number, boolean) |
+| **Bracket access** | `$lookup.stateOptions[params.country]` — needed | Not used |
+| **Implementation** | Custom evaluator with object/array support (not `expr-eval`) | `expr-eval` library |
+
+`expr-eval` is designed for mathematical/logical expressions returning scalars. Template interpolation needs to return complex objects (e.g., an array of `IOption[]` for a dropdown's `options`). `ExpressionInterpolator` uses a **lightweight custom evaluator**:
+- Ternary expressions: `params.country == 'CA' ? 'Province' : 'State'`
+- Property access: `params.country`, `$lookup.zipPatterns.US`
+- Bracket access: `$lookup.stateOptions[params.country]`
+- Equality/comparison: `==`, `!=`
+- Boolean literals and parameters
+
+This is intentionally simpler than `expr-eval` — template expressions resolve static data, not runtime computations.
+
 ### Expression Scoping
 
 Inside templates, `$values` references are **local by default**:
 - `$values.street` inside the address template resolves to `$values.shipping.address.street` after prefixing
 - `$root.fieldName` escapes the fragment scope and references the form root
 - This mirrors how `$parent` already works for FieldArrays
+
+### Template-Internal Rule Rewriting
+
+Resolution Step 6 rewrites field references in template-internal rules. Algorithm:
+
+For each rule in the template's `rules` array, walk the condition tree recursively:
+1. For each `IFieldCondition.field`:
+   - If the field name exists in the template's own `fields` set → prefix it (e.g., `"state"` → `"shipping.address.state"`)
+   - If the field name starts with `$root.` → strip the `$root.` prefix (after resolution, everything is at root level)
+   - Otherwise → throw a `ConfigValidationError` ("Rule in template 'address' references unknown field 'country'")
+2. For `ILogicalCondition` (and/or/not) → recurse into `conditions` array
+3. For `rule.then.fields` and `rule.else.fields` keys → apply the same prefix/root/error logic
+
+This ensures template rules are **portable by default** (local references only) and must explicitly opt into cross-boundary references via `$root`.
 
 ### Cycle Detection
 
@@ -281,6 +321,50 @@ interface IResolvedFormConfig extends IFormConfig {
 }
 ```
 
+### Resolution Timing
+
+Three paths, each with clear ownership:
+
+1. **`composeForm()` path:** Consumer calls `composeForm()` which calls `resolveTemplates()` internally. Returns a fully resolved `IFormConfig`. Consumer passes result to `<Formosaic>`.
+2. **`<ComposedForm>` path:** Component calls `composeForm()` in a `useMemo` during render. Passes resolved config to internal `<Formosaic>`.
+3. **Raw `IFormConfig` with `templateRef` passed to `<Formosaic>`:** `Formosaic.tsx` detects unresolved template references (presence of `templateRef` in any field) and calls `resolveTemplates()` before initializing the rules engine. This adds `Formosaic.tsx` to the modified files list.
+
+### Entity Data Shape
+
+react-hook-form treats dotted field names as nested object paths. `getValues("shipping.address.street")` traverses `{ shipping: { address: { street: ... } } }`.
+
+**Requirement:** Entity data (initial values) for composed forms must be nested objects matching the fragment prefix structure:
+
+```typescript
+// Correct:
+{ shipping: { name: "John", address: { street: "123 Main" } }, billing: { name: "Jane" } }
+
+// Incorrect (flat keys won't work with react-hook-form):
+{ "shipping.name": "John", "shipping.address.street": "123 Main" }
+```
+
+`composeForm()` and `resolveTemplates()` do **not** transform entity data — consumers provide it in the correct nested shape. This matches how FieldArray entity data already works today.
+
+**Draft persistence note:** If a form changes from non-templated to templated (field names change from `street` to `shipping.address.street`), existing drafts in localStorage become incompatible. Consumers should version their draft keys or clear drafts on schema changes.
+
+### Error Handling
+
+Template resolution failures fall into two categories:
+
+**Hard errors (throw `ConfigValidationError`):**
+- Missing template reference (`templateRef: "nonexistent"` not in registry or inline templates)
+- Cycle detected (template A → template B → template A)
+- Maximum resolution depth exceeded
+- Rule references unknown field (not local and not `$root.*`)
+
+**Dev-mode warnings (console.warn, continue resolution):**
+- Missing optional parameter (uses default value, warns if no default)
+- Type mismatch on parameter (string param receives number — coerced with warning)
+- Missing lookup table reference (resolves to `undefined`, warns)
+- Port references non-existent field (port entry removed, warns)
+
+This matches the existing `ConfigValidator` pattern: hard errors for broken configs, soft warnings for likely mistakes.
+
 ---
 
 ## Section 3: Runtime Composition
@@ -300,11 +384,11 @@ interface IComposeFormOptions {
   lookups?: Record<string, unknown>;
 }
 
+// Fragment key in the fragments record IS the prefix (no separate prefix property)
 interface IFragmentDef {
   template?: string;                           // template name from registry
   config?: IFormConfig;                        // inline config (alternative to template)
   params?: Record<string, unknown>;            // template parameters
-  prefix: string;                              // field name prefix
   overrides?: Record<string, Partial<IFieldConfig>>;
 }
 
@@ -313,7 +397,7 @@ interface IFormConnection {
   when: ICondition;
   source: { fragment: string; port: string };
   target: { fragment: string; port: string };
-  effect: "copyValues" | "hide" | "readOnly" | "computeFrom" | "syncOptions";
+  effect: "copyValues" | "hide" | "readOnly" | "computeFrom";
 }
 
 function composeForm(options: IComposeFormOptions): IFormConfig;
@@ -324,9 +408,9 @@ function composeForm(options: IComposeFormOptions): IFormConfig;
 ```typescript
 const config = composeForm({
   fragments: {
-    shipping: { template: "contactInfo", params: { country: "US" }, prefix: "shipping" },
-    billing: { template: "contactInfo", params: { country: "US" }, prefix: "billing" },
-    payment: { config: paymentConfig, prefix: "payment" },
+    shipping: { template: "contactInfo", params: { country: "US" } },
+    billing: { template: "contactInfo", params: { country: "US" } },
+    payment: { config: paymentConfig },
   },
   fields: {
     sameAsShipping: { type: "Toggle", label: "Same as shipping address" },
@@ -353,11 +437,12 @@ Connections are sugar that compile to standard `IRule[]`. No new runtime concept
 
 | Effect | Compiles To |
 |--------|-------------|
-| `copyValues` | `computedValue: "$values.{source.prefix}.{fieldName}"` on each target port field |
+| `copyValues` | `computedValue: "$root.{source.prefix}.{fieldName}"` on each target port field |
 | `hide` | `hidden: true` on each target port field |
 | `readOnly` | `readOnly: true` on each target port field |
-| `computeFrom` | `computedValue: "$values.{source.prefix}.{fieldName}"` (same as copyValues, kept for semantic clarity) |
-| `syncOptions` | `options` effect copying source field's current options to target |
+| `computeFrom` | `computedValue: "$root.{source.prefix}.{fieldName}"` (same as copyValues, kept for semantic clarity) |
+
+**Deferred:** `syncOptions` (copying runtime options between fields) requires runtime state access that cannot compile to static `IRule[]`. Will be added in a follow-up if needed, with a dedicated value function like `$fn.getFieldOptions("source.field")`.
 
 #### Expansion Example
 
@@ -402,12 +487,12 @@ Compiles to rules:
 
 #### How it works
 
-1. `<ComposedForm>` collects children declaratively via React context
-2. Builds an `IComposeFormOptions` object from the JSX tree
-3. Calls `composeForm()` internally
+1. `<ComposedForm>` reads its children's props declaratively by walking the React element tree using `React.Children.forEach` to extract props from `<FormFragment>`, `<FormField>`, and `<FormConnection>` elements
+2. Builds an `IComposeFormOptions` object from the extracted props
+3. Calls `composeForm()` internally (memoized via `useMemo` on the extracted config)
 4. Renders `<Formosaic config={resolvedConfig} />` with all standard props forwarded
 
-`<FormFragment>`, `<FormField>`, and `<FormConnection>` are **declaration-only components** — they render nothing themselves. They register their config into the parent `<ComposedForm>` context during render, similar to how React Router's `<Route>` works.
+`<FormFragment>`, `<FormField>`, and `<FormConnection>` are **declaration-only components** — they return `null` and render nothing. `<ComposedForm>` reads their props from the element tree, not via side effects during render. This avoids double-registration in `React.StrictMode` and issues with suspended/discarded renders.
 
 #### Mixing config and JSX
 
@@ -444,12 +529,14 @@ Bidirectional: outer wizards organize fragments into steps, and fragments can de
 interface IWizardStep {
   id: string;
   title: string;
-  fields?: string[];              // existing — top-level field names
+  fields?: string[];              // CHANGED: was required, now optional (steps can use fragments only)
   fragments?: string[];           // NEW — fragment prefixes
   visibleWhen?: ICondition;       // existing
   fragmentWizardMode?: "inline" | "nested";  // NEW — default: "inline"
 }
 ```
+
+**Breaking change:** `IWizardStep.fields` changes from required to optional. Steps can now specify `fragments` only, `fields` only, or both. `WizardHelper.ts` functions (`getStepFields`, `validateStepFields`, `getStepFieldOrder`) must add null checks for `step.fields`.
 
 #### Example
 
@@ -496,7 +583,7 @@ Templates can define their own wizard steps:
           { "id": "schedule", "title": "Schedule", "fields": ["startDate"] }
         ]
       },
-      "ports": { "identity": "personalInfo.*" }
+      "ports": { "identity": ["personalInfo.name", "personalInfo.email"] }
     }
   }
 }
@@ -596,11 +683,14 @@ Deep paths like `shipping.lineItems.0.description`:
 
 | File | Change | Scope |
 |------|--------|-------|
-| `RuleEngine.ts` | Two-tier graph, qualified path extraction based on field origin | ~50 lines modified |
+| `RuleEngine.ts` | Two-tier graph, `buildDefaultFieldStates` wires qualified edges into `dependentFields`, `evaluateAffectedFields` BFS uses qualified graph | ~100-150 lines modified |
+| `ConditionEvaluator.ts` | `extractConditionDependencies` returns full qualified path (not just first segment) for fragment fields | ~15 lines |
+| `ExpressionEngine.ts` | `extractExpressionDependencies` regex updated to capture full dotted paths from `$values.*` and `$root.*` | ~10 lines |
 | `DependencyGraphValidator.ts` | Accept qualified graph alongside topLevel | ~10 lines |
-| `FormosaicHelper.ts` | Pass resolution metadata to graph builder | ~5 lines |
-| `ConditionEvaluator.ts` | No change (already supports dot paths) | None |
-| `ExpressionEngine.ts` | No change (already supports dot paths) | None |
+| `FormosaicHelper.ts` | Pass resolution metadata to graph builder, detect templateRef in Formosaic.tsx | ~15 lines |
+| `WizardHelper.ts` | Null checks for `step.fields` (now optional), expand `step.fragments` to field lists | ~20 lines |
+
+**Note:** The `RuleEngine.ts` scope estimate is larger than originally projected. `buildDependencyGraph`, `buildDefaultFieldStates`, `evaluateAllRules`, `evaluateAffectedFields`, and `getTransitivelyAffectedFields` all perform key lookups on `fieldStates` that must work with dotted field names. The two-tier graph affects more functions than just edge construction.
 
 ---
 
@@ -646,28 +736,22 @@ Resolution expands `"shipping"` to the fragment's internal field order. Standalo
 
 ### IFormConfig Schema
 
-Templates are **additive** — new optional properties on `IFormConfig` and `IFieldConfig`:
+Templates are **additive** — new optional properties on `IFormConfig`, and a new union type for field values:
 
 ```typescript
 // On IFormConfig (optional)
 interface IFormConfig {
   version: 2;                                    // unchanged
-  fields: Record<string, IFieldConfig>;          // unchanged
+  fields: Record<string, IFieldConfig | ITemplateFieldRef>;  // CHANGED: union type
   templates?: Record<string, IFormTemplate>;     // NEW
   lookups?: Record<string, unknown>;             // NEW
   fieldOrder?: string[];
   wizard?: IWizardConfig;
   settings?: IFormSettings;
 }
-
-// On IFieldConfig (optional, mutually exclusive with type)
-interface IFieldConfig {
-  // existing properties...
-  templateRef?: string;                          // NEW
-  templateParams?: Record<string, unknown>;      // NEW
-  templateOverrides?: Record<string, Partial<IFieldConfig>>;  // NEW
-}
 ```
+
+`IFieldConfig` itself is **unchanged** — `type` and `label` remain required. Template references use the separate `ITemplateFieldRef` type (defined in Section 1). The `isTemplateFieldRef()` type guard discriminates between the two.
 
 No version bump needed. Fields with `templateRef` are resolved before any downstream processing.
 
@@ -708,14 +792,17 @@ packages/core/src/
 
 ```
 packages/core/src/
-  helpers/RuleEngine.ts          — two-tier dependency graph
+  helpers/RuleEngine.ts              — two-tier dependency graph, buildDefaultFieldStates, evaluateAffectedFields
+  helpers/ConditionEvaluator.ts      — extractConditionDependencies returns full qualified paths
+  helpers/ExpressionEngine.ts        — extractExpressionDependencies captures full dotted paths
   helpers/DependencyGraphValidator.ts — accept qualified graph
-  helpers/FormosaicHelper.ts     — template resolution before init
-  components/FormDevTools.tsx    — template provenance column
-  types/IFormConfig.ts           — templates?, lookups? properties
-  types/IFieldConfig.ts          — templateRef?, templateParams?, templateOverrides?
-  types/IWizardConfig.ts         — fragments?, fragmentWizardMode? on IWizardStep
-  index.ts                       — export new public API
+  helpers/FormosaicHelper.ts         — template resolution before init
+  helpers/WizardHelper.ts            — step.fields optional, expand step.fragments
+  components/Formosaic.tsx           — detect unresolved templateRef, call resolveTemplates()
+  components/FormDevTools.tsx        — template provenance column
+  types/IFormConfig.ts               — fields union type, templates?, lookups?
+  types/IWizardConfig.ts             — fields optional, fragments?, fragmentWizardMode?
+  index.ts                           — export new public API
 ```
 
 ---
@@ -781,12 +868,7 @@ export type { IResolvedFormConfig, ITemplateMeta, IResolvedFieldMeta } from './t
           "validate": [{ "name": "pattern", "params": { "pattern": "{{$lookup.zipPatterns[params.country]}}" } }]
         }
       },
-      "rules": [
-        {
-          "when": { "field": "country", "operator": "equals", "value": "UK" },
-          "then": { "fields": { "state": { "label": "County" } } }
-        }
-      ],
+      "rules": [],
       "ports": {
         "allFields": ["street", "city", "state", "zip"],
         "location": ["state", "zip"]
