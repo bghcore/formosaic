@@ -61,9 +61,10 @@ function collectEffectTargets(
 ): void {
   if (effect.fields) {
     for (const targetField of Object.keys(effect.fields)) {
-      if (targetField in graph) {
-        // The field that owns this rule's condition depends on condition fields;
-        // the target field is AFFECTED by the owner field's rule
+      // Skip self-references: a field targeting itself via cross-field effect
+      // syntax is handled as a self-effect during evaluation and must not
+      // create a self-loop that would poison the topological sort.
+      if (targetField !== ownerField && targetField in graph) {
         graph[ownerField]?.add(targetField);
       }
     }
