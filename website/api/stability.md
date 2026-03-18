@@ -103,6 +103,21 @@ This document classifies every public export from the `@formosaic/*` packages by
 | `ALL_FIELD_TYPES` | `@formosaic/core/testing` | Stable | Adapter + CI |
 | `runParityTests` | `@formosaic/core/testing` | Stable | Adapter + CI |
 
+## Template System
+
+| Export | Stability | Audience |
+|--------|-----------|----------|
+| `registerFormTemplate` | Stable | All consumers |
+| `registerLookupTables` | Stable | All consumers |
+| `composeForm` | Stable | All consumers |
+| `ComposedForm` | Stable | All consumers |
+| `FormFragment` | Stable | All consumers |
+| `FormField` | Stable | All consumers |
+| `FormConnection` | Stable | All consumers |
+| `ITemplateFieldRef` | Stable | All consumers |
+| `IFormTemplate` | Stable | All consumers |
+| `ITemplateParam` | Stable | All consumers |
+
 ## Schema Import/Export
 
 | Export | Stability | Audience |

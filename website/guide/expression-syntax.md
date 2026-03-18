@@ -183,6 +183,62 @@ const result = evaluateExpression(
 
 ---
 
+## Template Expressions
+
+Template expressions use a different syntax from runtime expressions. They are resolved at **template expansion time** (before the form renders), not at runtime.
+
+### Syntax: `{{...}}`
+
+Template expressions are wrapped in double curly braces `{{...}}` and appear in template field definitions:
+
+```ts
+registerFormTemplate('address', {
+  params: {
+    country: { type: 'string', default: 'US' },
+    required: { type: 'boolean', default: true },
+  },
+  fields: {
+    street: { type: 'Textbox', label: 'Street', required: '{{params.required}}' },
+    state: {
+      type: 'Dropdown',
+      label: "{{params.country == 'CA' ? 'Province' : 'State'}}",
+      options: '{{$lookup.stateOptions[params.country]}}',
+    },
+  },
+});
+```
+
+### Template Expression Contexts
+
+| Context | Syntax | Description |
+|---------|--------|-------------|
+| `params.*` | `{{params.country}}` | Access template parameter values |
+| `$lookup.*` | `{{$lookup.stateOptions[params.country]}}` | Access registered lookup tables |
+| Ternary | `{{params.x == 'y' ? 'a' : 'b'}}` | Conditional expressions |
+
+### How They Differ from Runtime Expressions
+
+| | Template Expressions | Runtime Expressions |
+|---|---|---|
+| **Syntax** | `{{params.country}}` | `$values.fieldName` |
+| **Evaluated** | Template expansion time (before render) | Runtime (on every form value change) |
+| **Context** | `params`, `$lookup` | `$values`, `$fn`, `$parent`, `$root` |
+| **Used in** | Template field definitions | `computedValue` property |
+| **Result** | Static config values baked into IFieldConfig | Dynamic values updated reactively |
+
+Template expressions produce static configuration. Once a template is expanded, the resulting `IFieldConfig` objects are indistinguishable from hand-written configs. Runtime `$values` expressions continue to work normally inside expanded template fields.
+
+### Scoping in Templates
+
+Inside template `computedValue` expressions, `$values` references are **local by default**:
+
+- `$values.street` inside a `shipping` fragment resolves to `$values.shipping.street`
+- Use `$root.fieldName` to reference root-level form fields: `$root.globalDiscount`
+
+See the [Templates & Composition](/guide/templates) guide for full documentation.
+
+---
+
 ## Limitations
 
 | Limitation | Workaround |

@@ -149,3 +149,18 @@ export {
 
 // Expression Engine
 export { evaluateExpression, extractExpressionDependencies, extractFunctionDependencies } from "./helpers/ExpressionEngine";
+
+// Template & Composition
+export { registerFormTemplate, registerFormTemplates, getFormTemplate, resetFormTemplates } from "./templates/TemplateRegistry";
+export { registerLookupTables, getLookupTable, resetLookupTables } from "./templates/LookupRegistry";
+export { resolveTemplates, TemplateResolutionError } from "./templates/TemplateResolver";
+export type { IResolveOptions, TemplateErrorType } from "./templates/TemplateResolver";
+export { composeForm, defineComposedForm } from "./templates/ComposedFormBuilder";
+export { ComposedForm } from "./components/ComposedForm";
+export type { IComposedFormProps } from "./components/ComposedForm";
+export { FormFragment } from "./components/FormFragment";
+export type { IFormFragmentProps } from "./components/FormFragment";
+export { FormConnection } from "./components/FormConnection";
+export type { IFormConnectionProps } from "./components/FormConnection";
+export { FormField } from "./components/FormField";
+export type { IFormFieldProps } from "./components/FormField";

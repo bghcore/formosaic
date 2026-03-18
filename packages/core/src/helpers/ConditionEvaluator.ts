@@ -110,7 +110,7 @@ function collectDependencies(condition: ICondition, deps: Set<string>): void {
     condition.conditions.forEach(c => collectDependencies(c, deps));
   } else {
     const fieldRef = (condition as IFieldCondition).field;
-    deps.add(fieldRef.includes('.') ? fieldRef.split('.')[0] : fieldRef);
+    deps.add(fieldRef);
   }
 }
 

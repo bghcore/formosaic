@@ -17,8 +17,9 @@ export function getStepFields(
   step: IWizardStep,
   fieldStates?: Record<string, IRuntimeFieldState>
 ): string[] {
-  if (!fieldStates) return step.fields;
-  return step.fields.filter(fieldName => {
+  const fields = step.fields ?? [];
+  if (!fieldStates) return fields;
+  return fields.filter(fieldName => {
     const state = fieldStates[fieldName];
     return !state?.hidden;
   });
@@ -29,14 +30,14 @@ export function getStepFieldOrder(
   entityData: IEntityData
 ): string[] {
   const visibleSteps = getVisibleSteps(steps, entityData);
-  return visibleSteps.flatMap(step => step.fields);
+  return visibleSteps.flatMap(step => step.fields ?? []);
 }
 
 export function validateStepFields(
   step: IWizardStep,
   errors: Record<string, unknown>
 ): string[] {
-  return step.fields.filter(fieldName => fieldName in errors);
+  return (step.fields ?? []).filter(fieldName => fieldName in errors);
 }
 
 export function isStepValid(

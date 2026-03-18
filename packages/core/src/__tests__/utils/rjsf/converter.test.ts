@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
+import type { IFieldConfig } from "../../../types/IFieldConfig";
 import { fromRjsfSchema } from "../../../utils/rjsf/converter";
+
+/** Cast helper: fromRjsfSchema always returns resolved IFieldConfig (never templateRefs). */
+const f = (fields: Record<string, unknown>, key: string): IFieldConfig =>
+  fields[key] as IFieldConfig;
 
 describe("fromRjsfSchema", () => {
   describe("basic field mapping", () => {
@@ -14,11 +19,11 @@ describe("fromRjsfSchema", () => {
       });
 
       expect(result.version).toBe(2);
-      expect(result.fields.name.type).toBe("Textbox");
-      expect(result.fields.name.label).toBe("Name");
-      expect(result.fields.name.required).toBe(true);
-      expect(result.fields.email.type).toBe("Textbox");
-      expect(result.fields.email.validate).toContainEqual({ name: "email" });
+      expect(f(result.fields, "name").type).toBe("Textbox");
+      expect(f(result.fields, "name").label).toBe("Name");
+      expect(f(result.fields, "name").required).toBe(true);
+      expect(f(result.fields, "email").type).toBe("Textbox");
+      expect(f(result.fields, "email").validate).toContainEqual({ name: "email" });
     });
 
     it("should convert all basic types", () => {
@@ -34,12 +39,12 @@ describe("fromRjsfSchema", () => {
         },
       });
 
-      expect(result.fields.text.type).toBe("Textbox");
-      expect(result.fields.num.type).toBe("Number");
-      expect(result.fields.int.type).toBe("Number");
-      expect(result.fields.bool.type).toBe("Toggle");
-      expect(result.fields.dropdown.type).toBe("Dropdown");
-      expect(result.fields.date.type).toBe("DateControl");
+      expect(f(result.fields, "text").type).toBe("Textbox");
+      expect(f(result.fields, "num").type).toBe("Number");
+      expect(f(result.fields, "int").type).toBe("Number");
+      expect(f(result.fields, "bool").type).toBe("Toggle");
+      expect(f(result.fields, "dropdown").type).toBe("Dropdown");
+      expect(f(result.fields, "date").type).toBe("DateControl");
     });
 
     it("should handle empty schema", () => {
@@ -62,8 +67,8 @@ describe("fromRjsfSchema", () => {
         },
       });
 
-      expect(result.fields.name.type).toBe("Textbox");
-      expect(result.fields.name.label).toBe("Name");
+      expect(f(result.fields, "name").type).toBe("Textbox");
+      expect(f(result.fields, "name").label).toBe("Name");
     });
   });
 
@@ -83,7 +88,7 @@ describe("fromRjsfSchema", () => {
       });
 
       expect(result.fields.name).toBeDefined();
-      expect(result.fields.name.required).toBe(true);
+      expect(f(result.fields, "name").required).toBe(true);
       expect(result.fields.age).toBeDefined();
     });
   });
@@ -105,8 +110,8 @@ describe("fromRjsfSchema", () => {
         }
       );
 
-      expect(result.fields.bio.type).toBe("Textarea");
-      expect(result.fields.bio.placeholder).toBe("Tell us about yourself");
+      expect(f(result.fields, "bio").type).toBe("Textarea");
+      expect(f(result.fields, "bio").placeholder).toBe("Tell us about yourself");
     });
 
     it("should use ui:order for fieldOrder", () => {
@@ -158,8 +163,8 @@ describe("fromRjsfSchema", () => {
         { name: "John", age: 30 }
       );
 
-      expect(result.fields.name.defaultValue).toBe("John");
-      expect(result.fields.age.defaultValue).toBe(30);
+      expect(f(result.fields, "name").defaultValue).toBe("John");
+      expect(f(result.fields, "age").defaultValue).toBe(30);
     });
 
     it("should not override schema default with formData", () => {
@@ -174,7 +179,7 @@ describe("fromRjsfSchema", () => {
         { name: "Override" }
       );
 
-      expect(result.fields.name.defaultValue).toBe("Default");
+      expect(f(result.fields, "name").defaultValue).toBe("Default");
     });
   });
 
@@ -195,8 +200,8 @@ describe("fromRjsfSchema", () => {
       });
 
       expect(result.fields["address.street"]).toBeDefined();
-      expect(result.fields["address.street"].label).toBe("Street");
-      expect(result.fields["address.street"].required).toBe(true);
+      expect(f(result.fields, "address.street").label).toBe("Street");
+      expect(f(result.fields, "address.street").required).toBe(true);
       expect(result.fields["address.city"]).toBeDefined();
     });
   });
@@ -220,9 +225,9 @@ describe("fromRjsfSchema", () => {
         },
       });
 
-      expect(result.fields.contacts.type).toBe("FieldArray");
-      expect(result.fields.contacts.items).toBeDefined();
-      expect(result.fields.contacts.items!.name.required).toBe(true);
+      expect(f(result.fields, "contacts").type).toBe("FieldArray");
+      expect(f(result.fields, "contacts").items).toBeDefined();
+      expect(f(result.fields, "contacts").items!.name.required).toBe(true);
     });
 
     it("should convert array with enum items to Multiselect", () => {
@@ -236,7 +241,7 @@ describe("fromRjsfSchema", () => {
         },
       });
 
-      expect(result.fields.tags.type).toBe("Multiselect");
+      expect(f(result.fields, "tags").type).toBe("Multiselect");
     });
   });
 
@@ -253,8 +258,8 @@ describe("fromRjsfSchema", () => {
         },
       });
 
-      expect(result.fields.billing_address.rules).toHaveLength(1);
-      expect(result.fields.billing_address.rules![0].when).toEqual({
+      expect(f(result.fields, "billing_address").rules).toHaveLength(1);
+      expect(f(result.fields, "billing_address").rules![0].when).toEqual({
         field: "credit_card",
         operator: "isNotEmpty",
       });
@@ -277,8 +282,8 @@ describe("fromRjsfSchema", () => {
       });
 
       expect(result.fields.billing_address).toBeDefined();
-      expect(result.fields.billing_address.hidden).toBe(true);
-      expect(result.fields.billing_address.rules).toHaveLength(1);
+      expect(f(result.fields, "billing_address").hidden).toBe(true);
+      expect(f(result.fields, "billing_address").rules).toHaveLength(1);
     });
   });
 
@@ -305,15 +310,15 @@ describe("fromRjsfSchema", () => {
       });
 
       expect(result.fields.indoor).toBeDefined();
-      expect(result.fields.indoor.rules).toHaveLength(1);
-      expect(result.fields.indoor.rules![0].when).toEqual({
+      expect(f(result.fields, "indoor").rules).toHaveLength(1);
+      expect(f(result.fields, "indoor").rules![0].when).toEqual({
         field: "animal",
         operator: "equals",
         value: "cat",
       });
 
       expect(result.fields.breed).toBeDefined();
-      expect(result.fields.breed.rules).toHaveLength(1);
+      expect(f(result.fields, "breed").rules).toHaveLength(1);
     });
   });
 
@@ -337,9 +342,9 @@ describe("fromRjsfSchema", () => {
         ],
       });
 
-      expect(result.fields.entity_type.type).toBe("Dropdown");
-      expect(result.fields.first_name.rules).toHaveLength(1);
-      expect(result.fields.company_name.rules).toHaveLength(1);
+      expect(f(result.fields, "entity_type").type).toBe("Dropdown");
+      expect(f(result.fields, "first_name").rules).toHaveLength(1);
+      expect(f(result.fields, "company_name").rules).toHaveLength(1);
     });
   });
 
@@ -378,11 +383,11 @@ describe("fromRjsfSchema", () => {
       );
 
       expect(result.version).toBe(2);
-      expect(result.fields.firstName.required).toBe(true);
-      expect(result.fields.firstName.config?.autofocus).toBe(true);
-      expect(result.fields.age.type).toBe("Number");
-      expect(result.fields.email.placeholder).toBe("you@example.com");
-      expect(result.fields.newsletter.type).toBe("Toggle");
+      expect(f(result.fields, "firstName").required).toBe(true);
+      expect(f(result.fields, "firstName").config?.autofocus).toBe(true);
+      expect(f(result.fields, "age").type).toBe("Number");
+      expect(f(result.fields, "email").placeholder).toBe("you@example.com");
+      expect(f(result.fields, "newsletter").type).toBe("Toggle");
       // Flattened address
       expect(result.fields["address.street"]).toBeDefined();
       expect(result.fields["address.city"]).toBeDefined();
@@ -405,7 +410,7 @@ describe("fromRjsfSchema", () => {
         { ruleIdPrefix: "myapp" }
       );
 
-      expect(result.fields.b.rules![0].id).toContain("myapp");
+      expect(f(result.fields, "b").rules![0].id).toContain("myapp");
     });
 
     it("should use fieldArray strategy for nested objects", () => {
@@ -427,8 +432,8 @@ describe("fromRjsfSchema", () => {
         { nestedObjectStrategy: "fieldArray" }
       );
 
-      expect(result.fields.address.type).toBe("FieldArray");
-      expect(result.fields.address.items).toBeDefined();
+      expect(f(result.fields, "address").type).toBe("FieldArray");
+      expect(f(result.fields, "address").items).toBeDefined();
     });
   });
 });

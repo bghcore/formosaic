@@ -17,6 +17,8 @@ import { IConfirmInputModalProps } from "../types/IConfirmInputModalProps";
 import { IFieldConfig } from "../types/IFieldConfig";
 import { IFormConfig } from "../types/IFormConfig";
 import { IFormosaicProps } from "../types/IFormosaicProps";
+import { isTemplateFieldRef } from "../types/IFormTemplate";
+import { resolveTemplates } from "../templates/TemplateResolver";
 import { UseRulesEngineContext } from "../providers/RulesEngineProvider";
 import { FormStrings } from "../strings";
 import { useFormAnalytics } from "../hooks/useFormAnalytics";
@@ -83,8 +85,19 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
   } = props;
 
   // Support both v2 formConfig and v1 fieldConfigs
-  const fields = formConfig?.fields ?? props.fieldConfigs ?? {};
-  const formSettings = formConfig?.settings;
+  const rawFields = formConfig?.fields ?? props.fieldConfigs ?? {};
+
+  // Detect and resolve templates: if any field is a templateRef, resolve them all
+  const hasTemplateRefs = formConfig
+    ? Object.values(formConfig.fields).some(f => isTemplateFieldRef(f))
+    : false;
+  const resolvedConfig = hasTemplateRefs && formConfig
+    ? resolveTemplates(formConfig)
+    : formConfig;
+  // Use resolved fields for all downstream work (after resolution, all templateRefs are gone)
+  const fields = (resolvedConfig?.fields ?? rawFields) as Record<string, IFieldConfig>;
+
+  const formSettings = resolvedConfig?.settings;
   const effectiveManualSave = formSettings?.manualSave ?? isManualSave;
   const effectiveSaveTimeout = formSettings?.saveTimeoutMs ?? saveTimeoutMs;
   const effectiveMaxRetries = formSettings?.maxSaveRetries ?? maxSaveRetries;

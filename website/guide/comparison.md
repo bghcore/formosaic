@@ -24,7 +24,7 @@ How does Formosaic compare to other React form libraries? This guide provides an
 | Field arrays / repeaters | Built-in | Repeater component | Built-in | Built-in | FieldArray | ListField | Matrix | DataGrid |
 | i18n / localization | Locale registry | Fluent.js | React-intl | Manual | Manual | Manual | Built-in | Built-in |
 | Custom components | cloneElement injection | Fluent builder API | Widgets | N/A | N/A | Fields | Built-in | Built-in |
-| Embedded forms / templates | No | Yes | No | No | No | No | No | Partial |
+| Form templates / composition | Yes | Yes | No | No | No | No | No | Partial |
 | TypeScript | Strict | Yes | Partial | Strict | Yes | Yes | Yes | Yes |
 | Schema import | JSON Schema + Zod | Proprietary JSON | Native JSON Schema | No | No | JSON Schema | Proprietary | Proprietary |
 | React framework support | React only | React + Next.js + Remix | React | React/Vue/Angular/Solid | React | React | Multi-framework | Multi-framework |
@@ -77,10 +77,10 @@ How does Formosaic compare to other React form libraries? This guide provides an
 - **Contract-tested parity**: All 11 adapters run the same contract + parity test suite (6,296 tests). FormEngine.io's adapter parity is not publicly documented.
 - **Schema interop**: Formosaic imports JSON Schema (via `fromRjsfSchema()`) and Zod schemas. FormEngine.io uses a proprietary JSON format with no documented import from standard schemas.
 - **DevTools**: Formosaic includes FormDevTools for runtime rule tracing, value inspection, and performance tracking. FormEngine.io has no equivalent.
+- **Form templates**: Formosaic has a full [template and composition system](/guide/templates) with parameterized templates, lookup tables, nested templates, fragment connections, and wizard integration. FormEngine.io supports forms-within-forms but without parameterized templates or declarative fragment connections.
 
 **Where they lead:**
 - **AI form generation**: FormEngine.io offers a custom ChatGPT GPT that converts screenshots, PDFs, or text descriptions into their JSON schema. Formosaic has no AI generation story.
-- **Embedded forms / templates**: FormEngine.io supports forms-within-forms and reusable template components. Formosaic has no template/embedding system beyond field arrays.
 - **Specialized components**: FormEngine.io offers premium components (data grid with inline editing, signature capture, QR codes, Google Maps, rich text editor). Formosaic focuses on standard form fields.
 - **Validation library choice**: FormEngine.io integrates Zod, Yup, AJV, Superstruct, and Joi out of the box. Formosaic has its own validation registry (14 built-in validators + custom) but no direct Zod/Yup runtime integration.
 - **Workflow integration**: FormEngine.io is part of the Optimajet ecosystem (Workflow Engine, Workflow Server), enabling form-to-workflow pipelines. Formosaic is standalone.
@@ -155,6 +155,10 @@ How does Formosaic compare to other React form libraries? This guide provides an
 **Choose Form.io when:** you want a managed platform that handles form submissions, roles, and persistence -- and you're willing to use their ecosystem.
 
 **Choose Formosaic when:** you want a React-native library with full control over your backend, UI framework integration, and MIT licensing for all features.
+
+## Form Templates as a Differentiator
+
+Formosaic's [template and composition system](/guide/templates) is a unique capability among open-source form libraries. Templates let you define reusable field groups (addresses, contact info, payment details) with typed parameters and lookup tables, then reference them across forms with `templateRef`. The `composeForm()` API assembles complex forms from fragments with declarative connections between them (copy values, hide, read-only). No other open-source React form library offers parameterized, composable, JSON-serializable form templates with fragment-to-fragment connections.
 
 ## Migration Paths
 
