@@ -153,10 +153,41 @@ import { createReactAriaFieldRegistry } from "@formosaic/react-aria";
 
 Pass the registry to `InjectedFieldProvider` and all form fields render with that library's components.
 
+## Reusable Templates
+
+Forms often share field groups like addresses and contact info. Templates let you define these once and reuse them across forms with different parameters:
+
+```ts
+import { registerFormTemplate } from '@formosaic/core';
+
+registerFormTemplate('address', {
+  params: {
+    country: { type: 'string', default: 'US' },
+  },
+  fields: {
+    street: { type: 'Textbox', label: 'Street', required: true },
+    city: { type: 'Textbox', label: 'City', required: true },
+    state: { type: 'Dropdown', label: 'State', options: '{{$lookup.stateOptions[params.country]}}' },
+    zip: { type: 'Textbox', label: 'ZIP Code' },
+  },
+});
+
+const formConfig = {
+  version: 2 as const,
+  fields: {
+    shipping: { templateRef: 'address', templateParams: { country: 'US' } },
+    billing: { templateRef: 'address', templateParams: { country: 'CA' } },
+  },
+};
+```
+
+See the [Templates & Composition](/guide/templates) guide for parameterized templates, fragment connections, and composition APIs.
+
 ## Next Steps
 
 - [Rules Engine](/guide/rules-engine) -- Learn how declarative rules work
 - [Condition Operators](/guide/condition-operators) -- All 20 condition operators
+- [Templates & Composition](/guide/templates) -- Reusable, parameterized form templates
 - [Field Types](/guide/field-types) -- Complete field type reference
 - [Choosing an Adapter](/adapters/choosing) -- Pick the right UI adapter
 - [Validation](/guide/validation) -- Built-in and custom validators

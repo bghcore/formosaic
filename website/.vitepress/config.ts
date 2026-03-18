@@ -38,7 +38,8 @@ export default defineConfig({
             { text: 'Condition Operators', link: '/guide/condition-operators' },
             { text: 'Expression Syntax', link: '/guide/expression-syntax' },
             { text: 'Validation', link: '/guide/validation' },
-            { text: 'Value Functions', link: '/guide/value-functions' }
+            { text: 'Value Functions', link: '/guide/value-functions' },
+            { text: 'Templates & Composition', link: '/guide/templates' }
           ]
         },
         {

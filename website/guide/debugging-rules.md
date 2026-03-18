@@ -127,6 +127,28 @@ When a field's value changes, ALL dependents from the previous value are reverte
 
 ---
 
+## Template Provenance in DevTools
+
+When using [form templates](/guide/templates), the **Deps tab** in FormDevTools includes a **Source** column that shows the template and fragment each field originated from. This makes it straightforward to trace expanded fields back to their template definition.
+
+For example, a field named `shipping.street` will show:
+
+| Field | Source | Effect |
+|-------|--------|--------|
+| `shipping.street` | `address` via `shipping` | -- |
+| `shipping.state` | `address` via `shipping` | dropdown (rule from `address` template) |
+| `billing.street` | `address` via `billing` | copyValues (from `shipping.street`) |
+
+This provenance tracking helps you understand:
+
+- Which template defined a field's original configuration
+- Which fragment prefix was applied during expansion
+- Whether a rule came from the template itself or from a `composeForm()` connection
+
+Template resolution errors (unregistered templates, circular references, max depth exceeded) are surfaced in the **Timeline tab** as `TemplateResolutionError` events.
+
+---
+
 ## Debugging Checklist
 
 1. **Enable tracing** -- `enableRuleTracing()` to capture all rule events
