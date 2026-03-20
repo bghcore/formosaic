@@ -37,7 +37,9 @@
 
 [Storybook](https://bghcore.github.io/formosaic/storybook/) | [npm](https://www.npmjs.com/org/formosaic)
 
-A React library for rendering complex, configuration-driven forms with a built-in rules engine. Define your forms as a single `IFormConfig` JSON object -- field definitions, declarative rules with rich conditions, validation, ordering -- and the library handles rendering, validation, auto-save, and field interactions automatically.
+Formosaic is a React form library where you define forms as JSON and a built-in rules engine handles the rest. One config object controls field rendering, conditional logic, validation, multi-step wizards, and auto-save. Swap between 12 UI frameworks — MUI, Ant Design, Fluent UI, Chakra, Mantine, Radix, and more — without rewriting form logic.
+
+Define your forms as a single `IFormConfig` JSON object — field definitions, declarative rules with 20 condition operators, validation, ordering — and the library handles rendering, validation, auto-save, and field interactions automatically.
 
 ## When to Use This Library
 
