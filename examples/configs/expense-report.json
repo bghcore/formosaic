@@ -1,0 +1,220 @@
+{
+  "version": 2,
+  "fields": {
+    "reportTitle": {
+      "type": "Textbox",
+      "label": "Report Title",
+      "required": true,
+      "placeholder": "e.g., Q1 2026 Travel Expenses"
+    },
+    "submitter": {
+      "type": "Textbox",
+      "label": "Submitted By",
+      "required": true
+    },
+    "department": {
+      "type": "Dropdown",
+      "label": "Department",
+      "required": true,
+      "options": [
+        { "value": "engineering", "label": "Engineering" },
+        { "value": "sales", "label": "Sales" },
+        { "value": "marketing", "label": "Marketing" },
+        { "value": "operations", "label": "Operations" },
+        { "value": "hr", "label": "Human Resources" },
+        { "value": "finance", "label": "Finance" }
+      ]
+    },
+    "currency": {
+      "type": "Dropdown",
+      "label": "Currency",
+      "required": true,
+      "defaultValue": "USD",
+      "options": [
+        { "value": "USD", "label": "USD — US Dollar" },
+        { "value": "EUR", "label": "EUR — Euro" },
+        { "value": "GBP", "label": "GBP — British Pound" },
+        { "value": "CAD", "label": "CAD — Canadian Dollar" },
+        { "value": "AUD", "label": "AUD — Australian Dollar" }
+      ],
+      "rules": [
+        {
+          "id": "currency-updates-amount-label",
+          "when": { "field": "currency", "operator": "equals", "value": "EUR" },
+          "then": {
+            "fields": {
+              "totalAmount": { "label": "Total Amount (EUR)" },
+              "subtotal": { "label": "Subtotal (EUR)" },
+              "taxAmount": { "label": "Tax Amount (EUR)" }
+            }
+          },
+          "else": {
+            "fields": {
+              "totalAmount": { "label": "Total Amount (USD)" },
+              "subtotal": { "label": "Subtotal (USD)" },
+              "taxAmount": { "label": "Tax Amount (USD)" }
+            }
+          }
+        }
+      ]
+    },
+    "expenseStartDate": {
+      "type": "DateControl",
+      "label": "Expense Period Start",
+      "required": true,
+      "rules": [
+        {
+          "id": "start-date-before-end",
+          "when": { "field": "expenseStartDate", "operator": "isNotEmpty" },
+          "then": {
+            "fields": {
+              "expenseEndDate": {
+                "validate": [
+                  {
+                    "name": "dateAfter",
+                    "params": { "field": "expenseStartDate" },
+                    "message": "End date must be on or after the start date"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "expenseEndDate": {
+      "type": "DateControl",
+      "label": "Expense Period End",
+      "required": true
+    },
+    "lineItems": {
+      "type": "FieldArray",
+      "label": "Expense Line Items",
+      "minItems": 1,
+      "maxItems": 50,
+      "items": {
+        "expenseDate": {
+          "type": "DateControl",
+          "label": "Date",
+          "required": true
+        },
+        "expenseType": {
+          "type": "Dropdown",
+          "label": "Expense Type",
+          "required": true,
+          "options": [
+            { "value": "travel", "label": "Travel" },
+            { "value": "meals", "label": "Meals & Entertainment" },
+            { "value": "accommodation", "label": "Accommodation" },
+            { "value": "software", "label": "Software / Subscriptions" },
+            { "value": "equipment", "label": "Equipment" },
+            { "value": "training", "label": "Training" },
+            { "value": "other", "label": "Other" }
+          ]
+        },
+        "description": {
+          "type": "Textbox",
+          "label": "Description",
+          "required": true,
+          "placeholder": "Brief description of the expense"
+        },
+        "amount": {
+          "type": "Number",
+          "label": "Amount",
+          "required": true,
+          "validate": [
+            {
+              "name": "numericRange",
+              "params": { "min": 0.01, "max": 100000 },
+              "message": "Amount must be between 0.01 and 100,000"
+            }
+          ]
+        },
+        "receipt": {
+          "type": "FileUpload",
+          "label": "Receipt",
+          "config": { "accept": ".pdf,.jpg,.jpeg,.png", "maxSizeMb": 10 }
+        }
+      }
+    },
+    "subtotal": {
+      "type": "ReadOnly",
+      "label": "Subtotal (USD)",
+      "readOnly": true,
+      "computedValue": "$fn.sumExpenseItems()"
+    },
+    "taxRate": {
+      "type": "Number",
+      "label": "Tax Rate (%)",
+      "defaultValue": 0,
+      "validate": [
+        {
+          "name": "numericRange",
+          "params": { "min": 0, "max": 100 },
+          "message": "Tax rate must be between 0 and 100"
+        }
+      ]
+    },
+    "taxAmount": {
+      "type": "ReadOnly",
+      "label": "Tax Amount (USD)",
+      "readOnly": true,
+      "computedValue": "$fn.sumExpenseItems() * ($values.taxRate / 100)"
+    },
+    "totalAmount": {
+      "type": "ReadOnly",
+      "label": "Total Amount (USD)",
+      "readOnly": true,
+      "computedValue": "$fn.sumExpenseItems() * (1 + $values.taxRate / 100)",
+      "rules": [
+        {
+          "id": "high-value-requires-justification",
+          "when": { "field": "totalAmount", "operator": "greaterThan", "value": 5000 },
+          "then": {
+            "fields": {
+              "justification": { "hidden": false, "required": true }
+            }
+          },
+          "else": {
+            "fields": {
+              "justification": { "hidden": true, "required": false }
+            }
+          }
+        }
+      ]
+    },
+    "justification": {
+      "type": "Textarea",
+      "label": "Business Justification (required for expenses over $5,000)",
+      "hidden": true,
+      "placeholder": "Explain why this expense is necessary and how it benefits the business..."
+    },
+    "approver": {
+      "type": "Textbox",
+      "label": "Approver Name or Email",
+      "required": true
+    },
+    "notes": {
+      "type": "Textarea",
+      "label": "Additional Notes",
+      "placeholder": "Any additional context or notes for the approver..."
+    },
+    "agreeToPolicy": {
+      "type": "Toggle",
+      "label": "I certify that all expenses listed are accurate and comply with company policy",
+      "required": true,
+      "defaultValue": false
+    }
+  },
+  "fieldOrder": [
+    "reportTitle", "submitter", "department", "currency",
+    "expenseStartDate", "expenseEndDate",
+    "lineItems",
+    "subtotal", "taxRate", "taxAmount", "totalAmount",
+    "justification",
+    "approver", "notes", "agreeToPolicy"
+  ],
+  "settings": {
+    "manualSave": true
+  }
+}
