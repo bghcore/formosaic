@@ -1,6 +1,6 @@
 {
   "name": "@formosaic/react-aria",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "React Aria Components field implementations for @formosaic/core",
   "repository": {
     "type": "git",

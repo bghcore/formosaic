@@ -1,6 +1,6 @@
 {
   "name": "@formosaic/headless",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "Headless (unstyled) semantic HTML field components for @formosaic/core",
   "repository": {
     "type": "git",
