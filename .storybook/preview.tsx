@@ -9,7 +9,7 @@ import {
   RulesEngineProvider,
   InjectedFieldProvider,
 } from "@formosaic/core";
-import "@formosaic/core/src/styles.css";
+import "@formosaic/core/styles.css";
 
 /** Wraps every story with Fluent UI theming + the required library providers */
 const withProviders: Decorator = (Story, context) => {

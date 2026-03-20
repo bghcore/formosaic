@@ -75,7 +75,8 @@
       "types": "./dist/zod.d.ts",
       "import": "./dist/zod.mjs",
       "require": "./dist/zod.js"
-    }
+    },
+    "./styles.css": "./dist/index.css"
   },
   "files": [
     "dist",
@@ -84,7 +85,10 @@
   ],
   "license": "MIT",
   "author": "bghcore (https://github.com/bghcore)",
-  "sideEffects": false,
+  "sideEffects": [
+    "*.css"
+  ],
+  "style": "dist/index.css",
   "scripts": {
     "build": "tsup",
     "clean": "rimraf dist"

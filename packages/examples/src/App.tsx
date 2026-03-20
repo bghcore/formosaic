@@ -11,7 +11,7 @@ import {
   Container,
   Box,
 } from "@mui/material";
-import "@formosaic/core/src/styles.css";
+import "@formosaic/core/styles.css";
 import { LoginMfaExample } from "./login-mfa/LoginMfaExample";
 import { CheckoutExample } from "./checkout/CheckoutExample";
 import { DataEntryExample } from "./data-entry/DataEntryExample";

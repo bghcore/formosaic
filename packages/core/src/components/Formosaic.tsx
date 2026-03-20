@@ -1,4 +1,5 @@
 import { IEntityData, SubEntityType, isEmpty } from "../utils";
+import "../styles.css";
 import React from "react";
 import { FormProvider, FormState, useForm } from "react-hook-form";
 import { FormConstants } from "../constants";

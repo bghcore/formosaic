@@ -82,4 +82,4 @@ In older browsers, animations simply do not play. Fields show and hide instantly
 - Entry transitions use `@starting-style` to animate elements in from their initial state.
 - Height collapse for field show/hide uses `grid-template-rows: 0fr` / `1fr` to avoid fixed pixel heights.
 - Rule-driven state changes are reflected via `data-*` attributes on field wrappers, which CSS selectors target for transitions.
-- All animation styles live in `packages/core/src/styles.css` and are imported automatically when using any Formosaic adapter.
+- All animation styles live in `@formosaic/core/styles.css`. Import it once in your app entry point: `import "@formosaic/core/styles.css"`.
