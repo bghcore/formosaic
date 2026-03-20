@@ -355,7 +355,7 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
           {formErrors.map((err, i) => (<div key={i} className="form-error-item">{err}</div>))}
         </div>
       )}
-      <div className="formosaic-form-wrapper">
+      <div className="formosaic-form-wrapper" data-formosaic-no-animations={formConfig?.settings?.animations === false || undefined}>
         <FormFields
           testId={testId}
           isExpanded={isExpanded}
