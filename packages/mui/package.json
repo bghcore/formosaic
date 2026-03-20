@@ -1,6 +1,6 @@
 {
   "name": "@formosaic/mui",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Material UI (MUI) field components for @formosaic/core",
   "repository": {
     "type": "git",

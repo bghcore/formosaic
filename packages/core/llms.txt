@@ -89,7 +89,7 @@
 
 ### Types
 - `IFormConfig` -- Top-level form config wrapper (version: 2, fields, fieldOrder, wizard, settings)
-- `IFormSettings` -- Form-level settings (saveTimeoutMs, maxSaveRetries, etc.)
+- `IFormSettings` -- Form-level settings (saveTimeoutMs, maxSaveRetries, animations, etc.)
 - `IFieldConfig` -- Primary consumer-facing type defining field configuration shape (v2 schema)
 - `IRule` -- Declarative rule (when: ICondition, then: IFieldEffect, else?: IFieldEffect, priority?: number)
 - `ICondition` -- Union of IFieldCondition | ILogicalCondition

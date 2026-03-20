@@ -1,6 +1,6 @@
 {
   "name": "@formosaic/antd",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Ant Design v5 field components for @formosaic/core",
   "repository": {
     "type": "git",

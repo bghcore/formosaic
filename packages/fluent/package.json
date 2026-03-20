@@ -1,6 +1,6 @@
 {
   "name": "@formosaic/fluent",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Fluent UI v9 field components for @formosaic/core",
   "repository": {
     "type": "git",

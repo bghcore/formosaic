@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-03-20
+
+### Fixed
+- **Styles auto-bundled:** `styles.css` (animations, focus styles, CSS custom properties) is now bundled into `dist/index.css` and exported as `@formosaic/core/styles.css`. Bundlers that read the `"style"` field in `package.json` will load it automatically.
+- **Storybook, E2E app, and examples** now import `@formosaic/core/styles.css` so animations work out of the box
+- **Publish workflow** no longer fails with exit code 1 when a version is already on npm — skips gracefully instead
+
 ## [1.4.0] - 2026-03-20
 
 ### Added

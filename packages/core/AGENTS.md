@@ -45,8 +45,8 @@ RulesEngineProvider (useReducer for rules engine state)
 | `src/components/Formosaic.tsx` | Formosaic component. Orchestrates react-hook-form, auto-save (AbortController, timeout via `saveTimeoutMs`, retry via `maxSaveRetries`), expand/collapse, confirm modal. Supports `formErrors` prop for form-level error banner. |
 | `src/components/WizardForm.tsx` | WizardForm component. Multi-step wizard with render props for step content, navigation, and header. Screen reader step announcements. |
 | `src/components/FieldArray.tsx` | FieldArray component. Wraps react-hook-form's `useFieldArray` with min/max/reorder support. Items use full `IFieldConfig`. |
-| `src/components/RenderField.tsx` | RenderField component. Per-field rendering with useMemo for component resolution. Async validation wired with AbortController -- sync runs first, async only if sync passes. |
-| `src/components/FieldWrapper.tsx` | FieldWrapper component. Field chrome (label, error, status) using plain HTML. Render props: `renderLabel`, `renderError`, `renderStatus` for theming. Supports CSS custom properties via optional `styles.css`. |
+| `src/components/RenderField.tsx` | RenderField component. Per-field rendering with useMemo for component resolution. Two-phase animation state machine for show/hide transitions. Change detection for options/label/readOnly via data-* attributes. Async validation wired with AbortController -- sync runs first, async only if sync passes. |
+| `src/components/FieldWrapper.tsx` | FieldWrapper component. Field chrome (label, error, status) using plain HTML. Render props: `renderLabel`, `renderError`, `renderStatus` for theming. Animation classes: `formosaic-required-indicator`, `formosaic-error-animate`. Error appearance detection via `data-error-entering`. |
 | `src/components/ConfirmInputsModal.tsx` | ConfirmInputsModal component. Confirmation dialog using native `<dialog>` element. Focus trap (Tab wraps, Escape closes, focus restored on close). |
 | `src/components/FormErrorBoundary.tsx` | FormErrorBoundary component. Per-field error boundary. Props: `children`, `fallback` (render function), `onError` callback. Each field is wrapped automatically in the rendering pipeline. |
 | `src/components/FormDevTools.tsx` | FormDevTools component. Collapsible dev-only panel with tabs: Rules, Values, Errors, Graph, Perf, Deps, Timeline. |
@@ -71,7 +71,7 @@ RulesEngineProvider (useReducer for rules engine state)
 | `src/types/ILocaleStrings.ts` | `ICoreLocaleStrings` (~50 keys). |
 | `src/types/IAnalyticsCallbacks.ts` | `IAnalyticsCallbacks` (8 event hooks for analytics/telemetry). |
 | `src/types/TypedFieldConfig.ts` | `defineFormConfig()` type-safe builder. |
-| `src/styles.css` | Optional CSS custom properties for theming: `--formosaic-error-color`, `--formosaic-warning-color`, `--formosaic-saving-color`, `--formosaic-label-color`, `--formosaic-required-color`, `--formosaic-border-radius`, `--formosaic-field-gap`, `--formosaic-font-size`. |
+| `src/styles.css` | CSS custom properties for theming and field animation CSS. Theming: `--formosaic-error-color`, `--formosaic-warning-color`, `--formosaic-saving-color`, `--formosaic-label-color`, `--formosaic-required-color`, `--formosaic-border-radius`, `--formosaic-field-gap`, `--formosaic-font-size`. Animations: `--formosaic-animation-duration` (150ms), `--formosaic-animation-easing` (ease-out), `--formosaic-highlight-color`. Uses `@starting-style`, `grid-template-rows` collapse, `data-*` attribute selectors. Respects `prefers-reduced-motion`. Bundled to `dist/index.css`, exported as `@formosaic/core/styles.css`. |
 | `src/providers/RulesEngineProvider.tsx` | RulesEngineProvider (React context provider owning rules engine state via useReducer). |
 | `src/providers/InjectedFieldProvider.tsx` | InjectedFieldProvider (React context provider for component injection registry). |
 | `src/reducers/RulesEngineReducer.ts` | Reducer for rules engine state mutations. |
