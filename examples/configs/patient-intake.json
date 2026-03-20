@@ -1,0 +1,267 @@
+{
+  "version": 2,
+  "fields": {
+    "firstName": {
+      "type": "Textbox",
+      "label": "First Name",
+      "required": true
+    },
+    "lastName": {
+      "type": "Textbox",
+      "label": "Last Name",
+      "required": true
+    },
+    "dateOfBirth": {
+      "type": "DateControl",
+      "label": "Date of Birth",
+      "required": true,
+      "confirmInput": true
+    },
+    "gender": {
+      "type": "Dropdown",
+      "label": "Gender",
+      "options": [
+        { "value": "male", "label": "Male" },
+        { "value": "female", "label": "Female" },
+        { "value": "nonbinary", "label": "Non-binary" },
+        { "value": "preferNotToSay", "label": "Prefer not to say" }
+      ]
+    },
+    "bloodType": {
+      "type": "Dropdown",
+      "label": "Blood Type",
+      "options": [
+        { "value": "A+", "label": "A+" },
+        { "value": "A-", "label": "A-" },
+        { "value": "B+", "label": "B+" },
+        { "value": "B-", "label": "B-" },
+        { "value": "AB+", "label": "AB+" },
+        { "value": "AB-", "label": "AB-" },
+        { "value": "O+", "label": "O+" },
+        { "value": "O-", "label": "O-" },
+        { "value": "unknown", "label": "Unknown" }
+      ]
+    },
+    "phone": {
+      "type": "PhoneInput",
+      "label": "Phone Number",
+      "required": true
+    },
+    "emergencyContactName": {
+      "type": "Textbox",
+      "label": "Emergency Contact Name"
+    },
+    "emergencyContactPhone": {
+      "type": "PhoneInput",
+      "label": "Emergency Contact Phone"
+    },
+    "symptoms": {
+      "type": "CheckboxGroup",
+      "label": "Current Symptoms",
+      "options": [
+        { "value": "headache", "label": "Headache" },
+        { "value": "fever", "label": "Fever" },
+        { "value": "cough", "label": "Cough" },
+        { "value": "chest_pain", "label": "Chest Pain" },
+        { "value": "shortness_of_breath", "label": "Shortness of Breath" },
+        { "value": "nausea", "label": "Nausea" },
+        { "value": "fatigue", "label": "Fatigue" },
+        { "value": "dizziness", "label": "Dizziness" },
+        { "value": "other", "label": "Other" }
+      ],
+      "rules": [
+        {
+          "id": "urgent-symptoms",
+          "when": {
+            "operator": "or",
+            "conditions": [
+              { "field": "symptoms", "operator": "arrayContains", "value": "chest_pain" },
+              { "field": "symptoms", "operator": "arrayContains", "value": "shortness_of_breath" }
+            ]
+          },
+          "then": {
+            "fields": {
+              "urgentWarning": { "hidden": false },
+              "emergencyContactName": { "required": true },
+              "emergencyContactPhone": { "required": true }
+            }
+          },
+          "else": {
+            "fields": {
+              "urgentWarning": { "hidden": true },
+              "emergencyContactName": { "required": false },
+              "emergencyContactPhone": { "required": false }
+            }
+          }
+        }
+      ]
+    },
+    "urgentWarning": {
+      "type": "DynamicFragment",
+      "label": "",
+      "hidden": true,
+      "config": {
+        "html": "<div style='padding: 12px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; color: #856404;'><strong>⚠ Urgent Symptoms Detected</strong><br/>Emergency contact information is now required. Please notify medical staff immediately.</div>"
+      }
+    },
+    "hasAllergies": {
+      "type": "Toggle",
+      "label": "Do you have any allergies?",
+      "defaultValue": false,
+      "rules": [
+        {
+          "id": "show-allergies",
+          "when": { "field": "hasAllergies", "operator": "equals", "value": true },
+          "then": { "fields": { "allergies": { "hidden": false } } },
+          "else": { "fields": { "allergies": { "hidden": true } } }
+        }
+      ]
+    },
+    "allergies": {
+      "type": "FieldArray",
+      "label": "Allergies",
+      "hidden": true,
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+        "allergen": {
+          "type": "Textbox",
+          "label": "Allergen",
+          "required": true
+        },
+        "severity": {
+          "type": "Dropdown",
+          "label": "Severity",
+          "required": true,
+          "options": [
+            { "value": "mild", "label": "Mild" },
+            { "value": "moderate", "label": "Moderate" },
+            { "value": "severe", "label": "Severe" },
+            { "value": "life_threatening", "label": "Life-threatening" }
+          ]
+        },
+        "reaction": {
+          "type": "Textarea",
+          "label": "Reaction Description"
+        }
+      }
+    },
+    "hasMedications": {
+      "type": "Toggle",
+      "label": "Are you currently taking any medications?",
+      "defaultValue": false,
+      "rules": [
+        {
+          "id": "show-medications",
+          "when": { "field": "hasMedications", "operator": "equals", "value": true },
+          "then": { "fields": { "medications": { "hidden": false } } },
+          "else": { "fields": { "medications": { "hidden": true } } }
+        }
+      ]
+    },
+    "medications": {
+      "type": "FieldArray",
+      "label": "Current Medications",
+      "hidden": true,
+      "minItems": 1,
+      "maxItems": 20,
+      "items": {
+        "name": {
+          "type": "Textbox",
+          "label": "Medication Name",
+          "required": true
+        },
+        "dosage": {
+          "type": "Textbox",
+          "label": "Dosage"
+        },
+        "frequency": {
+          "type": "Dropdown",
+          "label": "Frequency",
+          "options": [
+            { "value": "once_daily", "label": "Once daily" },
+            { "value": "twice_daily", "label": "Twice daily" },
+            { "value": "three_daily", "label": "Three times daily" },
+            { "value": "as_needed", "label": "As needed" },
+            { "value": "weekly", "label": "Weekly" }
+          ]
+        }
+      }
+    },
+    "hasInsurance": {
+      "type": "Toggle",
+      "label": "Do you have health insurance?",
+      "defaultValue": false,
+      "rules": [
+        {
+          "id": "show-insurance",
+          "when": { "field": "hasInsurance", "operator": "equals", "value": true },
+          "then": {
+            "fields": {
+              "insuranceProvider": { "hidden": false, "required": true },
+              "insuranceId": { "hidden": false, "required": true },
+              "insuranceGroupNumber": { "hidden": false }
+            }
+          },
+          "else": {
+            "fields": {
+              "insuranceProvider": { "hidden": true, "required": false },
+              "insuranceId": { "hidden": true, "required": false },
+              "insuranceGroupNumber": { "hidden": true }
+            }
+          }
+        }
+      ]
+    },
+    "insuranceProvider": {
+      "type": "Dropdown",
+      "label": "Insurance Provider",
+      "hidden": true,
+      "options": [
+        { "value": "aetna", "label": "Aetna" },
+        { "value": "bcbs", "label": "Blue Cross Blue Shield" },
+        { "value": "cigna", "label": "Cigna" },
+        { "value": "humana", "label": "Humana" },
+        { "value": "kaiser", "label": "Kaiser Permanente" },
+        { "value": "united", "label": "UnitedHealthcare" },
+        { "value": "other", "label": "Other" }
+      ]
+    },
+    "insuranceId": {
+      "type": "Textbox",
+      "label": "Insurance Member ID",
+      "hidden": true,
+      "confirmInput": true,
+      "validate": [
+        {
+          "name": "insuranceIdLookup",
+          "message": "Unable to verify this insurance ID. Please check and try again.",
+          "async": true,
+          "debounceMs": 800
+        }
+      ]
+    },
+    "insuranceGroupNumber": {
+      "type": "Textbox",
+      "label": "Group Number",
+      "hidden": true
+    },
+    "notes": {
+      "type": "Textarea",
+      "label": "Additional Notes",
+      "placeholder": "Any other information you'd like to share with your provider"
+    }
+  },
+  "fieldOrder": [
+    "firstName", "lastName", "dateOfBirth", "gender", "bloodType",
+    "phone", "emergencyContactName", "emergencyContactPhone",
+    "symptoms", "urgentWarning",
+    "hasAllergies", "allergies",
+    "hasMedications", "medications",
+    "hasInsurance", "insuranceProvider", "insuranceId", "insuranceGroupNumber",
+    "notes"
+  ],
+  "settings": {
+    "manualSave": true
+  }
+}
