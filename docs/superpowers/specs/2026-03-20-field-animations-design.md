@@ -106,7 +106,7 @@ The current `hidden` early return is inside a `useMemo` (line 66), which means w
 3. **Effect watching `hidden`:**
    - When `hidden` changes `false → true`: set `isExiting = true` (keeps field in DOM with `data-exiting`). Do NOT set `shouldRender = false` yet.
    - When `hidden` changes `true → false`: set `shouldRender = true`, `isExiting = false` (field enters DOM, CSS `@starting-style` handles entry animation).
-4. **`onTransitionEnd` on the grid wrapper:** When exit animation completes, set `shouldRender = false`, `isExiting = false` → field unmounts.
+4. **`onTransitionEnd` on the grid wrapper:** When exit animation completes, set `shouldRender = false`, `isExiting = false` → field unmounts. **Important:** Filter by `event.target === event.currentTarget` (or `propertyName === 'grid-template-rows'`) to avoid reacting to bubbled `transitionend` events from child elements (e.g., error animations, required indicator transitions).
 5. **Rapid toggle safety:** If `hidden` flips back to `false` while `isExiting` is `true`, cancel the exit by setting `isExiting = false`.
 6. **Fallback timeout:** `setTimeout` of `calc(duration * 2)` (default ~300ms) fires if `transitionend` doesn't (jsdom, CSS not loaded). Clears on unmount or if transition completes normally.
 7. **First render skip:** `isFirstRender.current` flag prevents entry animation on initial mount. CSS suppression: `.formosaic-field-animate[data-first-render] { transition: none; }` ensures no `@starting-style` entry animation plays on first paint.
