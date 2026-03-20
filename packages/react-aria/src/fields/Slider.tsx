@@ -1,7 +1,7 @@
 import { IFieldProps } from "@formosaic/core";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
-import { GetFieldDataTestId, getFieldState } from "../helpers";
+import { GetFieldDataTestId, getFieldState, isNull } from "../helpers";
 import { Slider as AriaSlider, SliderTrack, SliderThumb, SliderOutput } from "react-aria-components";
 
 interface ISliderProps {
@@ -14,7 +14,7 @@ const Slider = (props: IFieldProps<ISliderProps>) => {
   const { fieldName, testId, value, readOnly, config, error, required, setFieldValue } = props;
 
   if (readOnly) {
-    return <ReadOnlyText fieldName={fieldName} value={String(value)} />;
+    return <ReadOnlyText fieldName={fieldName} value={!isNull(value) ? String(value) : undefined} />;
   }
 
   return (

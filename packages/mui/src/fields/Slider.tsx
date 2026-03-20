@@ -2,7 +2,7 @@ import { IFieldProps } from "@formosaic/core";
 import { Slider as MuiSlider } from "@mui/material";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
-import { FieldClassName, GetFieldDataTestId } from "../helpers";
+import { FieldClassName, GetFieldDataTestId, isNull } from "../helpers";
 
 interface ISliderProps {
   max?: number;
@@ -18,7 +18,7 @@ const Slider = (props: IFieldProps<ISliderProps>) => {
   };
 
   return readOnly ? (
-    <ReadOnlyText fieldName={fieldName} value={String(value)} />
+    <ReadOnlyText fieldName={fieldName} value={!isNull(value) ? String(value) : undefined} />
   ) : (
     <MuiSlider
       className={FieldClassName("fe-slider", error)}

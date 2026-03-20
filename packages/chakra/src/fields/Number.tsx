@@ -16,7 +16,7 @@ const NumberField = (props: IFieldProps<{}>) => {
   };
 
   if (readOnly) {
-    return <ReadOnlyText fieldName={fieldName} value={String(value)} />;
+    return <ReadOnlyText fieldName={fieldName} value={!isNull(value) ? String(value) : undefined} />;
   }
 
   return (

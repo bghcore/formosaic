@@ -2,7 +2,7 @@ import { IFieldProps } from "@formosaic/core";
 import { Slider } from "@fluentui/react-components";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
-import { FieldClassName, GetFieldDataTestId } from "../helpers";
+import { FieldClassName, GetFieldDataTestId, isNull } from "../helpers";
 
 interface ISliderProps {
   max?: number;
@@ -18,7 +18,7 @@ const SliderField = (props: IFieldProps<ISliderProps>) => {
   };
 
   return readOnly ? (
-    <ReadOnlyText fieldName={fieldName} value={String(value)} />
+    <ReadOnlyText fieldName={fieldName} value={!isNull(value) ? String(value) : undefined} />
   ) : (
     <Slider
       className={FieldClassName("fe-slider", error)}

@@ -20,20 +20,20 @@ Each entry is classified by severity and recommended action for Tier 2 readiness
 
 ## Register
 
-### DIV-001: Number/Slider readOnly null coercion
+### DIV-001: Number/Slider readOnly null coercion -- RESOLVED
 
 | Property | Value |
 |----------|-------|
-| Affected adapters | All 11 |
+| Affected adapters | ~~All 11~~ **None (fixed)** |
 | Affected fields | Number, Slider |
-| Observed behavior | readOnly with null/undefined shows "0" (Number) or "0" (Slider) instead of "-" sentinel |
+| Observed behavior | readOnly with null/undefined showed "0" (Number) or "0" (Slider) instead of "-" sentinel |
 | Canonical expectation | Empty sentinel "-" per readOnly contract |
-| Root cause | `?? 0` coercion in Number field; Slider always coerces to 0 for range input |
-| Severity | Low |
-| User-visible | Yes — readOnly Number shows "0" instead of "-" when no value is set |
-| jsdom-only | No — same behavior in real browsers |
-| Category | Permanent acceptable |
-| Recommended action | Document as accepted. The coercion is intentional: Number/Slider need numeric values for their inputs. ReadOnly inherits this. Attempting to show "-" would require special-casing the readOnly path to distinguish "no value" from "value is 0", which is fragile. |
+| Root cause | `String(value)` converted null/undefined to truthy strings; `?? 0` coercion in editable path leaked into readOnly |
+| Severity | ~~Low~~ **Resolved** |
+| User-visible | ~~Yes~~ **No (fixed)** |
+| jsdom-only | No |
+| Category | ~~Permanent acceptable~~ **Resolved** |
+| Resolution | All 22 Number and Slider readOnly paths across all 11 adapters now use `!isNull(value) ? String(value) : undefined`, allowing ReadOnlyText to display the "-" sentinel for null/undefined values. Explicit `0` values still correctly display as "0". |
 
 ### DIV-002: Mantine NumberInput empty → null
 

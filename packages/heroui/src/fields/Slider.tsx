@@ -1,7 +1,7 @@
 import { IFieldProps } from "@formosaic/core";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
-import { GetFieldDataTestId } from "../helpers";
+import { GetFieldDataTestId, isNull } from "../helpers";
 
 interface ISliderProps {
   max?: number;
@@ -17,7 +17,7 @@ const Slider = (props: IFieldProps<ISliderProps>) => {
   };
 
   if (readOnly) {
-    return <ReadOnlyText fieldName={fieldName} value={String(value)} />;
+    return <ReadOnlyText fieldName={fieldName} value={!isNull(value) ? String(value) : undefined} />;
   }
 
   return (

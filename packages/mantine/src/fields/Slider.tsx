@@ -2,7 +2,7 @@ import { IFieldProps } from "@formosaic/core";
 import { Slider as MantineSlider } from "@mantine/core";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
-import { FieldClassName, GetFieldDataTestId } from "../helpers";
+import { FieldClassName, GetFieldDataTestId, isNull } from "../helpers";
 
 interface ISliderProps {
   max?: number;
@@ -18,7 +18,7 @@ const Slider = (props: IFieldProps<ISliderProps>) => {
   };
 
   if (readOnly) {
-    return <ReadOnlyText fieldName={fieldName} value={String(value)} />;
+    return <ReadOnlyText fieldName={fieldName} value={!isNull(value) ? String(value) : undefined} />;
   }
 
   return (

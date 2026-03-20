@@ -9,7 +9,7 @@ const NumberFieldComponent = (props: IFieldProps<{}>) => {
   const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
 
   if (readOnly) {
-    return <ReadOnlyText fieldName={fieldName} value={String(value)} />;
+    return <ReadOnlyText fieldName={fieldName} value={!isNull(value) ? String(value) : undefined} />;
   }
 
   return (

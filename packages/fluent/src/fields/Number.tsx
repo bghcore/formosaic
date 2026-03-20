@@ -16,7 +16,7 @@ const NumberField = (props: IFieldProps<{}>) => {
   };
 
   return readOnly ? (
-    <ReadOnlyText fieldName={fieldName} value={String(value)} />
+    <ReadOnlyText fieldName={fieldName} value={!isNull(value) ? String(value) : undefined} />
   ) : (
     <Input
       className={FieldClassName("fe-number", error)}
