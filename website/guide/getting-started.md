@@ -48,6 +48,9 @@ import { createFluentFieldRegistry } from "@formosaic/fluent";
 // Or: import { createMuiFieldRegistry } from "@formosaic/mui";
 // Or: import { createHeadlessFieldRegistry } from "@formosaic/headless";
 
+// Optional: import core styles for field animations, focus styles, and CSS custom properties
+import "@formosaic/core/src/styles.css";
+
 const formConfig = {
   version: 2 as const,
   fields: {

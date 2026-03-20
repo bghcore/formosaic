@@ -8,6 +8,7 @@ import {
   useDraftPersistence,
 } from "@formosaic/core";
 import { createFluentFieldRegistry } from "@formosaic/fluent";
+import "@formosaic/core/src/styles.css";
 import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 import type { IFormConfig } from "@formosaic/core";
 
