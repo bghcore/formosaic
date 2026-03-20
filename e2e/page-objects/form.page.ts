@@ -131,10 +131,11 @@ export class FormPage {
 
   /** Assert that a field is not visible on the page. */
   async expectFieldHidden(fieldName: string) {
+    // Wait for the field to be fully removed from the DOM (accounts for exit animation)
     const locator = this.page.locator(
       `[id="${fieldName}"], [name="${fieldName}"]`
     ).first();
-    await expect(locator).toBeHidden();
+    await expect(locator).toHaveCount(0, { timeout: 1000 });
   }
 
   /** Assert that a field has the required indicator. */
