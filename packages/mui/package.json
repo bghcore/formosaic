@@ -62,7 +62,7 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-hook-form": "^7.71.2",
-    "@mui/material": "^6.4.11",
+    "@mui/material": "^7.3.9",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@formosaic/core": "*",
