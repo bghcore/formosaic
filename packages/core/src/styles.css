@@ -15,6 +15,9 @@
   --formosaic-border-radius: 4px;
   --formosaic-field-gap: 8px;
   --formosaic-font-size: 14px;
+  --formosaic-animation-duration: 150ms;
+  --formosaic-animation-easing: ease-out;
+  --formosaic-highlight-color: rgba(0, 120, 212, 0.1);
 }
 
 /* Screen-reader-only utility (visually hidden, accessible to assistive technology) */
@@ -34,4 +37,106 @@
 .formosaic-form :focus-visible {
   outline: 2px solid var(--formosaic-saving-color, #0078d4);
   outline-offset: 2px;
+}
+
+/* ─── Field show/hide animation (grid height collapse + opacity) ─── */
+.formosaic-field-animate {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition:
+    grid-template-rows var(--formosaic-animation-duration) var(--formosaic-animation-easing),
+    opacity var(--formosaic-animation-duration) var(--formosaic-animation-easing);
+}
+
+@starting-style {
+  .formosaic-field-animate {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+.formosaic-field-animate[data-first-render] {
+  transition: none;
+}
+
+.formosaic-field-animate[data-exiting] {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
+.formosaic-field-animate-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ─── Required indicator fade ─── */
+.formosaic-required-indicator {
+  opacity: 1;
+  transition: opacity var(--formosaic-animation-duration) var(--formosaic-animation-easing);
+}
+
+@starting-style {
+  .formosaic-required-indicator {
+    opacity: 0;
+  }
+}
+
+/* ─── Error message slide-in ─── */
+.formosaic-error-animate {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity var(--formosaic-animation-duration) var(--formosaic-animation-easing),
+    transform var(--formosaic-animation-duration) var(--formosaic-animation-easing);
+}
+
+@starting-style {
+  .formosaic-error-animate {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* ─── Read-only crossfade ─── */
+.formosaic-field-container[data-readonly-entering] {
+  animation: formosaic-readonly-fade var(--formosaic-animation-duration) var(--formosaic-animation-easing);
+}
+
+@keyframes formosaic-readonly-fade {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
+
+/* ─── Label change pulse ─── */
+.formosaic-field-container[data-label-changing] {
+  animation: formosaic-label-pulse calc(var(--formosaic-animation-duration) * 2) var(--formosaic-animation-easing);
+}
+
+@keyframes formosaic-label-pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+/* ─── Dropdown option change highlight ─── */
+.formosaic-field-container[data-options-changed] {
+  animation: formosaic-options-flash calc(var(--formosaic-animation-duration) * 2) var(--formosaic-animation-easing);
+}
+
+@keyframes formosaic-options-flash {
+  from { background-color: var(--formosaic-highlight-color); }
+  to { background-color: transparent; }
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --formosaic-animation-duration: 0ms;
+  }
+}
+
+/* ─── Animations disabled via settings ─── */
+[data-formosaic-no-animations] {
+  --formosaic-animation-duration: 0ms;
 }
