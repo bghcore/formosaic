@@ -40,6 +40,22 @@ export const FieldWrapper: React.FunctionComponent<React.PropsWithChildren<IFiel
   const errorMessageId = `${id}_error`;
   const children = (Array.isArray(props.children) ? props.children : [props.children]) as React.ReactElement<Record<string, unknown>>[];
 
+  // Animation: detect error appearance for slide-in animation
+  const prevHasErrorRef = React.useRef<boolean | undefined>(undefined);
+  const [errorEntering, setErrorEntering] = React.useState(false);
+  React.useEffect(() => {
+    const hasError = !!error;
+    const prev = prevHasErrorRef.current;
+    prevHasErrorRef.current = hasError;
+    if (prev === undefined) return; // skip initial
+    if (!prev && hasError) {
+      setErrorEntering(true);
+    }
+  }, [error]);
+  const handleErrorAnimationEnd = React.useCallback(() => {
+    setErrorEntering(false);
+  }, []);
+
   const defaultLabel = (
     <div className={labelClassName || ""}>
       <label id={labelId} htmlFor={id} className="field-label">
@@ -54,7 +70,7 @@ export const FieldWrapper: React.FunctionComponent<React.PropsWithChildren<IFiel
   );
 
   const defaultErrorAndStatus = (
-    <div className="message formosaic-error-animate">
+    <div className="message formosaic-error-animate" data-error-entering={errorEntering || undefined} onAnimationEnd={handleErrorAnimationEnd}>
       {error ? (
         <>
           <span className="error-icon" aria-hidden="true" style={{ color: "var(--formosaic-error-color, #d13438)" }}>&#10006;</span>

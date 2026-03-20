@@ -261,6 +261,29 @@ describe("Change detection animations", () => {
     expect(updatedContainer).toHaveAttribute("data-options-changed");
   });
 
+  it("sets data-readonly-entering when readOnly changes", async () => {
+    const { rerender, container } = render(
+      <TestWrapper>
+        <RenderField {...defaultProps} readOnly={false} />
+      </TestWrapper>
+    );
+
+    const containerEl = container.querySelector(".formosaic-field-container");
+    expect(containerEl).toBeTruthy();
+    expect(containerEl).not.toHaveAttribute("data-readonly-entering");
+
+    await act(async () => {
+      rerender(
+        <TestWrapper>
+          <RenderField {...defaultProps} readOnly={true} />
+        </TestWrapper>
+      );
+    });
+
+    const updatedContainer = container.querySelector(".formosaic-field-container");
+    expect(updatedContainer).toHaveAttribute("data-readonly-entering");
+  });
+
   it("sets data-label-changing when label changes", async () => {
     const { rerender, container } = render(
       <TestWrapper>
@@ -323,6 +346,43 @@ describe("FieldWrapper animation classes", () => {
     // The .message.formosaic-error-animate div is always rendered
     const messageDiv = container.querySelector(".message.formosaic-error-animate");
     expect(messageDiv).toBeTruthy();
+  });
+
+  it("sets data-error-entering when error appears on already-visible field", async () => {
+    const { rerender, container } = render(
+      <FieldWrapper id="testField" label="Test">
+        <input data-testid="child-input" />
+      </FieldWrapper>
+    );
+
+    // No error initially — no data-error-entering
+    const messageDiv = container.querySelector(".formosaic-error-animate");
+    expect(messageDiv).toBeTruthy();
+    expect(messageDiv).not.toHaveAttribute("data-error-entering");
+
+    // Error appears
+    await act(async () => {
+      rerender(
+        <FieldWrapper id="testField" label="Test" error={{ type: "required", message: "Required" }}>
+          <input data-testid="child-input" />
+        </FieldWrapper>
+      );
+    });
+
+    const updatedDiv = container.querySelector(".formosaic-error-animate");
+    expect(updatedDiv).toHaveAttribute("data-error-entering");
+  });
+
+  it("does not set data-error-entering on initial render with error", () => {
+    const { container } = render(
+      <FieldWrapper id="testField" label="Test" error={{ type: "required", message: "Required" }}>
+        <input data-testid="child-input" />
+      </FieldWrapper>
+    );
+
+    const messageDiv = container.querySelector(".formosaic-error-animate");
+    expect(messageDiv).toBeTruthy();
+    expect(messageDiv).not.toHaveAttribute("data-error-entering");
   });
 
   it("formosaic-error-animate is also present when an error is shown", () => {

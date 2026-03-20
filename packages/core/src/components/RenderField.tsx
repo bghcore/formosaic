@@ -74,6 +74,10 @@ const RenderField = (props: IRenderFieldProps) => {
   const [readOnlyEntering, setReadOnlyEntering] = React.useState(false);
 
   // Effect: watch hidden prop for show/hide transitions
+  // Intentionally omits shouldRender/isExiting from deps — adding them would cause
+  // re-fire loops. The effect only needs to run when effectivelyHidden changes;
+  // shouldRender/isExiting are always current at that point due to React batching.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
@@ -157,11 +161,12 @@ const RenderField = (props: IRenderFieldProps) => {
     }
   }, [readOnly, isDisabled, skipLayoutReadOnly]);
 
-  // Clear change-detection flags after animation
-  const handleContainerAnimationEnd = React.useCallback(() => {
-    setOptionsChanged(false);
-    setLabelChanging(false);
-    setReadOnlyEntering(false);
+  // Clear change-detection flags after the specific animation that ended
+  const handleContainerAnimationEnd = React.useCallback((e: React.AnimationEvent) => {
+    const name = e.animationName;
+    if (name === "formosaic-options-flash") setOptionsChanged(false);
+    else if (name === "formosaic-label-pulse") setLabelChanging(false);
+    else if (name === "formosaic-readonly-fade") setReadOnlyEntering(false);
   }, []);
 
   React.useEffect(() => {

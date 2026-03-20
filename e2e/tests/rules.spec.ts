@@ -131,10 +131,7 @@ test.describe("Rules engine - show/hide, required, option filtering", () => {
   });
 
   test.describe("Field animation behavior", () => {
-    test("field animates in when shown by rule", async ({ page }) => {
-      const form = new FormPage(page);
-      await form.goto("/rules");
-
+    test("field animates in when shown by rule", async () => {
       // Priority is hidden by default
       await form.expectFieldHidden("priority");
 
@@ -142,15 +139,12 @@ test.describe("Rules engine - show/hide, required, option filtering", () => {
       await form.selectDropdown("status", "Active");
 
       // The field should become visible (animation wrapper present)
-      const wrapper = page.locator(".formosaic-field-animate").filter({ has: page.locator('[data-testid*="priority"]') });
+      const wrapper = form.page.locator(".formosaic-field-animate").filter({ has: form.page.locator('[data-testid*="priority"]') });
       await expect(wrapper).toBeVisible();
       await expect(wrapper).not.toHaveAttribute("data-exiting");
     });
 
-    test("field animates out when hidden by rule", async ({ page }) => {
-      const form = new FormPage(page);
-      await form.goto("/rules");
-
+    test("field animates out when hidden by rule", async () => {
       // Show the field first
       await form.selectDropdown("status", "Active");
       await form.expectFieldVisible("priority");
@@ -159,7 +153,7 @@ test.describe("Rules engine - show/hide, required, option filtering", () => {
       await form.selectDropdown("status", "Inactive");
 
       // After animation duration, field should be gone
-      const wrapper = page.locator(".formosaic-field-animate").filter({ has: page.locator('[data-testid*="priority"]') });
+      const wrapper = form.page.locator(".formosaic-field-animate").filter({ has: form.page.locator('[data-testid*="priority"]') });
       await expect(wrapper).toHaveCount(0, { timeout: 1000 });
     });
   });
