@@ -44,7 +44,7 @@ export const FieldWrapper: React.FunctionComponent<React.PropsWithChildren<IFiel
     <div className={labelClassName || ""}>
       <label id={labelId} htmlFor={id} className="field-label">
         {label}
-        {required && <><span className="required-indicator" aria-hidden="true" style={{ color: "var(--formosaic-required-color, #d13438)" }}> *</span><span className="sr-only" style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0, 0, 0, 0)", whiteSpace: "nowrap", border: 0 }}> (required)</span></>}
+        {required && <><span className="required-indicator formosaic-required-indicator" aria-hidden="true" style={{ color: "var(--formosaic-required-color, #d13438)" }}> *</span><span className="sr-only" style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0, 0, 0, 0)", whiteSpace: "nowrap", border: 0 }}> (required)</span></>}
       </label>
       {additionalInfoComponent}
       {!additionalInfoComponent && additionalInfo && (
@@ -54,7 +54,7 @@ export const FieldWrapper: React.FunctionComponent<React.PropsWithChildren<IFiel
   );
 
   const defaultErrorAndStatus = (
-    <div className="message">
+    <div className="message formosaic-error-animate">
       {error ? (
         <>
           <span className="error-icon" aria-hidden="true" style={{ color: "var(--formosaic-error-color, #d13438)" }}>&#10006;</span>
