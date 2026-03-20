@@ -33,6 +33,7 @@ The core library provides a strong accessibility foundation. Adapter packages (F
 | Expand/collapse | Supported | Expand button has `aria-expanded` attribute that toggles between `true` and `false`. |
 | Focus on error | Supported | On validation failure, focus moves to the first field with an error via `requestAnimationFrame(() => focusFirstError())`. |
 | Focus-visible styles | Supported | CSS includes `:focus-visible` outline styles (`2px solid` in theme color with `2px` offset). Consumers should import `styles.css` or provide their own focus styles. |
+| Reduced motion | Supported | Field animations respect `prefers-reduced-motion: reduce` by setting `--formosaic-animation-duration: 0ms`, disabling all transitions and keyframe animations. See [Animations](/guide/animations). |
 
 ### Understandable (WCAG 3.x)
 
