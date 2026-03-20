@@ -71,6 +71,7 @@ const PopOutEditor = (props: IFieldProps<IPopOutEditorProps>) => {
           className={FieldClassName("fe-text-area", error)}
           resize="none"
           autoComplete="off"
+          aria-required={required}
           value={modalVisible ? `${modalValue}` : value ? `${value}` : ""}
           onChange={onChange}
           data-testid={GetFieldDataTestId(fieldName, testId)}

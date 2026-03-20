@@ -72,6 +72,7 @@ const PopOutEditor = (props: IFieldProps<IPopOutEditorProps>) => {
           className={FieldClassName("fe-text-area", error)}
           autoComplete="off"
           multiline
+          required={required}
           rows={config?.numberOfRows ?? 4}
           value={modalVisible ? `${modalValue}` : value ? `${value}` : ""}
           onChange={onChange}

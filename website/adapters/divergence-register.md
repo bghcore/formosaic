@@ -50,20 +50,20 @@ Each entry is classified by severity and recommended action for Tier 2 readiness
 | Category | Must monitor during Tier 2 |
 | Recommended action | Monitor. If Mantine Tier 2 fields also normalize empty→null, this becomes a pattern, not a bug. |
 
-### DIV-003: Fluent/MUI Textarea required indicator (PopOutEditor)
+### DIV-003: Fluent/MUI Textarea required indicator (PopOutEditor) -- RESOLVED
 
 | Property | Value |
 |----------|-------|
-| Affected adapters | fluent, mui |
+| Affected adapters | ~~fluent, mui~~ **None (fixed)** |
 | Affected fields | Textarea |
 | Observed behavior | PopOutEditor shows required `*` only inside the expanded modal dialog title, not in the inline textarea rendering |
 | Canonical expectation | Required indicator should be visible in all rendering modes |
-| Root cause | PopOutEditor inline rendering does not propagate required attribute |
-| Severity | Medium |
-| User-visible | Yes — required indicator not visible until modal is opened |
+| Root cause | PopOutEditor inline rendering did not propagate required attribute |
+| Severity | ~~Medium~~ **Resolved** |
+| User-visible | ~~Yes~~ **No (fixed)** |
 | jsdom-only | No |
-| Category | UX-visible inconsistency |
-| Recommended action | Should normalize. The inline rendering of PopOutEditor should add aria-required or a visual `*`. This is a pre-existing design choice, not a regression. Fix is low-risk: add `aria-required={required}` to the inline `<TextField>`. |
+| Category | ~~UX-visible inconsistency~~ **Resolved** |
+| Resolution | Fluent inline `<Textarea>` now receives `aria-required={required}`. MUI inline `<TextField>` now receives `required={required}` (which sets both the visual `*` and `aria-required` automatically). |
 
 ### DIV-004: MUI CheckboxGroup required detection
 
