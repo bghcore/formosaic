@@ -42,4 +42,6 @@ export interface IFormSettings {
   enableFilter?: boolean;
   /** Analytics/telemetry callbacks for form lifecycle events. */
   analytics?: IAnalyticsCallbacks;
+  /** Enable/disable field animations on rule state changes. Default: true. */
+  animations?: boolean;
 }
