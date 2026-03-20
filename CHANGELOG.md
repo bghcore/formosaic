@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-03-20
+
+### Fixed
+- **DIV-001 resolved:** Number and Slider readOnly fields now show "-" sentinel for null/undefined values instead of "0" across all 11 adapters
+- **DIV-003 resolved:** Fluent and MUI PopOutEditor (Textarea) inline rendering now shows required indicator (`aria-required` / `required` prop)
+
 ## [1.3.0] - 2026-03-18
 
 ### Added
