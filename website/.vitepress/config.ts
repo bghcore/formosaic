@@ -79,6 +79,7 @@ export default defineConfig({
             { text: 'SSR / Next.js', link: '/guide/ssr' },
             { text: 'Debugging Rules', link: '/guide/debugging-rules' },
             { text: 'Performance', link: '/guide/performance' },
+            { text: 'Animations', link: '/guide/animations' },
             { text: 'Accessibility', link: '/guide/accessibility' },
             { text: 'Date Policy', link: '/guide/date-policy' }
           ]
