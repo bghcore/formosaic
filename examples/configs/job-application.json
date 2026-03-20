@@ -1,0 +1,273 @@
+{
+  "version": 2,
+  "fields": {
+    "fullName": {
+      "type": "Textbox",
+      "label": "Full Name",
+      "required": true
+    },
+    "email": {
+      "type": "Textbox",
+      "label": "Email Address",
+      "required": true,
+      "validate": [
+        { "name": "email", "message": "Please enter a valid email address" }
+      ]
+    },
+    "phone": {
+      "type": "PhoneInput",
+      "label": "Phone Number",
+      "required": true
+    },
+    "linkedIn": {
+      "type": "Textbox",
+      "label": "LinkedIn Profile URL",
+      "placeholder": "https://linkedin.com/in/your-profile",
+      "validate": [
+        {
+          "name": "pattern",
+          "params": { "pattern": "^https?://(www\\.)?linkedin\\.com/in/.+" },
+          "message": "Please enter a valid LinkedIn URL (e.g., https://linkedin.com/in/name)"
+        }
+      ]
+    },
+    "role": {
+      "type": "Dropdown",
+      "label": "Position Applied For",
+      "required": true,
+      "options": [
+        { "value": "frontend", "label": "Frontend Engineer" },
+        { "value": "backend", "label": "Backend Engineer" },
+        { "value": "fullstack", "label": "Full-Stack Engineer" },
+        { "value": "designer", "label": "UI/UX Designer" },
+        { "value": "pm", "label": "Product Manager" },
+        { "value": "data", "label": "Data Scientist" }
+      ],
+      "rules": [
+        {
+          "id": "show-portfolio-for-designers",
+          "when": {
+            "operator": "or",
+            "conditions": [
+              { "field": "role", "operator": "equals", "value": "designer" },
+              { "field": "role", "operator": "equals", "value": "frontend" }
+            ]
+          },
+          "then": {
+            "fields": {
+              "portfolioUrl": { "hidden": false, "required": true },
+              "portfolioUpload": { "hidden": false }
+            }
+          },
+          "else": {
+            "fields": {
+              "portfolioUrl": { "hidden": true, "required": false },
+              "portfolioUpload": { "hidden": true }
+            }
+          }
+        }
+      ]
+    },
+    "department": {
+      "type": "Dropdown",
+      "label": "Department",
+      "required": true,
+      "options": [
+        { "value": "engineering", "label": "Engineering" },
+        { "value": "design", "label": "Design" },
+        { "value": "product", "label": "Product" },
+        { "value": "data", "label": "Data & Analytics" }
+      ]
+    },
+    "startDate": {
+      "type": "DateControl",
+      "label": "Earliest Start Date",
+      "required": true
+    },
+    "salaryExpectation": {
+      "type": "Number",
+      "label": "Salary Expectation (USD/year)",
+      "placeholder": "e.g., 120000",
+      "validate": [
+        {
+          "name": "numericRange",
+          "params": { "min": 30000, "max": 500000 },
+          "message": "Please enter a realistic salary expectation"
+        }
+      ]
+    },
+    "yearsExperience": {
+      "type": "Slider",
+      "label": "Years of Experience",
+      "defaultValue": 3,
+      "config": { "min": 0, "max": 30, "step": 1 },
+      "rules": [
+        {
+          "id": "seniority-from-experience",
+          "when": { "field": "yearsExperience", "operator": "greaterThanOrEqual", "value": 8 },
+          "then": {
+            "fields": {
+              "seniority": { "options": [
+                { "value": "senior", "label": "Senior" },
+                { "value": "staff", "label": "Staff" },
+                { "value": "principal", "label": "Principal" },
+                { "value": "director", "label": "Director" }
+              ]}
+            }
+          },
+          "else": {
+            "fields": {
+              "seniority": { "options": [
+                { "value": "junior", "label": "Junior" },
+                { "value": "mid", "label": "Mid-Level" },
+                { "value": "senior", "label": "Senior" }
+              ]}
+            }
+          }
+        }
+      ]
+    },
+    "seniority": {
+      "type": "Dropdown",
+      "label": "Seniority Level",
+      "options": [
+        { "value": "junior", "label": "Junior" },
+        { "value": "mid", "label": "Mid-Level" },
+        { "value": "senior", "label": "Senior" }
+      ]
+    },
+    "portfolioUrl": {
+      "type": "Textbox",
+      "label": "Portfolio URL",
+      "hidden": true,
+      "validate": [
+        { "name": "url", "message": "Please enter a valid URL" }
+      ]
+    },
+    "portfolioUpload": {
+      "type": "FileUpload",
+      "label": "Upload Portfolio (PDF)",
+      "hidden": true,
+      "config": { "accept": ".pdf,.zip", "maxSizeMb": 25 }
+    },
+    "resume": {
+      "type": "FileUpload",
+      "label": "Upload Resume",
+      "required": true,
+      "config": { "accept": ".pdf,.doc,.docx", "maxSizeMb": 10 }
+    },
+    "previousRoles": {
+      "type": "FieldArray",
+      "label": "Previous Roles",
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+        "company": {
+          "type": "Textbox",
+          "label": "Company",
+          "required": true
+        },
+        "title": {
+          "type": "Textbox",
+          "label": "Job Title",
+          "required": true
+        },
+        "duration": {
+          "type": "Textbox",
+          "label": "Duration (e.g., 2 years)",
+          "required": true
+        }
+      }
+    },
+    "coverLetter": {
+      "type": "Textarea",
+      "label": "Cover Letter",
+      "placeholder": "Tell us why you're interested in this role..."
+    },
+    "ratingCommunication": {
+      "type": "Rating",
+      "label": "Communication Skills (self-assessment)",
+      "defaultValue": 3
+    },
+    "ratingTechnical": {
+      "type": "Rating",
+      "label": "Technical Skills (self-assessment)",
+      "defaultValue": 3
+    },
+    "ratingLeadership": {
+      "type": "Rating",
+      "label": "Leadership Skills (self-assessment)",
+      "defaultValue": 3
+    },
+    "ratingProblemSolving": {
+      "type": "Rating",
+      "label": "Problem Solving (self-assessment)",
+      "defaultValue": 3
+    },
+    "overallRating": {
+      "type": "ReadOnly",
+      "label": "Overall Self-Assessment (Average)",
+      "readOnly": true,
+      "computedValue": "$fn.averageRatings()"
+    }
+  },
+  "fieldOrder": [
+    "fullName", "email", "phone", "linkedIn",
+    "role", "department", "startDate", "salaryExpectation", "yearsExperience", "seniority",
+    "portfolioUrl", "portfolioUpload",
+    "resume", "previousRoles", "coverLetter",
+    "ratingCommunication", "ratingTechnical", "ratingLeadership", "ratingProblemSolving", "overallRating"
+  ],
+  "wizard": {
+    "steps": [
+      {
+        "id": "personal",
+        "title": "Personal Information",
+        "description": "Your contact details",
+        "fields": ["fullName", "email", "phone", "linkedIn"]
+      },
+      {
+        "id": "position",
+        "title": "Position Details",
+        "description": "Tell us about the role you want",
+        "fields": ["role", "department", "startDate", "salaryExpectation", "yearsExperience", "seniority"]
+      },
+      {
+        "id": "portfolio",
+        "title": "Portfolio",
+        "description": "Show us your work",
+        "fields": ["portfolioUrl", "portfolioUpload"],
+        "visibleWhen": {
+          "operator": "or",
+          "conditions": [
+            { "field": "role", "operator": "equals", "value": "designer" },
+            { "field": "role", "operator": "equals", "value": "frontend" }
+          ]
+        }
+      },
+      {
+        "id": "experience",
+        "title": "Experience",
+        "description": "Your professional background",
+        "fields": ["resume", "previousRoles", "coverLetter"]
+      },
+      {
+        "id": "self-assessment",
+        "title": "Self-Assessment",
+        "description": "Rate your skills honestly",
+        "fields": ["ratingCommunication", "ratingTechnical", "ratingLeadership", "ratingProblemSolving", "overallRating"]
+      },
+      {
+        "id": "review",
+        "title": "Review & Submit",
+        "description": "Review your application before submitting",
+        "fields": ["fullName", "email", "phone", "role", "department", "startDate", "salaryExpectation", "yearsExperience", "seniority", "overallRating"]
+      }
+    ],
+    "linearNavigation": true,
+    "validateOnStepChange": true
+  },
+  "settings": {
+    "manualSave": true
+  }
+}
