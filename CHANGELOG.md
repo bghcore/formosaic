@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-03-20
+
+### Added
+- **Field Animations:** CSS-based animations when business rules change field state (show/hide, required, errors, read-only, labels, dropdown options)
+  - Show/hide: `grid-template-rows` collapse + opacity fade (~150ms)
+  - Required indicator: opacity fade in/out
+  - Error messages: slide-in with `translateY` on appearance
+  - Read-only toggle: dim-and-restore crossfade
+  - Label changes: opacity pulse
+  - Dropdown options: background-color highlight flash
+  - On by default, disabled via `settings.animations: false`
+  - Customizable via CSS custom properties (`--formosaic-animation-duration`, `--formosaic-animation-easing`, `--formosaic-highlight-color`)
+  - Respects `prefers-reduced-motion: reduce`
+  - No adapter changes required — works with all 11 adapters
+  - Browser support: Chrome 117+, Safari 17.5+, Firefox 129+
+
 ## [1.3.1] - 2026-03-20
 
 ### Fixed
