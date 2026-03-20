@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import PopOutEditor from "@formosaic/fluent/fields/PopOutEditor";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **Textarea** (PopOutEditor) renders a multi-line text area with an expand
@@ -34,7 +34,11 @@ const TextareaStory = (args: Record<string, unknown>) => {
     value,
     setFieldValue: (_name, val) => setValue(val as string),
   });
-  return <PopOutEditor {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <PopOutEditor {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

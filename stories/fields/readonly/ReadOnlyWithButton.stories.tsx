@@ -1,7 +1,7 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import ReadOnlyWithButton from "@formosaic/fluent/fields/readonly/ReadOnlyWithButton";
-import { FormDecorator, createFieldProps } from "../../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../../helpers";
 
 /**
  * **ReadOnlyWithButton** displays a read-only text value alongside an action button.
@@ -19,6 +19,7 @@ const meta: Meta = {
   ],
   argTypes: {
     value: { control: "text" },
+    label: { control: "text" },
   },
 };
 
@@ -33,7 +34,11 @@ export const Default: StoryObj = {
         onButtonClick: () => alert("Button clicked!"),
       },
     });
-    return <ReadOnlyWithButton {...props} />;
+    return (
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <ReadOnlyWithButton {...props} />
+      </FieldStoryWrapper>
+    );
   },
   args: {
     value: "PRJ-2025-001",
@@ -44,7 +49,11 @@ export const Default: StoryObj = {
 export const WithoutButton: StoryObj = {
   render: (args) => {
     const props = createFieldProps({ ...args, config: {} });
-    return <ReadOnlyWithButton {...props} />;
+    return (
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <ReadOnlyWithButton {...props} />
+      </FieldStoryWrapper>
+    );
   },
   args: {
     value: "PRJ-2025-002",

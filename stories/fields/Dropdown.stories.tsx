@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import DropdownField from "@formosaic/fluent/fields/Dropdown";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **Dropdown** renders a single-select dropdown using Fluent UI's `<Dropdown>`.
@@ -21,6 +21,7 @@ const meta: Meta = {
     value: { control: "text" },
     readOnly: { control: "boolean" },
     required: { control: "boolean" },
+    label: { control: "text" },
   },
 };
 
@@ -40,7 +41,11 @@ const DropdownStory = (args: Record<string, unknown>) => {
     options: (args.options as typeof sampleOptions) ?? sampleOptions,
     setFieldValue: (_name, val) => setValue(val as string),
   });
-  return <DropdownField {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required} error={props.error}>
+      <DropdownField {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

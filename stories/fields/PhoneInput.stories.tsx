@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import PhoneInputField from "@formosaic/fluent/fields/PhoneInput";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **PhoneInput** renders a telephone input with inline number formatting.
@@ -21,6 +21,7 @@ const meta: Meta = {
     ),
   ],
   argTypes: {
+    label: { control: "text" },
     readOnly: { control: "boolean" },
     required: { control: "boolean" },
   },
@@ -35,7 +36,11 @@ const PhoneInputStory = (args: Record<string, unknown>) => {
     value,
     setFieldValue: (_name, val) => setValue(val as string),
   });
-  return <PhoneInputField {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <PhoneInputField {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const USFormat: StoryObj = {

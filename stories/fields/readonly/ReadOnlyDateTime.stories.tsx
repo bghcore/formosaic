@@ -1,7 +1,7 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import ReadOnlyDateTime from "@formosaic/fluent/fields/readonly/ReadOnlyDateTime";
-import { FormDecorator, createFieldProps } from "../../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../../helpers";
 
 /**
  * **ReadOnlyDateTime** formats and displays a date/time string.
@@ -18,6 +18,7 @@ const meta: Meta = {
   ],
   argTypes: {
     value: { control: "text" },
+    label: { control: "text" },
   },
 };
 
@@ -26,7 +27,11 @@ export default meta;
 export const WithTimestamp: StoryObj = {
   render: (args) => {
     const props = createFieldProps({ ...args });
-    return <ReadOnlyDateTime {...props} />;
+    return (
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <ReadOnlyDateTime {...props} />
+      </FieldStoryWrapper>
+    );
   },
   args: {
     value: "2025-06-15T14:30:00.000Z",
@@ -40,7 +45,11 @@ export const DateOnly: StoryObj = {
       ...args,
       config: { hidetimeStamp: true },
     });
-    return <ReadOnlyDateTime {...props} />;
+    return (
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <ReadOnlyDateTime {...props} />
+      </FieldStoryWrapper>
+    );
   },
   args: {
     value: "2025-06-15T14:30:00.000Z",
@@ -51,7 +60,11 @@ export const DateOnly: StoryObj = {
 export const NoValue: StoryObj = {
   render: (args) => {
     const props = createFieldProps({ ...args });
-    return <ReadOnlyDateTime {...props} />;
+    return (
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <ReadOnlyDateTime {...props} />
+      </FieldStoryWrapper>
+    );
   },
   args: {
     value: null,

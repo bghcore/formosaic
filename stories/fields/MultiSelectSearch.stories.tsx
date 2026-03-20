@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import MultiSelectSearch from "@formosaic/fluent/fields/MultiSelectSearch";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **MultiSelectSearch** renders a searchable multi-select using Fluent UI's
@@ -44,7 +44,11 @@ const MultiSelectSearchStory = (args: Record<string, unknown>) => {
     options: countryOptions,
     setFieldValue: (_name, val) => setValue(val as string[]),
   });
-  return <MultiSelectSearch {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <MultiSelectSearch {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

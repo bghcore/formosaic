@@ -1,7 +1,7 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import ReadOnlyArray from "@formosaic/fluent/fields/readonly/ReadOnlyArray";
-import { FormDecorator, createFieldProps } from "../../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../../helpers";
 
 /**
  * **ReadOnlyArray** displays an array of string values, each rendered as
@@ -16,6 +16,9 @@ const meta: Meta = {
       </FormDecorator>
     ),
   ],
+  argTypes: {
+    label: { control: "text" },
+  },
 };
 
 export default meta;
@@ -23,7 +26,11 @@ export default meta;
 export const Default: StoryObj = {
   render: (args) => {
     const props = createFieldProps({ ...args });
-    return <ReadOnlyArray {...props} />;
+    return (
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <ReadOnlyArray {...props} />
+      </FieldStoryWrapper>
+    );
   },
   args: {
     value: ["Frontend", "Backend", "DevOps"],
@@ -34,7 +41,11 @@ export const Default: StoryObj = {
 export const SingleItem: StoryObj = {
   render: (args) => {
     const props = createFieldProps({ ...args });
-    return <ReadOnlyArray {...props} />;
+    return (
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <ReadOnlyArray {...props} />
+      </FieldStoryWrapper>
+    );
   },
   args: {
     value: ["Only item"],
@@ -45,7 +56,11 @@ export const SingleItem: StoryObj = {
 export const Empty: StoryObj = {
   render: (args) => {
     const props = createFieldProps({ ...args });
-    return <ReadOnlyArray {...props} />;
+    return (
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <ReadOnlyArray {...props} />
+      </FieldStoryWrapper>
+    );
   },
   args: {
     value: [],

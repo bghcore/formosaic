@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import AutocompleteField from "@formosaic/fluent/fields/Autocomplete";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **Autocomplete** renders a searchable single-selection input.
@@ -19,6 +19,7 @@ const meta: Meta = {
   ],
   argTypes: {
     value: { control: "text" },
+    label: { control: "text" },
     readOnly: { control: "boolean" },
     required: { control: "boolean" },
   },
@@ -45,7 +46,11 @@ const AutocompleteStory = (args: Record<string, unknown>) => {
     options: (args.options as typeof countries) ?? countries,
     setFieldValue: (_name, val) => setValue(val as string),
   });
-  return <AutocompleteField {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <AutocompleteField {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import Toggle from "@formosaic/fluent/fields/Toggle";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **Toggle** renders a boolean switch using Fluent UI's `<Switch>`.
@@ -20,6 +20,7 @@ const meta: Meta = {
     value: { control: "boolean" },
     readOnly: { control: "boolean" },
     required: { control: "boolean" },
+    label: { control: "text" },
   },
 };
 
@@ -32,7 +33,11 @@ const ToggleStory = (args: Record<string, unknown>) => {
     value,
     setFieldValue: (_name, val) => setValue(val as boolean),
   });
-  return <Toggle {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <Toggle {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

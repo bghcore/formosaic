@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import NumberField from "@formosaic/fluent/fields/Number";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **Number** renders a numeric input using Fluent UI's `<Input type="number">`.
@@ -33,7 +33,11 @@ const NumberStory = (args: Record<string, unknown>) => {
     value,
     setFieldValue: (_name, val) => setValue(val as number),
   });
-  return <NumberField {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required} error={props.error}>
+      <NumberField {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

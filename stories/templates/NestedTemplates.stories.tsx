@@ -83,7 +83,7 @@ const meta: Meta = {
           state: {
             type: "Dropdown",
             label: "State",
-            options: "$lookup.usStates" as unknown as Array<{ value: string; label: string }>,
+            options: "{{$lookup.usStates}}" as unknown as Array<{ value: string; label: string }>,
           },
           zip: {
             type: "Textbox",
@@ -128,7 +128,7 @@ const meta: Meta = {
             type: "Dropdown",
             label: "Relationship",
             hidden: true,
-            options: "$lookup.relationships" as unknown as Array<{ value: string; label: string }>,
+            options: "{{$lookup.relationships}}" as unknown as Array<{ value: string; label: string }>,
             rules: [
               {
                 id: "show-relationship",

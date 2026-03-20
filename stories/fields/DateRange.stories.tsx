@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import DateRangeField from "@formosaic/fluent/fields/DateRange";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 interface IDateRangeValue {
   start: string;
@@ -24,6 +24,7 @@ const meta: Meta = {
     ),
   ],
   argTypes: {
+    label: { control: "text" },
     readOnly: { control: "boolean" },
     required: { control: "boolean" },
   },
@@ -40,7 +41,11 @@ const DateRangeStory = (args: Record<string, unknown>) => {
     value,
     setFieldValue: (_name, val) => setValue(val as IDateRangeValue | null),
   });
-  return <DateRangeField {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <DateRangeField {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

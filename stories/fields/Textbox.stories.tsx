@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import Textbox from "@formosaic/fluent/fields/Textbox";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **Textbox** renders a single-line text input using Fluent UI's `<Input>`.
@@ -33,7 +33,11 @@ const TextboxStory = (args: Record<string, unknown>) => {
     value,
     setFieldValue: (_name, val) => setValue(val as string),
   });
-  return <Textbox {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required} error={props.error}>
+      <Textbox {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

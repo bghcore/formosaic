@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import StatusDropdownField from "@formosaic/fluent/fields/StatusDropdown";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **StatusDropdown** renders a dropdown with colored status indicators.
@@ -19,6 +19,7 @@ const meta: Meta = {
   ],
   argTypes: {
     value: { control: "text" },
+    label: { control: "text" },
     readOnly: { control: "boolean" },
     required: { control: "boolean" },
   },
@@ -49,7 +50,11 @@ const StatusDropdownStory = (args: Record<string, unknown>) => {
     config: { statusColors },
     setFieldValue: (_name, val) => setValue(val as string),
   });
-  return <StatusDropdownField {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <StatusDropdownField {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import RatingField from "@formosaic/fluent/fields/Rating";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **Rating** renders a star-based rating input.
@@ -19,6 +19,7 @@ const meta: Meta = {
   ],
   argTypes: {
     value: { control: { type: "number", min: 0, max: 10 } },
+    label: { control: "text" },
     readOnly: { control: "boolean" },
     required: { control: "boolean" },
   },
@@ -33,7 +34,11 @@ const RatingStory = (args: Record<string, unknown>) => {
     value,
     setFieldValue: (_name, val) => setValue(val as number),
   });
-  return <RatingField {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <RatingField {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

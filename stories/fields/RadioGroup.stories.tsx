@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import RadioGroupField from "@formosaic/fluent/fields/RadioGroup";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **RadioGroup** renders a set of radio buttons for single-selection.
@@ -19,6 +19,7 @@ const meta: Meta = {
   ],
   argTypes: {
     value: { control: "text" },
+    label: { control: "text" },
     readOnly: { control: "boolean" },
     required: { control: "boolean" },
   },
@@ -40,7 +41,11 @@ const RadioGroupStory = (args: Record<string, unknown>) => {
     options: (args.options as typeof sampleOptions) ?? sampleOptions,
     setFieldValue: (_name, val) => setValue(val as string),
   });
-  return <RadioGroupField {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <RadioGroupField {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

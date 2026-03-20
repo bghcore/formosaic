@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import DateTimeField from "@formosaic/fluent/fields/DateTime";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **DateTime** renders a combined date+time input.
@@ -18,6 +18,7 @@ const meta: Meta = {
     ),
   ],
   argTypes: {
+    label: { control: "text" },
     readOnly: { control: "boolean" },
     required: { control: "boolean" },
   },
@@ -32,7 +33,11 @@ const DateTimeStory = (args: Record<string, unknown>) => {
     value,
     setFieldValue: (_name, val) => setValue(val as string | null),
   });
-  return <DateTimeField {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <DateTimeField {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import DateControl from "@formosaic/fluent/fields/DateControl";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **DateControl** renders a date picker using a native HTML `<input type="date">`
@@ -19,6 +19,7 @@ const meta: Meta = {
   ],
   argTypes: {
     value: { control: "text" },
+    label: { control: "text" },
     readOnly: { control: "boolean" },
     required: { control: "boolean" },
   },
@@ -33,7 +34,11 @@ const DateControlStory = (args: Record<string, unknown>) => {
     value,
     setFieldValue: (_name, val) => setValue(val as string),
   });
-  return <DateControl {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <DateControl {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

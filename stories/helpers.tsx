@@ -44,3 +44,31 @@ export function createFieldProps(
     ...overrides,
   };
 }
+
+/**
+ * Wraps a field component with a label and optional error message,
+ * mirroring the FieldWrapper chrome used by Formosaic at runtime.
+ */
+export function FieldStoryWrapper(props: {
+  label?: string;
+  required?: boolean;
+  error?: { message?: string };
+  children: React.ReactNode;
+}) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+      {props.label && (
+        <label style={{ fontWeight: 600, fontSize: 14 }}>
+          {props.label}
+          {props.required && <span style={{ color: "#c50f1f" }}> *</span>}
+        </label>
+      )}
+      {props.children}
+      {props.error?.message && (
+        <span style={{ color: "#c50f1f", fontSize: 12 }}>
+          {props.error.message}
+        </span>
+      )}
+    </div>
+  );
+}

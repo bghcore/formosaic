@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import DocumentLinksField from "@formosaic/fluent/fields/DocumentLinks";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **DocumentLinks** renders a list of named URL links with add/edit/delete
@@ -24,6 +24,7 @@ const meta: Meta = {
     ),
   ],
   argTypes: {
+    label: { control: "text" },
     readOnly: { control: "boolean" },
   },
 };
@@ -42,7 +43,11 @@ const DocumentLinksStory = (args: Record<string, unknown>) => {
     value,
     setFieldValue: (_name, val) => setValue(val as typeof sampleLinks),
   });
-  return <DocumentLinksField {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <DocumentLinksField {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

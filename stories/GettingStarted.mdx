@@ -11,11 +11,16 @@ validation, auto-save, and field interactions automatically.
 
 ## Packages
 
-| Package | Description |
-| --- | --- |
-| `@formosaic/core` | UI-agnostic rules engine and form orchestration (React + react-hook-form) |
-| `@formosaic/fluent` | Fluent UI v9 field component implementations |
-| `@formosaic/mui` | Material UI (MUI) field component implementations |
+<table>
+  <thead>
+    <tr><th>Package</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>@formosaic/core</code></td><td>UI-agnostic rules engine and form orchestration (React + react-hook-form)</td></tr>
+    <tr><td><code>@formosaic/fluent</code></td><td>Fluent UI v9 field component implementations</td></tr>
+    <tr><td><code>@formosaic/mui</code></td><td>Material UI (MUI) field component implementations</td></tr>
+  </tbody>
+</table>
 
 ## Installation
 
@@ -157,16 +162,21 @@ Fields can declare **rules** that react to other field values:
 
 ### Condition Operators
 
-| Operator | Description |
-| --- | --- |
-| `equals` / `notEquals` | Exact value match |
-| `greaterThan` / `lessThan` | Numeric comparison |
-| `greaterThanOrEqual` / `lessThanOrEqual` | Numeric comparison (inclusive) |
-| `contains` / `notContains` | Substring or array member check |
-| `startsWith` / `endsWith` | String prefix/suffix |
-| `in` / `notIn` | Value in array |
-| `isEmpty` / `isNotEmpty` | Null/empty check |
-| `matches` | Regex pattern |
+<table>
+  <thead>
+    <tr><th>Operator</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>equals</code> / <code>notEquals</code></td><td>Exact value match</td></tr>
+    <tr><td><code>greaterThan</code> / <code>lessThan</code></td><td>Numeric comparison</td></tr>
+    <tr><td><code>greaterThanOrEqual</code> / <code>lessThanOrEqual</code></td><td>Numeric comparison (inclusive)</td></tr>
+    <tr><td><code>contains</code> / <code>notContains</code></td><td>Substring or array member check</td></tr>
+    <tr><td><code>startsWith</code> / <code>endsWith</code></td><td>String prefix/suffix</td></tr>
+    <tr><td><code>in</code> / <code>notIn</code></td><td>Value in array</td></tr>
+    <tr><td><code>isEmpty</code> / <code>isNotEmpty</code></td><td>Null/empty check</td></tr>
+    <tr><td><code>matches</code></td><td>Regex pattern</td></tr>
+  </tbody>
+</table>
 
 ### Logical Operators
 

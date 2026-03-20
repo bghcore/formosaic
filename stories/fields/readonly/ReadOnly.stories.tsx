@@ -1,7 +1,7 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import ReadOnly from "@formosaic/fluent/fields/readonly/ReadOnly";
-import { FormDecorator, createFieldProps } from "../../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../../helpers";
 
 /**
  * **ReadOnly** displays a plain text value. Supports optional text truncation
@@ -18,6 +18,7 @@ const meta: Meta = {
   ],
   argTypes: {
     value: { control: "text" },
+    label: { control: "text" },
   },
 };
 
@@ -26,7 +27,11 @@ export default meta;
 export const Default: StoryObj = {
   render: (args) => {
     const props = createFieldProps({ ...args });
-    return <ReadOnly {...props} />;
+    return (
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <ReadOnly {...props} />
+      </FieldStoryWrapper>
+    );
   },
   args: {
     value: "John Doe",
@@ -37,7 +42,11 @@ export const Default: StoryObj = {
 export const LongText: StoryObj = {
   render: (args) => {
     const props = createFieldProps({ ...args });
-    return <ReadOnly {...props} />;
+    return (
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <ReadOnly {...props} />
+      </FieldStoryWrapper>
+    );
   },
   args: {
     value: "This is a very long text value that demonstrates how read-only fields display extended content without any truncation by default.",
@@ -51,7 +60,11 @@ export const Truncated: StoryObj = {
       ...args,
       config: { ellipsifyTextCharacters: 30 },
     });
-    return <ReadOnly {...props} />;
+    return (
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <ReadOnly {...props} />
+      </FieldStoryWrapper>
+    );
   },
   args: {
     value: "This is a very long text value that will be truncated after 30 characters.",

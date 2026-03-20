@@ -77,7 +77,7 @@ const meta: Meta = {
             type: "Dropdown",
             label: "State",
             required: "{{params.required}}" as unknown as boolean,
-            options: "$lookup.usStates" as unknown as Array<{ value: string; label: string }>,
+            options: "{{$lookup.usStates}}" as unknown as Array<{ value: string; label: string }>,
           },
           zip: {
             type: "Textbox",

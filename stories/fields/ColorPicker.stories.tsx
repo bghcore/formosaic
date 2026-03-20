@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import ColorPickerField from "@formosaic/fluent/fields/ColorPicker";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **ColorPicker** renders a native `<input type="color">` with the selected hex value displayed.
@@ -18,6 +18,7 @@ const meta: Meta = {
   ],
   argTypes: {
     value: { control: "color" },
+    label: { control: "text" },
     readOnly: { control: "boolean" },
     required: { control: "boolean" },
   },
@@ -32,7 +33,11 @@ const ColorPickerStory = (args: Record<string, unknown>) => {
     value,
     setFieldValue: (_name, val) => setValue(val as string),
   });
-  return <ColorPickerField {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <ColorPickerField {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

@@ -1,7 +1,7 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import ReadOnlyRichText from "@formosaic/fluent/fields/readonly/ReadOnlyRichText";
-import { FormDecorator, createFieldProps } from "../../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../../helpers";
 
 /**
  * **ReadOnlyRichText** renders HTML content using `dangerouslySetInnerHTML`.
@@ -18,6 +18,7 @@ const meta: Meta = {
   ],
   argTypes: {
     value: { control: "text" },
+    label: { control: "text" },
   },
 };
 
@@ -26,7 +27,11 @@ export default meta;
 export const Default: StoryObj = {
   render: (args) => {
     const props = createFieldProps({ ...args });
-    return <ReadOnlyRichText {...props} />;
+    return (
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <ReadOnlyRichText {...props} />
+      </FieldStoryWrapper>
+    );
   },
   args: {
     value:
@@ -38,7 +43,11 @@ export const Default: StoryObj = {
 export const PlainText: StoryObj = {
   render: (args) => {
     const props = createFieldProps({ ...args });
-    return <ReadOnlyRichText {...props} />;
+    return (
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <ReadOnlyRichText {...props} />
+      </FieldStoryWrapper>
+    );
   },
   args: {
     value: "Just a plain text string with no HTML formatting.",
@@ -49,7 +58,11 @@ export const PlainText: StoryObj = {
 export const Empty: StoryObj = {
   render: (args) => {
     const props = createFieldProps({ ...args });
-    return <ReadOnlyRichText {...props} />;
+    return (
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <ReadOnlyRichText {...props} />
+      </FieldStoryWrapper>
+    );
   },
   args: {
     value: "",

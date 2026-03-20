@@ -3,6 +3,8 @@ import type { Meta, StoryObj } from "@storybook/react";
 import {
   WizardForm,
   Formosaic,
+  RulesEngineProvider,
+  InjectedFieldProvider,
   UseInjectedFieldContext,
   IFormConfig,
 } from "@formosaic/core";
@@ -181,28 +183,35 @@ function StepNavigation({
   );
 }
 
+/**
+ * Full integration — `WizardForm` handles step navigation while `Formosaic`
+ * renders and validates the fields for each step.
+ */
 export const Default: StoryObj = {
   render: () => (
-    <FieldRegistrar>
-      <WizardForm
-        wizardConfig={wizardConfig.wizard!}
-        entityData={defaultValues}
-        renderStepContent={(fields) => (
-          <div>
-            {fields.map((field) => (
-              <div key={field} style={{ marginBottom: "8px", color: "#333" }}>
-                Field: <code>{field}</code>
-              </div>
-            ))}
-          </div>
-        )}
-        renderStepHeader={(props) => <StepHeader {...props} />}
-        renderStepNavigation={(props) => <StepNavigation {...props} />}
-      />
-    </FieldRegistrar>
+    <RulesEngineProvider>
+      <InjectedFieldProvider injectedFields={createFluentFieldRegistry()}>
+        <FieldRegistrar>
+          <Formosaic
+            configName="wizard-demo"
+            formConfig={wizardConfig}
+            defaultValues={defaultValues}
+            isManualSave={true}
+            saveData={async (data) => {
+              console.log("Wizard data:", data);
+              return data;
+            }}
+          />
+        </FieldRegistrar>
+      </InjectedFieldProvider>
+    </RulesEngineProvider>
   ),
 };
 
+/**
+ * Standalone `WizardForm` with custom render props — demonstrates the
+ * lower-level API where you control how each step's content is rendered.
+ */
 export const WithFormIntegration: StoryObj = {
   render: () => (
     <FieldRegistrar>

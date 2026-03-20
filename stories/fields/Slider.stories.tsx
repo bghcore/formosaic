@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import SliderField from "@formosaic/fluent/fields/Slider";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **Slider** renders a range slider using Fluent UI's `<Slider>`.
@@ -34,7 +34,11 @@ const SliderStory = (args: Record<string, unknown>) => {
     config: { min: 0, max: 100, step: 1, ...(args.config as object) },
     setFieldValue: (_name, val) => setValue(val as number),
   });
-  return <SliderField {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <SliderField {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

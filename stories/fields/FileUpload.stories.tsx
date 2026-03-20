@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import FileUploadField from "@formosaic/fluent/fields/FileUpload";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **FileUpload** lets users select one or more files for upload.
@@ -19,6 +19,7 @@ const meta: Meta = {
     ),
   ],
   argTypes: {
+    label: { control: "text" },
     readOnly: { control: "boolean" },
     required: { control: "boolean" },
   },
@@ -33,7 +34,11 @@ const FileUploadStory = (args: Record<string, unknown>) => {
     value,
     setFieldValue: (_name, val) => setValue(val as File | File[] | null),
   });
-  return <FileUploadField {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <FileUploadField {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

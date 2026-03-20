@@ -1,7 +1,7 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import ReadOnlyCumulativeNumber from "@formosaic/fluent/fields/readonly/ReadOnlyCumulativeNumber";
-import { FormDecorator, createFieldProps } from "../../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../../helpers";
 
 /**
  * **ReadOnlyCumulativeNumber** displays a computed sum of other numeric fields.
@@ -19,6 +19,9 @@ const meta: Meta = {
       </FormDecorator>
     ),
   ],
+  argTypes: {
+    label: { control: "text" },
+  },
 };
 
 export default meta;
@@ -30,12 +33,14 @@ export const Default: StoryObj = {
       config: { dependencyFields: ["hours1", "hours2", "hours3"] },
     });
     return (
-      <div>
-        <p style={{ color: "#666", fontSize: "13px", marginBottom: "8px" }}>
-          Sums hours1 (10) + hours2 (20) + hours3 (30):
-        </p>
-        <ReadOnlyCumulativeNumber {...props} />
-      </div>
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <div>
+          <p style={{ color: "#666", fontSize: "13px", marginBottom: "8px" }}>
+            Sums hours1 (10) + hours2 (20) + hours3 (30):
+          </p>
+          <ReadOnlyCumulativeNumber {...props} />
+        </div>
+      </FieldStoryWrapper>
     );
   },
   args: {

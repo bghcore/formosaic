@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import CheckboxGroupField from "@formosaic/fluent/fields/CheckboxGroup";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **CheckboxGroup** renders a set of checkboxes for multi-selection.
@@ -18,6 +18,7 @@ const meta: Meta = {
     ),
   ],
   argTypes: {
+    label: { control: "text" },
     readOnly: { control: "boolean" },
     required: { control: "boolean" },
   },
@@ -40,7 +41,11 @@ const CheckboxGroupStory = (args: Record<string, unknown>) => {
     options: (args.options as typeof sampleOptions) ?? sampleOptions,
     setFieldValue: (_name, val) => setValue(val as string[]),
   });
-  return <CheckboxGroupField {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <CheckboxGroupField {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {

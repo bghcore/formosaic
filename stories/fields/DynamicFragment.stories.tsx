@@ -1,7 +1,7 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import Fragment from "@formosaic/fluent/fields/DynamicFragment";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **DynamicFragment** renders a hidden input that holds a value without
@@ -17,6 +17,9 @@ const meta: Meta = {
       </FormDecorator>
     ),
   ],
+  argTypes: {
+    label: { control: "text" },
+  },
 };
 
 export default meta;
@@ -28,12 +31,14 @@ export const Default: StoryObj = {
       label: "Fragment",
     });
     return (
-      <div>
-        <p>
-          The DynamicFragment renders a hidden input. Inspect the DOM to see it.
-        </p>
-        <Fragment {...props} />
-      </div>
+      <FieldStoryWrapper label={props.label} required={props.required}>
+        <div>
+          <p>
+            The DynamicFragment renders a hidden input. Inspect the DOM to see it.
+          </p>
+          <Fragment {...props} />
+        </div>
+      </FieldStoryWrapper>
     );
   },
 };

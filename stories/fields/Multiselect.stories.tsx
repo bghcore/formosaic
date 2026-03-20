@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import MultiSelect from "@formosaic/fluent/fields/MultiSelect";
-import { FormDecorator, createFieldProps } from "../helpers";
+import { FormDecorator, createFieldProps, FieldStoryWrapper } from "../helpers";
 
 /**
  * **Multiselect** renders a multi-select dropdown using Fluent UI's
@@ -41,7 +41,11 @@ const MultiselectStory = (args: Record<string, unknown>) => {
     options: tagOptions,
     setFieldValue: (_name, val) => setValue(val as string[]),
   });
-  return <MultiSelect {...props} />;
+  return (
+    <FieldStoryWrapper label={props.label} required={props.required}>
+      <MultiSelect {...props} />
+    </FieldStoryWrapper>
+  );
 };
 
 export const Default: StoryObj = {
