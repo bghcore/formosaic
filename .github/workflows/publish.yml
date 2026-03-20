@@ -197,20 +197,33 @@ jobs:
           VERSION=$(node -p "require('./packages/${{ matrix.package }}/package.json').version")
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
+      - name: Check if version already published
+        id: check
+        run: |
+          LOCAL_VERSION=$(node -p "require('./packages/${{ matrix.package }}/package.json').version")
+          NPM_VERSION=$(npm view "@formosaic/${{ matrix.package }}" version 2>/dev/null || echo "0.0.0")
+          if [ "$LOCAL_VERSION" = "$NPM_VERSION" ]; then
+            echo "⏭️  @formosaic/${{ matrix.package }}@$LOCAL_VERSION already published, skipping"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "📦 @formosaic/${{ matrix.package }}: $NPM_VERSION -> $LOCAL_VERSION"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Publish @formosaic/${{ matrix.package }}
-        if: inputs.dry-run != true
+        if: inputs.dry-run != true && steps.check.outputs.skip != 'true'
         working-directory: packages/${{ matrix.package }}
         run: npm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @formosaic/${{ matrix.package }} (dry run)
-        if: inputs.dry-run == true
+        if: inputs.dry-run == true && steps.check.outputs.skip != 'true'
         working-directory: packages/${{ matrix.package }}
         run: npm publish --access public --dry-run
 
       - name: Create GitHub Release
-        if: inputs.dry-run != true
+        if: inputs.dry-run != true && steps.check.outputs.skip != 'true'
         run: |
           TAG="${{ matrix.package }}-v${{ steps.info.outputs.version }}"
           gh release create "$TAG" --generate-notes --title "@formosaic/${{ matrix.package }}@${{ steps.info.outputs.version }}" 2>/dev/null || echo "Release $TAG already exists, skipping"
