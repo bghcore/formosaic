@@ -56,17 +56,122 @@ const RenderField = (props: IRenderFieldProps) => {
   const { control, getValues } = useFormContext();
   const previousValueRef = React.useRef<unknown>(undefined);
 
+  const isDisabled = disabled ?? false;
+
+  // Animation: two-phase show/hide state machine
+  const effectivelyHidden = hidden || (isCreate && hideOnCreate);
+  const [shouldRender, setShouldRender] = React.useState(!effectivelyHidden);
+  const [isExiting, setIsExiting] = React.useState(false);
+  const isFirstRender = React.useRef(true);
+  const fallbackTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Animation: change detection refs (all initialized to undefined sentinel to skip initial render)
+  const prevOptionsRef = React.useRef<IOption[] | undefined>(undefined);
+  const prevLabelRef = React.useRef<string | undefined>(undefined);
+  const prevReadOnlyRef = React.useRef<boolean | undefined>(undefined);
+  const [optionsChanged, setOptionsChanged] = React.useState(false);
+  const [labelChanging, setLabelChanging] = React.useState(false);
+  const [readOnlyEntering, setReadOnlyEntering] = React.useState(false);
+
+  // Effect: watch hidden prop for show/hide transitions
+  React.useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    if (effectivelyHidden && shouldRender) {
+      // Start exit animation
+      setIsExiting(true);
+      // Fallback: force unmount if transitionend doesn't fire
+      fallbackTimerRef.current = setTimeout(() => {
+        setShouldRender(false);
+        setIsExiting(false);
+      }, 300); // ~2x animation duration
+    } else if (!effectivelyHidden && !shouldRender) {
+      // Show: mount the field, CSS @starting-style handles entry
+      setShouldRender(true);
+      setIsExiting(false);
+    } else if (!effectivelyHidden && isExiting) {
+      // Rapid toggle: cancel exit
+      setIsExiting(false);
+      if (fallbackTimerRef.current) {
+        clearTimeout(fallbackTimerRef.current);
+        fallbackTimerRef.current = null;
+      }
+    }
+  }, [effectivelyHidden]);
+
+  // Cleanup fallback timer on unmount
+  React.useEffect(() => {
+    return () => {
+      if (fallbackTimerRef.current) {
+        clearTimeout(fallbackTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleTransitionEnd = React.useCallback((e: React.TransitionEvent) => {
+    // Only respond to our own grid wrapper's transition, not bubbled child events
+    if (e.target !== e.currentTarget) return;
+    if (isExiting) {
+      setShouldRender(false);
+      setIsExiting(false);
+      if (fallbackTimerRef.current) {
+        clearTimeout(fallbackTimerRef.current);
+        fallbackTimerRef.current = null;
+      }
+    }
+  }, [isExiting]);
+
+  // Effect: detect options changes
+  React.useEffect(() => {
+    const prev = prevOptionsRef.current;
+    prevOptionsRef.current = options;
+    if (prev === undefined) return; // skip initial
+    const prevValues = prev?.map(o => o.value) ?? [];
+    const currValues = options?.map(o => o.value) ?? [];
+    if (prevValues.length !== currValues.length || prevValues.some((v, i) => v !== currValues[i])) {
+      setOptionsChanged(true);
+    }
+  }, [options]);
+
+  // Effect: detect label changes
+  React.useEffect(() => {
+    const prev = prevLabelRef.current;
+    prevLabelRef.current = label;
+    if (prev === undefined) return; // skip initial
+    if (prev !== label) {
+      setLabelChanging(true);
+    }
+  }, [label]);
+
+  // Effect: detect readOnly changes (uses undefined sentinel to skip initial render, same as options/label)
+  React.useEffect(() => {
+    const isReadOnly = readOnly || (isDisabled && (isNull(skipLayoutReadOnly) || (!isNull(skipLayoutReadOnly) && !skipLayoutReadOnly)));
+    const prev = prevReadOnlyRef.current;
+    prevReadOnlyRef.current = isReadOnly;
+    if (prev === undefined) return; // skip initial render
+    if (prev !== isReadOnly) {
+      setReadOnlyEntering(true);
+    }
+  }, [readOnly, isDisabled, skipLayoutReadOnly]);
+
+  // Clear change-detection flags after animation
+  const handleContainerAnimationEnd = React.useCallback(() => {
+    setOptionsChanged(false);
+    setLabelChanging(false);
+    setReadOnlyEntering(false);
+  }, []);
+
   React.useEffect(() => {
     trackRender(fieldName);
   });
 
-  const isDisabled = disabled ?? false;
   const fieldNameConst = `${fieldName}` as const;
 
   const FieldComponent = React.useMemo(() => {
     const isReadOnly = readOnly || (isDisabled && (isNull(skipLayoutReadOnly) || (!isNull(skipLayoutReadOnly) && !skipLayoutReadOnly)));
-
-    if ((isCreate && hideOnCreate) || hidden) return <></>;
 
     if (!isEmpty(injectedFields) && injectedFields[type]) {
       const Comp = injectedFields[type];
@@ -154,13 +259,34 @@ const RenderField = (props: IRenderFieldProps) => {
         Missing component &quot;{type}&quot; for field &quot;{fieldName}&quot;. Available: [{available}]
       </div>
     );
-  }, [type, hidden, required, readOnly, disabled, options, optionsLoading, softHidden, renderLabel, renderError, renderStatus,
+  }, [type, required, readOnly, disabled, options, optionsLoading, softHidden, renderLabel, renderError, renderStatus,
     fieldName, fieldNameConst, label, validate, config, description, placeholder, helpText,
-    isCreate, hideOnCreate, isManualSave, skipLayoutReadOnly,
+    isManualSave, skipLayoutReadOnly,
     testId,
     injectedFields, analytics, control, getValues, setFieldValue]);
 
-  return FieldComponent;
+  if (!shouldRender) return <></>;
+
+  return (
+    <div
+      className="formosaic-field-animate"
+      data-exiting={isExiting || undefined}
+      data-first-render={isFirstRender.current || undefined}
+      onTransitionEnd={handleTransitionEnd}
+    >
+      <div className="formosaic-field-animate-inner">
+        <div
+          className="formosaic-field-container"
+          data-options-changed={optionsChanged || undefined}
+          data-label-changing={labelChanging || undefined}
+          data-readonly-entering={readOnlyEntering || undefined}
+          onAnimationEnd={handleContainerAnimationEnd}
+        >
+          {FieldComponent}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default React.memo(RenderField);
