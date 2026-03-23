@@ -1,14 +1,14 @@
 # Expense Report
 
-An expense report form with repeating line items, computed totals, and approval routing.
+An expense report form with repeating line items, computed totals, and conditional approval.
 
 **Features demonstrated:**
 
-- Field arrays for repeating expense line items
-- Computed subtotal and total fields using `$values` expressions
-- Conditional receipt attachment required above a threshold amount
-- Hidden fields toggled based on expense category
-- Auto-save with draft persistence via `useDraftPersistence`
+- Field array for expense line items (date, type, description, amount, receipt upload)
+- Three computed read-only fields: subtotal via `$fn.sumExpenseItems()`, tax amount, and total (subtotal * tax rate)
+- Business justification field auto-shown and required when the computed total exceeds $5,000
+- Currency selector (USD/EUR) that dynamically updates the labels on subtotal, tax, and total fields
+- Numeric range validation on line item amounts and tax rate
 
 [Try it in the playground](/?example=expense-report)
 

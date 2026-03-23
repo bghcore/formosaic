@@ -4,11 +4,12 @@ A multi-step job application wizard with branching questions and file uploads.
 
 **Features demonstrated:**
 
-- Wizard with step-level visibility rules
-- Dynamic field ordering based on role selection
-- File upload with validation (resume, cover letter)
-- Computed salary range field derived from position and experience
-- Conditional work authorization questions based on citizenship status
+- 6-step wizard with a conditional Portfolio step visible only for Designer and Frontend roles
+- Seniority dropdown options change based on years of experience (Slider with `greaterThanOrEqual` rule)
+- Portfolio URL and file upload fields conditionally shown for Designer/Frontend via an `or` condition
+- Field array for previous roles (company, title, duration)
+- Computed read-only field averaging four self-assessment Rating fields via `$fn.averageRatings()`
+- File upload for resume with PDF/DOCX validation
 
 [Try it in the playground](/?example=job-application)
 

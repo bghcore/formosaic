@@ -64,15 +64,15 @@ export const Prefilled: StoryObj = {
         configName="survey-prefilled"
         formConfig={surveyConfig as unknown as IFormConfig}
         defaultValues={{
-          ageRange: "25_34",
+          ageRange: "25-34",
           role: "developer",
-          industry: "technology",
+          industry: "tech",
           usedBefore: true,
           usageFrequency: "weekly",
-          featuresUsed: ["rules_engine", "wizard", "computed_values"],
+          featuresUsed: ["rules_engine", "wizard", "computed"],
           satisfaction: 2,
           npsScore: 4,
-          painPoints: ["performance", "documentation"],
+          painPoints: ["performance", "docs"],
           openFeedback: "The rules engine is powerful but the documentation could be improved with more real-world examples.",
         }}
         saveData={async (data) => {

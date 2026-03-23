@@ -65,17 +65,17 @@ export const Prefilled: StoryObj = {
         formConfig={userSettingsConfig as unknown as IFormConfig}
         defaultValues={{
           displayName: "Sam Rivera",
-          email: "sam.rivera@example.com",
           language: "en",
-          timezone: "America/Chicago",
           theme: "custom",
           accentColor: "#6366f1",
-          fontSize: 16,
+          fontScale: 125,
           emailNotifications: true,
           digestFrequency: "daily",
-          pushNotifications: false,
-          twoFactorEnabled: true,
-          sessionTimeout: 30,
+          twoFactorAuth: true,
+          twoFactorMethod: "authenticator_app",
+          sessionTimeout: "8h",
+          dataExportFormat: "json",
+          marketingOptIn: false,
         }}
         saveData={async (data) => {
           console.log("Save:", data);

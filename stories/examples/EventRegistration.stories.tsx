@@ -67,16 +67,14 @@ export const Prefilled: StoryObj = {
           firstName: "Priya",
           lastName: "Nair",
           email: "priya.nair@example.com",
-          company: "DataViz Labs",
           ticketType: "vip",
           guestCount: 1,
           workshops: ["keynote_breakfast", "deep_dive_ai", "hands_on_lab", "networking_lunch", "panel_discussion"],
           hasDietaryRequirements: true,
-          dietaryRequirements: "vegetarian",
+          dietaryRestrictions: ["vegetarian"],
           hasAccessibilityNeeds: true,
           accessibilityNeeds: "Wheelchair access and reserved front-row seating required.",
-          tshirtSize: "M",
-          marketingOptIn: true,
+          agreeToTerms: true,
         }}
         saveData={async (data) => {
           console.log("Save:", data);

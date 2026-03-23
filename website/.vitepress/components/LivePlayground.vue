@@ -13,15 +13,11 @@
           </option>
         </optgroup>
       </select>
+      <!-- Only Headless is available in the playground. Additional adapters
+           (Fluent, MUI, Ant Design, etc.) require adding them as website
+           dependencies and configuring Vite aliases in config.ts. -->
       <select v-model="selectedAdapter" class="playground-select">
         <option value="headless">Headless</option>
-        <option value="fluent">Fluent UI</option>
-        <option value="mui">Material UI</option>
-        <option value="antd">Ant Design</option>
-        <option value="mantine">Mantine</option>
-        <option value="chakra">Chakra UI</option>
-        <option value="radix">Radix</option>
-        <option value="react-aria">React Aria</option>
       </select>
       <button class="playground-reset" @click="resetToPreset" title="Reset to preset">
         ↺ Reset

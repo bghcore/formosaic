@@ -32,10 +32,7 @@
       "defaultValue": "USD",
       "options": [
         { "value": "USD", "label": "USD — US Dollar" },
-        { "value": "EUR", "label": "EUR — Euro" },
-        { "value": "GBP", "label": "GBP — British Pound" },
-        { "value": "CAD", "label": "CAD — Canadian Dollar" },
-        { "value": "AUD", "label": "AUD — Australian Dollar" }
+        { "value": "EUR", "label": "EUR — Euro" }
       ],
       "rules": [
         {
@@ -61,26 +58,7 @@
     "expenseStartDate": {
       "type": "DateControl",
       "label": "Expense Period Start",
-      "required": true,
-      "rules": [
-        {
-          "id": "start-date-before-end",
-          "when": { "field": "expenseStartDate", "operator": "isNotEmpty" },
-          "then": {
-            "fields": {
-              "expenseEndDate": {
-                "validate": [
-                  {
-                    "name": "dateAfter",
-                    "params": { "field": "expenseStartDate" },
-                    "message": "End date must be on or after the start date"
-                  }
-                ]
-              }
-            }
-          }
-        }
-      ]
+      "required": true
     },
     "expenseEndDate": {
       "type": "DateControl",

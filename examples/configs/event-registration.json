@@ -199,7 +199,7 @@
       "hidden": true,
       "validate": [
         {
-          "name": "matches",
+          "name": "pattern",
           "params": { "pattern": "^[0-9A-Za-z\\s\\-]{3,10}$" },
           "message": "Please enter a valid ZIP or postal code"
         }

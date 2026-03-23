@@ -1,14 +1,14 @@
 # Event Registration
 
-An event registration form with ticket selection, add-ons, and attendee details.
+An event registration form with ticket selection, workshop add-ons, and attendee details.
 
 **Features demonstrated:**
 
-- Dropdown-driven option filtering (ticket tier → available add-ons)
-- Computed total price field from ticket quantity and selected tier
-- Conditional dietary restriction fields based on meal option selection
-- Multiple attendee entry using field arrays
-- Confirm input modal before final submission
+- VIP ticket selection makes the workshops CheckboxGroup read-only and shows an info banner via `DynamicFragment`
+- Computed total price field via `$fn.computeEventTotal()` reflecting ticket type, guest count, and workshops
+- Conditional dietary section (restrictions CheckboxGroup + notes) shown when the dietary toggle is enabled
+- Conditional accessibility section shown and required when the accessibility toggle is enabled
+- Optional billing address section (street, city, ZIP with `pattern` validation) toggled by a separate switch
 
 [Try it in the playground](/?example=event-registration)
 

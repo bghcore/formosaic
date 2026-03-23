@@ -1,14 +1,14 @@
 # Patient Intake
 
-A medical patient intake form demonstrating conditional fields and validation rules.
+A medical patient intake form demonstrating conditional fields, field arrays, and validation rules.
 
 **Features demonstrated:**
 
-- Conditional MFA / secondary contact fields based on patient age
-- Required field toggling based on insurance type selection
-- Cross-field validation (date of birth vs. age confirmation)
-- Read-only computed fields (calculated age from date of birth)
-- Dropdown dependency chains (state → county)
+- Urgent symptom detection via `arrayContains` on a CheckboxGroup that auto-requires emergency contact fields
+- Conditional insurance section (provider, member ID, group number) shown when the insurance toggle is enabled
+- Field arrays for allergies (allergen, severity, reaction) and medications (name, dosage, frequency)
+- Async validation with debounce on the insurance member ID field (`insuranceIdLookup`)
+- Confirm input modal on date of birth and insurance ID fields
 
 [Try it in the playground](/?example=patient-intake)
 

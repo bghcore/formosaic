@@ -65,23 +65,17 @@ export const Prefilled: StoryObj = {
         configName="vehicleInsuranceQuote-prefilled"
         formConfig={vehicleInsuranceQuoteConfig as unknown as IFormConfig}
         defaultValues={{
-          firstName: "Marcus",
-          lastName: "Webb",
-          dateOfBirth: "1978-11-22",
-          email: "marcus.webb@example.com",
-          phone: "+13125550187",
           vehicleType: "truck",
-          vehicleMake: "Ford",
-          vehicleModel: "F-150",
-          vehicleYear: 2022,
+          make: "ford",
+          model: "f150",
+          year: 2022,
+          mileage: 25000,
           usage: "commercial",
-          annualMileage: 25000,
           coverageLevel: "premium",
           deductible: 500,
           hasAccidents: true,
           accidentCount: 2,
           hasExistingPolicy: true,
-          existingPolicyNumber: "POL-2024-98765",
         }}
         saveData={async (data) => {
           console.log("Save:", data);

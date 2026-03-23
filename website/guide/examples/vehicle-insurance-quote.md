@@ -1,14 +1,15 @@
 # Vehicle Insurance Quote
 
-A vehicle insurance quoting form with coverage selection, driver history, and computed premium.
+A vehicle insurance quoting form with cascading vehicle selection, driver history, and computed premiums.
 
 **Features demonstrated:**
 
-- Component type swapping (Dropdown → RadioGroup) based on coverage category
-- Computed premium estimate using `$fn` value functions and `$values` expressions
-- Conditional driver history fields shown for drivers under 25
-- Cross-field validation between policy start date and vehicle purchase date
-- Hidden fields revealed based on `notIn` and `arrayContains` condition operators
+- 3-level cascading dropdowns: vehicle type (car/truck/motorcycle) drives make options, make drives model options
+- Three computed read-only premium fields via `$fn` value functions (monthly, annual, and coverage summary)
+- High-risk surcharge warning via `and` condition: accidents > 2 AND premium coverage selected
+- Commercial/rideshare usage notice shown via `or` condition with a `DynamicFragment` banner
+- `not` operator for new customer discount banner (shown when `hasExistingPolicy` is false)
+- Optional VIN field with conditional `pattern` validation (only validated when non-empty)
 
 [Try it in the playground](/?example=vehicle-insurance-quote)
 

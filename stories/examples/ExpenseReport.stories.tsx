@@ -64,20 +64,23 @@ export const Prefilled: StoryObj = {
         configName="expenseReport-prefilled"
         formConfig={expenseReportConfig as unknown as IFormConfig}
         defaultValues={{
-          employeeName: "Jordan Lee",
-          employeeId: "EMP-4821",
-          department: "engineering",
           reportTitle: "AWS Summit San Francisco 2026",
-          submissionDate: "2026-03-20",
+          submitter: "Jordan Lee",
+          department: "engineering",
+          currency: "USD",
+          expenseStartDate: "2026-03-17",
+          expenseEndDate: "2026-03-20",
           lineItems: [
-            { category: "travel", description: "Round-trip airfare SFO-NYC", amount: 820 },
-            { category: "accommodation", description: "Hotel (4 nights)", amount: 1480 },
-            { category: "meals", description: "Per diem (5 days)", amount: 275 },
-            { category: "conference", description: "AWS Summit conference ticket", amount: 2499 },
-            { category: "transport", description: "Taxi / rideshare", amount: 145 },
+            { expenseDate: "2026-03-17", expenseType: "travel", description: "Round-trip airfare SFO-NYC", amount: 820 },
+            { expenseDate: "2026-03-17", expenseType: "accommodation", description: "Hotel (4 nights)", amount: 1480 },
+            { expenseDate: "2026-03-18", expenseType: "meals", description: "Per diem (5 days)", amount: 275 },
+            { expenseDate: "2026-03-18", expenseType: "training", description: "AWS Summit conference ticket", amount: 2499 },
+            { expenseDate: "2026-03-19", expenseType: "travel", description: "Taxi / rideshare", amount: 145 },
           ],
+          taxRate: 0,
           justification: "Attendance at AWS Summit to evaluate upcoming cloud migration strategy and attend partner sessions directly relevant to our Q3 roadmap.",
-          managerApproval: "mgr@example.com",
+          approver: "mgr@example.com",
+          agreeToPolicy: true,
         }}
         saveData={async (data) => {
           console.log("Save:", data);

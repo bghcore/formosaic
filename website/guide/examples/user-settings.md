@@ -1,14 +1,14 @@
 # User Settings
 
-A user preferences and account settings form with toggled sections and live validation.
+A user preferences and account settings form with toggled sections.
 
 **Features demonstrated:**
 
-- Section visibility toggled by feature-flag toggles
-- Read-only fields for values managed externally (SSO email)
-- Async validation for username availability
-- Conditional notification preference fields based on channel selection
-- Debounced validation on email and username fields
+- Custom theme selection reveals a ColorPicker for accent color, a Slider for font scale, and a theme preview `DynamicFragment`
+- Email notifications toggle shows/hides a digest frequency dropdown (real-time, daily, weekly, never)
+- Two-factor authentication toggle reveals a 2FA method dropdown (authenticator app, SMS, email)
+- Language selector with five locale options
+- Session timeout and data export format dropdowns for account preferences
 
 [Try it in the playground](/?example=user-settings)
 

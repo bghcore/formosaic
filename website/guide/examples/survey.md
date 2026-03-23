@@ -1,14 +1,14 @@
 # Survey
 
-A multi-page satisfaction survey with conditional branching and rating fields.
+A multi-page product feedback survey with conditional branching and rating fields.
 
 **Features demonstrated:**
 
-- Wizard with condition-based step visibility
-- Follow-up questions shown based on rating scores
-- Rating, slider, and checkbox group field types
-- Optional free-text sections hidden until triggered
-- Field ordering rules to surface relevant questions first
+- 6-step wizard with condition-based step visibility: Pain Points step appears when satisfaction is below 3, Feature Requests step appears when satisfaction is 3 or above
+- `not` operator condition that shows "How did you hear about us?" only for first-time users (when `usedBefore` is false)
+- `arrayContains` rule on the features CheckboxGroup that reveals a template feedback Textarea when "Templates" is selected
+- Rating and Slider field types for satisfaction score and NPS (0-10)
+- Computed read-only progress field via `$fn.computeSurveyProgress()`
 
 [Try it in the playground](/?example=survey)
 
