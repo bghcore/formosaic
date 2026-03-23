@@ -315,37 +315,7 @@ packages/
 e2e/                             -- Playwright E2E tests (54 tests, 7 specs)
 benchmarks/                      -- Performance benchmark suite (vitest bench)
 stories/                         -- Storybook stories (64 stories + MDX docs)
-website/                         -- VitePress docs site (https://bghcore.github.io/formosaic/)
-  guide/
-    getting-started.md           -- Quick start and setup
-    comparison.md                -- Comparison vs RJSF, TanStack Form, Formik, uniforms, etc.
-    migrating.md                 -- Migration guide from @form-eng/* to @formosaic/*
-    rules-engine.md              -- Rules engine architecture and lifecycle
-    condition-operators.md       -- All 20 condition operators reference
-    expression-syntax.md         -- $values, $fn, $parent expression syntax
-    validation.md                -- Built-in and custom validators reference
-    value-functions.md           -- Value function registry reference
-    field-types.md               -- All 27 field types reference
-    field-config.md              -- IFieldConfig v2 property reference
-    analytics.md                 -- Analytics and telemetry integration
-    i18n.md                      -- Internationalization / localization guide
-    ssr.md                       -- SSR / Next.js integration guide
-    debugging-rules.md           -- Rules engine debugging guide
-    performance.md               -- Performance debugging with DevTools
-    accessibility.md             -- WCAG 2.1 AA compliance and ARIA guide
-    date-policy.md               -- ISO 8601 date handling policy
-  adapters/
-    choosing.md                  -- Adapter recommendation guide
-    creating.md                  -- Guide for building custom UI adapters
-    architecture.md              -- Adapter classification and architecture
-    parity-matrix.md             -- Field implementation matrix (Y/FB/---) across all adapters
-    field-contracts.md           -- Canonical field behavior contracts (13 Tier 1 types)
-    divergence-register.md       -- Cross-adapter divergence register (12 entries)
-    shadcn.md                    -- shadcn/ui integration guide
-  api/
-    field-config.md              -- Field config API reference
-    stability.md                 -- Public API stability classification
-docs/                            -- Internal planning docs only
+docs/                            -- MDX docs content (guide, adapters, API reference) — hosted separately via private repo on Vercel
   tier1-baseline-report.md       -- Tier 1 stabilization assessment
   tier1-patterns.md              -- Implementation patterns for Tier 2
   tier2-handoff.md               -- Tier 2 planning (feasibility, waves, go/no-go)
