@@ -1,0 +1,15 @@
+# Support Ticket
+
+A customer support ticket form with cascading dropdowns and conditional escalation.
+
+**Features demonstrated:**
+
+- 3-level cascading dropdowns: product selection drives category options, category drives sub-category options
+- Severity "Outage" auto-sets priority to "Critical" via a `setValue` rule effect
+- Dynamic description label changes to request outage-specific details when severity is "Outage"
+- Escalation contact field appears only when both "blocking" AND "company-wide" toggles are enabled (`and` condition)
+- Autocomplete field for searching related tickets
+
+[Try it in the playground](/?example=support-ticket)
+
+[View in Storybook](https://bghcore.github.io/formosaic/storybook/?path=/story/examples-support-ticket--default)

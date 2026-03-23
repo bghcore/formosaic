@@ -1,0 +1,6 @@
+{
+  "index": { "title": "Home", "type": "page" },
+  "guide": { "title": "Guide" },
+  "adapters": { "title": "Adapters" },
+  "api": { "title": "API" }
+}
