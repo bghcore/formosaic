@@ -137,6 +137,18 @@ async function loadAdapter(name: string): Promise<AdapterResult> {
       const m = await import("@formosaic/react-aria");
       return { createRegistry: m.createReactAriaFieldRegistry };
     }
+    case "base-web": {
+      const m = await import("@formosaic/base-web");
+      return { createRegistry: m.createBaseWebFieldRegistry };
+    }
+    case "heroui": {
+      const m = await import("@formosaic/heroui");
+      return { createRegistry: m.createHeroUIFieldRegistry };
+    }
+    case "atlaskit": {
+      const m = await import("@formosaic/atlaskit");
+      return { createRegistry: m.createAtlaskitFieldRegistry };
+    }
     default: {
       const m = await import("@formosaic/headless");
       return { createRegistry: m.createHeadlessFieldRegistry };

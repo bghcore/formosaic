@@ -22,6 +22,9 @@
         <option value="chakra">Chakra UI</option>
         <option value="radix">Radix</option>
         <option value="react-aria">React Aria</option>
+        <option value="base-web">Base Web</option>
+        <option value="heroui">HeroUI</option>
+        <option value="atlaskit">Atlaskit</option>
       </select>
       <button class="playground-reset" @click="resetToPreset" title="Reset to preset">
         ↺ Reset
