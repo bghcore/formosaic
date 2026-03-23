@@ -80,6 +80,20 @@ export default defineConfig({
           ]
         },
         {
+          text: 'Examples',
+          items: [
+            { text: 'Live Playground', link: '/#try-it-live' },
+            { text: 'Patient Intake', link: '/guide/examples/patient-intake' },
+            { text: 'Job Application', link: '/guide/examples/job-application' },
+            { text: 'Support Ticket', link: '/guide/examples/support-ticket' },
+            { text: 'Expense Report', link: '/guide/examples/expense-report' },
+            { text: 'Event Registration', link: '/guide/examples/event-registration' },
+            { text: 'User Settings', link: '/guide/examples/user-settings' },
+            { text: 'Survey', link: '/guide/examples/survey' },
+            { text: 'Vehicle Insurance Quote', link: '/guide/examples/vehicle-insurance-quote' },
+          ]
+        },
+        {
           text: 'Features',
           items: [
             { text: 'Field Types', link: '/guide/field-types' },
