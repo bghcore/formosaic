@@ -13,11 +13,15 @@
           </option>
         </optgroup>
       </select>
-      <!-- Only Headless is available in the playground. Additional adapters
-           (Fluent, MUI, Ant Design, etc.) require adding them as website
-           dependencies and configuring Vite aliases in config.ts. -->
       <select v-model="selectedAdapter" class="playground-select">
         <option value="headless">Headless</option>
+        <option value="fluent">Fluent UI</option>
+        <option value="mui">Material UI</option>
+        <option value="antd">Ant Design</option>
+        <option value="mantine">Mantine</option>
+        <option value="chakra">Chakra UI</option>
+        <option value="radix">Radix</option>
+        <option value="react-aria">React Aria</option>
       </select>
       <button class="playground-reset" @click="resetToPreset" title="Reset to preset">
         ↺ Reset
@@ -32,7 +36,7 @@
       <div class="playground-form">
         <div v-if="jsonError" class="playground-error">{{ jsonError }}</div>
         <div v-if="adapterError" class="playground-error adapter-error">{{ adapterError }}</div>
-        <FormRenderer :config="parsedConfig" :adapter="selectedAdapter" @adapter-error="onAdapterError" />
+        <FormRenderer :config="parsedConfig" :adapter="selectedAdapter" :config-name="playgroundConfigName" @adapter-error="onAdapterError" />
       </div>
     </div>
 
@@ -52,7 +56,7 @@
       <div v-show="mobileTab === 'form'" class="playground-form">
         <div v-if="jsonError" class="playground-error">{{ jsonError }}</div>
         <div v-if="adapterError" class="playground-error adapter-error">{{ adapterError }}</div>
-        <FormRenderer :config="parsedConfig" :adapter="selectedAdapter" @adapter-error="onAdapterError" />
+        <FormRenderer :config="parsedConfig" :adapter="selectedAdapter" :config-name="playgroundConfigName" @adapter-error="onAdapterError" />
       </div>
     </div>
   </div>
@@ -134,6 +138,9 @@ const adapterError = ref<string | null>(null);
 const mobileTab = ref<"editor" | "form">("form");
 const isMobile = ref(false);
 
+const renderKey = ref(0);
+const playgroundConfigName = computed(() => `playground-${selectedPreset.value}-${renderKey.value}`);
+
 let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 const parsedConfig = ref<Record<string, unknown> | null>(
   presets[selectedPreset.value].config as Record<string, unknown>
@@ -145,6 +152,7 @@ function onPresetChange() {
     editorContent.value = JSON.stringify(preset.config, null, 2);
     parsedConfig.value = preset.config as Record<string, unknown>;
     jsonError.value = null;
+    renderKey.value++;
   }
 }
 
@@ -168,6 +176,7 @@ function onJsonValid() {
   debounceTimer = setTimeout(() => {
     try {
       parsedConfig.value = JSON.parse(editorContent.value);
+      renderKey.value++;
     } catch {
       // Ignore — error handler will catch it
     }

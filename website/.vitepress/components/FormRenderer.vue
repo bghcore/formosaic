@@ -8,6 +8,7 @@ import { ref, onMounted, onUnmounted, watch } from "vue";
 const props = defineProps<{
   config: Record<string, unknown> | null;
   adapter: string;
+  configName: string;
 }>();
 
 const emit = defineEmits<{
@@ -39,9 +40,14 @@ async function renderForm() {
     registry = createHeadlessFieldRegistry();
   }
 
-  if (!reactRoot) {
-    reactRoot = createRoot(formRoot.value);
+  // Unmount and recreate the React root on each render to force a clean
+  // RulesEngineProvider + Formosaic re-initialization with the new config.
+  // Reusing the same root with a new formConfig but same configName causes
+  // stale rules engine state.
+  if (reactRoot) {
+    (reactRoot as { unmount: () => void }).unmount();
   }
+  reactRoot = createRoot(formRoot.value);
 
   (reactRoot as { render: (el: unknown) => void }).render(
     React.createElement(
@@ -51,7 +57,7 @@ async function renderForm() {
         InjectedFieldProvider,
         { injectedFields: registry },
         React.createElement(Formosaic, {
-          configName: "playground",
+          configName: props.configName,
           formConfig: props.config,
           defaultValues: {},
           isManualSave: true,
