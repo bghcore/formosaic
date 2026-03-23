@@ -1,0 +1,233 @@
+{
+  "version": 2,
+  "fields": {
+    "ageRange": {
+      "type": "RadioGroup",
+      "label": "Age Range",
+      "required": true,
+      "options": [
+        { "value": "18-24", "label": "18-24" },
+        { "value": "25-34", "label": "25-34" },
+        { "value": "35-44", "label": "35-44" },
+        { "value": "45-54", "label": "45-54" },
+        { "value": "55+", "label": "55+" }
+      ]
+    },
+    "role": {
+      "type": "RadioGroup",
+      "label": "Your Role",
+      "required": true,
+      "options": [
+        { "value": "developer", "label": "Developer" },
+        { "value": "designer", "label": "Designer" },
+        { "value": "pm", "label": "Product Manager" },
+        { "value": "manager", "label": "Engineering Manager" },
+        { "value": "other", "label": "Other" }
+      ]
+    },
+    "industry": {
+      "type": "Dropdown",
+      "label": "Industry",
+      "required": true,
+      "options": [
+        { "value": "tech", "label": "Technology" },
+        { "value": "finance", "label": "Finance" },
+        { "value": "healthcare", "label": "Healthcare" },
+        { "value": "education", "label": "Education" },
+        { "value": "retail", "label": "Retail" },
+        { "value": "other", "label": "Other" }
+      ]
+    },
+    "usedBefore": {
+      "type": "Toggle",
+      "label": "Have you used this product before?",
+      "defaultValue": false,
+      "rules": [
+        {
+          "id": "first-time-user",
+          "when": {
+            "operator": "not",
+            "conditions": [
+              { "field": "usedBefore", "operator": "equals", "value": true }
+            ]
+          },
+          "then": {
+            "fields": {
+              "howDidYouHear": { "hidden": false, "required": true }
+            }
+          },
+          "else": {
+            "fields": {
+              "howDidYouHear": { "hidden": true, "required": false }
+            }
+          }
+        }
+      ]
+    },
+    "howDidYouHear": {
+      "type": "Dropdown",
+      "label": "How did you hear about us?",
+      "hidden": true,
+      "options": [
+        { "value": "search", "label": "Search Engine" },
+        { "value": "social", "label": "Social Media" },
+        { "value": "referral", "label": "Friend/Colleague" },
+        { "value": "blog", "label": "Blog/Article" },
+        { "value": "conference", "label": "Conference/Event" },
+        { "value": "other", "label": "Other" }
+      ]
+    },
+    "usageFrequency": {
+      "type": "RadioGroup",
+      "label": "How often do you use the product?",
+      "options": [
+        { "value": "daily", "label": "Daily" },
+        { "value": "weekly", "label": "A few times a week" },
+        { "value": "monthly", "label": "A few times a month" },
+        { "value": "rarely", "label": "Rarely" }
+      ]
+    },
+    "featuresUsed": {
+      "type": "CheckboxGroup",
+      "label": "Which features do you use?",
+      "options": [
+        { "value": "rules_engine", "label": "Rules Engine" },
+        { "value": "wizard", "label": "Wizard Forms" },
+        { "value": "field_arrays", "label": "Field Arrays" },
+        { "value": "templates", "label": "Templates & Composition" },
+        { "value": "validation", "label": "Custom Validation" },
+        { "value": "computed", "label": "Computed Values" },
+        { "value": "devtools", "label": "DevTools" }
+      ],
+      "rules": [
+        {
+          "id": "templates-followup",
+          "when": { "field": "featuresUsed", "operator": "arrayContains", "value": "templates" },
+          "then": { "fields": { "templateFeedback": { "hidden": false } } },
+          "else": { "fields": { "templateFeedback": { "hidden": true } } }
+        }
+      ]
+    },
+    "templateFeedback": {
+      "type": "Textarea",
+      "label": "How has the template system worked for your use case?",
+      "hidden": true
+    },
+    "satisfaction": {
+      "type": "Rating",
+      "label": "Overall Satisfaction",
+      "required": true,
+      "defaultValue": 3,
+      "rules": [
+        {
+          "id": "low-satisfaction-branch",
+          "when": { "field": "satisfaction", "operator": "lessThan", "value": 3 },
+          "then": {
+            "fields": {
+              "painPoints": { "hidden": false, "required": true },
+              "featureRequests": { "hidden": true, "required": false }
+            }
+          },
+          "else": {
+            "fields": {
+              "painPoints": { "hidden": true, "required": false },
+              "featureRequests": { "hidden": false }
+            }
+          }
+        }
+      ]
+    },
+    "npsScore": {
+      "type": "Slider",
+      "label": "How likely are you to recommend us? (0-10)",
+      "defaultValue": 7,
+      "config": { "min": 0, "max": 10, "step": 1 }
+    },
+    "painPoints": {
+      "type": "CheckboxGroup",
+      "label": "What are your biggest pain points?",
+      "hidden": true,
+      "options": [
+        { "value": "complexity", "label": "Too complex to configure" },
+        { "value": "docs", "label": "Documentation is unclear" },
+        { "value": "performance", "label": "Performance issues" },
+        { "value": "bugs", "label": "Frequent bugs" },
+        { "value": "missing_features", "label": "Missing features" },
+        { "value": "migration", "label": "Difficult to migrate to" }
+      ]
+    },
+    "featureRequests": {
+      "type": "Textarea",
+      "label": "What features would you most like to see?",
+      "hidden": true,
+      "placeholder": "Tell us what you'd like us to build next..."
+    },
+    "openFeedback": {
+      "type": "Textarea",
+      "label": "Any other feedback?",
+      "placeholder": "Share anything else on your mind..."
+    },
+    "surveyProgress": {
+      "type": "ReadOnly",
+      "label": "Survey Progress",
+      "readOnly": true,
+      "computedValue": "$fn.computeSurveyProgress()"
+    }
+  },
+  "fieldOrder": [
+    "ageRange", "role", "industry",
+    "usedBefore", "howDidYouHear",
+    "usageFrequency", "featuresUsed", "templateFeedback",
+    "satisfaction", "npsScore",
+    "painPoints", "featureRequests",
+    "openFeedback",
+    "surveyProgress"
+  ],
+  "wizard": {
+    "steps": [
+      {
+        "id": "demographics",
+        "title": "About You",
+        "description": "Tell us a bit about yourself",
+        "fields": ["ageRange", "role", "industry", "usedBefore", "howDidYouHear"]
+      },
+      {
+        "id": "usage",
+        "title": "Product Usage",
+        "description": "How you use the product",
+        "fields": ["usageFrequency", "featuresUsed", "templateFeedback"]
+      },
+      {
+        "id": "satisfaction",
+        "title": "Satisfaction",
+        "description": "Rate your experience",
+        "fields": ["satisfaction", "npsScore"]
+      },
+      {
+        "id": "pain-points",
+        "title": "Pain Points",
+        "description": "Help us understand what's not working",
+        "fields": ["painPoints"],
+        "visibleWhen": { "field": "satisfaction", "operator": "lessThan", "value": 3 }
+      },
+      {
+        "id": "feature-requests",
+        "title": "Feature Requests",
+        "description": "Tell us what you'd like to see",
+        "fields": ["featureRequests"],
+        "visibleWhen": { "field": "satisfaction", "operator": "greaterThanOrEqual", "value": 3 }
+      },
+      {
+        "id": "final",
+        "title": "Final Thoughts",
+        "description": "Anything else?",
+        "fields": ["openFeedback", "surveyProgress"]
+      }
+    ],
+    "linearNavigation": true,
+    "validateOnStepChange": true
+  },
+  "settings": {
+    "manualSave": true
+  }
+}
