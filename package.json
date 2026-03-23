@@ -27,9 +27,7 @@
     "bench:report": "npx tsx benchmarks/run.ts",
     "test:e2e": "playwright test --config=e2e/playwright.config.ts",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "docs:dev": "npm run dev --workspace=website",
-    "docs:build": "npm run build --workspace=website"
+    "build-storybook": "storybook build"
   },
   "devDependencies": {
     "@fluentui/react-components": "^9.73.2",
