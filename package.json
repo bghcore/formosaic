@@ -2,8 +2,7 @@
   "name": "formosaic",
   "private": true,
   "workspaces": [
-    "packages/*",
-    "website"
+    "packages/*"
   ],
   "scripts": {
     "build": "npm run build:core && npm run build --workspace=packages/fluent --workspace=packages/mui --workspace=packages/headless --workspace=packages/antd --workspace=packages/chakra --workspace=packages/mantine --workspace=packages/atlaskit --workspace=packages/base-web --workspace=packages/heroui --workspace=packages/radix --workspace=packages/react-aria && npm run build --workspace=packages/examples",
