@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import react from '@vitejs/plugin-react'
 
 const siteBase = 'https://bghcore.github.io/formosaic'
 const siteUrl = 'https://bghcore.github.io'
@@ -6,6 +7,15 @@ const ogDescription = 'Define forms as JSON with a declarative rules engine. 11 
 const ogImage = `${siteBase}/formosaic-brand.png`
 
 export default defineConfig({
+  vite: {
+    plugins: [react()],
+    resolve: {
+      alias: {
+        '@formosaic/core': '../packages/core/src',
+        '@formosaic/headless': '../packages/headless/src',
+      },
+    },
+  },
   title: 'Formosaic',
   description: 'Configuration-driven forms with a built-in rules engine',
   base: '/formosaic/',
