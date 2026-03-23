@@ -18,6 +18,11 @@ const emit = defineEmits<{
 const formRoot = ref<HTMLElement>();
 let reactRoot: unknown = null;
 
+interface AdapterResult {
+  createRegistry: () => Record<string, unknown>;
+  wrapWithProvider?: (React: typeof import("react"), children: unknown) => unknown;
+}
+
 async function renderForm() {
   if (!formRoot.value || !props.config) return;
 
@@ -29,50 +34,55 @@ async function renderForm() {
     InjectedFieldProvider,
   } = await import("@formosaic/core");
 
-  let registry: Record<string, JSX.Element>;
+  let adapterResult: AdapterResult;
   try {
-    const adapterModule = await loadAdapter(props.adapter);
-    registry = adapterModule.createRegistry();
+    adapterResult = await loadAdapter(props.adapter);
   } catch (err) {
     console.error(`Failed to load adapter "${props.adapter}":`, err);
     emit("adapterError", `Failed to load ${props.adapter} adapter. Falling back to Headless.`);
     const { createHeadlessFieldRegistry } = await import("@formosaic/headless");
-    registry = createHeadlessFieldRegistry();
+    adapterResult = { createRegistry: createHeadlessFieldRegistry };
   }
+
+  const registry = adapterResult.createRegistry();
 
   // Unmount and recreate the React root on each render to force a clean
   // RulesEngineProvider + Formosaic re-initialization with the new config.
-  // Reusing the same root with a new formConfig but same configName causes
-  // stale rules engine state.
   if (reactRoot) {
     (reactRoot as { unmount: () => void }).unmount();
   }
   reactRoot = createRoot(formRoot.value);
 
-  (reactRoot as { render: (el: unknown) => void }).render(
+  // Build the core form tree: RulesEngineProvider > InjectedFieldProvider > Formosaic
+  const formTree = React.createElement(
+    RulesEngineProvider,
+    null,
     React.createElement(
-      RulesEngineProvider,
-      null,
-      React.createElement(
-        InjectedFieldProvider,
-        { injectedFields: registry },
-        React.createElement(Formosaic, {
-          configName: props.configName,
-          formConfig: props.config,
-          defaultValues: {},
-          isManualSave: true,
-          isCreate: true,
-          saveData: async (data: unknown) => {
-            console.log("Playground form data:", data);
-            return data;
-          },
-        })
-      )
+      InjectedFieldProvider,
+      { injectedFields: registry },
+      React.createElement(Formosaic, {
+        configName: props.configName,
+        formConfig: props.config,
+        defaultValues: {},
+        isManualSave: true,
+        isCreate: true,
+        saveData: async (data: unknown) => {
+          console.log("Playground form data:", data);
+          return data;
+        },
+      })
     )
   );
+
+  // Wrap with adapter-specific provider if needed (e.g., FluentProvider, MantineProvider)
+  const finalTree = adapterResult.wrapWithProvider
+    ? adapterResult.wrapWithProvider(React, formTree)
+    : formTree;
+
+  (reactRoot as { render: (el: unknown) => void }).render(finalTree);
 }
 
-async function loadAdapter(name: string) {
+async function loadAdapter(name: string): Promise<AdapterResult> {
   switch (name) {
     case "headless": {
       const m = await import("@formosaic/headless");
@@ -80,11 +90,22 @@ async function loadAdapter(name: string) {
     }
     case "fluent": {
       const m = await import("@formosaic/fluent");
-      return { createRegistry: m.createFluentFieldRegistry };
+      const fluentUI = await import("@fluentui/react-components");
+      return {
+        createRegistry: m.createFluentFieldRegistry,
+        wrapWithProvider: (React, children) =>
+          React.createElement(fluentUI.FluentProvider, { theme: fluentUI.webLightTheme }, children),
+      };
     }
     case "mui": {
       const m = await import("@formosaic/mui");
-      return { createRegistry: m.createMuiFieldRegistry };
+      const mui = await import("@mui/material");
+      const theme = mui.createTheme({ palette: { mode: "light" } });
+      return {
+        createRegistry: m.createMuiFieldRegistry,
+        wrapWithProvider: (React, children) =>
+          React.createElement(mui.ThemeProvider, { theme }, children),
+      };
     }
     case "antd": {
       const m = await import("@formosaic/antd");
@@ -92,11 +113,21 @@ async function loadAdapter(name: string) {
     }
     case "mantine": {
       const m = await import("@formosaic/mantine");
-      return { createRegistry: m.createMantineFieldRegistry };
+      const mantineCore = await import("@mantine/core");
+      return {
+        createRegistry: m.createMantineFieldRegistry,
+        wrapWithProvider: (React, children) =>
+          React.createElement(mantineCore.MantineProvider, { forceColorScheme: "light" as const }, children),
+      };
     }
     case "chakra": {
       const m = await import("@formosaic/chakra");
-      return { createRegistry: m.createChakraFieldRegistry };
+      const chakraUI = await import("@chakra-ui/react");
+      return {
+        createRegistry: m.createChakraFieldRegistry,
+        wrapWithProvider: (React, children) =>
+          React.createElement(chakraUI.ChakraProvider, { value: chakraUI.defaultSystem }, children),
+      };
     }
     case "radix": {
       const m = await import("@formosaic/radix");
@@ -111,9 +142,6 @@ async function loadAdapter(name: string) {
       return { createRegistry: m.createHeadlessFieldRegistry };
     }
   }
-  // NOTE: Adapter registry function names (createFluentFieldRegistry, createMuiFieldRegistry, etc.)
-  // should be verified against each adapter's index.ts exports. The Vite config in config.ts
-  // must add resolve aliases for all adapter packages used here.
 }
 
 onMounted(() => {
