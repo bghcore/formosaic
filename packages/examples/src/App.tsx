@@ -15,6 +15,9 @@ import "@formosaic/core/styles.css";
 import { LoginMfaExample } from "./login-mfa/LoginMfaExample";
 import { CheckoutExample } from "./checkout/CheckoutExample";
 import { DataEntryExample } from "./data-entry/DataEntryExample";
+import { PatientIntakeApp } from "./patient-intake/PatientIntakeApp";
+import { JobApplicationApp } from "./job-application/JobApplicationApp";
+import { ExpenseReportApp } from "./expense-report/ExpenseReportApp";
 
 const theme = createTheme({
   palette: {
@@ -23,12 +26,15 @@ const theme = createTheme({
   },
 });
 
-type ExampleKey = "login-mfa" | "checkout" | "data-entry";
+type ExampleKey = "login-mfa" | "checkout" | "data-entry" | "patient-intake" | "job-application" | "expense-report";
 
 const examples: Record<ExampleKey, { label: string; component: React.FC }> = {
   "login-mfa": { label: "Login + MFA", component: LoginMfaExample },
   checkout: { label: "E-Commerce Checkout", component: CheckoutExample },
   "data-entry": { label: "Data Entry", component: DataEntryExample },
+  "patient-intake": { label: "Patient Intake", component: PatientIntakeApp },
+  "job-application": { label: "Job Application", component: JobApplicationApp },
+  "expense-report": { label: "Expense Report", component: ExpenseReportApp },
 };
 
 export const App: React.FC = () => {
