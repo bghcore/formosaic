@@ -17,10 +17,38 @@ const emit = defineEmits<{
 
 const formRoot = ref<HTMLElement>();
 let reactRoot: unknown = null;
+const loadedStylesheets = new Set<string>();
 
 interface AdapterResult {
   createRegistry: () => Record<string, unknown>;
   wrapWithProvider?: (React: typeof import("react"), children: unknown) => unknown;
+  stylesheets?: string[];
+}
+
+/**
+ * Dynamically inject a CSS stylesheet into the document head.
+ * Uses a data attribute to track which sheets are already loaded.
+ */
+function loadStylesheet(href: string): void {
+  if (loadedStylesheets.has(href)) return;
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = href;
+  link.dataset.playgroundAdapter = "true";
+  document.head.appendChild(link);
+  loadedStylesheets.add(href);
+}
+
+/**
+ * Dynamically inject a CSS module's content (from a JS import that resolves CSS).
+ * For bundled CSS-in-JS that exports a string or side-effect import.
+ */
+async function loadCssModule(importFn: () => Promise<unknown>): Promise<void> {
+  try {
+    await importFn();
+  } catch (err) {
+    console.warn("Failed to load adapter CSS module:", err);
+  }
 }
 
 async function renderForm() {
@@ -100,11 +128,12 @@ async function loadAdapter(name: string): Promise<AdapterResult> {
     case "mui": {
       const m = await import("@formosaic/mui");
       const mui = await import("@mui/material");
-      const theme = mui.createTheme({ palette: { mode: "light" } });
+      const muiStyles = await import("@mui/material/styles");
+      const theme = muiStyles.createTheme({ palette: { mode: "light" } });
       return {
         createRegistry: m.createMuiFieldRegistry,
         wrapWithProvider: (React, children) =>
-          React.createElement(mui.ThemeProvider, { theme }, children),
+          React.createElement(muiStyles.ThemeProvider, { theme }, children),
       };
     }
     case "antd": {
@@ -114,6 +143,8 @@ async function loadAdapter(name: string): Promise<AdapterResult> {
     case "mantine": {
       const m = await import("@formosaic/mantine");
       const mantineCore = await import("@mantine/core");
+      // Mantine requires its static CSS — load it dynamically
+      await loadCssModule(() => import("@mantine/core/styles.css"));
       return {
         createRegistry: m.createMantineFieldRegistry,
         wrapWithProvider: (React, children) =>
