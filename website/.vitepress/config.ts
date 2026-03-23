@@ -1,5 +1,4 @@
 import { defineConfig } from 'vitepress'
-import react from '@vitejs/plugin-react'
 
 const siteBase = 'https://bghcore.github.io/formosaic'
 const siteUrl = 'https://bghcore.github.io'
@@ -8,13 +7,9 @@ const ogImage = `${siteBase}/formosaic-brand.png`
 
 export default defineConfig({
   vite: {
-    plugins: [react()],
-    resolve: {
-      alias: {
-        '@formosaic/core': '../packages/core/src',
-        '@formosaic/headless': '../packages/headless/src',
-      },
-    },
+    // No @vitejs/plugin-react needed — playground Vue components use React.createElement (no JSX)
+    // No resolve aliases needed — @formosaic/* packages are resolved from the monorepo
+    // workspace via node_modules. Ensure packages are built (npm run build) before docs:build.
   },
   title: 'Formosaic',
   description: 'Configuration-driven forms with a built-in rules engine',
