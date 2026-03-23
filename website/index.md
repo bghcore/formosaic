@@ -34,3 +34,9 @@ features:
     title: Production-Ready
     details: Auto-save with retry, draft persistence, error boundaries, SSR/Next.js support, i18n, analytics hooks.
 ---
+
+## Try It Live
+
+<ClientOnly>
+  <LivePlayground />
+</ClientOnly>

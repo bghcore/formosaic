@@ -1,0 +1,15 @@
+# Survey
+
+A multi-page product feedback survey with conditional branching and rating fields.
+
+**Features demonstrated:**
+
+- 6-step wizard with condition-based step visibility: Pain Points step appears when satisfaction is below 3, Feature Requests step appears when satisfaction is 3 or above
+- `not` operator condition that shows "How did you hear about us?" only for first-time users (when `usedBefore` is false)
+- `arrayContains` rule on the features CheckboxGroup that reveals a template feedback Textarea when "Templates" is selected
+- Rating and Slider field types for satisfaction score and NPS (0-10)
+- Computed read-only progress field via `$fn.computeSurveyProgress()`
+
+[Try it in the playground](/?example=survey)
+
+[View in Storybook](https://bghcore.github.io/formosaic/storybook/?path=/story/examples-survey--default)

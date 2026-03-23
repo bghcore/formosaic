@@ -1,0 +1,228 @@
+{
+  "version": 2,
+  "fields": {
+    "firstName": {
+      "type": "Textbox",
+      "label": "First Name",
+      "required": true
+    },
+    "lastName": {
+      "type": "Textbox",
+      "label": "Last Name",
+      "required": true
+    },
+    "email": {
+      "type": "Textbox",
+      "label": "Email Address",
+      "required": true,
+      "validate": [
+        {
+          "name": "email",
+          "message": "Please enter a valid email address"
+        }
+      ]
+    },
+    "ticketType": {
+      "type": "Dropdown",
+      "label": "Ticket Type",
+      "required": true,
+      "defaultValue": "standard",
+      "options": [
+        { "value": "standard", "label": "Standard — $99" },
+        { "value": "vip", "label": "VIP — $299" },
+        { "value": "student", "label": "Student — $49 (ID required)" }
+      ],
+      "rules": [
+        {
+          "id": "vip-sets-sections-readonly",
+          "when": { "field": "ticketType", "operator": "equals", "value": "vip" },
+          "then": {
+            "fields": {
+              "workshops": { "readOnly": true },
+              "workshopsNote": { "hidden": false }
+            }
+          },
+          "else": {
+            "fields": {
+              "workshops": { "readOnly": false },
+              "workshopsNote": { "hidden": true }
+            }
+          }
+        }
+      ]
+    },
+    "guestCount": {
+      "type": "Number",
+      "label": "Additional Guests",
+      "defaultValue": 0,
+      "validate": [
+        {
+          "name": "numericRange",
+          "params": { "min": 0, "max": 5 },
+          "message": "You may bring up to 5 additional guests"
+        }
+      ]
+    },
+    "workshops": {
+      "type": "CheckboxGroup",
+      "label": "Workshop Sessions (select all that apply)",
+      "options": [
+        { "value": "keynote_breakfast", "label": "Keynote Breakfast — $25" },
+        { "value": "deep_dive_ai", "label": "Deep Dive: AI & Automation — $75" },
+        { "value": "hands_on_lab", "label": "Hands-On Lab — $50" },
+        { "value": "networking_lunch", "label": "Networking Lunch — $35" },
+        { "value": "panel_discussion", "label": "Panel Discussion (free)" }
+      ]
+    },
+    "workshopsNote": {
+      "type": "DynamicFragment",
+      "label": "",
+      "hidden": true,
+      "config": {
+        "html": "<div style='padding: 10px 14px; background: #e8f4fd; border: 1px solid #90caf9; border-radius: 4px; color: #1565c0;'><strong>VIP tickets include all workshop sessions.</strong> Your selections above are pre-confirmed and cannot be changed.</div>"
+      }
+    },
+    "totalPrice": {
+      "type": "ReadOnly",
+      "label": "Total Price",
+      "readOnly": true,
+      "computedValue": "$fn.computeEventTotal()"
+    },
+    "hasDietaryRequirements": {
+      "type": "Toggle",
+      "label": "I have dietary requirements",
+      "defaultValue": false,
+      "rules": [
+        {
+          "id": "show-dietary",
+          "when": { "field": "hasDietaryRequirements", "operator": "equals", "value": true },
+          "then": {
+            "fields": {
+              "dietaryRestrictions": { "hidden": false },
+              "dietaryNotes": { "hidden": false }
+            }
+          },
+          "else": {
+            "fields": {
+              "dietaryRestrictions": { "hidden": true },
+              "dietaryNotes": { "hidden": true }
+            }
+          }
+        }
+      ]
+    },
+    "dietaryRestrictions": {
+      "type": "CheckboxGroup",
+      "label": "Dietary Restrictions",
+      "hidden": true,
+      "options": [
+        { "value": "vegetarian", "label": "Vegetarian" },
+        { "value": "vegan", "label": "Vegan" },
+        { "value": "gluten_free", "label": "Gluten-Free" },
+        { "value": "dairy_free", "label": "Dairy-Free" },
+        { "value": "nut_allergy", "label": "Nut Allergy (severe)" },
+        { "value": "halal", "label": "Halal" },
+        { "value": "kosher", "label": "Kosher" }
+      ]
+    },
+    "dietaryNotes": {
+      "type": "Textarea",
+      "label": "Additional Dietary Notes",
+      "hidden": true,
+      "placeholder": "Please describe any other dietary needs or allergies..."
+    },
+    "hasAccessibilityNeeds": {
+      "type": "Toggle",
+      "label": "I require accessibility accommodations",
+      "defaultValue": false,
+      "rules": [
+        {
+          "id": "show-accessibility",
+          "when": { "field": "hasAccessibilityNeeds", "operator": "equals", "value": true },
+          "then": {
+            "fields": {
+              "accessibilityNeeds": { "hidden": false, "required": true }
+            }
+          },
+          "else": {
+            "fields": {
+              "accessibilityNeeds": { "hidden": true, "required": false }
+            }
+          }
+        }
+      ]
+    },
+    "accessibilityNeeds": {
+      "type": "Textarea",
+      "label": "Accessibility Requirements",
+      "hidden": true,
+      "placeholder": "e.g., wheelchair access, sign language interpreter, large print materials..."
+    },
+    "useBillingAddress": {
+      "type": "Toggle",
+      "label": "Provide separate billing address",
+      "defaultValue": false,
+      "rules": [
+        {
+          "id": "show-billing",
+          "when": { "field": "useBillingAddress", "operator": "equals", "value": true },
+          "then": {
+            "fields": {
+              "billingAddress": { "hidden": false, "required": true },
+              "billingCity": { "hidden": false, "required": true },
+              "billingZip": { "hidden": false, "required": true }
+            }
+          },
+          "else": {
+            "fields": {
+              "billingAddress": { "hidden": true, "required": false },
+              "billingCity": { "hidden": true, "required": false },
+              "billingZip": { "hidden": true, "required": false }
+            }
+          }
+        }
+      ]
+    },
+    "billingAddress": {
+      "type": "Textbox",
+      "label": "Billing Street Address",
+      "hidden": true
+    },
+    "billingCity": {
+      "type": "Textbox",
+      "label": "Billing City",
+      "hidden": true
+    },
+    "billingZip": {
+      "type": "Textbox",
+      "label": "Billing ZIP / Postal Code",
+      "hidden": true,
+      "validate": [
+        {
+          "name": "pattern",
+          "params": { "pattern": "^[0-9A-Za-z\\s\\-]{3,10}$" },
+          "message": "Please enter a valid ZIP or postal code"
+        }
+      ]
+    },
+    "agreeToTerms": {
+      "type": "Toggle",
+      "label": "I agree to the event terms and conditions and cancellation policy",
+      "required": true,
+      "defaultValue": false
+    }
+  },
+  "fieldOrder": [
+    "firstName", "lastName", "email",
+    "ticketType", "guestCount",
+    "workshops", "workshopsNote",
+    "totalPrice",
+    "hasDietaryRequirements", "dietaryRestrictions", "dietaryNotes",
+    "hasAccessibilityNeeds", "accessibilityNeeds",
+    "useBillingAddress", "billingAddress", "billingCity", "billingZip",
+    "agreeToTerms"
+  ],
+  "settings": {
+    "manualSave": true
+  }
+}

@@ -1,0 +1,382 @@
+{
+  "version": 2,
+  "fields": {
+    "vehicleType": {
+      "type": "RadioGroup",
+      "label": "Vehicle Type",
+      "required": true,
+      "options": [
+        { "value": "car", "label": "Car" },
+        { "value": "truck", "label": "Truck/SUV" },
+        { "value": "motorcycle", "label": "Motorcycle" }
+      ],
+      "rules": [
+        {
+          "id": "car-makes",
+          "when": { "field": "vehicleType", "operator": "equals", "value": "car" },
+          "then": {
+            "fields": {
+              "make": {
+                "options": [
+                  { "value": "toyota", "label": "Toyota" },
+                  { "value": "honda", "label": "Honda" },
+                  { "value": "ford", "label": "Ford" },
+                  { "value": "chevrolet", "label": "Chevrolet" },
+                  { "value": "bmw", "label": "BMW" },
+                  { "value": "tesla", "label": "Tesla" }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "truck-makes",
+          "when": { "field": "vehicleType", "operator": "equals", "value": "truck" },
+          "then": {
+            "fields": {
+              "make": {
+                "options": [
+                  { "value": "ford", "label": "Ford" },
+                  { "value": "chevrolet", "label": "Chevrolet" },
+                  { "value": "ram", "label": "RAM" },
+                  { "value": "toyota", "label": "Toyota" },
+                  { "value": "gmc", "label": "GMC" },
+                  { "value": "jeep", "label": "Jeep" }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "motorcycle-makes",
+          "when": { "field": "vehicleType", "operator": "equals", "value": "motorcycle" },
+          "then": {
+            "fields": {
+              "make": {
+                "options": [
+                  { "value": "harley", "label": "Harley-Davidson" },
+                  { "value": "honda", "label": "Honda" },
+                  { "value": "yamaha", "label": "Yamaha" },
+                  { "value": "kawasaki", "label": "Kawasaki" },
+                  { "value": "bmw", "label": "BMW" },
+                  { "value": "ducati", "label": "Ducati" }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "make": {
+      "type": "Dropdown",
+      "label": "Make",
+      "required": true,
+      "options": [],
+      "rules": [
+        {
+          "id": "toyota-models",
+          "when": { "field": "make", "operator": "equals", "value": "toyota" },
+          "then": {
+            "fields": {
+              "model": {
+                "options": [
+                  { "value": "camry", "label": "Camry" },
+                  { "value": "corolla", "label": "Corolla" },
+                  { "value": "rav4", "label": "RAV4" },
+                  { "value": "highlander", "label": "Highlander" },
+                  { "value": "tacoma", "label": "Tacoma" }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "honda-models",
+          "when": { "field": "make", "operator": "equals", "value": "honda" },
+          "then": {
+            "fields": {
+              "model": {
+                "options": [
+                  { "value": "civic", "label": "Civic" },
+                  { "value": "accord", "label": "Accord" },
+                  { "value": "crv", "label": "CR-V" },
+                  { "value": "pilot", "label": "Pilot" },
+                  { "value": "cbr", "label": "CBR (Motorcycle)" }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "ford-models",
+          "when": { "field": "make", "operator": "equals", "value": "ford" },
+          "then": {
+            "fields": {
+              "model": {
+                "options": [
+                  { "value": "f150", "label": "F-150" },
+                  { "value": "mustang", "label": "Mustang" },
+                  { "value": "escape", "label": "Escape" },
+                  { "value": "explorer", "label": "Explorer" },
+                  { "value": "bronco", "label": "Bronco" }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "tesla-models",
+          "when": { "field": "make", "operator": "equals", "value": "tesla" },
+          "then": {
+            "fields": {
+              "model": {
+                "options": [
+                  { "value": "model3", "label": "Model 3" },
+                  { "value": "modely", "label": "Model Y" },
+                  { "value": "models", "label": "Model S" },
+                  { "value": "modelx", "label": "Model X" },
+                  { "value": "cybertruck", "label": "Cybertruck" }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "harley-models",
+          "when": { "field": "make", "operator": "equals", "value": "harley" },
+          "then": {
+            "fields": {
+              "model": {
+                "options": [
+                  { "value": "sportster", "label": "Sportster" },
+                  { "value": "softail", "label": "Softail" },
+                  { "value": "touring", "label": "Touring" },
+                  { "value": "street", "label": "Street" }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "model": {
+      "type": "Dropdown",
+      "label": "Model",
+      "required": true,
+      "options": []
+    },
+    "year": {
+      "type": "Number",
+      "label": "Year",
+      "required": true,
+      "validate": [
+        {
+          "name": "numericRange",
+          "params": { "min": 2000, "max": 2027 },
+          "message": "Year must be between 2000 and 2027"
+        }
+      ]
+    },
+    "mileage": {
+      "type": "Number",
+      "label": "Annual Mileage",
+      "required": true,
+      "validate": [
+        {
+          "name": "numericRange",
+          "params": { "min": 0, "max": 200000 },
+          "message": "Please enter a valid mileage"
+        }
+      ]
+    },
+    "vin": {
+      "type": "Textbox",
+      "label": "VIN (optional)",
+      "validate": [
+        {
+          "name": "pattern",
+          "params": { "pattern": "^[A-HJ-NPR-Z0-9]{17}$" },
+          "message": "VIN must be exactly 17 characters (letters/numbers, excluding I, O, Q)",
+          "when": { "field": "vin", "operator": "isNotEmpty" }
+        }
+      ]
+    },
+    "usage": {
+      "type": "Dropdown",
+      "label": "Vehicle Usage",
+      "required": true,
+      "options": [
+        { "value": "personal", "label": "Personal" },
+        { "value": "commute", "label": "Daily Commute" },
+        { "value": "commercial", "label": "Commercial" },
+        { "value": "rideshare", "label": "Rideshare (Uber/Lyft)" }
+      ],
+      "rules": [
+        {
+          "id": "commercial-rider",
+          "when": {
+            "operator": "or",
+            "conditions": [
+              { "field": "usage", "operator": "equals", "value": "commercial" },
+              { "field": "usage", "operator": "equals", "value": "rideshare" }
+            ]
+          },
+          "then": {
+            "fields": {
+              "commercialRiderNotice": { "hidden": false }
+            }
+          },
+          "else": {
+            "fields": {
+              "commercialRiderNotice": { "hidden": true }
+            }
+          }
+        }
+      ]
+    },
+    "commercialRiderNotice": {
+      "type": "DynamicFragment",
+      "label": "",
+      "hidden": true,
+      "config": {
+        "html": "<div style='padding: 12px; background: #e7f5ff; border: 1px solid #74c0fc; border-radius: 4px; color: #1864ab;'><strong>&#8505; Commercial Use Notice</strong><br/>Commercial and rideshare usage requires an additional commercial rider policy. This will be reflected in your premium estimate.</div>"
+      }
+    },
+    "hasExistingPolicy": {
+      "type": "Toggle",
+      "label": "Do you have an existing auto insurance policy?",
+      "defaultValue": false,
+      "rules": [
+        {
+          "id": "new-customer-discount",
+          "when": {
+            "operator": "not",
+            "conditions": [
+              { "field": "hasExistingPolicy", "operator": "equals", "value": true }
+            ]
+          },
+          "then": {
+            "fields": {
+              "newCustomerBanner": { "hidden": false }
+            }
+          },
+          "else": {
+            "fields": {
+              "newCustomerBanner": { "hidden": true }
+            }
+          }
+        }
+      ]
+    },
+    "newCustomerBanner": {
+      "type": "DynamicFragment",
+      "label": "",
+      "hidden": true,
+      "config": {
+        "html": "<div style='padding: 12px; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px; color: #155724;'><strong>New Customer Discount!</strong><br/>First-time customers receive a 10% discount on their first year. This has been applied to your quote.</div>"
+      }
+    },
+    "hasAccidents": {
+      "type": "Toggle",
+      "label": "Any accidents in the past 5 years?",
+      "defaultValue": false,
+      "rules": [
+        {
+          "id": "show-accident-count",
+          "when": { "field": "hasAccidents", "operator": "equals", "value": true },
+          "then": { "fields": { "accidentCount": { "hidden": false, "required": true } } },
+          "else": { "fields": { "accidentCount": { "hidden": true, "required": false } } }
+        }
+      ]
+    },
+    "accidentCount": {
+      "type": "Number",
+      "label": "Number of Accidents",
+      "hidden": true,
+      "validate": [
+        {
+          "name": "numericRange",
+          "params": { "min": 1, "max": 10 },
+          "message": "Please enter a valid number"
+        }
+      ],
+      "rules": [
+        {
+          "id": "high-risk-surcharge",
+          "when": {
+            "operator": "and",
+            "conditions": [
+              { "field": "hasAccidents", "operator": "equals", "value": true },
+              { "field": "accidentCount", "operator": "greaterThan", "value": 2 },
+              { "field": "coverageLevel", "operator": "equals", "value": "premium" }
+            ]
+          },
+          "then": {
+            "fields": {
+              "surchargeWarning": { "hidden": false }
+            }
+          },
+          "else": {
+            "fields": {
+              "surchargeWarning": { "hidden": true }
+            }
+          }
+        }
+      ]
+    },
+    "surchargeWarning": {
+      "type": "DynamicFragment",
+      "label": "",
+      "hidden": true,
+      "config": {
+        "html": "<div style='padding: 12px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; color: #856404;'><strong>&#9888; High-Risk Surcharge</strong><br/>More than 2 accidents with Premium coverage incurs a 25% surcharge. Consider Standard coverage to reduce your premium.</div>"
+      }
+    },
+    "coverageLevel": {
+      "type": "RadioGroup",
+      "label": "Coverage Level",
+      "required": true,
+      "defaultValue": "standard",
+      "options": [
+        { "value": "basic", "label": "Basic — Liability only" },
+        { "value": "standard", "label": "Standard — Liability + Collision" },
+        { "value": "premium", "label": "Premium — Full Coverage" }
+      ]
+    },
+    "deductible": {
+      "type": "Slider",
+      "label": "Deductible Amount ($)",
+      "defaultValue": 1000,
+      "config": { "min": 250, "max": 5000, "step": 250 }
+    },
+    "estimatedMonthly": {
+      "type": "ReadOnly",
+      "label": "Estimated Monthly Premium",
+      "readOnly": true,
+      "computedValue": "$fn.computeMonthlyPremium()"
+    },
+    "estimatedAnnual": {
+      "type": "ReadOnly",
+      "label": "Estimated Annual Premium",
+      "readOnly": true,
+      "computedValue": "$fn.computeAnnualPremium()"
+    },
+    "coverageSummary": {
+      "type": "ReadOnly",
+      "label": "Coverage Summary",
+      "readOnly": true,
+      "computedValue": "$fn.computeCoverageSummary()"
+    }
+  },
+  "fieldOrder": [
+    "vehicleType", "make", "model", "year", "mileage", "vin",
+    "usage", "commercialRiderNotice",
+    "hasExistingPolicy", "newCustomerBanner",
+    "hasAccidents", "accidentCount", "surchargeWarning",
+    "coverageLevel", "deductible",
+    "estimatedMonthly", "estimatedAnnual", "coverageSummary"
+  ],
+  "settings": {
+    "manualSave": true
+  }
+}

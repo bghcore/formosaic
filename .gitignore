@@ -37,3 +37,6 @@ Thumbs.db
 
 # Testing snapshots
 **/__snapshots__/
+
+# Git worktrees
+.worktrees/

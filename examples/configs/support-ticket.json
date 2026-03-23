@@ -1,0 +1,230 @@
+{
+  "version": 2,
+  "fields": {
+    "title": {
+      "type": "Textbox",
+      "label": "Ticket Title",
+      "required": true,
+      "placeholder": "Brief summary of the issue"
+    },
+    "product": {
+      "type": "Dropdown",
+      "label": "Product",
+      "required": true,
+      "options": [
+        { "value": "platform", "label": "Platform" },
+        { "value": "mobile", "label": "Mobile App" },
+        { "value": "integrations", "label": "Integrations" },
+        { "value": "billing", "label": "Billing & Payments" }
+      ],
+      "rules": [
+        {
+          "id": "product-sets-categories",
+          "when": { "field": "product", "operator": "equals", "value": "platform" },
+          "then": {
+            "fields": {
+              "category": {
+                "options": [
+                  { "value": "auth", "label": "Authentication" },
+                  { "value": "api", "label": "API" },
+                  { "value": "dashboard", "label": "Dashboard" },
+                  { "value": "performance", "label": "Performance" }
+                ]
+              }
+            }
+          },
+          "else": {
+            "fields": {
+              "category": {
+                "options": [
+                  { "value": "crash", "label": "App Crash" },
+                  { "value": "sync", "label": "Data Sync" },
+                  { "value": "ui", "label": "UI / Display" },
+                  { "value": "other", "label": "Other" }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "category": {
+      "type": "Dropdown",
+      "label": "Category",
+      "required": true,
+      "options": [
+        { "value": "auth", "label": "Authentication" },
+        { "value": "api", "label": "API" },
+        { "value": "dashboard", "label": "Dashboard" },
+        { "value": "performance", "label": "Performance" }
+      ],
+      "rules": [
+        {
+          "id": "category-sets-subcategory",
+          "when": { "field": "category", "operator": "equals", "value": "auth" },
+          "then": {
+            "fields": {
+              "subcategory": {
+                "options": [
+                  { "value": "login_failure", "label": "Login Failure" },
+                  { "value": "sso_issue", "label": "SSO Issue" },
+                  { "value": "mfa_problem", "label": "MFA Problem" },
+                  { "value": "session_expired", "label": "Session Expired" }
+                ]
+              }
+            }
+          },
+          "else": {
+            "fields": {
+              "subcategory": {
+                "options": [
+                  { "value": "timeout", "label": "Timeout" },
+                  { "value": "data_loss", "label": "Data Loss" },
+                  { "value": "incorrect_behavior", "label": "Incorrect Behavior" },
+                  { "value": "other", "label": "Other" }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "subcategory": {
+      "type": "Dropdown",
+      "label": "Sub-Category",
+      "required": true,
+      "options": [
+        { "value": "login_failure", "label": "Login Failure" },
+        { "value": "sso_issue", "label": "SSO Issue" },
+        { "value": "mfa_problem", "label": "MFA Problem" },
+        { "value": "session_expired", "label": "Session Expired" }
+      ]
+    },
+    "severity": {
+      "type": "Dropdown",
+      "label": "Severity",
+      "required": true,
+      "options": [
+        { "value": "low", "label": "Low" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "high", "label": "High" },
+        { "value": "outage", "label": "Outage / Service Down" }
+      ],
+      "rules": [
+        {
+          "id": "outage-sets-priority-critical",
+          "when": { "field": "severity", "operator": "equals", "value": "outage" },
+          "then": {
+            "fields": {
+              "priority": { "setValue": "critical" }
+            }
+          }
+        }
+      ]
+    },
+    "priority": {
+      "type": "Dropdown",
+      "label": "Priority",
+      "required": true,
+      "defaultValue": "medium",
+      "options": [
+        { "value": "low", "label": "Low" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "high", "label": "High" },
+        { "value": "critical", "label": "Critical" }
+      ]
+    },
+    "description": {
+      "type": "Textarea",
+      "label": "Description",
+      "required": true,
+      "placeholder": "Describe the issue in detail...",
+      "rules": [
+        {
+          "id": "outage-description-label",
+          "when": { "field": "severity", "operator": "equals", "value": "outage" },
+          "then": {
+            "fields": {
+              "description": { "label": "Outage Description (include start time, scope, and impact)" }
+            }
+          },
+          "else": {
+            "fields": {
+              "description": { "label": "Description" }
+            }
+          }
+        }
+      ]
+    },
+    "affectedUsers": {
+      "type": "Number",
+      "label": "Estimated Affected Users",
+      "placeholder": "0",
+      "validate": [
+        {
+          "name": "numericRange",
+          "params": { "min": 0, "max": 10000000 },
+          "message": "Please enter a valid number of affected users"
+        }
+      ]
+    },
+    "isBlocking": {
+      "type": "Toggle",
+      "label": "This issue is blocking production work",
+      "defaultValue": false,
+      "rules": [
+        {
+          "id": "blocking-and-company-wide-escalation",
+          "when": {
+            "operator": "and",
+            "conditions": [
+              { "field": "isBlocking", "operator": "equals", "value": true },
+              { "field": "isCompanyWide", "operator": "equals", "value": true }
+            ]
+          },
+          "then": {
+            "fields": {
+              "escalationContact": { "hidden": false, "required": true }
+            }
+          },
+          "else": {
+            "fields": {
+              "escalationContact": { "hidden": true, "required": false }
+            }
+          }
+        }
+      ]
+    },
+    "isCompanyWide": {
+      "type": "Toggle",
+      "label": "This issue affects the entire company",
+      "defaultValue": false
+    },
+    "escalationContact": {
+      "type": "Textbox",
+      "label": "Escalation Contact (name or email)",
+      "hidden": true,
+      "placeholder": "Who should be contacted for escalation?"
+    },
+    "relatedTickets": {
+      "type": "Autocomplete",
+      "label": "Related Tickets",
+      "placeholder": "Search for related tickets...",
+      "config": {
+        "multiple": true,
+        "minChars": 2
+      }
+    }
+  },
+  "fieldOrder": [
+    "title",
+    "product", "category", "subcategory",
+    "severity", "priority",
+    "description", "affectedUsers",
+    "isBlocking", "isCompanyWide", "escalationContact",
+    "relatedTickets"
+  ],
+  "settings": {
+    "manualSave": false
+  }
+}

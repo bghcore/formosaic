@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import react from '@vitejs/plugin-react'
 
 const siteBase = 'https://bghcore.github.io/formosaic'
 const siteUrl = 'https://bghcore.github.io'
@@ -6,6 +7,15 @@ const ogDescription = 'Define forms as JSON with a declarative rules engine. 11 
 const ogImage = `${siteBase}/formosaic-brand.png`
 
 export default defineConfig({
+  vite: {
+    plugins: [react()],
+    resolve: {
+      alias: {
+        '@formosaic/core': '../packages/core/src',
+        '@formosaic/headless': '../packages/headless/src',
+      },
+    },
+  },
   title: 'Formosaic',
   description: 'Configuration-driven forms with a built-in rules engine',
   base: '/formosaic/',
@@ -67,6 +77,20 @@ export default defineConfig({
             { text: 'Validation', link: '/guide/validation' },
             { text: 'Value Functions', link: '/guide/value-functions' },
             { text: 'Templates & Composition', link: '/guide/templates' }
+          ]
+        },
+        {
+          text: 'Examples',
+          items: [
+            { text: 'Live Playground', link: '/#try-it-live' },
+            { text: 'Patient Intake', link: '/guide/examples/patient-intake' },
+            { text: 'Job Application', link: '/guide/examples/job-application' },
+            { text: 'Support Ticket', link: '/guide/examples/support-ticket' },
+            { text: 'Expense Report', link: '/guide/examples/expense-report' },
+            { text: 'Event Registration', link: '/guide/examples/event-registration' },
+            { text: 'User Settings', link: '/guide/examples/user-settings' },
+            { text: 'Survey', link: '/guide/examples/survey' },
+            { text: 'Vehicle Insurance Quote', link: '/guide/examples/vehicle-insurance-quote' },
           ]
         },
         {
