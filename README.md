@@ -1,4 +1,11 @@
-<h1 align="center">Formosaic</h1>
+<p align="center">
+  <a href="https://formosaic.com">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./docs/public/formosaic-brand.png" />
+      <img src="./docs/public/formosaic-brand.png" alt="Formosaic" width="360" />
+    </picture>
+  </a>
+</p>
 
 <p align="center">
   <strong>Configuration-driven forms with a built-in rules engine</strong>
