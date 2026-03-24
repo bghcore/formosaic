@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="./website/public/formosaic-brand.png" alt="Formosaic" width="360">
-</p>
+<h1 align="center">Formosaic</h1>
 
 <p align="center">
   <strong>Configuration-driven forms with a built-in rules engine</strong>
@@ -8,7 +6,6 @@
 
 [![CI](https://github.com/bghcore/formosaic/actions/workflows/ci.yml/badge.svg)](https://github.com/bghcore/formosaic/actions/workflows/ci.yml)
 [![Publish](https://github.com/bghcore/formosaic/actions/workflows/publish.yml/badge.svg)](https://github.com/bghcore/formosaic/actions/workflows/publish.yml)
-[![Pages](https://github.com/bghcore/formosaic/actions/workflows/pages.yml/badge.svg)](https://github.com/bghcore/formosaic/actions/workflows/pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue.svg)](https://www.typescriptlang.org/)
 [![npm downloads](https://img.shields.io/npm/dm/@formosaic/core.svg?label=npm%20downloads)](https://www.npmjs.com/package/@formosaic/core)
@@ -16,7 +13,7 @@
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/react-19-61dafb.svg?logo=react)](https://react.dev/)
 [![Tests](https://img.shields.io/badge/tests-6%2C296%20passing-brightgreen.svg)](https://github.com/bghcore/formosaic/actions/workflows/ci.yml)
-[![Storybook](https://img.shields.io/badge/storybook-deployed-ff4785.svg?logo=storybook)](https://bghcore.github.io/formosaic/storybook/)
+[![Storybook](https://img.shields.io/badge/storybook-deployed-ff4785.svg?logo=storybook)](https://formosaic.com/storybook/)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/bghcore/formosaic/badge)](https://scorecard.dev/viewer/?uri=github.com/bghcore/formosaic)
 [![CodeQL](https://github.com/bghcore/formosaic/actions/workflows/codeql.yml/badge.svg)](https://github.com/bghcore/formosaic/actions/workflows/codeql.yml)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/bghcore/formosaic/pulls)
@@ -35,7 +32,7 @@
 [![npm atlaskit](https://img.shields.io/npm/v/@formosaic/atlaskit?label=atlaskit)](https://www.npmjs.com/package/@formosaic/atlaskit)
 [![npm heroui](https://img.shields.io/npm/v/@formosaic/heroui?label=heroui)](https://www.npmjs.com/package/@formosaic/heroui)
 
-[Storybook](https://bghcore.github.io/formosaic/storybook/) | [npm](https://www.npmjs.com/org/formosaic)
+[Storybook](https://formosaic.com/storybook/) | [npm](https://www.npmjs.com/org/formosaic)
 
 Formosaic is a React form library where you define forms as JSON and a built-in rules engine handles the rest. One config object controls field rendering, conditional logic, validation, multi-step wizards, and auto-save. Swap between 12 UI frameworks — MUI, Ant Design, Fluent UI, Chakra, Mantine, Radix, and more — without rewriting form logic.
 
@@ -55,7 +52,7 @@ Define your forms as a single `IFormConfig` JSON object — field definitions, d
 - Pure JSON Schema rendering with no rules engine -- use [RJSF](https://github.com/rjsf-team/react-jsonschema-form) (but if you want RJSF's schema format with our rules engine, use `fromRjsfSchema()` to migrate)
 - Headless form state with zero opinions -- use [TanStack Form](https://tanstack.com/form)
 
-See the [comparison guide](https://bghcore.github.io/formosaic/guide/comparison) for a detailed comparison with migration paths.
+See the [comparison guide](https://formosaic.com/guide/comparison) for a detailed comparison with migration paths.
 
 ### Feature Comparison
 
@@ -164,7 +161,7 @@ function App() {
 ## Try It Live
 
 - [Open in StackBlitz](https://stackblitz.com/github/bghcore/formosaic/tree/main/packages/examples?file=src%2Fcheckout%2FApp.tsx) -- edit and run the checkout wizard example in your browser
-- [Storybook](https://bghcore.github.io/formosaic/storybook/) -- interactive component gallery with all 27 field types across 11 adapters
+- [Storybook](https://formosaic.com/storybook/) -- interactive component gallery with all 27 field types across 11 adapters
 
 ## How It Works
 
@@ -692,7 +689,7 @@ All core components are SSR-safe. Browser-only API access (`localStorage`, `docu
 
 For Next.js App Router, add `"use client"` to files containing form components. Server-fetched data can be passed as props across the client boundary.
 
-See the [SSR / Next.js integration guide](https://bghcore.github.io/formosaic/guide/ssr) for full setup instructions covering App Router, Pages Router, draft persistence, lazy loading, and common pitfalls.
+See the [SSR / Next.js integration guide](https://formosaic.com/guide/ssr) for full setup instructions covering App Router, Pages Router, draft persistence, lazy loading, and common pitfalls.
 
 ### RJSF Schema Import
 
@@ -844,7 +841,7 @@ Formosaic separates **what** a form contains (the `IFormConfig` JSON object) fro
 
 ## Building a Custom UI Adapter
 
-See the [creating an adapter guide](https://bghcore.github.io/formosaic/adapters/creating) for a complete guide. The short version:
+See the [creating an adapter guide](https://formosaic.com/adapters/creating) for a complete guide. The short version:
 
 1. Create field components that accept `IFieldProps<T>`
 2. Build a registry mapping `ComponentTypes` to your field elements
@@ -912,7 +909,7 @@ packages/
 e2e/          -- Playwright end-to-end tests
 benchmarks/   -- Vitest benchmarks for rules engine performance
 stories/      -- Storybook stories for field components
-website/      -- VitePress docs site (https://bghcore.github.io/formosaic/)
+docs/         -- MDX docs content (hosted separately at https://formosaic.com/)
 docs/         -- Internal planning docs (tier1-baseline-report, tier1-patterns, tier2-handoff)
 ```
 
