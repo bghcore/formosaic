@@ -2,7 +2,8 @@
   <a href="https://formosaic.com">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="./docs/public/formosaic-brand.png" />
-      <img src="./docs/public/formosaic-brand.png" alt="Formosaic" width="360" />
+      <source media="(prefers-color-scheme: light)" srcset="./docs/public/formosaic-brand-black.png" />
+      <img src="./docs/public/formosaic-brand-black.png" alt="Formosaic" width="360" />
     </picture>
   </a>
 </p>
