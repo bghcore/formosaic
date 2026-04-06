@@ -1,6 +1,6 @@
 {
   "name": "@formosaic/heroui",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "HeroUI field components for @formosaic/core",
   "repository": {
     "type": "git",

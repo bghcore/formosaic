@@ -224,22 +224,46 @@ export function evaluateAffectedFields(
   values: IEntityData,
   currentState: IRuntimeFormState
 ): IRuntimeFormState {
-  // Find all transitively affected fields
+  // Find all transitively affected fields via the dependency graph
   const affected = getTransitivelyAffectedFields(changedField, currentState.fieldStates);
-  logEvent("field_change", changedField, `${affected.size} affected field(s)`);
-  if (affected.size === 0) {
-    return currentState;
+  // Always include the changed field itself so its own rules re-evaluate
+  affected.add(changedField);
+
+  // First pass: collect cross-field effect targets from rules on affected fields
+  // so we can reset and re-evaluate them too
+  const crossFieldTargets = new Set<string>();
+  for (const fieldName of affected) {
+    const config = fields[fieldName];
+    if (!config?.rules) continue;
+    for (const rule of config.rules) {
+      if (rule.then?.fields) {
+        for (const target of Object.keys(rule.then.fields)) {
+          if (target in fields) crossFieldTargets.add(target);
+        }
+      }
+      if (rule.else?.fields) {
+        for (const target of Object.keys(rule.else.fields)) {
+          if (target in fields) crossFieldTargets.add(target);
+        }
+      }
+    }
   }
+
+  // Merge cross-field targets into the set of fields to re-evaluate
+  for (const target of crossFieldTargets) {
+    affected.add(target);
+  }
+
+  logEvent("field_change", changedField, `${affected.size} affected field(s)`);
 
   const updatedStates = { ...currentState.fieldStates };
   let updatedOrder = [...currentState.fieldOrder];
 
-  // Re-evaluate affected fields
+  // Reset affected fields to defaults, preserving dependency graph edges
   for (const fieldName of affected) {
     const config = fields[fieldName];
     if (!config) continue;
 
-    // Reset to defaults first
     updatedStates[fieldName] = {
       ...updatedStates[fieldName],
       type: config.type,
@@ -253,29 +277,35 @@ export function evaluateAffectedFields(
       label: config.label,
       defaultValue: config.defaultValue,
       computeOnCreateOnly: config.computeOnCreateOnly,
+      // Preserve dependency graph — these are set at init and must survive updates
+      dependentFields: updatedStates[fieldName]?.dependentFields,
+      dependsOnFields: updatedStates[fieldName]?.dependsOnFields,
       activeRuleIds: [],
       pendingSetValue: undefined,
     };
   }
 
-  // Re-apply all rules that could affect the changed fields
-  // (from ALL fields, not just the changed one)
-  for (const [ownerField, config] of Object.entries(fields)) {
-    if (!config.rules) continue;
+  // Re-apply all rules from fields in the affected set
+  for (const ownerField of affected) {
+    const config = fields[ownerField];
+    if (!config?.rules) continue;
 
     const ruleResults = evaluateFieldRules(config.rules, values);
 
-    // Apply self-effects if this field is affected
-    if (affected.has(ownerField) || ownerField === changedField) {
-      applyEffectToState(updatedStates, ownerField, ruleResults.selfEffect);
-      if (ruleResults.pendingSetValue !== undefined && updatedStates[ownerField]) {
-        updatedStates[ownerField].pendingSetValue = ruleResults.pendingSetValue;
-      }
+    // Apply self-effects
+    applyEffectToState(updatedStates, ownerField, ruleResults.selfEffect);
+    if (ruleResults.pendingSetValue !== undefined && updatedStates[ownerField]) {
+      updatedStates[ownerField].pendingSetValue = ruleResults.pendingSetValue;
     }
 
-    // Apply cross-field effects to affected fields
+    if (updatedStates[ownerField]) {
+      updatedStates[ownerField].activeRuleIds = ruleResults.activeRuleIds;
+    }
+
+    // Apply cross-field effects — targets are guaranteed to be in updatedStates
+    // because we added them to the affected set above
     for (const [targetField, effect] of Object.entries(ruleResults.crossEffects)) {
-      if (affected.has(targetField) && updatedStates[targetField]) {
+      if (updatedStates[targetField]) {
         applyEffectToState(updatedStates, targetField, effect);
       }
     }

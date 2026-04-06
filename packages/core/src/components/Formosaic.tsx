@@ -156,7 +156,15 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
       const cfg = rulesState.configs[configName];
       CheckValidDropdownOptions(cfg.fieldStates, getValues(), setValue);
       CheckDefaultValues(cfg.fieldStates, getValues(), setValue);
-      handleComputedValues();
+      handleComputedValues(cfg);
+
+      // Apply pending setValue effects from rules, then clear them
+      for (const [fieldName, fieldState] of Object.entries(cfg.fieldStates)) {
+        if (fieldState.pendingSetValue !== undefined) {
+          setValue(`${fieldName}` as const, fieldState.pendingSetValue.value, { shouldDirty: true });
+          fieldState.pendingSetValue = undefined;
+        }
+      }
     }
   }, [rulesState]);
 
@@ -185,10 +193,9 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
     });
   };
 
-  const handleComputedValues = () => {
-    const { dirtyFields } = formStateRef.current;
-    const currentRulesState = rulesStateRef.current;
-    const cfg = currentRulesState.configs[configName];
+  const handleComputedValues = (runtimeState?: IRuntimeFormState) => {
+    const { dirtyFields } = formState;
+    const cfg = runtimeState ?? rulesStateRef.current.configs[configName];
     if (!cfg) return;
     const computedValues = GetComputedValuesOnDirtyFields(Object.keys(dirtyFields), cfg.fieldStates);
     if (computedValues.length > 0) {

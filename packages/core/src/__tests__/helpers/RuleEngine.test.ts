@@ -512,7 +512,7 @@ describe("evaluateAffectedFields", () => {
     expect(updatedState.fieldStates.priority.required).toBe(false);
   });
 
-  it("returns same state when changed field has no dependents", () => {
+  it("returns equivalent state when changed field has no dependents", () => {
     const initialState = evaluateAllRules(simpleTextFieldConfigs, simpleEntity);
     const updatedState = evaluateAffectedFields(
       "name",
@@ -520,8 +520,11 @@ describe("evaluateAffectedFields", () => {
       { ...simpleEntity, name: "New Name" },
       initialState
     );
-    // Should be same reference since no fields were affected
-    expect(updatedState).toBe(initialState);
+    // Changed field is always re-evaluated but result should be equivalent
+    // when it has no rules
+    expect(updatedState.fieldStates.name.required).toBe(initialState.fieldStates.name.required);
+    expect(updatedState.fieldStates.name.hidden).toBe(initialState.fieldStates.name.hidden);
+    expect(updatedState.fieldStates.name.type).toBe(initialState.fieldStates.name.type);
   });
 
   it("updates dropdown options when source field changes", () => {

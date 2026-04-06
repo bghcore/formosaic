@@ -63,11 +63,13 @@ export const RulesEngineProvider: React.FC<React.PropsWithChildren<{}>> = (
     const currentState = rulesStateRef.current.configs[configName];
     if (!currentState) return;
 
-    const hasAnyDeps =
-      (currentState.fieldStates[fieldName]?.dependentFields?.length ?? 0) > 0 ||
-      (currentState.fieldStates[fieldName]?.dependsOnFields?.length ?? 0) > 0;
+    // Re-evaluate when this field affects other fields (forward deps)
+    // or when it has its own rules that may produce cross-field effects
+    const fieldState = currentState.fieldStates[fieldName];
+    const hasDependents = (fieldState?.dependentFields?.length ?? 0) > 0;
+    const hasRules = !!(fields[fieldName]?.rules?.length);
 
-    if (!hasAnyDeps) return;
+    if (!hasDependents && !hasRules) return;
 
     const updatedState = evaluateAffectedFields(fieldName, fields, entityData, currentState);
 

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2026-04-06
+
+### Fixed
+- **Rules engine: cross-field effects silently dropped** — `evaluateAffectedFields()` now pre-scans rules to discover all cross-field effect targets and includes them in the affected set, so `then: { fields: { fieldC: { hidden: true } } }` is always applied
+- **Rules engine: changed field's own rules skipped** — the changed field is now always included in the evaluation set, fixing cases where a field with rules but no dependents would have its rules ignored on value change
+- **Rules engine: dependency graph lost on incremental updates** — `dependentFields` and `dependsOnFields` are now explicitly preserved during field state resets in `evaluateAffectedFields()` and defensively guarded in the reducer's UPDATE action
+- **Rules engine: wrong dependency direction check** — `processFieldChange()` now checks forward dependencies (`dependentFields`) and whether the field has rules, instead of incorrectly checking reverse dependencies (`dependsOnFields`)
+- **Rules engine: `setValue` effect non-functional** — `pendingSetValue` produced by rules is now consumed in the form component's rules state effect, applied via react-hook-form `setValue()`, and cleared after application
+- **Computed values: stale ref timing** — `handleComputedValues()` now accepts the current runtime form state directly instead of reading from a ref that may not yet be updated
+
 ## [1.4.1] - 2026-03-20
 
 ### Fixed

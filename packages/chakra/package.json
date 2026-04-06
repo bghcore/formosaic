@@ -1,6 +1,6 @@
 {
   "name": "@formosaic/chakra",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Chakra UI v3 field components for @formosaic/core",
   "repository": {
     "type": "git",

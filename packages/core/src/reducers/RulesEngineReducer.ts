@@ -26,9 +26,15 @@ const rulesEngineReducer = (
 
       const updatedFieldStates = { ...existing.fieldStates };
       Object.keys(action.payload.formState.fieldStates).forEach(fieldName => {
+        const prev = updatedFieldStates[fieldName];
+        const next = action.payload.formState.fieldStates[fieldName];
         updatedFieldStates[fieldName] = {
-          ...updatedFieldStates[fieldName],
-          ...action.payload.formState.fieldStates[fieldName],
+          ...prev,
+          ...next,
+          // Preserve dependency graph edges — these are set at init and must
+          // not be overwritten by incremental updates that omit them
+          dependentFields: next.dependentFields ?? prev?.dependentFields,
+          dependsOnFields: next.dependsOnFields ?? prev?.dependsOnFields,
         };
       });
 
