@@ -110,14 +110,14 @@ const pattern: ValidatorFn = (value, params) => {
   // from adversarial configs.
   const patternStr = String(regex);
   if (patternStr.length > 256) {
-    if (typeof process !== "undefined" && process.env && process.env.NODE_ENV !== "production") {
+    if ((globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production") {
       // eslint-disable-next-line no-console
       console.warn("[formosaic] pattern validator regex source exceeds 256 chars; skipping.");
     }
     return undefined;
   }
   if (value.length > 10_000) {
-    if (typeof process !== "undefined" && process.env && process.env.NODE_ENV !== "production") {
+    if ((globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production") {
       // eslint-disable-next-line no-console
       console.warn("[formosaic] pattern validator input exceeds 10000 chars; skipping.");
     }

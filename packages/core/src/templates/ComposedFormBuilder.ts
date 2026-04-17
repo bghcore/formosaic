@@ -62,7 +62,7 @@ export function composeForm(options: IComposeFormOptions): IFormConfig {
             ...connectionRules,
           ],
         };
-      } else if (typeof process !== "undefined" && process.env && process.env.NODE_ENV !== "production") {
+      } else if ((globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production") {
         // Per audit P1-8: warn when we cannot attach connection rules because
         // no owner field exists. Previously this was silently dropped.
         // eslint-disable-next-line no-console

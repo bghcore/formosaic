@@ -77,14 +77,14 @@ function evaluateFieldCondition(condition: IFieldCondition, values: IEntityData)
         const pattern = toString(condition.value);
         const input = toString(fieldValue);
         if (pattern.length > 256) {
-          if (typeof process !== "undefined" && process.env && process.env.NODE_ENV !== "production") {
+          if ((globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production") {
             // eslint-disable-next-line no-console
             console.warn(`[formosaic] 'matches' regex source exceeds 256 chars; returning false to prevent ReDoS.`);
           }
           return false;
         }
         if (input.length > 10_000) {
-          if (typeof process !== "undefined" && process.env && process.env.NODE_ENV !== "production") {
+          if ((globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production") {
             // eslint-disable-next-line no-console
             console.warn(`[formosaic] 'matches' input exceeds 10000 chars; returning false to prevent ReDoS.`);
           }
