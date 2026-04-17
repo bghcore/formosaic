@@ -3,7 +3,11 @@ import React, { useState, useMemo } from "react";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const MultiSelectSearch = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, options, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const [searchTerm, setSearchTerm] = useState("");
   const selectedValues = (value as string[]) ?? [];
@@ -39,6 +43,9 @@ const MultiSelectSearch = (props: IFieldProps<{}>) => {
 
   return (
     <div
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className="df-multi-select-search"
       data-field-type="MultiSelectSearch"
       data-field-state={getFieldState({ error, required, readOnly })}

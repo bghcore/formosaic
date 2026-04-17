@@ -5,7 +5,11 @@ import { GetFieldDataTestId, getFieldState } from "../helpers";
 import { RadioGroup as AriaRadioGroup, Radio } from "react-aria-components";
 
 const RadioGroup = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, options, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   if (readOnly) {
     const label = options?.find(o => String(o.value) === String(value))?.label ?? (value as string);
@@ -14,6 +18,9 @@ const RadioGroup = (props: IFieldProps<{}>) => {
 
   return (
     <AriaRadioGroup
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className="df-radio-group"
       value={(value as string) ?? ""}
       onChange={(val) => setFieldValue(fieldName, val)}

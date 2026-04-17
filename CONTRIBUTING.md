@@ -66,7 +66,7 @@ Optional, for end-to-end testing:
    npm run test
    ```
 
-   You should see all 6,296+ tests pass.
+   You should see all 6,145 tests pass.
 
 You can also build individual packages during development:
 
@@ -101,12 +101,11 @@ packages/
   heroui/      @formosaic/heroui     -- HeroUI adapter (27 field types)
   radix/       @formosaic/radix      -- Radix UI primitives adapter (27 field types)
   react-aria/  @formosaic/react-aria -- React Aria Components adapter (27 field types)
-  examples/    @formosaic/examples   -- 3 example apps (login+MFA, checkout wizard, data entry)
+  examples/    @formosaic/examples   -- 6 example apps (login+MFA, checkout wizard, data entry, patient-intake, job-application, expense-report)
 e2e/           Playwright end-to-end tests
 benchmarks/    Vitest benchmarks for rules engine performance
 stories/       Storybook stories for visual documentation
-website/       VitePress docs site (public documentation)
-docs/          Internal planning docs (tier1-baseline-report, tier1-patterns, tier2-handoff)
+docs/          MDX documentation (published at https://formosaic.com) plus internal planning notes (tier1-baseline-report, tier1-patterns, tier2-handoff)
 ```
 
 Each adapter package follows the same internal structure:
@@ -127,7 +126,7 @@ src/
 ### Unit and Integration Tests
 
 ```bash
-# Run all tests (vitest, ~6,296 tests across 55 files)
+# Run all tests (vitest, 6,145 tests across 65 files)
 npm run test
 
 # Watch mode -- re-runs on file changes
@@ -151,7 +150,7 @@ npx vitest run --project mui
 # Install Playwright browsers (first time only)
 npx playwright install
 
-# Run all E2E tests (54 tests across 7 specs)
+# Run all E2E tests (66 tests across 7 specs)
 npm run test:e2e
 ```
 
@@ -177,7 +176,7 @@ npm run storybook
 npm run build-storybook
 ```
 
-The deployed Storybook is available at [bghcore.github.io/formosaic/storybook/](https://bghcore.github.io/formosaic/storybook/).
+The deployed Storybook is available at [formosaic.com/storybook/](https://formosaic.com/storybook/).
 
 ## Code Style and Conventions
 
@@ -189,7 +188,7 @@ The deployed Storybook is available at [bghcore.github.io/formosaic/storybook/](
 
 ### Field Component Props
 
-All field components receive `IFieldProps<T>` via `React.cloneElement`. This is the standard contract between core and adapter packages. See the [canonical field contracts](https://bghcore.github.io/formosaic/adapters/field-contracts) for the full specification.
+All field components receive `IFieldProps<T>` via `React.cloneElement`. This is the standard contract between core and adapter packages. See the [canonical field contracts](https://formosaic.com/adapters/field-contracts) for the full specification.
 
 ### Naming Conventions
 
@@ -225,7 +224,7 @@ IFormConfig
 
 An adapter package provides a registry -- a `Record<string, JSX.Element>` mapping field type keys (like `"Textbox"`, `"Dropdown"`) to JSX elements. Consumers pass this registry to `InjectedFieldProvider`, and `RenderField` looks up the correct component at render time.
 
-To create a new adapter, see the [creating an adapter guide](https://bghcore.github.io/formosaic/adapters/creating). For implementation patterns to follow, see [docs/tier1-patterns.md](./docs/tier1-patterns.md).
+To create a new adapter, see the [creating an adapter guide](https://formosaic.com/adapters/creating). For implementation patterns to follow, see [docs/tier1-patterns.md](./docs/tier1-patterns.md).
 
 ## Adding a New Field Type
 
@@ -233,7 +232,7 @@ If you want to add a new field type (not a new adapter, but a new kind of field 
 
 1. **Define the component type key** in `packages/core/src/constants.ts` (e.g., `"MyNewField"`).
 
-2. **Define the field contract** -- document the value type, empty semantics, serialization, readOnly behavior, and config shape. Follow the format in the [canonical field contracts](https://bghcore.github.io/formosaic/adapters/field-contracts).
+2. **Define the field contract** -- document the value type, empty semantics, serialization, readOnly behavior, and config shape. Follow the format in the [canonical field contracts](https://formosaic.com/adapters/field-contracts).
 
 3. **Implement in at least one adapter** -- start with `headless` since it has no UI framework dependency. The component must accept `IFieldProps<T>` and handle:
    - Editable mode (renders an interactive control)
@@ -345,7 +344,7 @@ docs: add SSR / Next.js integration guide
 
 - **Small and focused.** One feature, one bug fix, or one refactor. Not all three.
 - **Tested.** New features need tests. Bug fixes need regression tests.
-- **Documented.** If the change affects the public API, update the relevant docs in `website/`.
+- **Documented.** If the change affects the public API, update the relevant MDX files under `docs/`.
 - **Backward compatible.** Breaking changes require discussion in an issue first.
 
 ## Reporting Issues
@@ -367,8 +366,8 @@ Do **not** report security vulnerabilities through public GitHub issues. Instead
 
 ## Getting Help
 
-- Read the [documentation](https://bghcore.github.io/formosaic/) -- it covers architecture, API reference, and guides
-- Browse the [Storybook](https://bghcore.github.io/formosaic/storybook/) to see components in action
+- Read the [documentation](https://formosaic.com/) -- it covers architecture, API reference, and guides
+- Browse the [Storybook](https://formosaic.com/storybook/) to see components in action
 - Check the [examples](./packages/examples) for real-world usage patterns
 - Open a [discussion](https://github.com/bghcore/formosaic/discussions) for questions that are not bug reports
 

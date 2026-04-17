@@ -3,6 +3,7 @@ export {
   TIER_1_FIELDS,
   ALL_FIELD_TYPES,
   VALUE_BY_TYPE,
+  XSS_PAYLOAD,
 } from "./fieldContractTests";
 export type { IContractTestOptions } from "./fieldContractTests";
 export { runParityTests } from "./parityHarness";

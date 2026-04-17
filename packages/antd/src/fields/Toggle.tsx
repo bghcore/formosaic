@@ -6,7 +6,11 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId } from "../helpers";
 
 const Toggle = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const onChange = (checked: boolean) => {
     setFieldValue(fieldName, checked);
@@ -18,10 +22,11 @@ const Toggle = (props: IFieldProps<{}>) => {
 
   return (
     <Switch
-      checked={!!value}
-      onChange={onChange}
       aria-invalid={!!error}
       aria-required={required}
+      {...rest}
+      checked={!!value}
+      onChange={onChange}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );

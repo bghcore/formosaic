@@ -87,6 +87,23 @@ const defaultStrings: ICoreLocaleStrings = {
   unsavedChangesWarning: "You have unsaved changes. Are you sure you want to leave?",
 };
 
+/**
+ * SSR / multi-tenant contract (audit P1-21):
+ *
+ * `currentLocale` is a module-level singleton. It is intended to be set
+ * ONCE at app boot (or once per deploy) to the locale of the whole app.
+ * It is NOT a per-request locale: in an SSR / multi-tenant environment
+ * where different requests need different locales, calling
+ * `registerLocale()` from a per-request code path will cause cross-request
+ * pollution (the last caller wins for all concurrent/subsequent requests
+ * on the same Node process).
+ *
+ * For per-request i18n, wrap your own translation layer at the framework
+ * level (e.g. React Context provided by a route/layout) and pass
+ * translated strings into Formosaic via props / render props. This
+ * registry is an English-default fallback, not a per-request
+ * translation engine.
+ */
 let currentLocale: ICoreLocaleStrings = { ...defaultStrings };
 
 /**

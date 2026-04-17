@@ -4,7 +4,11 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const DateTime = (props: IFieldProps<IDateTimeConfig>) => {
-  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, config, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder,
+    ...rest
+  } = props;
 
   const minDateTime = config?.minDateTime;
   const maxDateTime = config?.maxDateTime;
@@ -19,6 +23,9 @@ const DateTime = (props: IFieldProps<IDateTimeConfig>) => {
 
   return (
     <input
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       type="datetime-local"
       className="df-date-time"
       data-field-type="DateTime"
@@ -27,8 +34,6 @@ const DateTime = (props: IFieldProps<IDateTimeConfig>) => {
       min={minDateTime}
       max={maxDateTime}
       onChange={onChange}
-      aria-invalid={!!error}
-      aria-required={required}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );

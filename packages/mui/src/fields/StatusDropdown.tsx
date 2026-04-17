@@ -26,7 +26,11 @@ const StatusDot = ({ color }: { color?: string }) => (
 );
 
 const StatusDropdown = (props: IFieldProps<IStatusDropdownProps>) => {
-  const { fieldName, testId, value, readOnly, error, config, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, config, options, setFieldValue,
+    required, errorCount, saving, savePending, optionsLoading, label, type, description, helpText, placeholder,
+    ...rest
+  } = props;
 
   const statusColors = (config?.statusColors ?? {}) as Dictionary<string>;
 
@@ -35,12 +39,12 @@ const StatusDropdown = (props: IFieldProps<IStatusDropdownProps>) => {
   };
 
   return readOnly ? (
-    <div className="fe-read-only-status-dropdown" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+    <div {...rest} className="fe-read-only-status-dropdown" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
       <StatusDot color={statusColors && value ? statusColors[value as string] : undefined} />
       <ReadOnlyText fieldName={fieldName} value={value as string} />
     </div>
   ) : (
-    <div className={FieldClassName("fe-status-dropdown", error)} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+    <div {...rest} className={FieldClassName("fe-status-dropdown", error)} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
       <StatusDot color={statusColors && value ? statusColors[value as string] : undefined} />
       <FormControl fullWidth size="small" error={!!error}>
         <Select

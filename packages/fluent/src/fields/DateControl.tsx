@@ -5,7 +5,11 @@ import React from "react";
 import { FieldClassName, GetFieldDataTestId, formatDateTime } from "../helpers";
 
 const DateControl = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const date = new Date(event.target.value);
@@ -31,12 +35,13 @@ const DateControl = (props: IFieldProps<{}>) => {
   ) : (
     <div className="fe-date-control-container" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
       <Input
+        aria-invalid={!!error}
+        aria-required={required}
+        {...rest}
         className={FieldClassName("fe-date-control", error)}
         type="date"
         value={dateInputValue}
         onChange={onChange}
-        aria-invalid={!!error}
-        aria-required={required}
         data-testid={GetFieldDataTestId(fieldName, testId)}
       />
       <Button

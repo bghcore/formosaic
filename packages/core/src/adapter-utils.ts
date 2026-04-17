@@ -35,3 +35,6 @@ export type {
 
 // Utility functions used by adapters
 export { convertBooleanToYesOrNoText, isNull } from "./utils";
+
+// HTML sanitizer for rich-text read-only rendering
+export { sanitizeHtml } from "./utils/sanitizeHtml";

@@ -55,6 +55,33 @@ const rulesEngineReducer = (
       }
       return defaultRulesEngineState;
     }
+    case RulesEngineActionType.CLEAR_PENDING_SETVALUE: {
+      const { configName, fieldNames } = action.payload;
+      const existing = state.configs[configName];
+      if (!existing) return state;
+
+      const targets = fieldNames ?? Object.keys(existing.fieldStates);
+      let changed = false;
+      const updatedFieldStates: typeof existing.fieldStates = { ...existing.fieldStates };
+      for (const fieldName of targets) {
+        const fs = updatedFieldStates[fieldName];
+        if (fs && fs.pendingSetValue !== undefined) {
+          updatedFieldStates[fieldName] = { ...fs, pendingSetValue: undefined };
+          changed = true;
+        }
+      }
+      if (!changed) return state;
+
+      return {
+        configs: {
+          ...state.configs,
+          [configName]: {
+            fieldStates: updatedFieldStates,
+            fieldOrder: existing.fieldOrder,
+          },
+        },
+      };
+    }
     default:
       return state;
   }

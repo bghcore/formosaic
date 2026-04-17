@@ -6,10 +6,13 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const NumberField = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const onChange = (val: number | string) => {
-    // Mantine NumberInput passes number or empty string
     if (typeof val === "number") {
       setFieldValue(fieldName, val, false, 1500);
     } else if (val === "") {
@@ -23,13 +26,13 @@ const NumberField = (props: IFieldProps<{}>) => {
 
   return (
     <NumberInput
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className={FieldClassName("fe-number", error)}
       autoComplete="off"
       value={!isNull(value) ? (value as number) : ""}
       onChange={onChange}
-      required={required}
-      aria-invalid={!!error}
-      aria-required={required}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );

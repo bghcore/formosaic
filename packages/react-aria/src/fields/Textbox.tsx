@@ -11,7 +11,11 @@ interface ITextboxProps {
 }
 
 const Textbox = (props: IFieldProps<ITextboxProps>) => {
-  const { fieldName, testId, value, readOnly, config, error, required, placeholder, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, config, error, required, placeholder, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText,
+    ...rest
+  } = props;
 
   if (readOnly) {
     return (
@@ -25,6 +29,9 @@ const Textbox = (props: IFieldProps<ITextboxProps>) => {
 
   return (
     <TextField
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className="df-textbox"
       value={(value as string) ?? ""}
       onChange={(val) => setFieldValue(fieldName, val, false, 3000)}

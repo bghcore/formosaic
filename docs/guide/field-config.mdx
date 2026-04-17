@@ -159,6 +159,8 @@ See the [Expression Syntax](/guide/expression-syntax) page for the full expressi
 
 ## Built-in Component Types
 
+See the [field types reference](/guide/field-types) for the full list of 28 keys (21 editable + 6 read-only + `FieldArray`). Summary:
+
 | Key | Description |
 |-----|-------------|
 | `"Textbox"` | Single-line text input |
@@ -173,11 +175,19 @@ See the [Expression Syntax](/guide/expression-syntax) page for the full expressi
 | `"Textarea"` | Multi-line text input |
 | `"DocumentLinks"` | URL link CRUD |
 | `"StatusDropdown"` | Dropdown with color indicators |
+| `"RadioGroup"` | Single-select radio group |
+| `"CheckboxGroup"` | Multi-select checkbox group |
+| `"Rating"` | Star rating input |
+| `"ColorPicker"` | Color picker (hex string) |
+| `"Autocomplete"` | Searchable single-select |
+| `"FileUpload"` | File picker |
+| `"DateRange"` | Date range (from/to) |
+| `"DateTime"` | Date + time input |
+| `"PhoneInput"` | Phone input with masking |
 | `"ReadOnly"` | Read-only text display |
 | `"ReadOnlyArray"` | Read-only array display |
 | `"ReadOnlyDateTime"` | Read-only date/time display |
 | `"ReadOnlyCumulativeNumber"` | Read-only cumulative number |
-| `"ReadOnlyRichText"` | Read-only rich text |
+| `"ReadOnlyRichText"` | Read-only rich text (sanitized HTML) |
 | `"ReadOnlyWithButton"` | Read-only with action button |
-| `"ChoiceSet"` | Choice set / radio group |
 | `"FieldArray"` | Repeating field array |

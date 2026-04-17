@@ -11,7 +11,11 @@ interface IDropdownProps {
 }
 
 const Dropdown = (props: IFieldProps<IDropdownProps>) => {
-  const { fieldName, testId, value, readOnly, config, error, required, options, placeholder, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, config, error, required, options, placeholder, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText,
+    ...rest
+  } = props;
 
   const selectOptions = options?.map(option => ({
     id: String(option.value),
@@ -43,6 +47,7 @@ const Dropdown = (props: IFieldProps<IDropdownProps>) => {
 
   return (
     <Select
+      {...rest}
       options={selectOptions}
       value={selectedOption ? [selectedOption] : []}
       onChange={onChange}

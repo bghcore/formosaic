@@ -45,6 +45,13 @@
   ],
   "license": "MIT",
   "author": "bghcore (https://github.com/bghcore)",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=18.18"
+  },
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
@@ -54,7 +61,7 @@
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0",
     "react-hook-form": "^7.0.0",
-    "@formosaic/core": "^1.0.0",
+    "@formosaic/core": "^1.4.0",
     "baseui": "^14.0.0",
     "styletron-engine-monolithic": "^1.0.0",
     "styletron-react": "^6.0.0"

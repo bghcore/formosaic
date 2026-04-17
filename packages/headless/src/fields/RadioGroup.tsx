@@ -4,23 +4,28 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const RadioGroup = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, options, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(fieldName, event.target.value);
   };
 
   if (readOnly) {
-    const label = options?.find(o => String(o.value) === String(value))?.label ?? (value as string);
-    return <ReadOnlyText fieldName={fieldName} value={label} />;
+    const optLabel = options?.find(o => String(o.value) === String(value))?.label ?? (value as string);
+    return <ReadOnlyText fieldName={fieldName} value={optLabel} />;
   }
 
   return (
     <div
-      className="df-radio-group"
       role="radiogroup"
       aria-invalid={!!error}
       aria-required={required}
+      {...rest}
+      className="df-radio-group"
       data-field-type="RadioGroup"
       data-field-state={getFieldState({ error, required, readOnly })}
       data-testid={GetFieldDataTestId(fieldName, testId)}

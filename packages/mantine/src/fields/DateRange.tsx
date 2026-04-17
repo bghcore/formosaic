@@ -4,7 +4,11 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const DateRange = (props: IFieldProps<IDateRangeConfig>) => {
-  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, config, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder,
+    ...rest
+  } = props;
 
   const rangeValue = (value as IDateRangeValue | null) ?? { start: "", end: "" };
   const minDate = config?.minDate;
@@ -29,6 +33,10 @@ const DateRange = (props: IFieldProps<IDateRangeConfig>) => {
 
   return (
     <div
+      role="group"
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className="fe-date-range"
       data-field-type="DateRange"
       data-field-state={getFieldState({ error, required, readOnly })}

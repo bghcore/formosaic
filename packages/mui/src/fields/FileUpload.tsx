@@ -5,7 +5,11 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const FileUpload = (props: IFieldProps<IFileUploadConfig>) => {
-  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, config, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder,
+    ...rest
+  } = props;
   const inputRef = useRef<HTMLInputElement>(null);
 
   const multiple = config?.multiple ?? false;
@@ -41,9 +45,10 @@ const FileUpload = (props: IFieldProps<IFileUploadConfig>) => {
 
   return (
     <div
-      className={FieldClassName("fe-file-upload", error)}
       aria-invalid={!!error}
       aria-required={required}
+      {...rest}
+      className={FieldClassName("fe-file-upload", error)}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       <input

@@ -58,19 +58,19 @@ export function resolveTemplates(
   // Pull from global registry by trying to look up inline/config templates later
   // We store inline + option templates here; global is accessed via getFormTemplate
   if (config.templates) {
-    Object.assign(mergedTemplates, config.templates);
+    safeMerge(mergedTemplates, config.templates);
   }
   if (options?.templates) {
-    Object.assign(mergedTemplates, options.templates);
+    safeMerge(mergedTemplates, options.templates);
   }
 
   // Build merged lookup tables: global -> config.lookups -> options.lookups
   const mergedLookups: Record<string, unknown> = {};
   if (config.lookups) {
-    Object.assign(mergedLookups, config.lookups);
+    safeMerge(mergedLookups, config.lookups);
   }
   if (options?.lookups) {
-    Object.assign(mergedLookups, options.lookups);
+    safeMerge(mergedLookups, options.lookups);
   }
 
   // Resolution context
@@ -401,7 +401,7 @@ function buildLookups(ctx: IResolutionContext): Record<string, unknown> {
   // in the interpolator. However, our interpolateDeep passes lookups directly,
   // so we need to include anything from the global registry that might be needed.
   // Since we can't enumerate, we rely on the merged set.
-  Object.assign(result, ctx.mergedLookups);
+  safeMerge(result, ctx.mergedLookups);
 
   return result;
 }
@@ -699,4 +699,18 @@ function expandWizardFragments(
 
 function deepClone<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
+}
+
+/**
+ * Merge source keys into target, excluding prototype-pollution keys
+ * (__proto__, constructor, prototype). See audit P0-10.
+ */
+function safeMerge<T extends Record<string, unknown>>(
+  target: T,
+  source: Record<string, unknown>
+): void {
+  for (const key of Object.keys(source)) {
+    if (key === "__proto__" || key === "constructor" || key === "prototype") continue;
+    (target as Record<string, unknown>)[key] = source[key];
+  }
 }

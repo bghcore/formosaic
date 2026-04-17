@@ -9,10 +9,15 @@ interface ITextareaProps {
   numberOfRows?: number;
   ellipsifyTextCharacters?: number;
   maxLimit?: number;
+  placeHolder?: string;
 }
 
 const Textarea = (props: IFieldProps<ITextareaProps>) => {
-  const { fieldName, testId, value, readOnly, config, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, config, error, required, setFieldValue, placeholder,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText,
+    ...rest
+  } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFieldValue(fieldName, event.target.value, false, 3000);
@@ -30,6 +35,9 @@ const Textarea = (props: IFieldProps<ITextareaProps>) => {
 
   return (
     <MantineTextarea
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className={FieldClassName("fe-textarea", error)}
       autoComplete="off"
       value={value ? `${value}` : ""}
@@ -37,9 +45,7 @@ const Textarea = (props: IFieldProps<ITextareaProps>) => {
       rows={config?.numberOfRows ?? 4}
       autosize={config?.autoAdjustHeight}
       maxLength={config?.maxLimit}
-      required={required}
-      aria-invalid={!!error}
-      aria-required={required}
+      placeholder={placeholder ?? config?.placeHolder}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );

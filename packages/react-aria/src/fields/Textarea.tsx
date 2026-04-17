@@ -13,12 +13,15 @@ interface ITextareaProps {
   maxLimit?: number;
   saveCallback?: () => void;
   renderExtraModalFooter?: () => React.ReactNode;
+  placeHolder?: string;
 }
 
 const Textarea = (props: IFieldProps<ITextareaProps>) => {
   const {
     error, fieldName, testId, config, readOnly,
-    required, savePending, saving, value, label, setFieldValue
+    required, savePending, saving, value, label, setFieldValue, placeholder,
+    errorCount, options, optionsLoading, type, description, helpText,
+    ...rest
   } = props;
 
   const [modalValue, setModalValue] = useState<string>();
@@ -75,6 +78,9 @@ const Textarea = (props: IFieldProps<ITextareaProps>) => {
         data-field-state={getFieldState({ error, required, readOnly })}
       >
         <TextField
+          aria-invalid={!!error}
+          aria-required={required}
+          {...rest}
           className="df-textarea__field"
           value={modalVisible ? `${modalValue}` : value ? `${value}` : ""}
           onChange={(val) => {
@@ -87,6 +93,7 @@ const Textarea = (props: IFieldProps<ITextareaProps>) => {
             className="df-textarea__input"
             autoComplete="off"
             rows={config?.numberOfRows ?? 4}
+            placeholder={placeholder ?? config?.placeHolder}
             data-testid={GetFieldDataTestId(fieldName, testId)}
           />
         </TextField>

@@ -6,7 +6,11 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId } from "../helpers";
 
 const RadioGroup = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, options, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const onChange = (e: RadioChangeEvent) => {
     setFieldValue(fieldName, e.target.value);
@@ -19,8 +23,10 @@ const RadioGroup = (props: IFieldProps<{}>) => {
 
   return (
     <div
+      role="radiogroup"
       aria-invalid={!!error}
       aria-required={required}
+      {...rest}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       <Radio.Group value={value} onChange={onChange}>

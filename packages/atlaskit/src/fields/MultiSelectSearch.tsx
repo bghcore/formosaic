@@ -3,7 +3,11 @@ import React, { useState, useMemo } from "react";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const MultiSelectSearch = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, options, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
   const [searchTerm, setSearchTerm] = useState("");
   const selectedValues = (value as string[]) ?? [];
   const filteredOptions = useMemo(() => {
@@ -23,9 +27,17 @@ const MultiSelectSearch = (props: IFieldProps<{}>) => {
     ) : (<span className="ak-read-only-text">-</span>);
   }
   return (
-    <div className="ak-multi-select-search" data-field-type="MultiSelectSearch" data-field-state={getFieldState({ error, required, readOnly })} data-testid={GetFieldDataTestId(fieldName, testId)}>
+    <div
+      className="ak-multi-select-search"
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
+      data-field-type="MultiSelectSearch"
+      data-field-state={getFieldState({ error, required, readOnly })}
+      data-testid={GetFieldDataTestId(fieldName, testId)}
+    >
       <input type="search" className="ak-multi-select-search__input" placeholder="Search..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} aria-label={`Search options for ${fieldName}`} />
-      <fieldset className="ak-multi-select-search__options" aria-invalid={!!error} aria-required={required}>
+      <fieldset className="ak-multi-select-search__options">
         <legend className="ak-sr-only">Options</legend>
         {filteredOptions.map(option => {
           const optVal = String(option.value);

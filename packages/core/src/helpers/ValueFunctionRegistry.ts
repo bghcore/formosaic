@@ -22,6 +22,15 @@ const defaultValueFunctions: Record<string, ValueFunction> = {
   setLoggedInUser: ({ currentUserId }) => currentUserId ? { id: currentUserId } : undefined,
 };
 
+/**
+ * SSR / multi-tenant contract (audit P1-21):
+ *
+ * Plugin-style registry of named value functions referenced via `$fn.name()`
+ * in computed-value expressions. Register ONCE at app boot. Value functions
+ * receive `values`, `parentEntity`, `currentUserId` per-call, so per-request
+ * state should be plumbed through those arguments — never captured in a
+ * module-level closure, which would leak across tenants/requests.
+ */
 let valueFunctionRegistry: Record<string, ValueFunction> = { ...defaultValueFunctions };
 
 /** Register custom value functions (merge into registry) */

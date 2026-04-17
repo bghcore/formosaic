@@ -11,7 +11,11 @@ interface IDropdownProps {
 }
 
 const Dropdown = (props: IFieldProps<IDropdownProps>) => {
-  const { fieldName, testId, value, readOnly, config, error, required, options, placeholder, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, config, error, required, options, placeholder, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText,
+    ...rest
+  } = props;
 
   React.useEffect(() => {
     if (!value && !readOnly && config?.setDefaultKeyIfOnlyOneOption && options?.length === 1) {
@@ -27,6 +31,9 @@ const Dropdown = (props: IFieldProps<IDropdownProps>) => {
 
   return (
     <Select
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className="df-dropdown"
       selectedKey={(value as string) || null}
       onSelectionChange={(key: Key) => setFieldValue(fieldName, String(key))}

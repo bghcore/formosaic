@@ -11,7 +11,11 @@ interface ISliderProps {
 }
 
 const Slider = (props: IFieldProps<ISliderProps>) => {
-  const { fieldName, testId, value, readOnly, config, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, config, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder,
+    ...rest
+  } = props;
 
   if (readOnly) {
     return <ReadOnlyText fieldName={fieldName} value={!isNull(value) ? String(value) : undefined} />;
@@ -25,6 +29,7 @@ const Slider = (props: IFieldProps<ISliderProps>) => {
       maxValue={config?.max}
       minValue={config?.min}
       step={config?.step}
+      {...(rest as Record<string, unknown>)}
       data-field-type="Slider"
       data-field-state={getFieldState({ error, required, readOnly })}
       data-testid={GetFieldDataTestId(fieldName, testId)}

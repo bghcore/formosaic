@@ -5,7 +5,11 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId } from "../helpers";
 
 const Toggle = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(fieldName, event.target.checked);
@@ -18,12 +22,13 @@ const Toggle = (props: IFieldProps<{}>) => {
   return (
     <label className="fe-toggle">
       <input
+        aria-invalid={!!error}
+        aria-required={required}
+        {...rest}
         type="checkbox"
         role="switch"
         checked={!!value}
         onChange={onChange}
-        aria-invalid={!!error}
-        aria-required={required}
         data-testid={GetFieldDataTestId(fieldName, testId)}
       />
     </label>

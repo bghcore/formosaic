@@ -4,7 +4,11 @@ import React from "react";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const MultiSelect = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, options, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const selectedValues = (value as string[]) ?? [];
 
@@ -28,6 +32,9 @@ const MultiSelect = (props: IFieldProps<{}>) => {
 
   return (
     <Select
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       mode="multiple"
       className={FieldClassName("fe-multiselect", error)}
       value={selectedValues}
@@ -35,8 +42,6 @@ const MultiSelect = (props: IFieldProps<{}>) => {
       options={selectOptions}
       status={error ? "error" : undefined}
       style={{ width: "100%" }}
-      aria-invalid={!!error}
-      aria-required={required}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );

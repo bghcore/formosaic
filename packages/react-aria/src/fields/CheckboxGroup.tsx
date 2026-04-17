@@ -5,7 +5,11 @@ import { GetFieldDataTestId, getFieldState } from "../helpers";
 import { CheckboxGroup as AriaCheckboxGroup, Checkbox } from "react-aria-components";
 
 const CheckboxGroup = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, options, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const selected = Array.isArray(value) ? (value as string[]) : [];
 
@@ -19,6 +23,9 @@ const CheckboxGroup = (props: IFieldProps<{}>) => {
 
   return (
     <AriaCheckboxGroup
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className="df-checkbox-group"
       value={selected}
       onChange={(vals) => setFieldValue(fieldName, vals)}

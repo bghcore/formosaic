@@ -54,6 +54,16 @@ export const RulesEngineProvider: React.FC<React.PropsWithChildren<{}>> = (
     });
   }, []);
 
+  const clearPendingSetValue = React.useCallback((
+    configName: string,
+    fieldNames?: readonly string[]
+  ) => {
+    dispatch({
+      type: RulesEngineActionType.CLEAR_PENDING_SETVALUE,
+      payload: { configName, fieldNames },
+    });
+  }, []);
+
   const processFieldChange = React.useCallback((
     entityData: IEntityData,
     configName: string,
@@ -84,7 +94,8 @@ export const RulesEngineProvider: React.FC<React.PropsWithChildren<{}>> = (
     initFormState,
     processFieldChange,
     clearFormState,
-  }), [rulesState, initFormState, processFieldChange, clearFormState]);
+    clearPendingSetValue,
+  }), [rulesState, initFormState, processFieldChange, clearFormState, clearPendingSetValue]);
 
   return (
     <RulesEngineContext.Provider value={providerValue}>

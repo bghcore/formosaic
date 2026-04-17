@@ -14,16 +14,21 @@ export function evaluateCondition(condition: ICondition, values: IEntityData): b
 }
 
 function evaluateLogicalCondition(condition: ILogicalCondition, values: IEntityData): boolean {
+  // Per audit P1-9: default missing `conditions` to an empty array and return
+  // mathematically-correct defaults (and:true, or:false, not:true) so a
+  // user authoring error surfaces as a no-op rule rather than a runtime crash.
+  const conditions = Array.isArray(condition.conditions) ? condition.conditions : [];
   switch (condition.operator) {
     case "and":
-      return condition.conditions.every(c => evaluateCondition(c, values));
+      return conditions.every(c => evaluateCondition(c, values));
     case "or":
-      return condition.conditions.some(c => evaluateCondition(c, values));
+      return conditions.some(c => evaluateCondition(c, values));
     case "not":
-      // NOT applies to the first (and typically only) child condition
-      return condition.conditions.length > 0
-        ? !evaluateCondition(condition.conditions[0], values)
-        : false;
+      // NOT applies to the first (and typically only) child condition.
+      // Empty `conditions` => logical not of nothing => true.
+      return conditions.length > 0
+        ? !evaluateCondition(conditions[0], values)
+        : true;
     default:
       return false;
   }
@@ -66,8 +71,26 @@ function evaluateFieldCondition(condition: IFieldCondition, values: IEntityData)
     case "isNotEmpty":
       return !isValueEmpty(fieldValue);
     case "matches":
+      // Per audit P0-10: cap regex source length and input length before
+      // executing to mitigate ReDoS via adversarial configs.
       try {
-        return new RegExp(toString(condition.value)).test(toString(fieldValue));
+        const pattern = toString(condition.value);
+        const input = toString(fieldValue);
+        if (pattern.length > 256) {
+          if (typeof process !== "undefined" && process.env && process.env.NODE_ENV !== "production") {
+            // eslint-disable-next-line no-console
+            console.warn(`[formosaic] 'matches' regex source exceeds 256 chars; returning false to prevent ReDoS.`);
+          }
+          return false;
+        }
+        if (input.length > 10_000) {
+          if (typeof process !== "undefined" && process.env && process.env.NODE_ENV !== "production") {
+            // eslint-disable-next-line no-console
+            console.warn(`[formosaic] 'matches' input exceeds 10000 chars; returning false to prevent ReDoS.`);
+          }
+          return false;
+        }
+        return new RegExp(pattern).test(input);
       } catch {
         return false;
       }
@@ -107,10 +130,11 @@ export function extractConditionDependencies(condition: ICondition): string[] {
 
 function collectDependencies(condition: ICondition, deps: Set<string>): void {
   if (isLogicalCondition(condition)) {
-    condition.conditions.forEach(c => collectDependencies(c, deps));
+    const conditions = Array.isArray(condition.conditions) ? condition.conditions : [];
+    conditions.forEach(c => collectDependencies(c, deps));
   } else {
     const fieldRef = (condition as IFieldCondition).field;
-    deps.add(fieldRef);
+    if (fieldRef) deps.add(fieldRef);
   }
 }
 
@@ -121,6 +145,8 @@ function getNestedValue(obj: IEntityData, path: string): unknown {
   let current: unknown = obj;
   for (const part of parts) {
     if (current === null || current === undefined) return undefined;
+    // Per audit P0-10: refuse to traverse prototype-pollution keys.
+    if (part === "__proto__" || part === "constructor" || part === "prototype") return undefined;
     current = (current as Record<string, unknown>)[part];
   }
   return current;

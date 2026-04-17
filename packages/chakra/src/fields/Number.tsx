@@ -6,7 +6,11 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const NumberField = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const number = Number(event.target.value);
@@ -21,12 +25,13 @@ const NumberField = (props: IFieldProps<{}>) => {
 
   return (
     <Input
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       type="number"
       autoComplete="off"
       value={!isNull(value) ? String(value) : ""}
       onChange={onChange}
-      aria-invalid={!!error}
-      aria-required={required}
       data-field-type="Number"
       data-field-state={getFieldState({ error, required, readOnly })}
       data-testid={GetFieldDataTestId(fieldName, testId)}

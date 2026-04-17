@@ -11,7 +11,11 @@ interface ISliderProps {
 }
 
 const Slider = (props: IFieldProps<ISliderProps>) => {
-  const { fieldName, testId, value, readOnly, config, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, config, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder,
+    ...rest
+  } = props;
 
   if (readOnly) {
     return <ReadOnlyText fieldName={fieldName} value={!isNull(value) ? String(value) : undefined} />;
@@ -32,6 +36,7 @@ const Slider = (props: IFieldProps<ISliderProps>) => {
         step={config?.step}
         aria-invalid={!!error}
         aria-required={required}
+        {...rest}
         data-testid={GetFieldDataTestId(fieldName, testId)}
       >
         <RadixSlider.Track className="df-slider__track">

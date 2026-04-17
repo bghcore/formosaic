@@ -30,57 +30,86 @@ These validators are registered by default and can be referenced by name in `IFi
 
 ---
 
-## Factory Validators
+## Factory Helpers
 
-Factory functions create parameterized validators. These must be registered at startup using `registerValidators()`.
+Factory helpers (exported from `@formosaic/core`) return an `IValidationRule` object. Place the return value directly in a field's `validate:` array -- these do not need to be registered with `registerValidators()`.
 
-### createMinLengthValidation(min)
+### createMinLengthRule(min, message?)
 
-Creates a validator that checks whether the string value has at least `min` characters.
+Returns a rule that checks the string value has at least `min` characters.
 
 ```typescript
-import { registerValidators, createMinLengthValidation } from "@formosaic/core";
+import { createMinLengthRule } from "@formosaic/core";
 
-registerValidators({
-  MinLength5: createMinLengthValidation(5),
-  MinLength10: createMinLengthValidation(10),
-});
+fields: {
+  username: {
+    type: "Textbox",
+    label: "Username",
+    validate: [createMinLengthRule(5)],
+  },
+}
 ```
 
-### createMaxLengthValidation(max)
+### createMaxLengthRule(max, message?)
 
-Creates a validator that checks whether the string value has at most `max` characters.
+Returns a rule that checks the string value has at most `max` characters.
 
-### createNumericRangeValidation(min, max)
+### createNumericRangeRule(min, max, message?)
 
-Creates a validator that checks whether the value (parsed as a number) falls within the specified range.
+Returns a rule that checks the value (parsed as a number) falls within the specified range.
 
 ```typescript
-registerValidators({
-  PercentageRange: createNumericRangeValidation(0, 100),
-  AgeRange: createNumericRangeValidation(0, 150),
-});
+import { createNumericRangeRule } from "@formosaic/core";
+
+fields: {
+  percentage: {
+    type: "Number",
+    label: "Percentage",
+    validate: [createNumericRangeRule(0, 100)],
+  },
+  age: {
+    type: "Number",
+    label: "Age",
+    validate: [createNumericRangeRule(0, 150)],
+  },
+}
 ```
 
-### createPatternValidation(regex, message)
+### createPatternRule(pattern, message)
 
-Creates a validator that tests the string value against a custom regex.
+Returns a rule that tests the string value against a regex pattern string.
 
 ```typescript
-registerValidators({
-  AlphaOnly: createPatternValidation(/^[a-zA-Z]+$/, "Only letters are allowed"),
-  USZipCode: createPatternValidation(/^\d{5}(-\d{4})?$/, "Invalid US ZIP code"),
-});
+import { createPatternRule } from "@formosaic/core";
+
+fields: {
+  letters: {
+    type: "Textbox",
+    label: "Letters only",
+    validate: [createPatternRule("^[a-zA-Z]+$", "Only letters are allowed")],
+  },
+  zip: {
+    type: "Textbox",
+    label: "ZIP code",
+    validate: [createPatternRule("^\\d{5}(-\\d{4})?$", "Invalid US ZIP code")],
+  },
+}
 ```
 
-### createRequiredIfValidation(dependentFieldName, dependentFieldValues)
+### createRequiredIfRule(field, values, message?)
 
-Creates a cross-field-aware sync validator that makes the current field required conditionally.
+Returns a cross-field rule that makes the current field required when `field`'s value is one of `values`.
 
 ```typescript
-registerValidators({
-  RequiredIfStatusActive: createRequiredIfValidation("status", ["Active", "InProgress"]),
-});
+import { createRequiredIfRule } from "@formosaic/core";
+
+fields: {
+  reason: {
+    type: "Textarea",
+    label: "Reason",
+    validate: [createRequiredIfRule("status", ["Active", "InProgress"])],
+  },
+}
 ```
 
 ---

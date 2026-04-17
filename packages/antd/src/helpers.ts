@@ -6,4 +6,5 @@ export {
   DocumentLinksStrings,
   convertBooleanToYesOrNoText,
   isNull,
+  sanitizeHtml,
 } from "@formosaic/core/adapter-utils";

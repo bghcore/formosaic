@@ -21,6 +21,9 @@ export {
   getLastRenderedFields,
   getTotalFormRenders,
   resetRenderTracker,
+  enableRenderTracker,
+  disableRenderTracker,
+  isRenderTrackerEnabled,
 } from "./helpers/RenderTracker";
 
 // Event Timeline
@@ -28,5 +31,8 @@ export {
   logEvent,
   getTimeline,
   clearTimeline,
+  enableEventTimeline,
+  disableEventTimeline,
+  isEventTimelineEnabled,
 } from "./helpers/EventTimeline";
 export type { ITimelineEvent, TimelineEventType } from "./helpers/EventTimeline";

@@ -3,7 +3,11 @@ import React from "react";
 import { GetFieldDataTestId, getFieldState, formatDateTime } from "../helpers";
 
 const DateControl = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const date = new Date(event.target.value);
@@ -40,12 +44,13 @@ const DateControl = (props: IFieldProps<{}>) => {
       data-field-state={getFieldState({ error, required, readOnly })}
     >
       <input
+        aria-invalid={!!error}
+        aria-required={required}
+        {...rest}
         type="date"
         className="df-date-control__input"
         value={dateInputValue}
         onChange={onChange}
-        aria-invalid={!!error}
-        aria-required={required}
         data-testid={GetFieldDataTestId(fieldName, testId)}
       />
       <button

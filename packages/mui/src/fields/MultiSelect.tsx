@@ -6,7 +6,11 @@ import { useFormContext } from "react-hook-form";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const MultiSelect = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, options, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const { watch } = useFormContext();
   const selectedOptions = (watch(`${fieldName}` as const) as string[]) ?? [];
@@ -27,14 +31,14 @@ const MultiSelect = (props: IFieldProps<{}>) => {
       ) : null}
     </>
   ) : (
-    <FormControl fullWidth size="small" error={!!error} required={required}>
+    <FormControl {...rest} fullWidth size="small" error={!!error} required={required}>
       <Select
+        aria-invalid={!!error}
+        aria-required={required}
         className={FieldClassName("fe-multi-select", error)}
         multiple
         value={selectedOptions}
         onChange={onChange}
-        aria-invalid={!!error}
-        aria-required={required}
         renderValue={(selected) => (
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
             {(selected as string[]).map((val) => (

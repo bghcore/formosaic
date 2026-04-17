@@ -5,7 +5,11 @@ import { GetFieldDataTestId } from "../helpers";
 import { Autocomplete as MantineAutocomplete } from "@mantine/core";
 
 const Autocomplete = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, placeholder, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, placeholder, options, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, config,
+    ...rest
+  } = props;
 
   const selectedLabel = options?.find(o => String(o.value) === String(value))?.label ?? (value as string) ?? "";
 
@@ -17,6 +21,9 @@ const Autocomplete = (props: IFieldProps<{}>) => {
 
   return (
     <MantineAutocomplete
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className="fe-autocomplete"
       data={data}
       defaultValue={selectedLabel}

@@ -8,10 +8,15 @@ interface ITextareaProps {
   numberOfRows?: number;
   ellipsifyTextCharacters?: number;
   maxLimit?: number;
+  placeHolder?: string;
 }
 
 const Textarea = (props: IFieldProps<ITextareaProps>) => {
-  const { fieldName, testId, value, readOnly, config, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, config, error, required, setFieldValue, placeholder,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText,
+    ...rest
+  } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFieldValue(fieldName, event.target.value, false, 3000);
@@ -29,14 +34,16 @@ const Textarea = (props: IFieldProps<ITextareaProps>) => {
 
   return (
     <textarea
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className={FieldClassName("fe-textarea", error)}
       autoComplete="off"
       value={value ? `${value}` : ""}
       onChange={onChange}
       rows={config?.numberOfRows ?? 4}
       maxLength={config?.maxLimit}
-      aria-invalid={!!error}
-      aria-required={required}
+      placeholder={placeholder ?? config?.placeHolder}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );

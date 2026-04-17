@@ -5,7 +5,11 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const Rating = (props: IFieldProps<IRatingConfig>) => {
-  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, config, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder,
+    ...rest
+  } = props;
 
   const max = config?.max ?? 5;
   const precision = config?.allowHalf ? 0.5 : 1;
@@ -21,12 +25,14 @@ const Rating = (props: IFieldProps<IRatingConfig>) => {
 
   return (
     <MuiRating
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className={FieldClassName("fe-rating", error)}
       value={rating}
       max={max}
       precision={precision}
       onChange={onChange}
-      aria-required={required}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );

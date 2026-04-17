@@ -1,7 +1,6 @@
 import { isEmpty, isNull } from "../utils";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { ComponentTypes } from "../constants";
 import { CheckFieldValidationRules, CheckAsyncFieldValidationRules, ShowField } from "../helpers/FormosaicHelper";
 import { IOption } from "../types/IOption";
 import { IValidationRule } from "../types/IValidationRule";
@@ -170,7 +169,10 @@ const RenderField = (props: IRenderFieldProps) => {
   }, []);
 
   React.useEffect(() => {
-    trackRender(fieldName);
+    // Gate dev-only render tracking: no work in production. See audit P1-22.
+    if (process.env.NODE_ENV !== "production") {
+      trackRender(fieldName);
+    }
   });
 
   const fieldNameConst = `${fieldName}` as const;
@@ -185,11 +187,20 @@ const RenderField = (props: IRenderFieldProps) => {
           name={fieldNameConst}
           control={control}
           rules={{
-            required: required && type !== ComponentTypes.Toggle && !isReadOnly
+            // Per audit P0-9: Toggle with required:true must require a truthy
+            // value (the user must actively toggle it on). Previously Toggle
+            // was silently exempted, breaking required-consent UX.
+            // TODO(docs): surface this as a behavior change in the next CHANGELOG.
+            required: required && !isReadOnly
               ? { value: true, message: FormStrings.required }
               : undefined,
             validate: async (value) => {
-              if (!validate || validate.length === 0 || isReadOnly || !value) return undefined;
+              // Per audit P0-8: do NOT short-circuit on falsy values (0, "",
+              // false, null). Each validator guards its own empty cases and
+              // may fire on an empty/zero value (e.g. numericRange min:5
+              // must reject 0). Only short-circuit when validation is
+              // disabled or the field is read-only.
+              if (!validate || validate.length === 0 || isReadOnly) return undefined;
               // Build a mock runtime state for validation
               const fieldState: IRuntimeFieldState = { validate };
               const syncError = CheckFieldValidationRules(value, fieldName, getValues(), fieldState);

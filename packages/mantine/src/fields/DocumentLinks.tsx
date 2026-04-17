@@ -9,7 +9,11 @@ export interface IDocumentLink {
 }
 
 const DocumentLinks = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const { watch } = useFormContext();
   const documentLinks: IDocumentLink[] = watch(`${fieldName}` as const) ?? [];
@@ -33,6 +37,7 @@ const DocumentLinks = (props: IFieldProps<{}>) => {
   if (readOnly) {
     return (
       <ul
+        {...rest}
         className="fe-document-links fe-document-links--readonly"
         data-field-type="DocumentLinks"
         data-field-state="readonly"
@@ -50,6 +55,9 @@ const DocumentLinks = (props: IFieldProps<{}>) => {
 
   return (
     <div
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className="fe-document-links"
       data-field-type="DocumentLinks"
       data-field-state={getFieldState({ error, required, readOnly })}

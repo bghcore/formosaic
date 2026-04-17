@@ -105,11 +105,13 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
   const effectiveExpandCutoff = formSettings?.expandCutoffCount ?? expandCutoffCount;
   const analytics = useFormAnalytics(formSettings?.analytics);
 
-  const saveData = props.saveData
-    ? props.saveData
-    : (): Promise<IEntityData> => Promise.resolve({} as IEntityData);
+  // Per audit P0-4: do NOT fall back to a noop saveData. A noop resolver
+  // returning `{}` causes handleDirtyFields to reset the form to an empty
+  // object, wiping in-progress user edits. When `saveData` is not supplied,
+  // the save flow is skipped entirely below.
+  const saveData = props.saveData;
 
-  const { initFormState, processFieldChange, rulesState } = UseRulesEngineContext();
+  const { initFormState, processFieldChange, rulesState, clearPendingSetValue } = UseRulesEngineContext();
 
   const saveTimeoutDelay = React.useRef<number | undefined>(undefined);
   const saveTimeout = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -132,7 +134,37 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
 
   React.useEffect(() => { rulesStateRef.current = rulesState; }, [rulesState]);
   React.useEffect(() => { formStateRef.current = formState; }, [formState]);
-  React.useEffect(() => { initForm(defaultValues); }, [areAllFieldsReadonly]);
+
+  // Track last-init inputs so we only re-init when meaningful inputs change,
+  // not on every parent rerender. See audit P1-1.
+  const initInputsRef = React.useRef<{
+    fields: Record<string, IFieldConfig>;
+    defaultValues: IEntityData;
+    configName: string;
+    isCreate?: boolean;
+    areAllFieldsReadonly?: boolean;
+    parentEntity?: IEntityData;
+    currentUserId?: string;
+  } | undefined>(undefined);
+
+  React.useEffect(() => {
+    const last = initInputsRef.current;
+    if (
+      last &&
+      last.fields === fields &&
+      last.defaultValues === defaultValues &&
+      last.configName === configName &&
+      last.isCreate === isCreate &&
+      last.areAllFieldsReadonly === areAllFieldsReadonly &&
+      last.parentEntity === parentEntity &&
+      last.currentUserId === currentUserId
+    ) {
+      return;
+    }
+    initInputsRef.current = { fields, defaultValues, configName, isCreate, areAllFieldsReadonly, parentEntity, currentUserId };
+    initForm(defaultValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fields, defaultValues, configName, isCreate, areAllFieldsReadonly, parentEntity, currentUserId]);
 
   // Inject server-side per-field errors into RHF error state
   React.useEffect(() => {
@@ -144,26 +176,42 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
 
   const initForm = (entityData: IEntityData) => {
     const { formState: loadedState, initEntityData } = isCreate
-      ? InitOnCreateFormState(configName, fields, entityData, parentEntity ?? {}, currentUserId ?? "", setValue, initFormState)
+      ? InitOnCreateFormState(configName, fields, entityData, parentEntity ?? {}, currentUserId ?? "", setValue, initFormState, getValues)
       : InitOnEditFormState(configName, fields, entityData, areAllFieldsReadonly ?? false, initFormState);
 
     setExpandEnabled(IsExpandVisible(loadedState.fieldStates, effectiveExpandCutoff));
     CheckValidDropdownOptions(loadedState.fieldStates, initEntityData, setValue);
+    // Defaults are applied once at init-time only (P1-3). Rules that want to
+    // reset or override values should use setValue effects (pendingSetValue).
+    CheckDefaultValues(loadedState.fieldStates, initEntityData, setValue);
   };
 
   React.useEffect(() => {
     if (rulesState.configs[configName]) {
       const cfg = rulesState.configs[configName];
       CheckValidDropdownOptions(cfg.fieldStates, getValues(), setValue);
-      CheckDefaultValues(cfg.fieldStates, getValues(), setValue);
+      // Per audit P1-3: do NOT re-apply defaults on every rules-state change.
+      // Defaults are init-time only (see initForm). Rules that want to reset or
+      // replace values should use setValue effects via pendingSetValue.
       handleComputedValues(cfg);
 
-      // Apply pending setValue effects from rules, then clear them
+      // Apply pending setValue effects from rules. We dispatch a reducer
+      // action to clear them immutably rather than mutating state in place
+      // (P1-4). After applying each value, call processFieldChange so any
+      // downstream rules re-evaluate against the new value.
+      const appliedFields: string[] = [];
       for (const [fieldName, fieldState] of Object.entries(cfg.fieldStates)) {
         if (fieldState.pendingSetValue !== undefined) {
           setValue(`${fieldName}` as const, fieldState.pendingSetValue.value, { shouldDirty: true });
-          fieldState.pendingSetValue = undefined;
+          appliedFields.push(fieldName);
         }
+      }
+      if (appliedFields.length > 0) {
+        // Cascade: let any rules whose condition depends on these fields re-run.
+        for (const fieldName of appliedFields) {
+          processFieldChange(getValues(), configName, fieldName, fields);
+        }
+        clearPendingSetValue(configName, appliedFields);
       }
     }
   }, [rulesState]);
@@ -177,13 +225,21 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
     }, saveTimeoutDelay?.current || 100);
   }, []);
 
-  const setFieldValue = (fieldName: string, fieldValue: unknown, skipSave?: boolean, timeout?: number) => {
+  // Stable reference to avoid breaking downstream memoization. See audit P0-2.
+  // Uses only stable deps: `configName`, `fields`, and functions from RHF/context
+  // which are stable by contract. `effectiveManualSave` is a primitive.
+  const setFieldValue = React.useCallback((
+    fieldName: string,
+    fieldValue: unknown,
+    skipSave?: boolean,
+    timeout?: number
+  ) => {
     saveTimeoutDelay.current = timeout;
     setValue(`${fieldName}` as const, fieldValue, { shouldDirty: !skipSave });
     trigger(fieldName);
     processFieldChange(getValues(), configName, fieldName, fields);
     if (!skipSave && !effectiveManualSave) { attemptSave(); }
-  };
+  }, [setValue, trigger, getValues, processFieldChange, configName, fields, effectiveManualSave, attemptSave]);
 
   const manualSave = React.useCallback(() => { validateAndSaveRef.current?.(); }, []);
 
@@ -202,6 +258,11 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
       computedValues.forEach(cv => {
         const result = ExecuteComputedValue(cv.expression, getValues(), cv.fieldName);
         setValue(`${cv.fieldName}` as const, result as unknown, { shouldDirty: true });
+        // Per audit P1-5: re-trigger validation and cascade rules that depend
+        // on this computed field so downstream validation / cross-field rules
+        // reflect the new value.
+        trigger(cv.fieldName);
+        processFieldChange(getValues(), configName, cv.fieldName, fields);
       });
     }
   };
@@ -254,6 +315,10 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
   validateAndSaveRef.current = validateAndSave;
 
   const handleSave = (data: IEntityData) => {
+    // Per audit P0-4: skip the save flow entirely when no saveData was
+    // supplied. Falling back to a noop resolver (returning `{}`) would cause
+    // handleDirtyFields to reset the form to an empty object, wiping edits.
+    if (!saveData) return;
     if (saveAbortControllerRef.current) saveAbortControllerRef.current.abort();
     const abortController = new AbortController();
     saveAbortControllerRef.current = abortController;
@@ -261,20 +326,61 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
 
     const saveWithTimeoutAndRetry = async (attempt: number): Promise<void> => {
       if (abortController.signal.aborted) return;
+
+      // Abortable timeout: reject on either the configured timeout OR abort.
+      // Track the setTimeout handle so we can clear it on success (P2-23).
+      let timeoutHandle: ReturnType<typeof setTimeout> | undefined;
       const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => reject(new Error(FormStrings.saveTimeout)), effectiveSaveTimeout);
+        timeoutHandle = setTimeout(
+          () => reject(new Error(FormStrings.saveTimeout)),
+          effectiveSaveTimeout
+        );
+        const onAbort = () => {
+          if (timeoutHandle !== undefined) clearTimeout(timeoutHandle);
+          reject(new Error("aborted"));
+        };
+        if (abortController.signal.aborted) onAbort();
+        else abortController.signal.addEventListener("abort", onAbort, { once: true });
       });
+
       try {
-        const updatedEntity = await Promise.race([saveData(data, dirtyFieldNames), timeoutPromise]);
+        // Forward the AbortSignal to the consumer's saveData as an optional
+        // third arg. Older consumers (2-arg) ignore it; new consumers can
+        // honor it to cancel in-flight network requests (P0-4).
+        const updatedEntity = await Promise.race([
+          (saveData as (
+            data: IEntityData,
+            dirtyFieldNames?: string[],
+            options?: { signal?: AbortSignal }
+          ) => Promise<IEntityData>)(data, dirtyFieldNames, { signal: abortController.signal }),
+          timeoutPromise,
+        ]);
+        // Clear the timeout immediately so the handle isn't leaked.
+        if (timeoutHandle !== undefined) clearTimeout(timeoutHandle);
         if (abortController.signal.aborted) return;
         setStatusMessage(FormStrings.saved);
         analytics.trackFormSubmit(data as Record<string, unknown>);
         if (!isCreate) handleDirtyFields(updatedEntity, data);
       } catch (error) {
+        if (timeoutHandle !== undefined) clearTimeout(timeoutHandle);
         if (abortController.signal.aborted) return;
         if (attempt < effectiveMaxRetries) {
           const delay = Math.pow(2, attempt) * 1000;
-          await new Promise(resolve => setTimeout(resolve, delay));
+          // Abortable sleep between retries: new edits must not wait out a
+          // stale retry sleep (P0-4).
+          try {
+            await new Promise<void>((resolve, reject) => {
+              const sleepHandle = setTimeout(resolve, delay);
+              const onAbort = () => {
+                clearTimeout(sleepHandle);
+                reject(new Error("aborted"));
+              };
+              if (abortController.signal.aborted) onAbort();
+              else abortController.signal.addEventListener("abort", onAbort, { once: true });
+            });
+          } catch {
+            return; // aborted during sleep
+          }
           if (abortController.signal.aborted) return;
           return saveWithTimeoutAndRetry(attempt + 1);
         }
@@ -290,7 +396,10 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
     const { dirtyFields } = formStateRef.current;
     const stillDirtyFields: IEntityData = {};
     Object.keys(dirtyFields).forEach(field => { stillDirtyFields[field] = getValues(field); });
-    const resetValue = entity;
+    // Per audit P0-4: if the consumer's saveData returns null/undefined, fall
+    // back to the submitted data so RHF reset() doesn't blow away in-progress
+    // edits.
+    const resetValue = (entity ?? data) as IEntityData;
     reset(resetValue);
     Object.keys(stillDirtyFields).forEach(field => {
       if (JSON.stringify(stillDirtyFields[field]) !== JSON.stringify(data[field])) {
@@ -333,7 +442,11 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
     if (current && current.otherDirtyFields && current.otherDirtyFields.length > 0) {
       if (current.confirmInputsTriggeredBy) resetField(current.confirmInputsTriggeredBy);
       if (current.dependentFieldNames) current.dependentFieldNames.forEach(n => resetField(n));
-      saveData(getValues(), current.otherDirtyFields).then(updatedEntity => initForm(updatedEntity));
+      if (saveData) {
+        saveData(getValues(), current.otherDirtyFields).then(updatedEntity => initForm(updatedEntity ?? getValues()));
+      } else {
+        initForm(getValues());
+      }
     } else {
       reset();
       initForm(getValues());
@@ -347,7 +460,7 @@ export const Formosaic: React.FC<IFormosaicComponentProps> = (props: IFormosaicC
     : undefined;
 
   return (
-    <FormProvider {...formMethods} formState={{ ...formMethods.formState, isDirty, isValid, dirtyFields, errors, isSubmitting, isSubmitSuccessful }}>
+    <FormProvider {...formMethods}>
       <div role="status" aria-live="polite" className="sr-only" style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0, 0, 0, 0)", whiteSpace: "nowrap", border: 0 }} data-testid="form-status-live-region">
         {statusMessage}
       </div>

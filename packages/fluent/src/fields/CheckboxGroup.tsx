@@ -6,7 +6,11 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const CheckboxGroup = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, options, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const selected = Array.isArray(value) ? (value as string[]) : [];
 
@@ -27,9 +31,11 @@ const CheckboxGroup = (props: IFieldProps<{}>) => {
 
   return (
     <div
-      className={FieldClassName("fe-checkbox-group", error)}
+      role="group"
       aria-invalid={!!error}
       aria-required={required}
+      {...rest}
+      className={FieldClassName("fe-checkbox-group", error)}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       {options?.map(option => (

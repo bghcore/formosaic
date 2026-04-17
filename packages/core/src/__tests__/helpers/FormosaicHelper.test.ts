@@ -330,7 +330,8 @@ describe("InlineFormHelper", () => {
       CheckDefaultValues(fieldStates, formValues, setValue);
 
       expect(setValue).toHaveBeenCalledTimes(1);
-      expect(setValue).toHaveBeenCalledWith("status", "Open", { shouldDirty: true });
+      // Updated: behavior corrected per audit finding P1-2 — defaults must not dirty the form.
+      expect(setValue).toHaveBeenCalledWith("status", "Open", { shouldDirty: false });
     });
 
     it("does not call setValue when form value already exists", () => {

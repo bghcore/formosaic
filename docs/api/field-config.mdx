@@ -13,24 +13,29 @@ Complete reference for `IFieldConfig`, the primary type used to define forms as 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `type` | `string` | `undefined` | UI component type key. Must match a registered component. |
+| `label` | `string` | `undefined` | Display label for the field (required in v2). |
 | `required` | `boolean` | `false` | Whether the field is required. Can be overridden by rules. |
 | `hidden` | `boolean` | `false` | Whether the field is hidden. Hidden fields skip validation. |
 | `readOnly` | `boolean` | `false` | Whether the field is read-only. |
 | `disabled` | `boolean` | `false` | Whether the field is disabled at the layout level. |
-| `label` | `string` | `undefined` | Display label for the field. |
-| `defaultValue` | `string \| number \| boolean` | `undefined` | Default value when field is visible and value is null. |
-| `computedValue` | `string` | `undefined` | Expression or value function reference. |
-| `computeOnCreateOnly` | `boolean` | `false` | Computed value runs only during create. |
-| `confirmInput` | `boolean` | `false` | Triggers confirmation modal on dependent changes. |
+| `defaultValue` | `unknown` | `undefined` | Default value when field is visible and value is null/undefined. |
+| `computedValue` | `string` | `undefined` | Expression or value function reference (e.g. `"$values.qty * $values.price"`, `"$fn.setDate()"`). |
+| `computeOnCreateOnly` | `boolean` | `false` | If true, computed value runs only during create (not edit). |
+| `confirmInput` | `boolean` | `false` | Triggers confirmation modal before save when the field changes. |
 | `hideOnCreate` | `boolean` | `false` | Field not rendered in create mode. |
-| `skipLayoutReadOnly` | `boolean` | `false` | Ignores layout-level disabled/readOnly. |
-| `rules` | `IRule[]` | `undefined` | Declarative dependency rules. |
-| `validate` | `IValidationRule[]` | `undefined` | Validation rules. |
+| `skipLayoutReadOnly` | `boolean` | `false` | Ignores layout-level disabled/readOnly override. |
+| `rules` | `IRule[]` | `undefined` | Declarative dependency rules (`when`/`then`/`else`/`priority`). |
+| `validate` | `IValidationRule[]` | `undefined` | Validation rules (unified: sync, async, cross-field, conditional). |
 | `options` | `IOption[]` | `undefined` | Static dropdown options. |
+| `loadOptions` | `(ctx) => Promise<IOption[]>` | `undefined` | Async options loader. When present, overrides static `options`. Cached per unique combination of `optionsDependsOn` values. |
+| `optionsDependsOn` | `string[]` | `undefined` | Field IDs that trigger a re-run of `loadOptions` when they change. If omitted, `loadOptions` runs once on mount. |
 | `config` | `Record<string, unknown>` | `undefined` | Arbitrary config passed to the field component. |
-| `items` | `Record<string, IFieldConfig>` | `undefined` | Field array item definitions. |
+| `items` | `Record<string, IFieldConfig>` | `undefined` | Field array item definitions (FieldArray only). |
 | `minItems` | `number` | `undefined` | Minimum items in a field array. |
 | `maxItems` | `number` | `undefined` | Maximum items in a field array. |
+| `description` | `string` | `undefined` | Short description shown as field tooltip or help text. |
+| `placeholder` | `string` | `undefined` | Placeholder text for empty fields. |
+| `helpText` | `string` | `undefined` | Extended help text (e.g. shown in a popover or below the field). |
 
 ---
 
@@ -93,6 +98,10 @@ After processing, each `IFieldConfig` becomes an `IRuntimeFieldState` at runtime
 
 ## Built-in Component Types
 
+`ComponentTypes` (from `packages/core/src/constants.ts`) defines 28 keys: 21 editable + 6 read-only + 1 structural (`FieldArray`).
+
+### Editable
+
 | Key | Constant | Description |
 |-----|----------|-------------|
 | `"Textbox"` | `ComponentTypes.Textbox` | Single-line text input |
@@ -102,16 +111,34 @@ After processing, each `IFieldConfig` becomes an `IRuntimeFieldState` at runtime
 | `"Multiselect"` | `ComponentTypes.MultiSelect` | Multi-select dropdown |
 | `"DateControl"` | `ComponentTypes.DateControl` | Date picker |
 | `"Slider"` | `ComponentTypes.Slider` | Range slider |
-| `"DynamicFragment"` | `ComponentTypes.Fragment` | Hidden fragment |
+| `"DynamicFragment"` | `ComponentTypes.Fragment` | Hidden fragment (form-state only, no visible UI) |
 | `"MultiSelectSearch"` | `ComponentTypes.MultiSelectSearch` | Multi-select with search |
 | `"Textarea"` | `ComponentTypes.Textarea` | Multi-line text input |
 | `"DocumentLinks"` | `ComponentTypes.DocumentLinks` | URL link CRUD |
 | `"StatusDropdown"` | `ComponentTypes.StatusDropdown` | Dropdown with color indicators |
+| `"RadioGroup"` | `ComponentTypes.RadioGroup` | Single-select radio button group |
+| `"CheckboxGroup"` | `ComponentTypes.CheckboxGroup` | Multi-select checkbox group (value: `string[]`) |
+| `"Rating"` | `ComponentTypes.Rating` | Star rating input (value: `number`) |
+| `"ColorPicker"` | `ComponentTypes.ColorPicker` | Native color picker (value: hex string) |
+| `"Autocomplete"` | `ComponentTypes.Autocomplete` | Searchable single-select with type-ahead |
+| `"FileUpload"` | `ComponentTypes.FileUpload` | File picker (single or multiple) |
+| `"DateRange"` | `ComponentTypes.DateRange` | Two date inputs; value: `{ start, end }` ISO strings |
+| `"DateTime"` | `ComponentTypes.DateTime` | Combined date+time input; value: ISO datetime-local string |
+| `"PhoneInput"` | `ComponentTypes.PhoneInput` | Phone input with inline masking (`us`, `international`, `raw`) |
+
+### Read-Only
+
+| Key | Constant | Description |
+|-----|----------|-------------|
 | `"ReadOnly"` | `ComponentTypes.ReadOnly` | Read-only text display |
 | `"ReadOnlyArray"` | `ComponentTypes.ReadOnlyArray` | Read-only array display |
 | `"ReadOnlyDateTime"` | `ComponentTypes.ReadOnlyDateTime` | Read-only date/time |
 | `"ReadOnlyCumulativeNumber"` | `ComponentTypes.ReadOnlyCumulativeNumber` | Read-only cumulative number |
-| `"ReadOnlyRichText"` | `ComponentTypes.ReadOnlyRichText` | Read-only rich text |
-| `"ReadOnlyWithButton"` | `ComponentTypes.ReadOnlyWithButton` | Read-only with action button |
-| `"ChoiceSet"` | `ComponentTypes.ChoiceSet` | Choice set / radio group |
-| `"FieldArray"` | `ComponentTypes.FieldArray` | Repeating field array |
+| `"ReadOnlyRichText"` | `ComponentTypes.ReadOnlyRichText` | Read-only rich text (sanitized HTML) |
+| `"ReadOnlyWithButton"` | `ComponentTypes.ReadOnlyWithButton` | Read-only text with an action button |
+
+### Structural
+
+| Key | Constant | Description |
+|-----|----------|-------------|
+| `"FieldArray"` | `ComponentTypes.FieldArray` | Repeating field array; configured via `items`/`minItems`/`maxItems` |

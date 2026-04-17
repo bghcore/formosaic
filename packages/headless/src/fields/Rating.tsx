@@ -4,7 +4,11 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const Rating = (props: IFieldProps<IRatingConfig>) => {
-  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, config, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder,
+    ...rest
+  } = props;
 
   const max = config?.max ?? 5;
   const rating = (value as number) ?? 0;
@@ -17,11 +21,12 @@ const Rating = (props: IFieldProps<IRatingConfig>) => {
 
   return (
     <div
-      className="df-rating"
       role="radiogroup"
       aria-label={`Rating, ${rating} of ${max}`}
       aria-invalid={!!error}
       aria-required={required}
+      {...rest}
+      className="df-rating"
       data-field-type="Rating"
       data-field-state={getFieldState({ error, required, readOnly })}
       data-testid={GetFieldDataTestId(fieldName, testId)}

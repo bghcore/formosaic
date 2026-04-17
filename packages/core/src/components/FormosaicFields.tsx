@@ -42,11 +42,15 @@ export const FormFields = (props: IFormFieldsProps) => {
   const [asyncOptionsLoading, setAsyncOptionsLoading] = React.useState<Record<string, boolean>>({});
   // Cache key per field: JSON-serialised values of optionsDependsOn fields
   const asyncCacheKeyRef = React.useRef<Record<string, string>>({});
+  // Per-field AbortController so a new fetch cancels the previous one (P1-6).
+  const loadOptionsAbortRef = React.useRef<Record<string, AbortController>>({});
 
   const { getValues } = useFormContext();
 
-  // Run loadOptions for each field that declares it, re-running when deps change.
-  // useEffect runs after every render; we guard with a cache key to avoid redundant fetches.
+  // Run loadOptions for each field that declares it, re-running when deps
+  // change. We gate on the `fields` reference plus snapshot dep-value keys
+  // (via the cache key ref). Stale fetches are ignored — only the request
+  // whose cacheKey matches the current one commits results. See audit P1-6.
   React.useEffect(() => {
     if (!fields) return;
     Object.entries(fields).forEach(([fieldId, fieldConfig]) => {
@@ -58,19 +62,41 @@ export const FormFields = (props: IFormFieldsProps) => {
       const cacheKey = JSON.stringify(depValues);
       if (asyncCacheKeyRef.current[fieldId] === cacheKey) return; // deps unchanged, use cached result
       asyncCacheKeyRef.current[fieldId] = cacheKey;
+
+      // Abort any in-flight fetch for this field before starting a new one.
+      const prevController = loadOptionsAbortRef.current[fieldId];
+      if (prevController) prevController.abort();
+      const controller = new AbortController();
+      loadOptionsAbortRef.current[fieldId] = controller;
+
       setAsyncOptionsLoading(prev => ({ ...prev, [fieldId]: true }));
       fieldConfig.loadOptions({ fieldId, values: getValues() })
         .then(options => {
+          // Ignore stale responses: only commit if the cacheKey we started
+          // with is still the current one for this field.
+          if (asyncCacheKeyRef.current[fieldId] !== cacheKey) return;
+          if (controller.signal.aborted) return;
           setAsyncOptions(prev => ({ ...prev, [fieldId]: options }));
         })
         .catch(() => {
           // On error, leave the previous options intact and clear loading state
         })
         .finally(() => {
+          if (asyncCacheKeyRef.current[fieldId] !== cacheKey) return;
           setAsyncOptionsLoading(prev => ({ ...prev, [fieldId]: false }));
         });
     });
-  });
+  }, [fields]);
+
+  // Cleanup in-flight fetches on unmount.
+  React.useEffect(() => {
+    return () => {
+      for (const controller of Object.values(loadOptionsAbortRef.current)) {
+        controller.abort();
+      }
+      loadOptionsAbortRef.current = {};
+    };
+  }, []);
 
   const collapsedClass = !isExpanded && (expandEnabled || expandEnabled === undefined) ? "collapsed" : "";
   const fieldsToRender = GetFieldsToRender(fieldRenderLimit ?? 0, fieldOrder ?? [], formState?.fieldStates);

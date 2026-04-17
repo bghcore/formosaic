@@ -47,6 +47,14 @@ export const WizardForm: React.FC<IWizardFormProps> = (props) => {
     [wizardConfig.steps, entityData]
   );
 
+  // Per audit P1-7: clamp currentStepIndex when steps disappear so the
+  // wizard never renders blank or hangs on an invalid index.
+  React.useEffect(() => {
+    if (currentStepIndex >= visibleSteps.length) {
+      setCurrentStepIndex(Math.max(0, visibleSteps.length - 1));
+    }
+  }, [visibleSteps.length, currentStepIndex]);
+
   const currentStep = visibleSteps[currentStepIndex];
   const currentFields = currentStep ? getStepFields(currentStep, fieldStates) : [];
   const canGoNext = currentStepIndex < visibleSteps.length - 1;

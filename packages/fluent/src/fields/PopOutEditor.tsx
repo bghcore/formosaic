@@ -14,12 +14,15 @@ interface IPopOutEditorProps {
   maxLimit?: number;
   saveCallback?: () => void;
   renderExtraModalFooter?: () => React.ReactNode;
+  placeHolder?: string;
 }
 
 const PopOutEditor = (props: IFieldProps<IPopOutEditorProps>) => {
   const {
     error, fieldName, testId, config, readOnly,
-    required, savePending, saving, value, label, setFieldValue
+    required, savePending, saving, value, label, setFieldValue, placeholder,
+    errorCount, options, optionsLoading, type, description, helpText,
+    ...rest
   } = props;
 
   const [modalValue, setModalValue] = useState<string>();
@@ -68,12 +71,15 @@ const PopOutEditor = (props: IFieldProps<IPopOutEditorProps>) => {
     <>
       <div className="fe-textarea">
         <Textarea
+          aria-invalid={!!error}
+          aria-required={required}
+          {...rest}
           className={FieldClassName("fe-text-area", error)}
           resize="none"
           autoComplete="off"
-          aria-required={required}
           value={modalVisible ? `${modalValue}` : value ? `${value}` : ""}
           onChange={onChange}
+          placeholder={placeholder ?? config?.placeHolder}
           data-testid={GetFieldDataTestId(fieldName, testId)}
           rows={config?.numberOfRows ?? 4}
         />

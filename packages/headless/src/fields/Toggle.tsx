@@ -5,7 +5,11 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const Toggle = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, label, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, label, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(fieldName, event.target.checked);
@@ -22,16 +26,16 @@ const Toggle = (props: IFieldProps<{}>) => {
       data-field-state={getFieldState({ error, required, readOnly })}
     >
       <input
+        aria-invalid={!!error}
+        aria-required={required}
+        {...rest}
         type="checkbox"
         className="df-toggle__input"
         role="switch"
         checked={!!value}
         onChange={onChange}
-        aria-invalid={!!error}
-        aria-required={required}
         data-testid={GetFieldDataTestId(fieldName, testId)}
       />
-      <span className="df-toggle__label">{label}</span>
     </label>
   );
 };

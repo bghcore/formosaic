@@ -6,7 +6,7 @@ title: Field Types Reference
 
 This document provides a comprehensive reference for every component type supported by Formosaic. Component types are defined in `packages/core/src/constants.ts` as the `ComponentTypes` object, and each maps to a string key used in `IFieldConfig.type`.
 
-There are **21 total component keys**: 12 editable, 6 read-only, and 3 structural/abstract types (Fragment, FieldArray, ChoiceSet).
+There are **28 component keys**: 21 editable, 6 read-only, and 1 structural (`FieldArray`).
 
 ---
 
@@ -22,11 +22,19 @@ There are **21 total component keys**: 12 editable, 6 read-only, and 3 structura
 | `"DateControl"` | Date picker with clear button | `string` (ISO 8601) | No |
 | `"Slider"` | Range slider input | `number` | No |
 | `"DynamicFragment"` | Hidden field (no visible UI) | `string` | No |
-
 | `"MultiSelectSearch"` | Searchable multi-select with free-form | `string[]` | Yes |
 | `"Textarea"` | Multi-line text with expand-to-modal | `string` | No |
 | `"DocumentLinks"` | CRUD list of URL links | `IDocumentLink[]` | No |
 | `"StatusDropdown"` | Dropdown with color-coded status indicators | `string` | Yes |
+| `"RadioGroup"` | Single-select radio button group | `string` | Yes |
+| `"CheckboxGroup"` | Multi-select checkbox group | `string[]` | Yes |
+| `"Rating"` | Star rating input | `number` | No |
+| `"ColorPicker"` | Color picker returning hex string | `string` | No |
+| `"Autocomplete"` | Searchable single-select with type-ahead | `string` | Yes |
+| `"FileUpload"` | File picker (single or multiple) | `File \| File[]` | No |
+| `"DateRange"` | Two date inputs (From / To) | `{ start: string; end: string }` (ISO strings) | No |
+| `"DateTime"` | Combined date+time input | `string` (ISO datetime-local) | No |
+| `"PhoneInput"` | Phone input with inline masking | `string` | No |
 
 ## Read-Only Field Types
 
@@ -36,16 +44,15 @@ There are **21 total component keys**: 12 editable, 6 read-only, and 3 structura
 | `"ReadOnlyArray"` | List of static text values | `string[]` |
 | `"ReadOnlyDateTime"` | Formatted date/time display | `string` (ISO 8601) |
 | `"ReadOnlyCumulativeNumber"` | Sum of other numeric fields | `number` (computed) |
-| `"ReadOnlyRichText"` | HTML content display | `string` (HTML) |
+| `"ReadOnlyRichText"` | Sanitized HTML content display | `string` (HTML) |
 | `"ReadOnlyWithButton"` | Static text with action button | `string` |
 
-## Structural / Abstract Types
+## Structural Types
 
 | Component Key | Description | Notes |
 |---|---|---|
 | `"DynamicFragment"` | Hidden field | Renders as `<input type="hidden">`. No label/wrapper chrome. |
-| `"FieldArray"` | Repeating field group | Configured via `IFieldConfig.items`. |
-| `"ChoiceSet"` | Custom choice component | No built-in implementation. Consumers must register their own. |
+| `"FieldArray"` | Repeating field group | Configured via `IFieldConfig.items`, `minItems`, `maxItems`. |
 
 ---
 
@@ -167,6 +174,150 @@ Repeating field group. Uses `items`, `minItems`, and `maxItems` on the field con
     },
     "minItems": 1,
     "maxItems": 10
+  }
+}
+```
+
+### RadioGroup
+
+Single-select radio button group. Value type is `string`.
+
+**Config properties:** `orientation` (`"horizontal"` | `"vertical"`, adapter-specific)
+
+```json
+{
+  "plan": {
+    "type": "RadioGroup",
+    "label": "Plan",
+    "required": true,
+    "options": [
+      { "value": "basic", "label": "Basic" },
+      { "value": "pro", "label": "Pro" },
+      { "value": "enterprise", "label": "Enterprise" }
+    ]
+  }
+}
+```
+
+### CheckboxGroup
+
+Multi-select checkbox group. Value type is `string[]`. Matches the same `options` contract as `Multiselect`.
+
+```json
+{
+  "interests": {
+    "type": "CheckboxGroup",
+    "label": "Interests",
+    "options": [
+      { "value": "music", "label": "Music" },
+      { "value": "sports", "label": "Sports" },
+      { "value": "travel", "label": "Travel" }
+    ]
+  }
+}
+```
+
+### Rating
+
+Star rating input. Value type is `number`.
+
+**Config properties:** `max` (number, default 5), `allowHalf` (boolean, default false)
+
+```json
+{
+  "satisfaction": {
+    "type": "Rating",
+    "label": "Satisfaction",
+    "config": { "max": 5, "allowHalf": true }
+  }
+}
+```
+
+### ColorPicker
+
+Color picker returning a hex string.
+
+```json
+{
+  "themeColor": {
+    "type": "ColorPicker",
+    "label": "Theme color"
+  }
+}
+```
+
+### Autocomplete
+
+Searchable single-select with type-ahead. Value type is `string`. Uses `options` for the search set. Native implementations (e.g. antd AutoComplete, Mantine Autocomplete, React Aria ComboBox) render natively; other adapters fall back to semantic HTML.
+
+```json
+{
+  "city": {
+    "type": "Autocomplete",
+    "label": "City",
+    "options": [
+      { "value": "nyc", "label": "New York" },
+      { "value": "sf", "label": "San Francisco" },
+      { "value": "sea", "label": "Seattle" }
+    ]
+  }
+}
+```
+
+### FileUpload
+
+File picker. Value type is `File | File[]` depending on config.
+
+**Config properties:** `multiple` (boolean), `accept` (MIME-type string), `maxSizeMb` (number -- validated by built-in size validator)
+
+```json
+{
+  "resume": {
+    "type": "FileUpload",
+    "label": "Resume",
+    "config": { "accept": ".pdf", "maxSizeMb": 5 }
+  }
+}
+```
+
+### DateRange
+
+Two date inputs (From / To). Value type is `{ start: string; end: string }` (ISO 8601 date strings).
+
+```json
+{
+  "vacation": {
+    "type": "DateRange",
+    "label": "Vacation dates"
+  }
+}
+```
+
+### DateTime
+
+Combined date + time input. Value type is an ISO datetime-local string (e.g. `"2026-04-16T14:30"`).
+
+```json
+{
+  "scheduledAt": {
+    "type": "DateTime",
+    "label": "Scheduled at"
+  }
+}
+```
+
+### PhoneInput
+
+Phone input with inline masking. Value type is `string`.
+
+**Config properties:** `format` (`"us"` | `"international"` | `"raw"`, default `"us"`)
+
+```json
+{
+  "phone": {
+    "type": "PhoneInput",
+    "label": "Phone",
+    "config": { "format": "us" }
   }
 }
 ```

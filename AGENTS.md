@@ -5,16 +5,16 @@
 ```bash
 npm install --legacy-peer-deps
 npm run build          # Build all packages
-npm run test           # Run 6296 tests with Vitest
+npm run test           # Run 6,766 tests with Vitest
 npm run test:coverage  # Run tests with coverage report
-npm run test:e2e       # Run 54 Playwright E2E tests
+npm run test:e2e       # Run 66 Playwright E2E tests
 npm run bench          # Run performance benchmarks
 npm run storybook      # Start Storybook dev server
 npm run build-storybook # Build static Storybook
-npm run docs:dev       # Start VitePress docs dev server
-npm run docs:build     # Build static docs site
 npm run clean          # Remove all dist/ directories
 ```
+
+The MDX documentation under `docs/` is published to https://formosaic.com from a separate deployment pipeline; there is no in-repo docs dev server script.
 
 Build individual packages:
 
@@ -51,45 +51,46 @@ packages/
   heroui/    -- @formosaic/heroui (HeroUI, 27 types)
   radix/     -- @formosaic/radix (Radix UI primitives, 27 types, unstyled)
   react-aria/ -- @formosaic/react-aria (React Aria Components, 27 types)
-  examples/  -- @formosaic/examples (3 example apps)
-docs/                          -- Internal planning docs only
+  examples/  -- @formosaic/examples (6 example apps)
+docs/                          -- MDX documentation + internal planning notes
   tier1-baseline-report.md    -- Tier 1 stabilization assessment
   tier1-patterns.md           -- Implementation patterns for Tier 2
   tier2-handoff.md            -- Tier 2 planning (feasibility, waves, go/no-go)
-website/                       -- VitePress docs site (deployed to GitHub Pages)
   guide/
-    getting-started.md        -- Quick start and setup
-    comparison.md             -- Comparison vs RJSF, TanStack Form, Formik, etc.
-    migrating.md              -- Migration from @form-eng/* to @formosaic/*
-    rules-engine.md           -- Rules engine architecture and lifecycle
-    condition-operators.md    -- All 20 condition operators
-    expression-syntax.md      -- $values, $fn, $parent expressions
-    validation.md             -- Built-in and custom validators
-    value-functions.md        -- Value function registry
-    field-types.md            -- All 27 field types
-    field-config.md           -- IFieldConfig v2 reference
-    analytics.md              -- Analytics and telemetry integration
-    i18n.md                   -- Internationalization guide
-    ssr.md                    -- SSR / Next.js guide
-    debugging-rules.md        -- Rules engine debugging
-    performance.md            -- Performance debugging with DevTools
-    accessibility.md          -- WCAG 2.1 AA, ARIA, keyboard
-    date-policy.md            -- ISO 8601 date handling policy
+    getting-started.mdx       -- Quick start and setup
+    comparison.mdx            -- Comparison vs RJSF, TanStack Form, Formik, etc.
+    migrating.mdx             -- Migration from @form-eng/* to @formosaic/*
+    rules-engine.mdx          -- Rules engine architecture and lifecycle
+    condition-operators.mdx   -- All 20 condition operators
+    expression-syntax.mdx     -- $values, $fn, $parent expressions
+    validation.mdx            -- Built-in and custom validators
+    value-functions.mdx       -- Value function registry
+    field-types.mdx           -- All 27 field types
+    field-config.mdx          -- IFieldConfig v2 reference
+    analytics.mdx             -- Analytics and telemetry integration
+    i18n.mdx                  -- Internationalization guide
+    ssr.mdx                   -- SSR / Next.js guide
+    debugging-rules.mdx       -- Rules engine debugging
+    performance.mdx           -- Performance debugging with DevTools
+    accessibility.mdx         -- WCAG 2.1 AA, ARIA, keyboard
+    date-policy.mdx           -- ISO 8601 date handling policy
   adapters/
-    choosing.md               -- Adapter recommendation guide
-    creating.md               -- Building custom UI adapters
-    architecture.md           -- Adapter classification and architecture
-    parity-matrix.md          -- Field implementation matrix across all adapters
-    field-contracts.md        -- Canonical field behavior contracts
-    divergence-register.md    -- Cross-adapter divergence register (12 entries)
-    shadcn.md                 -- shadcn/ui integration guide
+    choosing.mdx              -- Adapter recommendation guide
+    creating.mdx              -- Building custom UI adapters
+    architecture.mdx          -- Adapter classification and architecture
+    parity-matrix.mdx         -- Field implementation matrix across all adapters
+    field-contracts.mdx       -- Canonical field behavior contracts
+    divergence-register.mdx   -- Cross-adapter divergence register (12 entries)
+    shadcn.mdx                -- shadcn/ui integration guide
   api/
-    field-config.md           -- Field config API reference
-    stability.md              -- Public API stability classification
-e2e/                           -- Playwright E2E tests (54 tests, 7 specs)
+    field-config.mdx          -- Field config API reference
+    stability.mdx             -- Public API stability classification
+e2e/                           -- Playwright E2E tests (66 tests, 7 specs)
 benchmarks/                    -- Performance benchmark suite (vitest bench)
-stories/                       -- Storybook stories (67+ stories + MDX docs)
+stories/                       -- Storybook stories (151 story exports across 49 files; currently Fluent UI only)
 ```
+
+The published documentation site at https://formosaic.com is built from the MDX files under `docs/` by a separate deployment pipeline (not wired to this repo's package.json).
 
 Build output per package: `dist/index.js` (CJS), `dist/index.mjs` (ESM), `dist/index.d.ts` (types). Built with tsup.
 
@@ -126,7 +127,7 @@ Build output per package: `dist/index.js` (CJS), `dist/index.mjs` (ESM), `dist/i
 
 ## Testing
 
-6296 tests using Vitest across 55 test files. 54 Playwright E2E tests across 7 specs. 67+ Storybook stories.
+6,766 tests using Vitest across 68 test files. 66 Playwright E2E tests across 7 specs. 151 Storybook story exports across 49 files (Fluent UI adapter only today).
 
 ```bash
 npm run test             # Run all tests
@@ -146,7 +147,7 @@ After any code change, verify:
 npm run build && npm run test
 ```
 
-All packages should build cleanly and all 6296 tests should pass.
+All packages should build cleanly and all 6,766 tests should pass.
 
 ## Git Workflow
 

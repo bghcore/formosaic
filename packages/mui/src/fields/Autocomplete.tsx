@@ -9,8 +9,16 @@ interface IAutocompleteOption {
   label: string;
 }
 
-const Autocomplete = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, placeholder, options, setFieldValue } = props;
+interface IAutocompleteConfig {
+  placeHolder?: string;
+}
+
+const Autocomplete = (props: IFieldProps<IAutocompleteConfig>) => {
+  const {
+    fieldName, testId, value, readOnly, error, required, placeholder, options, setFieldValue, config,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText,
+    ...rest
+  } = props;
 
   const muiOptions: IAutocompleteOption[] = (options ?? []).map(o => ({
     value: String(o.value),
@@ -29,6 +37,9 @@ const Autocomplete = (props: IFieldProps<{}>) => {
 
   return (
     <MuiAutocomplete
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className={FieldClassName("fe-autocomplete", error)}
       options={muiOptions}
       value={selected}
@@ -39,7 +50,7 @@ const Autocomplete = (props: IFieldProps<{}>) => {
         <TextField
           {...params}
           size="small"
-          placeholder={placeholder}
+          placeholder={placeholder ?? config?.placeHolder}
           error={!!error}
           required={required}
           inputProps={{

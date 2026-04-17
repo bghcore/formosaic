@@ -4,7 +4,11 @@ import React from "react";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const MultiSelectSearch = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, options: dropdownOptions, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, options: dropdownOptions, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const selectedValues = (value as string[]) ?? [];
 
@@ -30,10 +34,12 @@ const MultiSelectSearch = (props: IFieldProps<{}>) => {
     </>
   ) : (
     <Autocomplete
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className={FieldClassName("fe-multi-select-search", error)}
       multiple
       freeSolo
-      aria-required={required}
       options={mappedOptions}
       getOptionLabel={(option) => typeof option === "string" ? option : option.label}
       getOptionDisabled={(option) => typeof option === "string" ? false : !!option.disabled}

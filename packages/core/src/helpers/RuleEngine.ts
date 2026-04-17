@@ -21,14 +21,32 @@ export function buildDependencyGraph(
     graph[name] = new Set();
   }
 
+  // Resolve a dotted dependency reference to the longest-prefix field that
+  // actually exists in the fields record. This lets rule conditions like
+  // `{ field: "address.city" }` register an edge on the `address` field
+  // when only `address` is a top-level key (e.g. an object/template field).
+  // Without this, evaluateAffectedFields would skip the rule on changes to
+  // the ancestor key. See audit finding P0-5.
+  const resolveDepKey = (dep: string): string | undefined => {
+    if (dep in graph) return dep;
+    let idx = dep.lastIndexOf(".");
+    while (idx > 0) {
+      const candidate = dep.slice(0, idx);
+      if (candidate in graph) return candidate;
+      idx = dep.lastIndexOf(".", idx - 1);
+    }
+    return undefined;
+  };
+
   for (const [fieldName, config] of Object.entries(fields)) {
     if (config.rules) {
       for (const rule of config.rules) {
         // Fields referenced in the when condition
         const condDeps = extractConditionDependencies(rule.when);
         for (const dep of condDeps) {
-          if (dep in graph) {
-            graph[dep].add(fieldName);
+          const key = resolveDepKey(dep);
+          if (key) {
+            graph[key].add(fieldName);
           }
         }
 
@@ -44,8 +62,9 @@ export function buildDependencyGraph(
     if (config.computedValue) {
       const exprDeps = extractExpressionDependencies(config.computedValue);
       for (const dep of exprDeps) {
-        if (dep in graph) {
-          graph[dep].add(fieldName);
+        const key = resolveDepKey(dep);
+        if (key) {
+          graph[key].add(fieldName);
         }
       }
     }

@@ -5,25 +5,29 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const RadioGroup = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, options, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const onChange = (_: React.ChangeEvent<HTMLInputElement>, newValue: string) => {
     setFieldValue(fieldName, newValue);
   };
 
   if (readOnly) {
-    const label = options?.find(o => String(o.value) === String(value))?.label ?? (value as string);
-    return <ReadOnlyText fieldName={fieldName} value={label} />;
+    const optLabel = options?.find(o => String(o.value) === String(value))?.label ?? (value as string);
+    return <ReadOnlyText fieldName={fieldName} value={optLabel} />;
   }
 
   return (
-    <FormControl error={!!error} required={required}>
+    <FormControl {...rest} error={!!error} required={required}>
       <MuiRadioGroup
+        aria-invalid={!!error}
+        aria-required={required}
         className={FieldClassName("fe-radio-group", error)}
         value={value ? String(value) : ""}
         onChange={onChange}
-        aria-invalid={!!error}
-        aria-required={required}
         data-testid={GetFieldDataTestId(fieldName, testId)}
       >
         {options?.map(option => (

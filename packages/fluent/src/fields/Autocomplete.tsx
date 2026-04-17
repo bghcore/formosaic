@@ -5,8 +5,16 @@ import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
-const Autocomplete = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, placeholder, options, setFieldValue } = props;
+interface IAutocompleteConfig {
+  placeHolder?: string;
+}
+
+const Autocomplete = (props: IFieldProps<IAutocompleteConfig>) => {
+  const {
+    fieldName, testId, value, readOnly, error, required, placeholder, options, setFieldValue, config,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText,
+    ...rest
+  } = props;
 
   const selectedText = options?.find(o => String(o.value) === String(value))?.label ?? (value as string) ?? "";
 
@@ -26,15 +34,16 @@ const Autocomplete = (props: IFieldProps<{}>) => {
 
   return (
     <Combobox
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className={FieldClassName("fe-autocomplete", error)}
       value={selectedText}
       selectedOptions={value ? [String(value)] : []}
       onOptionSelect={onOptionSelect}
       onInput={onInput}
-      placeholder={placeholder}
+      placeholder={placeholder ?? config?.placeHolder}
       freeform
-      aria-invalid={!!error}
-      aria-required={required}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       {options?.map(option => (

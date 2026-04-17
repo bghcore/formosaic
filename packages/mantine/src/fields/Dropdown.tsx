@@ -10,7 +10,11 @@ interface IDropdownProps {
 }
 
 const Dropdown = (props: IFieldProps<IDropdownProps>) => {
-  const { fieldName, testId, value, readOnly, config, error, required, options, placeholder, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, config, error, required, options, placeholder, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText,
+    ...rest
+  } = props;
 
   const onChange = (val: string | null) => {
     setFieldValue(fieldName, val ?? "");
@@ -36,15 +40,15 @@ const Dropdown = (props: IFieldProps<IDropdownProps>) => {
 
   return (
     <Select
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className={FieldClassName("fe-dropdown", error)}
       value={value ? String(value) : null}
       onChange={onChange}
       data={data}
       placeholder={placeholder ?? config?.placeHolder}
       clearable
-      required={required}
-      aria-invalid={!!error}
-      aria-required={required}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );

@@ -9,7 +9,11 @@ export interface IStatusDropdownProps {
 }
 
 const StatusDropdown = (props: IFieldProps<IStatusDropdownProps>) => {
-  const { fieldName, testId, value, readOnly, error, required, config, options, placeholder, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, config, options, placeholder, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText,
+    ...rest
+  } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setFieldValue(fieldName, event.target.value);
@@ -49,11 +53,12 @@ const StatusDropdown = (props: IFieldProps<IStatusDropdownProps>) => {
         />
       )}
       <select
+        aria-invalid={!!error}
+        aria-required={required}
+        {...rest}
         className="fe-status-dropdown__select"
         value={(value as string) ?? ""}
         onChange={onChange}
-        aria-invalid={!!error}
-        aria-required={required}
         data-testid={GetFieldDataTestId(fieldName, testId)}
       >
         <option value="">{placeholder ?? config?.placeHolder ?? ""}</option>

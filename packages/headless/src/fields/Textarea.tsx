@@ -14,10 +14,16 @@ interface ITextareaProps {
   renderExtraModalFooter?: () => React.ReactNode;
 }
 
-const Textarea = (props: IFieldProps<ITextareaProps>) => {
+interface ITextareaConfigWithPlaceholder extends ITextareaProps {
+  placeHolder?: string;
+}
+
+const Textarea = (props: IFieldProps<ITextareaConfigWithPlaceholder>) => {
   const {
     error, fieldName, testId, config, readOnly,
-    required, savePending, saving, value, label, setFieldValue
+    required, savePending, saving, value, label, setFieldValue, placeholder,
+    errorCount, options, optionsLoading, type, description, helpText,
+    ...rest
   } = props;
 
   const [modalValue, setModalValue] = useState<string>();
@@ -79,13 +85,15 @@ const Textarea = (props: IFieldProps<ITextareaProps>) => {
         data-field-state={getFieldState({ error, required, readOnly })}
       >
         <textarea
+          aria-invalid={!!error}
+          aria-required={required}
+          {...rest}
           className="df-textarea__input"
           autoComplete="off"
           value={modalVisible ? `${modalValue}` : value ? `${value}` : ""}
           onChange={onChange}
           rows={config?.numberOfRows ?? 4}
-          aria-invalid={!!error}
-          aria-required={required}
+          placeholder={placeholder ?? config?.placeHolder}
           data-testid={GetFieldDataTestId(fieldName, testId)}
         />
         <button

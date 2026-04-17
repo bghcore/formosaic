@@ -9,7 +9,7 @@ export interface IDocumentLink {
   url: string;
 }
 
-interface IDocumentLinksProps {
+interface IDocumentLinksProps extends React.HTMLAttributes<HTMLDivElement> {
   fieldName: string;
   testId?: string;
   className?: string;
@@ -20,7 +20,7 @@ interface IDocumentLinksProps {
 }
 
 const DocumentLinks = (props: IDocumentLinksProps) => {
-  const { fieldName, testId, className, readOnly, links, onUpdateLinks, onDeleteLink } = props;
+  const { fieldName, testId, className, readOnly, links, onUpdateLinks, onDeleteLink, ...rest } = props;
   const [addNewLink, setAddNewLink] = React.useState<boolean>(false);
   const [deleteLinkIndex, setDeleteLinkIndex] = React.useState<number | undefined>(undefined);
 
@@ -32,7 +32,7 @@ const DocumentLinks = (props: IDocumentLinksProps) => {
   const saveLinks = (newLink: IDocumentLink, addNew?: boolean, index?: number) => { onUpdateLinks(newLink, addNew, index); setAddNewLink(false); };
 
   return (
-    <div className={className}>
+    <div {...rest} className={className}>
       {links?.length > 0 ? links.map((link, index) => (
         <DocumentLink
           key={`${link.url}-${index}`} fieldName={fieldName} testId={testId}

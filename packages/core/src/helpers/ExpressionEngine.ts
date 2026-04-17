@@ -27,22 +27,29 @@ import { Parser } from "expr-eval";
  *   "round($values.total * 100) / 100"
  */
 
-// Singleton CSP-safe parser.
-// expr-eval 2.x exposes binaryOps/consts as plain objects; access via any to avoid
-// augmenting the upstream @types/expr-eval declarations.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const _parser: Parser = new Parser() as any;
-// Override + to handle string concatenation (string + number, number + string).
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const _origAdd = (_parser as any).binaryOps["+"];
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(_parser as any).binaryOps["+"] = (a: unknown, b: unknown): unknown => {
-  if (typeof a === "string" || typeof b === "string") return String(a) + String(b);
-  return _origAdd(a as number, b as number);
-};
-// Register NaN as a named constant so substituted "NaN" tokens evaluate correctly.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(_parser as any).consts["NaN"] = NaN;
+// Private CSP-safe parser singleton.
+// expr-eval 2.x exposes binaryOps/consts as plain objects on each Parser
+// instance. We create our own fresh instance in a factory here rather than
+// mutating the library's default — see audit P1-20. This keeps overrides
+// isolated to our own internal parser.
+function createInternalParser(): Parser {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const parser: Parser = new Parser() as any;
+  // Override + to handle string concatenation (string + number, number + string).
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const origAdd = (parser as any).binaryOps["+"];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (parser as any).binaryOps["+"] = (a: unknown, b: unknown): unknown => {
+    if (typeof a === "string" || typeof b === "string") return String(a) + String(b);
+    return origAdd(a as number, b as number);
+  };
+  // Register NaN as a named constant so substituted "NaN" tokens evaluate correctly.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (parser as any).consts["NaN"] = NaN;
+  return parser;
+}
+
+const _parser: Parser = createInternalParser();
 
 
 export function evaluateExpression(
@@ -136,6 +143,8 @@ function getNestedValue(obj: IEntityData, path: string): unknown {
   let current: unknown = obj;
   for (const part of parts) {
     if (current === null || current === undefined) return undefined;
+    // Per audit P0-10: refuse to traverse prototype-pollution keys.
+    if (part === "__proto__" || part === "constructor" || part === "prototype") return undefined;
     current = (current as Record<string, unknown>)[part];
   }
   return current;

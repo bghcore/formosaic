@@ -5,25 +5,29 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId } from "../helpers";
 
 const RadioGroup = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, options, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const onChange = (val: string) => {
     setFieldValue(fieldName, val);
   };
 
   if (readOnly) {
-    const label = options?.find(o => String(o.value) === String(value))?.label ?? (value as string);
-    return <ReadOnlyText fieldName={fieldName} value={label} />;
+    const optLabel = options?.find(o => String(o.value) === String(value))?.label ?? (value as string);
+    return <ReadOnlyText fieldName={fieldName} value={optLabel} />;
   }
 
   return (
     <Radio.Group
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className="fe-radio-group"
       value={value ? String(value) : ""}
       onChange={onChange}
-      required={required}
-      aria-invalid={!!error}
-      aria-required={required}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     >
       <Group mt="xs">

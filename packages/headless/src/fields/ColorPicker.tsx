@@ -4,7 +4,11 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const ColorPicker = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const color = (value as string) ?? "#000000";
 
@@ -24,12 +28,13 @@ const ColorPicker = (props: IFieldProps<{}>) => {
       style={{ display: "flex", alignItems: "center", gap: "8px" }}
     >
       <input
+        aria-invalid={!!error}
+        aria-required={required}
+        {...rest}
         type="color"
         className="df-color-picker__input"
         value={color}
         onChange={onChange}
-        aria-invalid={!!error}
-        aria-required={required}
         data-testid={GetFieldDataTestId(fieldName, testId)}
       />
       <span className="df-color-picker__value">{color}</span>

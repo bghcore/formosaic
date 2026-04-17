@@ -5,7 +5,11 @@ import { GetFieldDataTestId, getFieldState } from "../helpers";
 import { FileInput } from "@mantine/core";
 
 const FileUpload = (props: IFieldProps<IFileUploadConfig>) => {
-  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, config, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder,
+    ...rest
+  } = props;
 
   const multiple = config?.multiple ?? false;
   const accept = config?.accept;
@@ -37,6 +41,9 @@ const FileUpload = (props: IFieldProps<IFileUploadConfig>) => {
 
   return (
     <div
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className="fe-file-upload"
       data-field-type="FileUpload"
       data-field-state={getFieldState({ error, required, readOnly })}

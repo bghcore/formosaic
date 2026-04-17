@@ -13,12 +13,15 @@ interface ITextareaProps {
   maxLimit?: number;
   saveCallback?: () => void;
   renderExtraModalFooter?: () => React.ReactNode;
+  placeHolder?: string;
 }
 
 const Textarea = (props: IFieldProps<ITextareaProps>) => {
   const {
     error, fieldName, testId, config, readOnly,
-    required, savePending, saving, value, label, setFieldValue
+    required, savePending, saving, value, label, setFieldValue, placeholder,
+    errorCount, options, optionsLoading, type, description, helpText,
+    ...rest
   } = props;
 
   const [modalValue, setModalValue] = useState<string>();
@@ -79,12 +82,14 @@ const Textarea = (props: IFieldProps<ITextareaProps>) => {
         data-field-state={getFieldState({ error, required, readOnly })}
       >
         <ChakraTextarea
+          aria-invalid={!!error}
+          aria-required={required}
+          {...rest}
           autoComplete="off"
           value={modalVisible ? `${modalValue}` : value ? `${value}` : ""}
           onChange={onChange}
           rows={config?.numberOfRows ?? 4}
-          aria-invalid={!!error}
-          aria-required={required}
+          placeholder={placeholder ?? config?.placeHolder}
           data-testid={GetFieldDataTestId(fieldName, testId)}
         />
         <button

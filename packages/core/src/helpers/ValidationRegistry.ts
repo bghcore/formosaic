@@ -106,8 +106,25 @@ const pattern: ValidatorFn = (value, params) => {
   const regex = params?.pattern;
   const message = (params?.message as string) ?? "Invalid format";
   if (!regex) return undefined;
+  // Per audit P0-10: cap pattern source and input length to mitigate ReDoS
+  // from adversarial configs.
+  const patternStr = String(regex);
+  if (patternStr.length > 256) {
+    if (typeof process !== "undefined" && process.env && process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
+      console.warn("[formosaic] pattern validator regex source exceeds 256 chars; skipping.");
+    }
+    return undefined;
+  }
+  if (value.length > 10_000) {
+    if (typeof process !== "undefined" && process.env && process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console
+      console.warn("[formosaic] pattern validator input exceeds 10000 chars; skipping.");
+    }
+    return undefined;
+  }
   try {
-    return new RegExp(regex as string).test(value) ? undefined : message;
+    return new RegExp(patternStr).test(value) ? undefined : message;
   } catch {
     return undefined;
   }
@@ -176,6 +193,12 @@ export interface IValidatorMetadata {
   }>;
 }
 
+/**
+ * SSR / multi-tenant contract (audit P1-21):
+ *
+ * Plugin-style registry. Populate ONCE at app boot. Metadata is shared
+ * across all requests served by the same Node process.
+ */
 let validatorMetadataRegistry: Record<string, IValidatorMetadata> = {};
 
 /** Register metadata for a custom (or built-in) validator */
@@ -229,6 +252,15 @@ const defaultValidators: Record<string, ValidatorFn> = {
   Max32KbValidation: (v, _p, c) => maxKb(v, { maxKb: 32 }, c),
 };
 
+/**
+ * SSR / multi-tenant contract (audit P1-21):
+ *
+ * Plugin-style registry of named validator functions. Register custom
+ * validators ONCE at app boot via registerValidators(). Validators receive
+ * `value`, `params`, and `context.values` per-call, so per-request/per-user
+ * state must be plumbed through those arguments — do NOT capture per-request
+ * context in a module-level closure, as it would leak across tenants.
+ */
 let validatorRegistry: Record<string, ValidatorFn> = { ...defaultValidators };
 
 /** Register custom validators (merge into registry) */

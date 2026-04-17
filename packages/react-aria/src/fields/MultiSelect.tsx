@@ -3,7 +3,11 @@ import React from "react";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const MultiSelect = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, options, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const selectedValues = (value as string[]) ?? [];
 
@@ -36,6 +40,7 @@ const MultiSelect = (props: IFieldProps<{}>) => {
       onChange={onChange}
       aria-invalid={!!error}
       aria-required={required}
+      {...rest}
       data-field-type="MultiSelect"
       data-field-state={getFieldState({ error, required, readOnly })}
       data-testid={GetFieldDataTestId(fieldName, testId)}

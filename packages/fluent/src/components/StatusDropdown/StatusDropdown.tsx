@@ -5,7 +5,7 @@ import React from "react";
 import { GetFieldDataTestId } from "../../helpers";
 import StatusColor from "./StatusColor";
 
-interface IStatusDropdownProps {
+interface IStatusDropdownProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
   className: string;
   testId?: string;
   fieldName: string;
@@ -16,13 +16,13 @@ interface IStatusDropdownProps {
 }
 
 const StatusDropdown = (props: IStatusDropdownProps) => {
-  const { fieldName, testId, className, status, meta, dropdownOptions, onOptionSelect } = props;
+  const { fieldName, testId, className, status, meta, dropdownOptions, onOptionSelect, ...rest } = props;
   const statusColors = (meta?.statusColors ?? {}) as Dictionary<string>;
 
   const selectedText = dropdownOptions?.find(o => String(o.value) === status)?.label;
 
   return (
-    <div className={className} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+    <div {...rest} className={className} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
       <StatusColor statusColors={statusColors} status={status} />
       <Dropdown
         value={selectedText ?? ""}

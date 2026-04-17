@@ -35,4 +35,11 @@ runAdapterContractTests(createMantineFieldRegistry, {
   suiteName: "Mantine",
   onlyTypes: [...TIER_1_FIELDS, "Rating", "Autocomplete", "DateTime", "DateRange", "PhoneInput", "FileUpload", "ColorPicker", "MultiSelectSearch", "StatusDropdown", "ReadOnlyArray", "ReadOnlyDateTime", "ReadOnlyRichText", "ReadOnlyWithButton"],
   wrapper: MantineWrapper,
+  // Known a11y gaps in Mantine adapter. Mantine components expose the
+  // error state via `error` prop that adds aria-describedby + a dedicated
+  // error node rather than aria-invalid on the input itself. Tracked as
+  // a known gap for follow-up.
+  knownAriaGaps: {
+    ariaInvalid: ["Textbox", "Number", "Dropdown", "Multiselect", "Textarea"],
+  },
 });

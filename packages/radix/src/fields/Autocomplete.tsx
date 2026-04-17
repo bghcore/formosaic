@@ -4,7 +4,11 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { GetFieldDataTestId, getFieldState } from "../helpers";
 
 const Autocomplete = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, placeholder, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, placeholder, options, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, config,
+    ...rest
+  } = props;
 
   const listId = useId();
   const [inputValue, setInputValue] = useState<string>(
@@ -39,6 +43,7 @@ const Autocomplete = (props: IFieldProps<{}>) => {
         placeholder={placeholder}
         aria-invalid={!!error}
         aria-required={required}
+        {...rest}
         data-testid={GetFieldDataTestId(fieldName, testId)}
       />
       <datalist id={listId}>

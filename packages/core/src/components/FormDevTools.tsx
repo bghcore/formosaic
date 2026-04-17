@@ -1,7 +1,7 @@
 import React from "react";
 import { IRuntimeFormState, IRuntimeFieldState } from "../types/IRuntimeFieldState";
-import { getRenderCounts, getLastRenderedFields, getTotalFormRenders, resetRenderTracker } from "../helpers/RenderTracker";
-import { getTimeline, clearTimeline, ITimelineEvent } from "../helpers/EventTimeline";
+import { getRenderCounts, getLastRenderedFields, getTotalFormRenders, resetRenderTracker, enableRenderTracker, disableRenderTracker } from "../helpers/RenderTracker";
+import { getTimeline, clearTimeline, ITimelineEvent, enableEventTimeline, disableEventTimeline } from "../helpers/EventTimeline";
 import { ITemplateMeta } from "../types/IResolvedFormConfig";
 
 export interface IFormDevToolsProps {
@@ -25,6 +25,18 @@ export const FormDevTools: React.FC<IFormDevToolsProps> = (props) => {
   const [timelineFilter, setTimelineFilter] = React.useState("");
   const [depGraphSort, setDepGraphSort] = React.useState<"name" | "depCount">("name");
   const [, forceUpdate] = React.useReducer((x: number) => x + 1, 0);
+
+  // When mounted, opt into render tracking and event timeline logging.
+  // Both are no-ops until enabled. See audit P1-22.
+  React.useEffect(() => {
+    if (!enabled) return;
+    enableRenderTracker();
+    enableEventTimeline();
+    return () => {
+      disableRenderTracker();
+      disableEventTimeline();
+    };
+  }, [enabled]);
 
   if (!enabled) return null;
 

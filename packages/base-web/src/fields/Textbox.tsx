@@ -11,7 +11,11 @@ interface ITextboxProps {
 }
 
 const Textbox = (props: IFieldProps<ITextboxProps>) => {
-  const { fieldName, testId, value, readOnly, config, error, required, placeholder, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, config, error, required, placeholder, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText,
+    ...rest
+  } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(fieldName, event.target.value, false, 3000);
@@ -29,13 +33,14 @@ const Textbox = (props: IFieldProps<ITextboxProps>) => {
 
   return (
     <Input
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       autoComplete="off"
       value={(value as string) ?? ""}
       onChange={onChange}
       placeholder={placeholder ?? config?.placeHolder}
       error={!!error}
-      aria-invalid={!!error}
-      aria-required={required}
       overrides={{
         Root: {
           props: {

@@ -1,11 +1,11 @@
 import { IEntityData, SubEntityType, isEmpty, isNull, isStringEmpty } from "../utils";
-import { UseFormSetValue } from "react-hook-form";
+import { UseFormGetValues, UseFormSetValue } from "react-hook-form";
 import { IFieldConfig } from "../types/IFieldConfig";
 import { IConfirmInputModalProps } from "../types/IConfirmInputModalProps";
 import { IFieldToRender } from "../types/IFieldToRender";
 import { IRuntimeFieldState, IRuntimeFormState } from "../types/IRuntimeFieldState";
 import { IOption } from "../types/IOption";
-import { evaluateAllRules } from "./RuleEngine";
+import { evaluateAllRules, buildDependencyGraph, topologicalSort } from "./RuleEngine";
 import { runSyncValidations, runValidations, IValidationContext } from "./ValidationRegistry";
 import { executeValueFunction } from "./ValueFunctionRegistry";
 import { evaluateExpression } from "./ExpressionEngine";
@@ -16,9 +16,27 @@ function getNestedFormValue(obj: Record<string, unknown>, path: string): unknown
   let current: unknown = obj;
   for (const part of parts) {
     if (current === null || current === undefined) return undefined;
+    if (part === "__proto__" || part === "constructor" || part === "prototype") return undefined;
     current = (current as Record<string, unknown>)[part];
   }
   return current;
+}
+
+function setNestedFormValue(obj: Record<string, unknown>, path: string, value: unknown): void {
+  const parts = path.split(".");
+  let current: Record<string, unknown> = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    const part = parts[i];
+    if (part === "__proto__" || part === "constructor" || part === "prototype") return;
+    const next = current[part];
+    if (next === null || next === undefined || typeof next !== "object" || Array.isArray(next)) {
+      current[part] = {};
+    }
+    current = current[part] as Record<string, unknown>;
+  }
+  const last = parts[parts.length - 1];
+  if (last === "__proto__" || last === "constructor" || last === "prototype") return;
+  current[last] = value;
 }
 
 export const IsExpandVisible = (
@@ -181,7 +199,10 @@ export const CheckDefaultValues = (
   Object.keys(fieldStates).forEach(fieldName => {
     const { defaultValue, hidden } = fieldStates[fieldName];
     if (!isNull(defaultValue) && isNull(getNestedFormValue(formValues, fieldName)) && !hidden) {
-      setValue(`${fieldName}` as const, defaultValue, { shouldDirty: true });
+      // Per audit P1-2: applying defaults must NOT dirty the form. Dirtying
+      // the form at mount triggers useBeforeUnload warnings and may cause
+      // spurious autosaves of values the user never touched.
+      setValue(`${fieldName}` as const, defaultValue, { shouldDirty: false });
     }
   });
 };
@@ -198,12 +219,23 @@ export const InitOnCreateFormState = (
     defaultValues: IEntityData,
     fields: Record<string, IFieldConfig>,
     areAllFieldsReadonly?: boolean
-  ) => IRuntimeFormState
+  ) => IRuntimeFormState,
+  getValues?: UseFormGetValues<IEntityData>
 ): { formState: IRuntimeFormState; initEntityData: IEntityData } => {
   const initEntityData: IEntityData = { ...defaultValues, Parent: { ...parentEntity } };
 
-  // Execute computed values for create
-  for (const [fieldName, config] of Object.entries(fields)) {
+  // Execute computed values and apply defaults in topological order so a field
+  // whose computedValue depends on another field (possibly also computed) reads
+  // the already-computed value rather than undefined. Use nested writes so
+  // dotted field names (e.g. "shipping.name") are legible to subsequent reads
+  // via getNestedFormValue / ExpressionEngine. See audit finding P0-6.
+  const graph = buildDependencyGraph(fields);
+  const { sorted } = topologicalSort(graph);
+  const fieldNames = sorted.length > 0 ? sorted : Object.keys(fields);
+
+  for (const fieldName of fieldNames) {
+    const config = fields[fieldName];
+    if (!config) continue;
     if (config.computedValue && config.computeOnCreateOnly) {
       const result = ExecuteComputedValue(
         config.computedValue,
@@ -214,18 +246,24 @@ export const InitOnCreateFormState = (
       );
       if (result !== undefined) {
         setValue(`${fieldName}` as const, result);
-        initEntityData[fieldName] = result;
+        setNestedFormValue(initEntityData, fieldName, result);
       }
     }
     if (config.defaultValue !== undefined && isNull(getNestedFormValue(initEntityData, fieldName))) {
       setValue(`${fieldName}` as const, config.defaultValue);
-      initEntityData[fieldName] = config.defaultValue;
+      setNestedFormValue(initEntityData, fieldName, config.defaultValue);
     }
   }
 
+  // If caller passed getValues, rebuild initEntityData from the RHF store so
+  // the returned data is the authoritative form state.
+  const finalEntityData: IEntityData = getValues
+    ? { ...(getValues() as IEntityData), Parent: initEntityData.Parent }
+    : initEntityData;
+
   return {
-    formState: initFormState(configName, initEntityData, fields, false),
-    initEntityData,
+    formState: initFormState(configName, finalEntityData, fields, false),
+    initEntityData: finalEntityData,
   };
 };
 

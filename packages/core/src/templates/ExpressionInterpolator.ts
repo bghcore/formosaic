@@ -118,26 +118,39 @@ function evaluateExpr(
   // 5. Numeric literal
   if (/^-?\d+(\.\d+)?$/.test(expr)) return Number(expr);
 
+  // Per audit P0-7: the $lookup table-name segment comes from authored
+  // config and can be arbitrary. Refuse to traverse prototype-pollution
+  // keys, plus reject any bracket-derived subKey that hits them. Keys
+  // traversed by `getNestedValue` are already guarded.
+  const isPollutionKey = (k: string): boolean =>
+    k === "__proto__" || k === "constructor" || k === "prototype";
+
   // 6. $lookup.table[params.key] — bracket access
   const bracketMatch = /^\$lookup\.([a-zA-Z_][a-zA-Z0-9_]*)\.([a-zA-Z_][a-zA-Z0-9_]*)\[(.+)\]$/.exec(expr);
   if (bracketMatch) {
     const [, tableName, subKey, bracketExpr] = bracketMatch;
+    if (isPollutionKey(tableName) || isPollutionKey(subKey)) return undefined;
     const table = lookups[tableName] as Record<string, unknown> | undefined;
     if (!table) return undefined;
     const subTable = table[subKey] as Record<string, unknown> | undefined;
     if (!subTable) return undefined;
     const keyValue = evaluateExpr(bracketExpr.trim(), params, lookups);
-    return subTable[String(keyValue)];
+    const bracketKey = String(keyValue);
+    if (isPollutionKey(bracketKey)) return undefined;
+    return subTable[bracketKey];
   }
 
   // Also handle $lookup.table[params.key] without an intermediate subkey
   const bracketTopMatch = /^\$lookup\.([a-zA-Z_][a-zA-Z0-9_]*)\[(.+)\]$/.exec(expr);
   if (bracketTopMatch) {
     const [, tableName, bracketExpr] = bracketTopMatch;
+    if (isPollutionKey(tableName)) return undefined;
     const table = lookups[tableName] as Record<string, unknown> | undefined;
     if (!table) return undefined;
     const keyValue = evaluateExpr(bracketExpr.trim(), params, lookups);
-    return (table as Record<string, unknown>)[String(keyValue)];
+    const bracketKey = String(keyValue);
+    if (isPollutionKey(bracketKey)) return undefined;
+    return (table as Record<string, unknown>)[bracketKey];
   }
 
   // 7. $lookup.table.key — dot access (may have multiple segments)
@@ -145,6 +158,7 @@ function evaluateExpr(
     const path = expr.slice("$lookup.".length); // e.g. "stateOptions.US"
     const parts = path.split(".");
     const [tableName, ...rest] = parts;
+    if (isPollutionKey(tableName)) return undefined;
     const table = lookups[tableName];
     if (table === undefined) return undefined;
     return getNestedValue(table as Record<string, unknown>, rest.join("."));
@@ -250,6 +264,10 @@ function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
   let current: unknown = obj;
   for (const part of parts) {
     if (current === null || current === undefined) return undefined;
+    // Per audit P0-10: refuse to traverse prototype-pollution keys. Without
+    // this, a malicious params object could reach Object.prototype or the
+    // constructor function via e.g. `{{params.__proto__.polluted}}`.
+    if (part === "__proto__" || part === "constructor" || part === "prototype") return undefined;
     current = (current as Record<string, unknown>)[part];
   }
   return current;

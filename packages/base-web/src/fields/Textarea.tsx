@@ -9,10 +9,15 @@ interface ITextareaProps {
   numberOfRows?: number;
   ellipsifyTextCharacters?: number;
   maxLimit?: number;
+  placeHolder?: string;
 }
 
 const Textarea = (props: IFieldProps<ITextareaProps>) => {
-  const { fieldName, testId, value, readOnly, config, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, config, error, required, setFieldValue, placeholder,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText,
+    ...rest
+  } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFieldValue(fieldName, event.target.value, false, 3000);
@@ -30,15 +35,17 @@ const Textarea = (props: IFieldProps<ITextareaProps>) => {
 
   return (
     <BaseTextarea
+      {...rest}
       autoComplete="off"
       value={value ? `${value}` : ""}
       onChange={onChange}
       error={!!error}
-      aria-invalid={!!error}
-      aria-required={required}
+      placeholder={placeholder ?? config?.placeHolder}
       overrides={{
         Root: {
           props: {
+            "aria-invalid": !!error,
+            "aria-required": required,
             "data-testid": GetFieldDataTestId(fieldName, testId),
           },
         },

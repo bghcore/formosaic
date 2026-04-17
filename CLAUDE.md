@@ -17,7 +17,7 @@ Published as thirteen npm packages:
 - `@formosaic/heroui` -- HeroUI (formerly NextUI) field component implementations
 - `@formosaic/radix` -- Radix UI primitives field implementations (unstyled, ideal for Tailwind/shadcn)
 - `@formosaic/react-aria` -- React Aria Components field implementations (accessibility-first)
-- `@formosaic/examples` -- 3 example apps (login+MFA, checkout wizard, data entry)
+- `@formosaic/examples` -- 6 example apps (login+MFA, checkout wizard, data entry, patient-intake, job-application, expense-report)
 
 ## Architecture
 
@@ -243,56 +243,56 @@ packages/
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, HookFormLoading, StatusDropdown/, DocumentLinks/)
-      fields/ (13 editable + 6 read-only, accept IFieldProps)
+      fields/ (21 editable + 6 read-only, accept IFieldProps)
 
   mui/                           -- @formosaic/mui
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, HookFormLoading)
-      fields/ (13 editable + 6 read-only, accept IFieldProps, using @mui/material)
+      fields/ (21 editable + 6 read-only, accept IFieldProps, using @mui/material)
 
   headless/                      -- @formosaic/headless
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, HookFormLoading)
-      fields/ (13 editable + 6 read-only, semantic HTML, data-* attributes, ARIA)
+      fields/ (21 editable + 6 read-only, semantic HTML, data-* attributes, ARIA)
       styles.css (optional CSS custom properties)
 
   antd/                          -- @formosaic/antd
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, FormLoading)
-      fields/ (22 editable + 6 read-only, Ant Design v5 components)
+      fields/ (21 editable + 6 read-only, Ant Design v5 components)
 
   chakra/                        -- @formosaic/chakra
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, FormLoading)
-      fields/ (22 editable + 6 read-only, Chakra UI v3 + semantic HTML)
+      fields/ (21 editable + 6 read-only, Chakra UI v3 + semantic HTML)
 
   mantine/                       -- @formosaic/mantine
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, FormLoading)
-      fields/ (22 editable + 6 read-only, Mantine v7 components)
+      fields/ (21 editable + 6 read-only, Mantine v7 components)
 
   atlaskit/                      -- @formosaic/atlaskit
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, FormLoading)
-      fields/ (22 editable + 6 read-only, Atlassian Design System components)
+      fields/ (21 editable + 6 read-only, Atlassian Design System components)
 
   base-web/                      -- @formosaic/base-web
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, FormLoading)
-      fields/ (22 editable + 6 read-only, semantic HTML for Base Web integration)
+      fields/ (21 editable + 6 read-only, semantic HTML for Base Web integration)
 
   heroui/                        -- @formosaic/heroui
     src/
       index.ts, registry.ts, helpers.ts
       components/ (ReadOnlyText, StatusMessage, FormLoading)
-      fields/ (22 editable + 6 read-only, HeroUI components)
+      fields/ (21 editable + 6 read-only, HeroUI components)
 
   radix/                         -- @formosaic/radix
     src/
@@ -311,11 +311,14 @@ packages/
       login-mfa/ (conditional MFA fields, dynamic labels)
       checkout/ (wizard, dropdown dependencies, payment branching)
       data-entry/ (field arrays, computed values, cross-field validation)
+      patient-intake/ (medical intake form with dependent fields)
+      job-application/ (multi-step hiring application)
+      expense-report/ (field-array-driven expense line items)
 
-e2e/                             -- Playwright E2E tests (54 tests, 7 specs)
+e2e/                             -- Playwright E2E tests (66 tests, 7 specs)
 benchmarks/                      -- Performance benchmark suite (vitest bench)
-stories/                         -- Storybook stories (64 stories + MDX docs)
-docs/                            -- MDX docs content (guide, adapters, API reference) — hosted separately via private repo on Vercel
+stories/                         -- Storybook stories (151 story exports across 49 files; currently Fluent UI only)
+docs/                            -- MDX docs content (guide, adapters, API reference) — published to formosaic.com via a separate deployment pipeline
   tier1-baseline-report.md       -- Tier 1 stabilization assessment
   tier1-patterns.md              -- Implementation patterns for Tier 2
   tier2-handoff.md               -- Tier 2 planning (feasibility, waves, go/no-go)
@@ -338,10 +341,10 @@ npm run build:heroui     # Build HeroUI package only
 npm run build:radix      # Build Radix package only
 npm run build:react-aria # Build React Aria package only
 npm run clean            # Remove all dist/ directories
-npm run test             # Run all tests (vitest, 6145 tests)
+npm run test             # Run all tests (vitest, 6766 tests)
 npm run test:watch       # Run tests in watch mode
 npm run test:coverage    # Run tests with coverage report
-npm run test:e2e         # Run Playwright E2E tests (54 tests)
+npm run test:e2e         # Run Playwright E2E tests (66 tests)
 npm run bench            # Run performance benchmarks
 npm run storybook        # Start Storybook dev server
 npm run build-storybook  # Build static Storybook
@@ -358,9 +361,9 @@ npm run build-storybook  # Build static Storybook
 - **Fluent UI v9** (`@fluentui/react-components`) for UI components (fluent package)
 - **MUI v5/v6** (`@mui/material`) for UI components (mui package)
 - **TypeScript** with `strict: true`
-- **Vitest** for testing (6145 tests across 65 files)
-- **Playwright** for E2E testing (54 tests across 7 specs)
-- **Storybook 10** for visual component documentation (67+ stories)
+- **Vitest** for testing (6766 tests across 68 files)
+- **Playwright** for E2E testing (66 tests across 7 specs)
+- **Storybook 10** for visual component documentation (151 story exports across 49 files; currently Fluent UI only)
 - **tsup** for bundling (CJS + ESM + .d.ts)
 - **npm workspaces** for monorepo management
 

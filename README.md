@@ -20,7 +20,7 @@
 [![Bundle Size](https://img.shields.io/bundlephobia/minzip/@formosaic/core?label=core%20gzip)](https://bundlephobia.com/package/@formosaic/core)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/react-19-61dafb.svg?logo=react)](https://react.dev/)
-[![Tests](https://img.shields.io/badge/tests-6%2C296%20passing-brightgreen.svg)](https://github.com/bghcore/formosaic/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-6%2C766%20passing-brightgreen.svg)](https://github.com/bghcore/formosaic/actions/workflows/ci.yml)
 [![Storybook](https://img.shields.io/badge/storybook-deployed-ff4785.svg?logo=storybook)](https://formosaic.com/storybook/)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/bghcore/formosaic/badge)](https://scorecard.dev/viewer/?uri=github.com/bghcore/formosaic)
 [![CodeQL](https://github.com/bghcore/formosaic/actions/workflows/codeql.yml/badge.svg)](https://github.com/bghcore/formosaic/actions/workflows/codeql.yml)
@@ -93,7 +93,7 @@ See the [comparison guide](https://formosaic.com/guide/comparison) for a detaile
 | [`@formosaic/heroui`](./packages/heroui) | HeroUI field components (27 field types). | ~22 KB ESM |
 | [`@formosaic/radix`](./packages/radix) | Radix UI primitives field components (27 field types). Unstyled. | ~32 KB ESM |
 | [`@formosaic/react-aria`](./packages/react-aria) | React Aria Components field components (27 field types). | ~31 KB ESM |
-| [`@formosaic/examples`](./packages/examples) | 3 example apps (login+MFA, checkout wizard, data entry). | -- |
+| [`@formosaic/examples`](./packages/examples) | 6 example apps: login+MFA, checkout wizard, data entry, patient-intake, job-application, expense-report. | -- |
 
 ## Quick Start
 
@@ -169,7 +169,7 @@ function App() {
 ## Try It Live
 
 - [Open in StackBlitz](https://stackblitz.com/github/bghcore/formosaic/tree/main/packages/examples?file=src%2Fcheckout%2FApp.tsx) -- edit and run the checkout wizard example in your browser
-- [Storybook](https://formosaic.com/storybook/) -- interactive component gallery with all 27 field types across 11 adapters
+- [Storybook](https://formosaic.com/storybook/) -- interactive component gallery covering all 27 field types for the Fluent UI adapter. Multi-adapter stories are planned.
 
 ## How It Works
 
@@ -219,8 +219,8 @@ const formConfig = {
       rules: [
         {
           when: { field: "type", operator: "equals", value: "bug" },
-          then: { severity: { required: true, hidden: false } },
-          else: { severity: { hidden: true } },
+          then: { fields: { severity: { required: true, hidden: false } } },
+          else: { fields: { severity: { hidden: true } } },
           priority: 1,
         },
       ],
@@ -329,13 +329,14 @@ import { FieldArray } from "@formosaic/core";
 <FieldArray
   fieldName="contacts"
   config={{
+    type: "FieldArray",
+    label: "Contacts",
     items: {
       name: { type: "Textbox", label: "Name", required: true },
       email: { type: "Textbox", label: "Email", validate: [{ name: "email" }] },
     },
     minItems: 1,
     maxItems: 5,
-    defaultItem: { name: "", email: "" },
   }}
   renderItem={(fieldNames, index, remove) => (
     <div key={index}>
@@ -376,24 +377,21 @@ import { createHeadlessFieldRegistry } from "@formosaic/headless";
 
 ### Pluggable Validation
 
-14 built-in validators plus support for custom sync, async, and cross-field validators via the unified `registerValidators()` API:
+14 built-in validators plus support for custom sync, async, and cross-field validators via the unified `registerValidators()` API.
+
+**Registering a custom validator** — `registerValidators()` takes a map of name to `ValidatorFn`. Use this for any validator that isn't already built in, including async server-side checks:
 
 ```tsx
-import {
-  registerValidators,
-  createMinLengthValidation,
-  createPatternValidation,
-} from "@formosaic/core";
+import { registerValidators } from "@formosaic/core";
 
-// Register built-in factory validators
 registerValidators({
-  MinLength5: createMinLengthValidation(5),
-  AlphaOnly: createPatternValidation(/^[a-zA-Z]+$/, "Letters only"),
-});
-
-// Add async validators (e.g., server-side uniqueness check)
-registerValidators({
-  CheckUniqueEmail: async (value, entityData, signal) => {
+  // Sync custom validator
+  AlphaOnly: (value) => {
+    if (typeof value !== "string") return undefined;
+    return /^[a-zA-Z]+$/.test(value) ? undefined : "Letters only";
+  },
+  // Async validator — receives an AbortSignal in the context arg
+  CheckUniqueEmail: async (value, _params, { signal }) => {
     const response = await fetch(`/api/check-email?email=${value}`, { signal });
     const { exists } = await response.json();
     return exists ? "Email already in use" : undefined;
@@ -401,7 +399,30 @@ registerValidators({
 });
 ```
 
-Reference validators in field configs:
+**Using factory helpers** — the `create*Rule` factories return an `IValidationRule` that you place directly into a field's `validate:` array. They are a shorthand for the equivalent `{ name, params, message }` object:
+
+```tsx
+import {
+  createMinLengthRule,
+  createMaxLengthRule,
+  createNumericRangeRule,
+  createPatternRule,
+  createRequiredIfRule,
+} from "@formosaic/core";
+
+fields: {
+  username: {
+    type: "Textbox",
+    label: "Username",
+    validate: [
+      createMinLengthRule(3),
+      createPatternRule("^[a-zA-Z]+$", "Letters only"),
+    ],
+  },
+}
+```
+
+**Referencing validators (built-in or registered) by name** — set the `name` on the rule and (optionally) `params`, `message`, `async`, `debounceMs`, or `when`:
 
 ```tsx
 fields: {
@@ -424,7 +445,7 @@ fields: {
 }
 ```
 
-Built-in validators: `EmailValidation`, `PhoneNumberValidation`, `YearValidation`, `Max150KbValidation`, `Max32KbValidation`, `isValidUrl`, `NoSpecialCharactersValidation`, `CurrencyValidation`, `UniqueInArrayValidation` + factory functions: `createMinLengthValidation`, `createMaxLengthValidation`, `createNumericRangeValidation`, `createPatternValidation`, `createRequiredIfValidation`
+Built-in validators: `EmailValidation`, `PhoneNumberValidation`, `YearValidation`, `Max150KbValidation`, `Max32KbValidation`, `isValidUrl`, `NoSpecialCharactersValidation`, `CurrencyValidation`, `UniqueInArrayValidation`. Factory helpers: `createMinLengthRule`, `createMaxLengthRule`, `createNumericRangeRule`, `createPatternRule`, `createRequiredIfRule`.
 
 Use `registerValidatorMetadata()` to attach human-readable metadata (label, description, parameter schema) to validators for display in tooling or documentation:
 
@@ -913,12 +934,11 @@ packages/
   heroui/     -- @formosaic/heroui (HeroUI adapter, 27 field types)
   radix/      -- @formosaic/radix (Radix UI primitives adapter, 27 field types)
   react-aria/ -- @formosaic/react-aria (React Aria Components adapter, 27 field types)
-  examples/   -- 3 example apps (login+MFA, checkout wizard, data entry)
+  examples/   -- 6 example apps (login+MFA, checkout wizard, data entry, patient-intake, job-application, expense-report)
 e2e/          -- Playwright end-to-end tests
 benchmarks/   -- Vitest benchmarks for rules engine performance
 stories/      -- Storybook stories for field components
-docs/         -- MDX docs content (hosted separately at https://formosaic.com/)
-docs/         -- Internal planning docs (tier1-baseline-report, tier1-patterns, tier2-handoff)
+docs/         -- MDX documentation (published at https://formosaic.com/) plus internal planning notes (tier1-baseline-report, tier1-patterns, tier2-handoff)
 ```
 
 ## License

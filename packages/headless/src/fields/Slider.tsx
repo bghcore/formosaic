@@ -10,7 +10,11 @@ interface ISliderProps {
 }
 
 const Slider = (props: IFieldProps<ISliderProps>) => {
-  const { fieldName, testId, value, readOnly, config, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, config, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder,
+    ...rest
+  } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(fieldName, Number(event.target.value));
@@ -27,6 +31,9 @@ const Slider = (props: IFieldProps<ISliderProps>) => {
       data-field-state={getFieldState({ error, required, readOnly })}
     >
       <input
+        aria-invalid={!!error}
+        aria-required={required}
+        {...rest}
         type="range"
         className="df-slider__input"
         value={(value as number) ?? 0}
@@ -34,8 +41,6 @@ const Slider = (props: IFieldProps<ISliderProps>) => {
         max={config?.max}
         min={config?.min}
         step={config?.step}
-        aria-invalid={!!error}
-        aria-required={required}
         aria-valuenow={(value as number) ?? 0}
         aria-valuemin={config?.min}
         aria-valuemax={config?.max}

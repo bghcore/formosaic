@@ -11,7 +11,11 @@ interface ISliderProps {
 }
 
 const Slider = (props: IFieldProps<ISliderProps>) => {
-  const { fieldName, testId, value, readOnly, config, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, config, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder,
+    ...rest
+  } = props;
 
   const onChange = (_: Event, newValue: number | number[]) => {
     setFieldValue(fieldName, newValue as number);
@@ -21,6 +25,9 @@ const Slider = (props: IFieldProps<ISliderProps>) => {
     <ReadOnlyText fieldName={fieldName} value={!isNull(value) ? String(value) : undefined} />
   ) : (
     <MuiSlider
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className={FieldClassName("fe-slider", error)}
       value={(value as number) ?? 0}
       onChange={onChange}
@@ -28,8 +35,6 @@ const Slider = (props: IFieldProps<ISliderProps>) => {
       min={config?.min}
       step={config?.step}
       valueLabelDisplay="auto"
-      aria-invalid={!!error}
-      aria-required={required}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );

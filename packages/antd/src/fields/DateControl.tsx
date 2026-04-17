@@ -5,7 +5,11 @@ import React from "react";
 import { FieldClassName, GetFieldDataTestId, formatDateTime } from "../helpers";
 
 const DateControl = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const onChange = (date: dayjs.Dayjs | null) => {
     if (date) {
@@ -27,14 +31,15 @@ const DateControl = (props: IFieldProps<{}>) => {
 
   return (
     <DatePicker
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className={FieldClassName("fe-date-control", error)}
       value={dayjsValue}
       onChange={onChange}
       allowClear
       status={error ? "error" : undefined}
       style={{ width: "100%" }}
-      aria-invalid={!!error}
-      aria-required={required}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );

@@ -6,7 +6,11 @@ import { GetFieldDataTestId, getFieldState } from "../helpers";
 import { NumberField, Input } from "react-aria-components";
 
 const NumberFieldComponent = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   if (readOnly) {
     return <ReadOnlyText fieldName={fieldName} value={!isNull(value) ? String(value) : undefined} />;
@@ -14,6 +18,9 @@ const NumberFieldComponent = (props: IFieldProps<{}>) => {
 
   return (
     <NumberField
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className="df-number"
       value={!isNull(value) ? (value as number) : undefined}
       onChange={(num) => {

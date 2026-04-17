@@ -51,16 +51,26 @@
   ],
   "license": "MIT",
   "author": "bghcore (https://github.com/bghcore)",
-  "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=18.18"
+  },
+  "sideEffects": [
+    "*.css",
+    "./dist/styles.css"
+  ],
   "scripts": {
-    "build": "tsup && node -e \"require('fs').copyFileSync('src/styles.css','dist/styles.css')\"",
+    "build": "tsup",
     "clean": "rimraf dist"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0",
     "react-hook-form": "^7.0.0",
-    "@formosaic/core": "^1.0.0"
+    "@formosaic/core": "^1.4.0"
   },
   "devDependencies": {
     "react": "^19.2.4",

@@ -5,7 +5,11 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const PhoneInput = (props: IFieldProps<IPhoneInputConfig>) => {
-  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, config, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder,
+    ...rest
+  } = props;
 
   const format = config?.format ?? "us";
 
@@ -21,6 +25,9 @@ const PhoneInput = (props: IFieldProps<IPhoneInputConfig>) => {
 
   return (
     <TextField
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       type="tel"
       className={FieldClassName("fe-phone-input", error)}
       value={(value as string) ?? ""}

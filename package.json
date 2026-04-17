@@ -26,7 +26,8 @@
     "bench:report": "npx tsx benchmarks/run.ts",
     "test:e2e": "playwright test --config=e2e/playwright.config.ts",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "release:bump": "node scripts/bump-version.mjs"
   },
   "devDependencies": {
     "@fluentui/react-components": "^9.73.2",

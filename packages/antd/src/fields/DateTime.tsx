@@ -6,7 +6,11 @@ import { DatePicker } from "antd";
 import dayjs from "dayjs";
 
 const DateTime = (props: IFieldProps<IDateTimeConfig>) => {
-  const { fieldName, testId, value, readOnly, error, required, config, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, config, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder,
+    ...rest
+  } = props;
 
   if (readOnly) {
     return <ReadOnlyText fieldName={fieldName} value={formatDateTimeValue(value)} />;
@@ -20,6 +24,9 @@ const DateTime = (props: IFieldProps<IDateTimeConfig>) => {
 
   return (
     <DatePicker
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className="fe-date-time"
       showTime
       value={dayjsValue}

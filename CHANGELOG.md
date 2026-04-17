@@ -5,17 +5,141 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.4.2] - 2026-04-17
 
-## [1.4.2] - 2026-04-06
+This release consolidates the original 2026-04-06 rules-engine fixes with the
+audit remediation work from 2026-04-17. See `formosaic-audit-closure.md` for the
+full audit evidence and `FOLLOWUPS.md` for documented follow-up work items.
+
+### Breaking
+
+- `required: true` on a `Toggle` field now validates that the value is `true`.
+  The previous silent skip that treated a `false` toggle as satisfying
+  `required` has been removed. If your app relied on the old behavior, remove
+  `required: true` from optional Toggles.
+- The `RenderField` validator `!value` short-circuit has been removed.
+  Validators now run for `0`, `false`, and `""` (previously these values
+  silently bypassed validation). If your app relied on that skip, update your
+  validators to guard their own empty cases — most built-in validators already do.
+
+### Security
+
+- **HTML sanitization** on all 11 adapters' `ReadOnlyRichText` by default
+  (previously rendered raw `value` via `dangerouslySetInnerHTML`). Single
+  sanitizer now lives at `@formosaic/core/adapter-utils` and is re-exported by
+  every adapter's `helpers`. Optional `config.sanitize?: (html) => html`
+  override for consumers with stricter needs (e.g. a full DOMPurify integration).
+- **Prototype pollution guards** on every config-walking boundary:
+  `ExpressionEngine`, `ConditionEvaluator`, `ExpressionInterpolator` (params,
+  lookups, interpolateDeep), `TemplateResolver.safeMerge`, and RJSF
+  `refResolver`. During this pass the adversarial tests surfaced and fixed an
+  unguarded `$lookup.<tableName>` path in `ExpressionInterpolator`.
+- **ReDoS length caps** on the `matches` condition operator and the `pattern`
+  validator: regex sources above 256 chars or inputs above 10 000 chars are
+  refused. Length caps are not a complete ReDoS defense — see the caveats
+  section below.
+- **RJSF `$ref` maxDepth** (default 64) prevents stack overflow on pathological
+  schemas.
+- **Module-level registries** (template, lookup, validator, value-function,
+  locale) are now documented as plugin-style "register at app boot". DevTools
+  render/event tracking and rule tracing default to disabled to prevent
+  accidental PII retention across SSR requests.
+- **SECURITY.md** documents the trust model for form configurations.
 
 ### Fixed
-- **Rules engine: cross-field effects silently dropped** — `evaluateAffectedFields()` now pre-scans rules to discover all cross-field effect targets and includes them in the affected set, so `then: { fields: { fieldC: { hidden: true } } }` is always applied
-- **Rules engine: changed field's own rules skipped** — the changed field is now always included in the evaluation set, fixing cases where a field with rules but no dependents would have its rules ignored on value change
-- **Rules engine: dependency graph lost on incremental updates** — `dependentFields` and `dependsOnFields` are now explicitly preserved during field state resets in `evaluateAffectedFields()` and defensively guarded in the reducer's UPDATE action
-- **Rules engine: wrong dependency direction check** — `processFieldChange()` now checks forward dependencies (`dependentFields`) and whether the field has rules, instead of incorrectly checking reverse dependencies (`dependsOnFields`)
-- **Rules engine: `setValue` effect non-functional** — `pendingSetValue` produced by rules is now consumed in the form component's rules state effect, applied via react-hook-form `setValue()`, and cleared after application
-- **Computed values: stale ref timing** — `handleComputedValues()` now accepts the current runtime form state directly instead of reading from a ref that may not yet be updated
+
+- **A11y: adapter fields now forward FieldWrapper-injected `id`,
+  `aria-labelledby`, `aria-describedby`, `aria-invalid`, and `aria-required`**
+  onto the rendered control. Label association and error descriptions now work
+  correctly across all 11 adapters.
+- **Autosave**: `AbortSignal` is propagated to the consumer `saveData`; the
+  retry sleep is interruptible on unmount or next edit; a consumer returning
+  `undefined` no longer wipes form state (previously `reset(undefined)` would
+  erase in-progress edits); the save-path default is no-op when no `saveData`
+  prop is supplied.
+- **Dependency graph for dotted paths**: rules and computed values that
+  reference `$values.address.city` now correctly register an edge on the
+  top-level `address` field, so changing `address` triggers cascaded updates.
+- **Create-time computed values** now iterate in topological order; the flat-
+  key init write that could hide dotted values from `getNestedValue` has been
+  removed.
+- **`pendingSetValue` cascade**: rule-driven `setValue` effects now dispatch an
+  immutable `CLEAR_PENDING_SETVALUE` action and re-invoke `processFieldChange`
+  so downstream rules fire.
+- **Rules engine: cross-field effects silently dropped** —
+  `evaluateAffectedFields()` now pre-scans rules to discover all cross-field
+  effect targets and includes them in the affected set.
+- **Rules engine: changed field's own rules skipped** — the changed field is
+  always included in the evaluation set.
+- **Rules engine: dependency graph lost on incremental updates** —
+  `dependentFields` / `dependsOnFields` are preserved during field-state
+  resets in `evaluateAffectedFields` and defensively guarded in the reducer.
+- **Rules engine: wrong dependency direction check** — `processFieldChange()`
+  checks forward dependencies (`dependentFields`) instead of reverse.
+- **Computed values: stale ref timing** — `handleComputedValues` accepts the
+  current runtime state directly; after write, it calls `trigger()` and
+  `processFieldChange` so downstream validation and rules re-evaluate.
+- **Render cascade**: `setFieldValue` is now `useCallback`-stable;
+  `<FormProvider>` no longer spreads a freshly-constructed `formState` object
+  on every render.
+- **Mantine**: removed double asterisk on required fields (FieldWrapper +
+  adapter both emitted `*`).
+- **MUI Textbox**: removed duplicate error text (FieldWrapper + MUI
+  `helperText` both showed the message).
+- **Fluent**: Textbox, Dropdown, and Autocomplete now honor the
+  `config.placeHolder` shorthand.
+- **Headless Toggle**: removed duplicate label (FieldWrapper renders it).
+- **Textarea placeholder** is now passed through across all adapters.
+
+### Packaging / release hygiene
+
+- Adapter `peerDependencies["@formosaic/core"]` tightened to `^1.4.0` (was
+  `^1.0.0`) to prevent cross-version installs.
+- `vitest` and `@testing-library/react` declared as optional peer
+  dependencies on `@formosaic/core` so consumers of `@formosaic/core/testing`
+  get a clear signal.
+- `@formosaic/headless` `sideEffects` corrected to allowlist CSS; CSS emission
+  routed through `tsup`'s `onSuccess` instead of an inline `copyFileSync`.
+- CI now typechecks and runs E2E without `continue-on-error`.
+- `publishConfig` and `engines` added to every public package.
+- `scripts/bump-version.mjs` for lockstep version bumps.
+- `@formosaic/heroui` no longer declares `@heroui/react` as a peer (it's a
+  semantic-HTML compatibility adapter); `@formosaic/atlaskit` description
+  clarifies the same.
+
+### Docs
+
+- Fixed three broken README code examples (cross-field rule shape, FieldArray
+  example, validator factory names/signatures).
+- Updated test, E2E, example-app, and Storybook counts to the verified values.
+- Added documentation for the 9 Tier-2 field types (RadioGroup, CheckboxGroup,
+  Rating, ColorPicker, Autocomplete, FileUpload, DateRange, DateTime,
+  PhoneInput).
+- Fixed stale names in `docs/api/stability.mdx`: `ITemplateParam` →
+  `ITemplateParamSchema`; `fromZodSchema` → `zodSchemaToFieldConfig`.
+- Normalized documentation URLs to `formosaic.com`.
+- Removed references to a non-existent `website/` folder and undefined
+  `npm run docs:*` scripts.
+
+### Known caveats (carried forward)
+
+See `formosaic-audit-closure.md` §6 for the full list. Headline items:
+
+1. **Short pathological regex within caps can still backtrack.** Length caps
+   block long sources/inputs; they do not defeat exponential backtracking on
+   short ReDoS patterns. Treat configs from untrusted sources with additional
+   server-side validation.
+2. **`LocaleRegistry` is module-global.** Populate at app startup only.
+   Calling `registerLocale` per request in SSR leaks across requests.
+3. **`@formosaic/core` public barrel still exposes ~13 internal helpers.**
+   Treat non-documented exports as unstable; an `/internal` subpath
+   migration with deprecation path is planned (see `FOLLOWUPS.md`).
+4. **SSR first paint renders the form wrapper but no field rows.** Fields
+   materialize after client hydration. Not a safety issue — a
+   hydration-efficiency follow-up.
+5. **`@formosaic/fluent` consumed via native Node ESM hits an upstream
+   `@fluentui/react-icons` packaging bug.** CJS consumers and bundlers with
+   dual-package resolution are unaffected.
 
 ## [1.4.1] - 2026-03-20
 

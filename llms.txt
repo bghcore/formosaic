@@ -1,6 +1,6 @@
 # Formosaic
 
-> A config-driven React form library with a built-in declarative rules engine. Define forms as JSON (`IFormConfig`), swap UI libraries without rewriting logic, and let the engine handle conditional visibility, computed values, validation, and auto-save. 11 UI adapters (Fluent UI, MUI, Ant Design, Mantine, Chakra, Radix, React Aria, headless HTML, Base Web, Atlaskit, HeroUI) and 6,296+ tests. MIT licensed. Built on react-hook-form v7.
+> A config-driven React form library with a built-in declarative rules engine. Define forms as JSON (`IFormConfig`), swap UI libraries without rewriting logic, and let the engine handle conditional visibility, computed values, validation, and auto-save. 11 UI adapters (Fluent UI, MUI, Ant Design, Mantine, Chakra, Radix, React Aria, headless HTML, Base Web, Atlaskit, HeroUI) and 6,766 tests. MIT licensed. Built on react-hook-form v7.
 
 ## Key Capabilities
 
@@ -67,17 +67,17 @@ const formConfig = {
 ## Docs
 
 - [README](https://github.com/bghcore/formosaic/blob/main/README.md): Full usage guide, field types, architecture, examples
-- [Comparison](https://bghcore.github.io/formosaic/guide/comparison): Honest comparison vs RJSF, TanStack Form, Formik, uniforms, SurveyJS, Form.io
-- [Choosing an Adapter](https://bghcore.github.io/formosaic/adapters/choosing): Which adapter for your UI framework
-- [Field Config Reference](https://bghcore.github.io/formosaic/guide/field-config): IFieldConfig v2 properties
-- [Rules Engine](https://bghcore.github.io/formosaic/guide/rules-engine): Lifecycle, dependency graph, evaluation
-- [Expression Syntax](https://bghcore.github.io/formosaic/guide/expression-syntax): $values, $fn, $parent expressions
-- [Condition Operators](https://bghcore.github.io/formosaic/guide/condition-operators): All 20 operators
-- [Accessibility](https://bghcore.github.io/formosaic/guide/accessibility): WCAG 2.1 AA, ARIA, keyboard
-- [SSR / Next.js](https://bghcore.github.io/formosaic/guide/ssr): App Router, Pages Router, lazy loading
-- [shadcn Integration](https://bghcore.github.io/formosaic/adapters/shadcn): Radix + Tailwind setup
-- [Creating an Adapter](https://bghcore.github.io/formosaic/adapters/creating): Build a custom UI adapter
-- [Documentation Site](https://bghcore.github.io/formosaic/): Full documentation
+- [Comparison](https://formosaic.com/guide/comparison): Honest comparison vs RJSF, TanStack Form, Formik, uniforms, SurveyJS, Form.io
+- [Choosing an Adapter](https://formosaic.com/adapters/choosing): Which adapter for your UI framework
+- [Field Config Reference](https://formosaic.com/guide/field-config): IFieldConfig v2 properties
+- [Rules Engine](https://formosaic.com/guide/rules-engine): Lifecycle, dependency graph, evaluation
+- [Expression Syntax](https://formosaic.com/guide/expression-syntax): $values, $fn, $parent expressions
+- [Condition Operators](https://formosaic.com/guide/condition-operators): All 20 operators
+- [Accessibility](https://formosaic.com/guide/accessibility): WCAG 2.1 AA, ARIA, keyboard
+- [SSR / Next.js](https://formosaic.com/guide/ssr): App Router, Pages Router, lazy loading
+- [shadcn Integration](https://formosaic.com/adapters/shadcn): Radix + Tailwind setup
+- [Creating an Adapter](https://formosaic.com/adapters/creating): Build a custom UI adapter
+- [Documentation Site](https://formosaic.com/): Full documentation
 
 ## Packages
 
@@ -93,7 +93,7 @@ const formConfig = {
 - [`@formosaic/heroui`](https://github.com/bghcore/formosaic/tree/main/packages/heroui): HeroUI adapter (27 field types, ~22 KB)
 - [`@formosaic/radix`](https://github.com/bghcore/formosaic/tree/main/packages/radix): Radix UI primitives, unstyled (27 field types, ~32 KB)
 - [`@formosaic/react-aria`](https://github.com/bghcore/formosaic/tree/main/packages/react-aria): React Aria Components, accessibility-first (27 field types, ~31 KB)
-- [`@formosaic/examples`](https://github.com/bghcore/formosaic/tree/main/packages/examples): 3 example apps (login+MFA, checkout wizard, data entry)
+- [`@formosaic/examples`](https://github.com/bghcore/formosaic/tree/main/packages/examples): 6 example apps (login+MFA, checkout wizard, data entry, patient-intake, job-application, expense-report)
 
 ## Optional
 

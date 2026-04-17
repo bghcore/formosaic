@@ -11,7 +11,11 @@ interface ISliderProps {
 }
 
 const SliderField = (props: IFieldProps<ISliderProps>) => {
-  const { fieldName, testId, value, readOnly, config, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, config, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder,
+    ...rest
+  } = props;
 
   const onChange = (_: unknown, data: { value: number }) => {
     setFieldValue(fieldName, data.value);
@@ -21,14 +25,15 @@ const SliderField = (props: IFieldProps<ISliderProps>) => {
     <ReadOnlyText fieldName={fieldName} value={!isNull(value) ? String(value) : undefined} />
   ) : (
     <Slider
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className={FieldClassName("fe-slider", error)}
       value={(value as number) ?? 0}
       onChange={onChange}
       max={config?.max}
       min={config?.min}
       step={config?.step}
-      aria-invalid={!!error}
-      aria-required={required}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );

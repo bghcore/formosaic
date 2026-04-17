@@ -6,7 +6,11 @@ import { ReadOnlyText } from "../components/ReadOnlyText";
 import { FieldClassName, GetFieldDataTestId } from "../helpers";
 
 const NumberField = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, setFieldValue,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const onChange = (val: number | null) => {
     setFieldValue(fieldName, val, false, 1500);
@@ -18,14 +22,15 @@ const NumberField = (props: IFieldProps<{}>) => {
 
   return (
     <InputNumber
+      aria-invalid={!!error}
+      aria-required={required}
+      {...rest}
       className={FieldClassName("fe-number", error)}
       autoComplete="off"
       value={!isNull(value) ? (value as number) : null}
       onChange={onChange}
       status={error ? "error" : undefined}
       style={{ width: "100%" }}
-      aria-invalid={!!error}
-      aria-required={required}
       data-testid={GetFieldDataTestId(fieldName, testId)}
     />
   );

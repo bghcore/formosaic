@@ -15,17 +15,42 @@ afterEach(() => {
 
 describe("Feature 4 – CSP-Safe Expression Engine", () => {
   describe("No new Function() usage", () => {
-    it("does not call Function constructor during expression evaluation", () => {
-      // If new Function() were used, patching it would cause an error.
-      // With expr-eval it never gets called.
+    it("does not call the Function constructor during expression evaluation", () => {
+      // Instrument the global Function constructor via a Proxy. Any use of
+      // `new Function(...)` anywhere in the call stack during evaluation
+      // will increment the counter. expr-eval (our CSP-safe parser) never
+      // calls `new Function()`.
       const originalFunction = global.Function;
       let functionCallCount = 0;
-      // We can't easily replace Function constructor, but we verify via side-effect:
-      // evaluating an expression succeeds even in environments where Function creation is blocked.
-      const result = evaluateExpression("$values.a + $values.b", { a: 3, b: 7 });
-      expect(result).toBe(10);
-      expect(functionCallCount).toBe(0); // No explicit new Function() called
-      global.Function = originalFunction;
+
+      const FunctionProxy = new Proxy(originalFunction, {
+        construct(target, argArray, newTarget) {
+          functionCallCount += 1;
+          return Reflect.construct(target, argArray, newTarget);
+        },
+        apply(target, thisArg, argArray) {
+          functionCallCount += 1;
+          return Reflect.apply(target, thisArg, argArray);
+        },
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (global as any).Function = FunctionProxy;
+
+      try {
+        const result = evaluateExpression("$values.a + $values.b", { a: 3, b: 7 });
+        expect(result).toBe(10);
+        // The CSP-safe parser must not create functions at runtime.
+        expect(functionCallCount).toBe(0);
+
+        // Exercise other expression shapes to increase coverage.
+        const r2 = evaluateExpression("round($values.x * 100) / 100", { x: 1.2345 });
+        expect(r2).toBeCloseTo(1.23, 5);
+        expect(functionCallCount).toBe(0);
+      } finally {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (global as any).Function = originalFunction;
+      }
     });
   });
 

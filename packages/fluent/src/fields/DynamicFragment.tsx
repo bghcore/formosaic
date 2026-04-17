@@ -2,8 +2,13 @@ import { IFieldProps } from "@formosaic/core";
 import React from "react";
 
 const Fragment = (props: IFieldProps<{}>) => {
-  const { value } = props;
-  return <input type="hidden" value={value as string} />;
+  const {
+    value,
+    fieldName, testId, readOnly, error, required, setFieldValue, config,
+    errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder,
+    ...rest
+  } = props;
+  return <input {...rest} type="hidden" value={value as string} />;
 };
 
 export default Fragment;

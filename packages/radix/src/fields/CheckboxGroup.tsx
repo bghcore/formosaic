@@ -5,7 +5,11 @@ import { GetFieldDataTestId, getFieldState } from "../helpers";
 import * as Checkbox from "@radix-ui/react-checkbox";
 
 const CheckboxGroup = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, required, options, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, required, options, setFieldValue,
+    errorCount, saving, savePending, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const selected = Array.isArray(value) ? (value as string[]) : [];
 
@@ -26,9 +30,11 @@ const CheckboxGroup = (props: IFieldProps<{}>) => {
 
   return (
     <div
-      className="df-checkbox-group"
+      role="group"
       aria-invalid={!!error}
       aria-required={required}
+      {...rest}
+      className="df-checkbox-group"
       data-field-type="CheckboxGroup"
       data-field-state={getFieldState({ error, required, readOnly })}
       data-testid={GetFieldDataTestId(fieldName, testId)}

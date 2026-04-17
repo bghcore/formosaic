@@ -1,6 +1,6 @@
 # Formosaic -- Full Reference
 
-> A config-driven React form library with a built-in declarative rules engine. Define forms as JSON (`IFormConfig`), swap UI libraries without rewriting logic, and let the engine handle conditional visibility, computed values, validation, and auto-save. 11 UI adapters (Fluent UI, MUI, Ant Design, Mantine, Chakra, Radix, React Aria, headless HTML, Base Web, Atlaskit, HeroUI) and 6,296+ tests. MIT licensed. Built on react-hook-form v7.
+> A config-driven React form library with a built-in declarative rules engine. Define forms as JSON (`IFormConfig`), swap UI libraries without rewriting logic, and let the engine handle conditional visibility, computed values, validation, and auto-save. 11 UI adapters (Fluent UI, MUI, Ant Design, Mantine, Chakra, Radix, React Aria, headless HTML, Base Web, Atlaskit, HeroUI) and 6,766 tests. MIT licensed. Built on react-hook-form v7.
 
 This is the extended reference for AI models. For the concise version, see [llms.txt](https://github.com/bghcore/formosaic/blob/main/llms.txt).
 
@@ -124,7 +124,7 @@ type ICondition = IFieldCondition | ILogicalCondition;
 | Visual form builder | No | No | No | No | No |
 | Bundle (core) | ~114 KB | ~85 KB | ~12 KB | ~13 KB | ~45 KB |
 
-See the [comparison guide](https://bghcore.github.io/formosaic/guide/comparison) for full comparison with migration paths.
+See the [comparison guide](https://formosaic.com/guide/comparison) for full comparison with migration paths.
 
 ## Package API Reference
 
@@ -135,7 +135,7 @@ UI-library agnostic engine built for React. Depends only on `react` and `react-h
 - **Providers**: `RulesEngineProvider`, `InjectedFieldProvider` -- React context providers that must wrap the form tree (memoized)
 - **Components**: `Formosaic` (entry point, save with AbortController/retry/timeout), `FormFields`, `RenderField` (useMemo, async validation wired), `FieldWrapper` (React.memo, render props for theming), `ConfirmInputsModal` (focus trap), `WizardForm` (multi-step wizard, step announcements), `FieldArray` (repeating sections), `FormErrorBoundary` (per-field crash isolation), `FormDevTools` (dev-only debugging panel with Rules, Values, Errors, Graph, Perf, Deps, Timeline tabs)
 - **Rules Engine**: `buildDependencyGraph`, `evaluateAllRules`, `evaluateAffectedFields`, `processFieldChange`, `topologicalSort`, `evaluateCondition` (20 operators + AND/OR/NOT), priority-based conflict resolution. Rule effects: required, hidden, readOnly, component swap, options, validate, computedValue, setValue, fieldOrder. Array operators: `arrayContains`, `arrayNotContains`, `arrayLength`.
-- **Validation**: 14 built-in validators + `registerValidators()` for custom sync/async/cross-field. Per-rule `when` condition, `debounceMs`, `async` flag. Factory functions: `createMinLengthValidation`, `createMaxLengthValidation`, `createNumericRangeValidation`, `createPatternValidation`, `createRequiredIfValidation`. `registerValidatorMetadata()` for attaching label/description/paramSchema to validators.
+- **Validation**: 14 built-in validators + `registerValidators()` for custom sync/async/cross-field. Per-rule `when` condition, `debounceMs`, `async` flag. Factory helpers (return `IValidationRule` for field `validate:` arrays): `createMinLengthRule`, `createMaxLengthRule`, `createNumericRangeRule`, `createPatternRule`, `createRequiredIfRule`. `registerValidatorMetadata()` for attaching label/description/paramSchema to validators.
 - **Config Validation**: `validateFieldConfigs()` -- dev-mode checks for missing deps, unregistered components/validators, circular deps
 - **Cycle Detection**: `validateDependencyGraph()` -- Kahn's algorithm on dependency graphs
 - **i18n**: `registerLocale()`, `getLocaleString()`, `resetLocale()` -- partial locale overrides with English fallback
@@ -148,7 +148,7 @@ UI-library agnostic engine built for React. Depends only on `react` and `react-h
 - **Type Safety**: `defineFormConfig()` -- zero-cost TypeScript utility for type-safe form configs
 - **JSON Schemas**: `schemas/field-config.schema.json` and `schemas/wizard-config.schema.json` for IDE autocompletion
 - **Lazy Loading**: `createLazyFieldRegistry()` -- React.lazy field registry for code splitting
-- **Theming**: CSS custom properties (`--fe-error-color`, etc.) via optional `styles.css`, render props on `FieldWrapper`
+- **Theming**: CSS custom properties (`--formosaic-error-color`, etc.) via the bundled `dist/index.css`, render props on `FieldWrapper`
 - **Accessibility**: Focus trap in modals, focus-to-first-error, ARIA live regions, wizard step announcements
 - **Analytics**: `IAnalyticsCallbacks` (8 event hooks), `useFormAnalytics()` hook
 - **Performance**: `RenderTracker` (per-field render count tracking), `EventTimeline` (chronological event log)
@@ -180,7 +180,7 @@ Unstyled semantic HTML adapter. No UI framework dependency. Provides 27 field co
 - **Optional CSS**: `styles.css` with CSS custom properties for basic styling
 
 ### @formosaic/antd
-Ant Design v5 adapter. Provides 27 field components (18 native antd + 9 semantic HTML). Native Tier 2: Rate, AutoComplete, DatePicker+showTime, RangePicker, Upload, ColorPicker.
+Ant Design v5 adapter. Provides 27 field components (21 native antd + 6 semantic HTML). Native Tier 2: Rate, AutoComplete, DatePicker+showTime, RangePicker, Upload, ColorPicker.
 - **Registry**: `createAntdFieldRegistry()`
 
 ### @formosaic/chakra
@@ -196,7 +196,7 @@ Atlassian Design System adapter. Provides 27 field components using semantic HTM
 - **Registry**: `createAtlaskitFieldRegistry()`
 
 ### @formosaic/base-web
-Uber Base Web adapter. Provides 27 field components (9 native baseui + 18 semantic HTML).
+Uber Base Web adapter. Provides 27 field components (11 native baseui + 16 semantic HTML).
 - **Registry**: `createBaseWebFieldRegistry()`
 
 ### @formosaic/heroui
@@ -213,11 +213,14 @@ React Aria Components adapter. Provides 27 field components (10 React Aria nativ
 
 ### @formosaic/examples
 
-Three example applications demonstrating common form patterns.
+Six example applications demonstrating common form patterns.
 
 - **login-mfa**: Conditional MFA fields, dynamic labels
 - **checkout**: Wizard form, dropdown dependencies, payment branching
 - **data-entry**: Field arrays, computed values, cross-field validation
+- **patient-intake**: Medical intake form with dependent fields
+- **job-application**: Multi-step hiring application
+- **expense-report**: Field-array-driven expense line items
 
 ## Code Examples
 
@@ -476,7 +479,7 @@ const lazyFields = createLazyFieldRegistry({
 
 ## Available Field Types
 
-21 editable + 6 read-only field types. All 27 are available across all 11 adapters (fluent, mui, headless, antd, chakra, mantine, atlaskit, base-web, heroui, radix, react-aria). 4 additional specialized types (PopOutEditor, ChoiceSet, FieldArray, RichText) are fluent/mui/headless only.
+21 editable + 6 read-only field types = 27 total. All 27 are available across all 11 adapters (fluent, mui, headless, antd, chakra, mantine, atlaskit, base-web, heroui, radix, react-aria).
 
 ### Editable Fields
 
@@ -519,20 +522,20 @@ const lazyFields = createLazyFieldRegistry({
 
 - [README.md](https://github.com/bghcore/formosaic/blob/main/README.md): Full usage guide with quick start, field types, architecture, and examples
 - [CLAUDE.md](https://github.com/bghcore/formosaic/blob/main/CLAUDE.md): Detailed architecture, rendering pipeline, key directories, coding conventions
-- [Comparison](https://bghcore.github.io/formosaic/guide/comparison): Comparison vs RJSF, TanStack Form, Formik, uniforms, SurveyJS, Form.io
-- [Choosing an Adapter](https://bghcore.github.io/formosaic/adapters/choosing): Adapter recommendation guide
-- [Creating an Adapter](https://bghcore.github.io/formosaic/adapters/creating): Guide for building custom UI library adapters
-- [Field Config Reference](https://bghcore.github.io/formosaic/guide/field-config): IFieldConfig v2 reference
-- [Rules Engine](https://bghcore.github.io/formosaic/guide/rules-engine): Rules engine lifecycle, dependency graph, evaluation
-- [Condition Operators](https://bghcore.github.io/formosaic/guide/condition-operators): All 20 condition operators
-- [Expression Syntax](https://bghcore.github.io/formosaic/guide/expression-syntax): Expression syntax ($values, $fn, $parent)
-- [Accessibility](https://bghcore.github.io/formosaic/guide/accessibility): Accessibility guide (ARIA, keyboard, screen readers)
-- [SSR / Next.js](https://bghcore.github.io/formosaic/guide/ssr): Server-side rendering guide
-- [shadcn Integration](https://bghcore.github.io/formosaic/adapters/shadcn): shadcn/ui integration guide
-- [Analytics & Telemetry](https://bghcore.github.io/formosaic/guide/analytics): Analytics and telemetry integration
-- [Performance](https://bghcore.github.io/formosaic/guide/performance): Performance debugging with DevTools
-- [Adapter Architecture](https://bghcore.github.io/formosaic/adapters/architecture): Adapter classification and architecture
-- [Field Contracts](https://bghcore.github.io/formosaic/adapters/field-contracts): Canonical field behavior contracts
-- [Parity Matrix](https://bghcore.github.io/formosaic/adapters/parity-matrix): Per-field, per-adapter parity matrix
-- [API Stability](https://bghcore.github.io/formosaic/api/stability): Public API stability classification
-- [Divergence Register](https://bghcore.github.io/formosaic/adapters/divergence-register): Cross-adapter divergence register
+- [Comparison](https://formosaic.com/guide/comparison): Comparison vs RJSF, TanStack Form, Formik, uniforms, SurveyJS, Form.io
+- [Choosing an Adapter](https://formosaic.com/adapters/choosing): Adapter recommendation guide
+- [Creating an Adapter](https://formosaic.com/adapters/creating): Guide for building custom UI library adapters
+- [Field Config Reference](https://formosaic.com/guide/field-config): IFieldConfig v2 reference
+- [Rules Engine](https://formosaic.com/guide/rules-engine): Rules engine lifecycle, dependency graph, evaluation
+- [Condition Operators](https://formosaic.com/guide/condition-operators): All 20 condition operators
+- [Expression Syntax](https://formosaic.com/guide/expression-syntax): Expression syntax ($values, $fn, $parent)
+- [Accessibility](https://formosaic.com/guide/accessibility): Accessibility guide (ARIA, keyboard, screen readers)
+- [SSR / Next.js](https://formosaic.com/guide/ssr): Server-side rendering guide
+- [shadcn Integration](https://formosaic.com/adapters/shadcn): shadcn/ui integration guide
+- [Analytics & Telemetry](https://formosaic.com/guide/analytics): Analytics and telemetry integration
+- [Performance](https://formosaic.com/guide/performance): Performance debugging with DevTools
+- [Adapter Architecture](https://formosaic.com/adapters/architecture): Adapter classification and architecture
+- [Field Contracts](https://formosaic.com/adapters/field-contracts): Canonical field behavior contracts
+- [Parity Matrix](https://formosaic.com/adapters/parity-matrix): Per-field, per-adapter parity matrix
+- [API Stability](https://formosaic.com/api/stability): Public API stability classification
+- [Divergence Register](https://formosaic.com/adapters/divergence-register): Cross-adapter divergence register

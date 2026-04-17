@@ -34,6 +34,9 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
+      - name: Typecheck
+        run: npx tsc -p tsconfig.base.json --noEmit
+
       - name: Build all packages
         run: npm run build
 
@@ -47,7 +50,6 @@ jobs:
         run: |
           cd e2e/app && npm install --legacy-peer-deps && cd ../..
           npx playwright test --config=e2e/playwright.config.ts
-        continue-on-error: true
 
       - name: Upload test results
         if: always()

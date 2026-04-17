@@ -131,7 +131,11 @@ const DocumentLinkItem = (props: IDocumentLinkItemProps) => {
 };
 
 const DocumentLinks = (props: IFieldProps<{}>) => {
-  const { fieldName, testId, value, readOnly, error, setFieldValue } = props;
+  const {
+    fieldName, testId, value, readOnly, error, setFieldValue,
+    required, errorCount, saving, savePending, options, optionsLoading, label, type, description, helpText, placeholder, config,
+    ...rest
+  } = props;
 
   const { watch } = useFormContext();
   const documentLinks = watch(`${fieldName}` as const);
@@ -168,7 +172,7 @@ const DocumentLinks = (props: IFieldProps<{}>) => {
   const links = value as IDocumentLink[];
 
   return (
-    <div className={FieldClassName("fe-document-links", readOnly ? undefined : error)}>
+    <div {...rest} className={FieldClassName("fe-document-links", readOnly ? undefined : error)}>
       <List disablePadding>
         {links?.length > 0 ? links.map((link, index) => (
           <DocumentLinkItem
