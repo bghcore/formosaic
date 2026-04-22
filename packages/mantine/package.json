@@ -64,15 +64,15 @@
     "@mantine/dates": "^7.0.0"
   },
   "devDependencies": {
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-hook-form": "^7.71.2",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-hook-form": "^7.73.1",
     "@formosaic/core": "*",
-    "@mantine/core": "^7.17.2",
-    "@mantine/dates": "^7.17.2",
-    "dayjs": "^1.11.13",
+    "@mantine/core": "^9.1.0",
+    "@mantine/dates": "^9.1.0",
+    "dayjs": "^1.11.20",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3"
   }
