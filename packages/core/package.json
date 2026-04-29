@@ -123,13 +123,13 @@
     "@formosaic/radix": "*",
     "@formosaic/react-aria": "*",
     "@testing-library/react": "^16.3.2",
-    "@types/expr-eval": "^1.0.2",
+    "@types/expr-eval": "^1.1.2",
     "@types/react": "^19.2.14",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-hook-form": "^7.71.2",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-hook-form": "^7.74.0",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vitest": "^4.0.18"
   },
   "dependencies": {
