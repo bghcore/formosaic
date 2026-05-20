@@ -66,16 +66,16 @@
     "@formosaic/core": "^1.4.0"
   },
   "devDependencies": {
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-hook-form": "^7.71.2",
-    "@mui/material": "^6.4.11",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-hook-form": "^7.76.0",
+    "@mui/material": "^9.0.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@formosaic/core": "*",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
-    "@types/react": "^19.2.14",
+    "typescript": "^6.0.3",
+    "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3"
   }
 }
