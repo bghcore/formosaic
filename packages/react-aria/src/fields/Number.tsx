@@ -24,9 +24,8 @@ const NumberFieldComponent = (props: IFieldProps<{}>) => {
       className="df-number"
       value={!isNull(value) ? (value as number) : undefined}
       onChange={(num) => {
-        if (!isNaN(num)) {
-          setFieldValue(fieldName, num, false, 1500);
-        }
+        // RAC emits NaN when the input is cleared — commit null, not a stale value
+        setFieldValue(fieldName, isNaN(num) ? null : num, false, 1500);
       }}
       isInvalid={!!error}
       isRequired={required}

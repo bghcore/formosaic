@@ -19,6 +19,7 @@
     "build:radix": "npm run build --workspace=packages/radix",
     "build:react-aria": "npm run build --workspace=packages/react-aria",
     "clean": "rimraf packages/*/dist",
+    "typecheck": "node scripts/typecheck.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -33,6 +34,7 @@
     "@fluentui/react-components": "^9.73.2",
     "@fluentui/react-icons": "^2.0.320",
     "@mantine/hooks": "^8.3.16",
+    "@playwright/test": "^1.60.0",
     "@storybook/addon-docs": "^10.2.15",
     "@storybook/addon-links": "^10.2.15",
     "@storybook/react": "^10.2.15",
@@ -41,6 +43,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^20.19.43",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitest/coverage-v8": "^4.0.18",
@@ -55,5 +58,5 @@
     "vite": "^7.3.1",
     "vitest": "^4.0.18"
   },
-  "version": "1.4.2"
+  "version": "1.5.0"
 }

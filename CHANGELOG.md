@@ -5,6 +5,75 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-06-11
+
+All 13 packages released together. Adapter packages now declare
+`@formosaic/core: ^1.5.0` as their peer range — the Number-field fix relies on
+`parseNumberInputValue`, which first ships in core 1.5.0.
+
+### Fixed
+
+- **Number fields: clearing the input no longer commits `0`.** `Number("") === 0`
+  passed the `!isNaN` guard, so emptying a Number field wrote the value `0`
+  instead of clearing it. Affected 8 of 11 adapters (fluent, mui, headless,
+  atlaskit, base-web, chakra, heroui, radix). The react-aria adapter had the
+  inverse manifestation: React Aria Components emit `NaN` on clear, which the
+  guard dropped, silently keeping the stale value. Clearing now commits `null`
+  in all adapters (antd and mantine were already correct).
+- **Analytics callbacks no longer fire during render.** `onValidationError`
+  fired on every re-render while a field had an error (flooding analytics
+  sinks), and field-change tracking mutated a ref during render, double-firing
+  under React StrictMode. Tracking now runs in effects: `onValidationError`
+  fires once per error-message transition and `onFieldChange` once per actual
+  value change.
+- **CI restored to green.** The build had been failing since v1.4.2 on one
+  remaining bare `process.env.NODE_ENV` in `RenderField` (tsup's DTS compiler
+  has no `@types/node`); replaced with the established `globalThis` cast. The
+  CI typecheck step — which swept the whole repo with `strict: true` and had
+  never passed — now typechecks each package against its own tsconfig
+  (`npm run typecheck`); all 13 packages pass.
+- **Pristine forms no longer start dirty when a Dropdown value is `""`.**
+  Init-time option validation normalized `""` to `null`, which flipped
+  react-hook-form's value-based `isDirty` at mount — enabling Save/Cancel on
+  untouched forms and triggering spurious before-unload warnings. `""` is now
+  treated as "no selection" and left alone.
+- **E2E suite repaired and gating for the first time.** The Playwright step
+  had run with `continue-on-error: true` since its introduction (59 of 66
+  tests failed at the supposedly green commit). Fixed page-object selector
+  bugs and expectations stale since v1.4.2's intentional behavior changes:
+  61 tests now pass and fail the build on regression; 5 are `test.fixme`
+  with reasons, tracked as FU-6 (wizard step filtering, FieldArray adapter
+  registration, and draft-persistence live values are not yet implemented).
+- Unregistered validator names in `validate` rules now emit a dev-mode
+  `console.warn` (once per name) instead of being silently skipped.
+- Form-connection port fields that reduce to the same suffix now warn about
+  the collision instead of silently dropping one field from the connection.
+- `ConfirmInputsModal`: the per-field `setFieldValue` callback is memoized
+  (it was defeating `RenderField`'s `React.memo` for every modal field), and
+  focus restore on close now checks the element is still in the DOM.
+- `FormErrorBoundary`'s default fallback announces assertively
+  (`aria-live="assertive"`) for screen-reader users.
+- README: the compound-condition example was missing the
+  `then: { fields: { … } }` wrapper, so copy-pasted cross-field rules were a
+  silent no-op.
+
+### Changed
+
+- `composeForm()` and `defineComposedForm()` now declare their actual return
+  type, `IResolvedFormConfig`, instead of the wider `IFormConfig` —
+  `config.fields` values are typed `IFieldConfig` without the
+  `ITemplateFieldRef` union member. Non-breaking (subtype).
+
+### Added
+
+- `parseNumberInputValue(raw)` in `@formosaic/core/adapter-utils` — shared
+  text-to-number parsing for Number fields (empty/whitespace → `null`,
+  unparseable → `undefined`, otherwise the parsed number).
+- Behavioral contract tests in the shared adapter harness
+  (`@formosaic/core/testing`): Number fields must commit the typed number and
+  must commit `null` — never `0` — when cleared. Runs against all 11 adapters.
+- `npm run typecheck` — per-package typecheck mirroring the CI step.
+
 ## [1.4.2] - 2026-04-17
 
 This release consolidates the original 2026-04-06 rules-engine fixes with the

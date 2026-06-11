@@ -19,7 +19,7 @@
  * without silently passing. See EXCEPTIONS_BY_TYPE below.
  */
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import React from "react";
 import { ComponentTypes } from "../constants";
 import type { Dictionary } from "../utils";
@@ -466,6 +466,56 @@ export function runAdapterContractTests(
             ariaInvalid,
             `"${type}" did not surface aria-invalid="true" when error prop provided`,
           ).toBeTruthy();
+        });
+      }
+
+      // Behavioral contract: Number fields must distinguish "cleared" from 0.
+      // Regression for the Number("") === 0 coercion bug: clearing the input
+      // used to commit the value 0 (or, in adapters whose widget emits NaN on
+      // clear, silently keep the stale value). Clearing must commit null.
+      if (typesToTest.includes(ComponentTypes.Number)) {
+        const renderNumberField = (value: unknown) => {
+          const setFieldValue = vi.fn();
+          const element = registry[ComponentTypes.Number];
+          const { container } = renderWithWrapper(
+            React.cloneElement(element, {
+              ...minimalProps,
+              value,
+              setFieldValue,
+            })
+          );
+          const input = container.querySelector<HTMLInputElement>(
+            'input:not([type="hidden"])'
+          );
+          return { setFieldValue, input };
+        };
+
+        it(`"${ComponentTypes.Number}" commits the typed number`, () => {
+          const { setFieldValue, input } = renderNumberField(undefined);
+          expect(input, "Number field rendered no editable input").toBeTruthy();
+          fireEvent.change(input!, { target: { value: "7" } });
+          fireEvent.blur(input!);
+          const committed = setFieldValue.mock.calls.map(call => call[1]);
+          expect(
+            committed,
+            `typing "7" should commit the number 7 (got: ${JSON.stringify(committed)})`,
+          ).toContain(7);
+        });
+
+        it(`"${ComponentTypes.Number}" commits null when cleared — never 0`, () => {
+          const { setFieldValue, input } = renderNumberField(42);
+          expect(input, "Number field rendered no editable input").toBeTruthy();
+          fireEvent.change(input!, { target: { value: "" } });
+          fireEvent.blur(input!);
+          const committed = setFieldValue.mock.calls.map(call => call[1]);
+          expect(
+            committed,
+            "clearing the Number field must never commit 0",
+          ).not.toContain(0);
+          expect(
+            committed,
+            `clearing the Number field must commit null (got: ${JSON.stringify(committed)})`,
+          ).toContain(null);
         });
       }
 

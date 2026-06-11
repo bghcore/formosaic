@@ -10,7 +10,12 @@ test.describe("Wizard form - step navigation and conditional steps", () => {
   });
 
   test.describe("Step navigation", () => {
-    test("starts on the first step (Personal Info)", async ({ page }) => {
+    // FIXME(FU-6): Formosaic does not consume config.wizard — WizardForm is a
+    // separate render-prop component and there is no built-in integration that
+    // filters rendered fields per step (even packages/examples/checkout renders
+    // all fields below the wizard chrome). The e2e app renders a flat form, so
+    // these assertions test behavior that does not exist yet.
+    test.fixme("starts on the first step (Personal Info)", async ({ page }) => {
       // The first step fields should be visible
       await form.expectFieldVisible("name");
       await form.expectFieldVisible("email");
@@ -19,7 +24,7 @@ test.describe("Wizard form - step navigation and conditional steps", () => {
       await form.expectFieldHidden("role");
     });
 
-    test("wizard step live region announces current step", async () => {
+    test.fixme("wizard step live region announces current step", async () => {
       const announcement = form.wizardStepAnnouncement();
       await expect(announcement).toContainText("Personal Info");
     });

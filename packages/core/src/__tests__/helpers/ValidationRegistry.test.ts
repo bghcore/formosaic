@@ -308,6 +308,22 @@ describe("ValidationRegistry", () => {
       const result = runSyncValidations("test", rules, ctx);
       expect(result).toBeUndefined();
     });
+
+    it("dev-warns once per unknown validator name (audit 2026-06 finding 4)", () => {
+      const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+      try {
+        const rules: IValidationRule[] = [{ name: "TypoedValidator" }];
+        const ctx: IValidationContext = { fieldName: "test", values: {} };
+        runSyncValidations("test", rules, ctx);
+        runSyncValidations("test", rules, ctx);
+        const matching = warnSpy.mock.calls.filter(c =>
+          String(c[0]).includes('unregistered validator "TypoedValidator"')
+        );
+        expect(matching).toHaveLength(1);
+      } finally {
+        warnSpy.mockRestore();
+      }
+    });
   });
 
   describe("runValidations (async)", () => {

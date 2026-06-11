@@ -11,9 +11,10 @@ test.describe("Validation - required, email, URL, phone, length", () => {
 
   test.describe("Required field validation", () => {
     test("submitting with empty required fields shows errors", async () => {
-      // Dirty the form with a non-required field so save is enabled
+      // Dirty the form with a non-required field so save is enabled.
+      // (react-hook-form's isDirty is value-based: clearing back to the
+      // default would un-dirty the form and disable Save again.)
       await form.fillText("phone", "something");
-      await form.fillText("phone", "");
       await form.save();
 
       // Required fields (name, email) should show validation errors
@@ -25,6 +26,8 @@ test.describe("Validation - required, email, URL, phone, length", () => {
     test("filling required fields allows submission", async () => {
       await form.fillText("name", "John Doe");
       await form.fillText("email", "john@example.com");
+      // Since v1.4.2 a required Toggle must be actively switched on
+      await form.clickToggle("agreeTerms");
 
       await form.save();
       await form.expectSaveSuccess();
@@ -117,6 +120,8 @@ test.describe("Validation - required, email, URL, phone, length", () => {
       await form.fillText("phone", "+1-555-9876");
       await form.fillText("website", "https://jane.dev");
       await form.fillText("bio", "Software engineer with a passion for forms.");
+      // Since v1.4.2 a required Toggle must be actively switched on
+      await form.clickToggle("agreeTerms");
 
       await form.save();
       await form.expectSaveSuccess();

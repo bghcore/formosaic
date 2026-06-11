@@ -66,7 +66,10 @@ describe("P0-10 ReDoS cap effectiveness", () => {
     // sources and long inputs. This test asserts a wall-clock UPPER BOUND
     // (10s) so a true hang would trip the test, but the cap would need to
     // shrink (or a real regex-complexity check added) to fully close this.
-    it("short pathological regex within caps is not fully protected — documented weakness", () => {
+    // The harness timeout must exceed the asserted 10s wall-clock bound;
+    // vitest's default 5s timeout killed this test on hardware where the
+    // backtrack takes longer than the "~5s at last measurement" note.
+    it("short pathological regex within caps is not fully protected — documented weakness", { timeout: 15_000 }, () => {
       const regex = "(a+)+b"; // classic ReDoS, 6 chars
       const input = "a".repeat(25) + "c"; // 26 chars, well under 10_000
       const start = Date.now();

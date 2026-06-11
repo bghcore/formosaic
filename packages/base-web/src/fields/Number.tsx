@@ -1,5 +1,5 @@
 import { IFieldProps } from "@formosaic/core";
-import { isNull } from "../helpers";
+import { isNull, parseNumberInputValue } from "../helpers";
 import { Input } from "baseui/input";
 import React from "react";
 import { ReadOnlyText } from "../components/ReadOnlyText";
@@ -13,9 +13,9 @@ const NumberField = (props: IFieldProps<{}>) => {
   } = props;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const num = Number(event.target.value);
-    if (!isNaN(num)) {
-      setFieldValue(fieldName, num, false, 1500);
+    const parsed = parseNumberInputValue(event.target.value);
+    if (parsed !== undefined) {
+      setFieldValue(fieldName, parsed, false, 1500);
     }
   };
 

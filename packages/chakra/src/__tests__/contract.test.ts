@@ -4,7 +4,7 @@ import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import React from "react";
 
 const ChakraWrapper = ({ children }: { children: React.ReactNode }) =>
-  React.createElement(ChakraProvider, { value: defaultSystem }, children);
+  React.createElement(ChakraProvider, { value: defaultSystem, children });
 
 runAdapterContractTests(createChakraFieldRegistry, {
   suiteName: "Chakra UI",

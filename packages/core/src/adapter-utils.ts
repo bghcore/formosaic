@@ -18,6 +18,7 @@ export {
   getFileNames,
   extractDigits,
   formatPhone,
+  parseNumberInputValue,
   ellipsifyText,
   MAX_FILE_SIZE_MB_DEFAULT,
   DocumentLinksStrings,

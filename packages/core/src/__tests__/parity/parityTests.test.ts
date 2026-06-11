@@ -61,7 +61,7 @@ const MANTINE_SKIP_REQUIRED = ["Rating"];
 
 // Provider wrappers for Chakra and Mantine
 const ChakraWrapper = ({ children }: { children: React.ReactNode }) =>
-  React.createElement(ChakraProvider, { value: defaultSystem }, children);
+  React.createElement(ChakraProvider, { value: defaultSystem, children });
 
 const MantineWrapper = ({ children }: { children: React.ReactNode }) =>
   React.createElement(MantineProvider, { forceColorScheme: "light" as const }, children);

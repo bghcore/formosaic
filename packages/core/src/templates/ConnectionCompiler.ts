@@ -91,6 +91,16 @@ function buildSuffixMap(
 
   for (const field of fields) {
     const suffix = field.startsWith(prefix) ? field.slice(prefix.length) : field;
+    if (map[suffix] !== undefined && map[suffix] !== field) {
+      // Two port fields reduce to the same suffix (e.g. "a.address.street"
+      // and a non-prefixed "address.street"); the later one wins and the
+      // earlier silently stops participating in the connection (audit
+      // 2026-06 finding 5) — make the overwrite visible.
+      console.warn(
+        `[Formosaic] Port fields "${map[suffix]}" and "${field}" in fragment "${fragment}" ` +
+        `both reduce to suffix "${suffix}"; "${field}" wins and "${map[suffix]}" is ignored.`
+      );
+    }
     map[suffix] = field;
   }
 

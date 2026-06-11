@@ -253,7 +253,7 @@ rules: [
         { field: "priority", operator: "greaterThanOrEqual", value: 3 },
       ],
     },
-    then: { assignee: { required: true } },
+    then: { fields: { assignee: { required: true } } },
   },
 ]
 ```

@@ -63,6 +63,32 @@ describe("ConnectionCompiler", () => {
     expect(effectFields["billing.name"]?.computedValue).toBe("$root.shipping.name");
   });
 
+  it("warns when two port fields collide on the same suffix (audit 2026-06 finding 5)", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      // "a.address.street" strips the fragment prefix to "address.street";
+      // the non-prefixed "address.street" reduces to the same suffix.
+      const ports: Record<string, string[]> = {
+        "a.port": ["a.address.street", "address.street"],
+        "b.port": ["b.address.street"],
+      };
+      compileConnections([{
+        name: "collide",
+        when: { field: "toggle", operator: "equals", value: true },
+        source: { fragment: "a", port: "port" },
+        target: { fragment: "b", port: "port" },
+        effect: "copyValues",
+      }], ports);
+
+      const collisionWarnings = warnSpy.mock.calls.filter(c =>
+        String(c[0]).includes('both reduce to suffix "address.street"')
+      );
+      expect(collisionWarnings).toHaveLength(1);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
   it("matches ports by field suffix, not array index", () => {
     const ports: Record<string, string[]> = {
       "a.port": ["a.x", "a.y"],

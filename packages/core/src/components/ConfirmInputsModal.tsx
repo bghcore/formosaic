@@ -42,7 +42,12 @@ const ConfirmInputsModal = (props: IConfirmInputsModalProps) => {
       saveButtonRef.current?.focus();
     } else if (!isOpen && dialogRef.current?.open) {
       dialogRef.current.close();
-      if (previouslyFocusedRef.current instanceof HTMLElement) previouslyFocusedRef.current.focus();
+      // The previously focused element may have been removed from the DOM
+      // while the modal was open (e.g. a rule hid its field) — focusing a
+      // detached element is a silent no-op at best.
+      if (previouslyFocusedRef.current instanceof HTMLElement && previouslyFocusedRef.current.isConnected) {
+        previouslyFocusedRef.current.focus();
+      }
       previouslyFocusedRef.current = null;
     }
   }, [isOpen]);
@@ -68,10 +73,12 @@ const ConfirmInputsModal = (props: IConfirmInputsModalProps) => {
     }
   }, []);
 
-  const setValueFunctionFieldValue = (fieldName: string, fieldValue: unknown) => {
+  // Stable identity: RenderField is React.memo'd, so a new function per render
+  // would defeat its memoization for every modal field.
+  const setValueFunctionFieldValue = React.useCallback((fieldName: string, fieldValue: unknown) => {
     trigger();
     setValue(`${fieldName}` as const, fieldValue, { shouldDirty: true });
-  };
+  }, [trigger, setValue]);
 
   const content = (
     <div className="formosaic-form-wrapper">

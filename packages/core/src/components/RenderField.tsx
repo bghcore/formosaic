@@ -40,6 +40,42 @@ interface IRenderFieldProps {
   analytics?: IFormAnalytics;
 }
 
+interface IFieldAnalyticsTrackerProps {
+  fieldName: string;
+  value: unknown;
+  errorMessage?: string;
+  analytics: IFormAnalytics;
+}
+
+/**
+ * Owns the analytics side effects for a field. Rendered from inside the
+ * Controller render prop (where hooks are unavailable) so tracking runs in
+ * effects rather than during render: trackValidationError fires only when the
+ * error message transitions, and trackFieldChange fires once per actual value
+ * change. Refs persist across StrictMode's double-invoked dev renders, so
+ * neither callback double-fires.
+ */
+const FieldAnalyticsTracker = ({ fieldName, value, errorMessage, analytics }: IFieldAnalyticsTrackerProps) => {
+  const previousValueRef = React.useRef<unknown>(undefined);
+  const lastTrackedErrorRef = React.useRef<string | undefined>(undefined);
+
+  React.useEffect(() => {
+    if (errorMessage && lastTrackedErrorRef.current !== errorMessage) {
+      analytics.trackValidationError(fieldName, [errorMessage]);
+    }
+    lastTrackedErrorRef.current = errorMessage;
+  }, [errorMessage, analytics, fieldName]);
+
+  React.useEffect(() => {
+    if (previousValueRef.current !== undefined && previousValueRef.current !== value) {
+      analytics.trackFieldChange(fieldName, previousValueRef.current, value);
+    }
+    previousValueRef.current = value;
+  }, [value, analytics, fieldName]);
+
+  return null;
+};
+
 const RenderField = (props: IRenderFieldProps) => {
   const {
     type, fieldName, testId,
@@ -53,7 +89,6 @@ const RenderField = (props: IRenderFieldProps) => {
 
   const { injectedFields } = UseInjectedFieldContext();
   const { control, getValues } = useFormContext();
-  const previousValueRef = React.useRef<unknown>(undefined);
 
   const isDisabled = disabled ?? false;
 
@@ -170,7 +205,7 @@ const RenderField = (props: IRenderFieldProps) => {
 
   React.useEffect(() => {
     // Gate dev-only render tracking: no work in production. See audit P1-22.
-    if (process.env.NODE_ENV !== "production") {
+    if ((globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production") {
       trackRender(fieldName);
     }
   });
@@ -190,7 +225,6 @@ const RenderField = (props: IRenderFieldProps) => {
             // Per audit P0-9: Toggle with required:true must require a truthy
             // value (the user must actively toggle it on). Previously Toggle
             // was silently exempted, breaking required-consent UX.
-            // TODO(docs): surface this as a behavior change in the next CHANGELOG.
             required: required && !isReadOnly
               ? { value: true, message: FormStrings.required }
               : undefined,
@@ -216,16 +250,19 @@ const RenderField = (props: IRenderFieldProps) => {
             const errorCount = errors ? Object.keys(errors).length : 0;
             const saving = isDirty && (isSubmitting || isSubmitSuccessful);
             const savePending = isDirty && errorCount > 0 && !isSubmitting && !isSubmitSuccessful;
-            if (error && analytics) {
-              analytics.trackValidationError(fieldName, [error.message || "Error"]);
-            }
-            if (previousValueRef.current !== undefined && previousValueRef.current !== value && analytics) {
-              analytics.trackFieldChange(fieldName, previousValueRef.current, value);
-            }
-            previousValueRef.current = value;
+            const tracker = analytics ? (
+              <FieldAnalyticsTracker
+                fieldName={fieldName}
+                value={value}
+                errorMessage={error ? error.message || "Error" : undefined}
+                analytics={analytics}
+              />
+            ) : null;
             return type === "DynamicFragment" ? (
-              <>{React.cloneElement(Comp, { value })}</>
+              <>{tracker}{React.cloneElement(Comp, { value })}</>
             ) : ShowField(filterText, value, label) && !softHidden ? (
+              <>
+              {tracker}
               <FieldWrapper
                 id={fieldName}
                 required={required}
@@ -263,7 +300,8 @@ const RenderField = (props: IRenderFieldProps) => {
                   onBlur: analytics ? () => analytics.trackFieldBlur(fieldName) : undefined,
                 })}
               </FieldWrapper>
-            ) : <></>;
+              </>
+            ) : <>{tracker}</>;
           }}
         />
       );

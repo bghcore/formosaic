@@ -281,6 +281,27 @@ export function getValidatorRegistry(): Record<string, ValidatorFn> {
 /** Reset registry to defaults (for testing) */
 export function resetValidatorRegistry(): void {
   validatorRegistry = { ...defaultValidators };
+  warnedUnknownValidators.clear();
+}
+
+/**
+ * Dev-only warning for validation rules referencing a validator name that is
+ * not in the registry. Without this, a typo'd `name` silently disables the
+ * rule (audit 2026-06 finding 4). Warns once per unknown name per process to
+ * avoid flooding the console from per-keystroke validation.
+ */
+const warnedUnknownValidators = new Set<string>();
+function warnUnknownValidator(name: string): void {
+  if ((globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production") {
+    if (!warnedUnknownValidators.has(name)) {
+      warnedUnknownValidators.add(name);
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[formosaic] Validation rule references unregistered validator "${name}"; the rule is skipped. ` +
+        `Register it via registerValidators({ ${name}: ... }) or fix the rule's "name".`
+      );
+    }
+  }
 }
 
 /**
@@ -301,7 +322,10 @@ export async function runValidations(
     }
 
     const validator = getValidator(rule.name);
-    if (!validator) continue;
+    if (!validator) {
+      warnUnknownValidator(rule.name);
+      continue;
+    }
 
     const result = validator(value, rule.params, context);
     const message = result instanceof Promise ? await result : result;
@@ -329,7 +353,10 @@ export function runSyncValidations(
     }
 
     const validator = getValidator(rule.name);
-    if (!validator) continue;
+    if (!validator) {
+      warnUnknownValidator(rule.name);
+      continue;
+    }
 
     const result = validator(value, rule.params, context);
     if (typeof result === "string") {

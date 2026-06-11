@@ -99,11 +99,15 @@ Single-select dropdown populated from `options`.
 
 Boolean on/off switch. In read-only mode, displays "Yes" or "No".
 
-**Note:** Toggle fields skip the `required` validation -- `false` is a valid boolean value.
+**Note:** Since v1.4.2, `required: true` on a Toggle validates that the value is `true` (the user must actively toggle it on) — e.g. for consent checkboxes. Omit `required` for optional toggles where `false` is an acceptable answer.
 
 ### Number
 
 Numeric input field. Uses a 1500ms auto-save debounce.
+
+Clearing the input sets the field value to `null` — never `0`. An empty Number
+field and an explicit `0` are distinct values; validators and rules that need
+to distinguish "no answer" from zero can rely on this across all adapters.
 
 ### Multiselect
 

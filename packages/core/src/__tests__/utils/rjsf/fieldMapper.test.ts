@@ -410,6 +410,6 @@ describe("applyUiSchema", () => {
   it("should not mutate the original config", () => {
     const original = { ...baseConfig };
     applyUiSchema(baseConfig, { "ui:hidden": true });
-    expect(original.hidden).toBeUndefined();
+    expect("hidden" in original).toBe(false);
   });
 });

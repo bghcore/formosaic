@@ -236,7 +236,7 @@ packages/
         zodSchemaImport.ts       -- Zod schema -> IFieldConfig (no zod dep)
         lazyFieldRegistry.ts     -- React.lazy field loading
       styles.css                 -- CSS custom properties for theming + field animation CSS
-      __tests__/                 -- Vitest tests (65 files)
+      __tests__/                 -- Vitest tests (62 files)
         __fixtures__/            -- Shared test configs and entity data (v2 format)
 
   fluent/                        -- @formosaic/fluent
@@ -341,7 +341,7 @@ npm run build:heroui     # Build HeroUI package only
 npm run build:radix      # Build Radix package only
 npm run build:react-aria # Build React Aria package only
 npm run clean            # Remove all dist/ directories
-npm run test             # Run all tests (vitest, 6766 tests)
+npm run test             # Run all tests (vitest, 6799 tests)
 npm run test:watch       # Run tests in watch mode
 npm run test:coverage    # Run tests with coverage report
 npm run test:e2e         # Run Playwright E2E tests (66 tests)
@@ -361,7 +361,7 @@ npm run build-storybook  # Build static Storybook
 - **Fluent UI v9** (`@fluentui/react-components`) for UI components (fluent package)
 - **MUI v5/v6** (`@mui/material`) for UI components (mui package)
 - **TypeScript** with `strict: true`
-- **Vitest** for testing (6766 tests across 68 files)
+- **Vitest** for testing (6799 tests across 73 files)
 - **Playwright** for E2E testing (66 tests across 7 specs)
 - **Storybook 10** for visual component documentation (151 story exports across 49 files; currently Fluent UI only)
 - **tsup** for bundling (CJS + ESM + .d.ts)

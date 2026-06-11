@@ -2,7 +2,7 @@ import { runAdapterContractTests, ALL_FIELD_TYPES } from "@formosaic/core/testin
 import { createRadixFieldRegistry } from "../registry";
 
 // Radix Slider uses @radix-ui/react-use-size which requires ResizeObserver
-global.ResizeObserver = class {
+globalThis.ResizeObserver = class {
   observe() {}
   unobserve() {}
   disconnect() {}

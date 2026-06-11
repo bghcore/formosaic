@@ -46,8 +46,8 @@ All callbacks are optional. If a callback is not provided, the corresponding eve
 |---|---|---|
 | `onFieldFocus` | `(fieldName: string) => void` | Field receives focus |
 | `onFieldBlur` | `(fieldName: string, timeSpentMs: number) => void` | Field loses focus (with duration) |
-| `onFieldChange` | `(fieldName: string, oldValue: unknown, newValue: unknown) => void` | Field value changes |
-| `onValidationError` | `(fieldName: string, errors: string[]) => void` | Field validation fails |
+| `onFieldChange` | `(fieldName: string, oldValue: unknown, newValue: unknown) => void` | Fires once per actual value change (not per re-render) |
+| `onValidationError` | `(fieldName: string, errors: string[]) => void` | Fires once when a field's error appears or its message changes — not on every re-render while the error persists |
 | `onFormSubmit` | `(values: Record<string, unknown>, durationMs: number) => void` | Form submitted successfully |
 | `onFormAbandonment` | `(filledFields: string[], emptyRequiredFields: string[]) => void` | User navigates away with unsaved changes |
 | `onWizardStepChange` | `(fromStep: number, toStep: number) => void` | Wizard step changes |

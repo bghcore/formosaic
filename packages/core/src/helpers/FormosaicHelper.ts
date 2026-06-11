@@ -174,6 +174,11 @@ export const CheckValidDropdownOptions = (
     if (
       (type === "Dropdown" || type === "StatusDropdown") &&
       !isNull(fieldValue) &&
+      // "" means "no selection", not an invalid selection — nulling it out
+      // changes the value representation and flips react-hook-form's global
+      // isDirty deep-compare at mount (save button enabled on a pristine
+      // form, spurious beforeunload warnings).
+      fieldValue !== "" &&
       options &&
       options.findIndex(o => String(o.value) === String(fieldValue)) === -1
     ) {

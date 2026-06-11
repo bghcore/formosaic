@@ -33,7 +33,7 @@ export class FormErrorBoundary extends React.Component<IFormErrorBoundaryProps, 
     if (this.state.hasError && this.state.error) {
       if (this.props.fallback) return this.props.fallback(this.state.error, this.resetError);
       return (
-        <div className="form-error-boundary" role="alert">
+        <div className="form-error-boundary" role="alert" aria-live="assertive">
           <span className="error-boundary-message">Something went wrong: {this.state.error.message}</span>
           <button className="error-boundary-retry" onClick={this.resetError} type="button">Retry</button>
         </div>

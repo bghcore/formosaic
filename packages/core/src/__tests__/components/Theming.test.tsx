@@ -64,7 +64,7 @@ describe("FieldWrapper render props", () => {
     });
 
     // Default label should NOT be rendered
-    expect(screen.queryByClassName?.("field-label") ?? document.querySelector(".field-label")).toBeNull();
+    expect(document.querySelector(".field-label")).toBeNull();
   });
 
   it("renders the default error display when no renderError prop is provided", () => {

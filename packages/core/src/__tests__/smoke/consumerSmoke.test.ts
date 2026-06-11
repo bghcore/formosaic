@@ -122,7 +122,7 @@ describe("Consumer smoke tests", () => {
       for (const { name, keys } of registries) {
         const adapterTier1 = keys
           .split(",")
-          .filter((k) => TIER_1_KEYS.includes(k))
+          .filter((k) => (TIER_1_KEYS as readonly string[]).includes(k))
           .sort()
           .join(",");
         expect(adapterTier1, `${name} Tier 1 keys mismatch`).toBe(tier1Set);

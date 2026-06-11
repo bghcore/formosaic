@@ -53,7 +53,8 @@ export class FormPage {
 
   /** Get a dropdown option by its display text. */
   dropdownOption(text: string): Locator {
-    return this.page.getByRole("option", { name: text });
+    // exact: true — substring matching makes "Active" also match "Inactive"
+    return this.page.getByRole("option", { name: text, exact: true });
   }
 
   /** Get a toggle/switch by field name. */
@@ -158,6 +159,16 @@ export class FormPage {
 
   /** Assert that a field is read-only. */
   async expectFieldReadOnly(fieldName: string) {
+    // Adapters swap read-only fields to a static ReadOnlyText element with
+    // id="<fieldName>-read-only" — the editable control leaves the DOM.
+    const readOnlySwap = this.page.locator(`[id="${fieldName}-read-only"]`);
+    try {
+      await readOnlySwap.first().waitFor({ state: "visible", timeout: 3000 });
+      return;
+    } catch {
+      // No read-only swap — fall through and assert read-only attributes on
+      // the still-editable control.
+    }
     const input = this.page.locator(
       `[id="${fieldName}"], [name="${fieldName}"]`
     ).first();

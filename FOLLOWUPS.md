@@ -182,6 +182,39 @@ documented.
 
 ---
 
+## FU-6 — E2E suite: unimplemented features behind `test.fixme`
+
+**Origin:** 2026-06 audit. The E2E step ran with `continue-on-error: true`
+from its introduction until v1.4.2, so the suite was never actually green:
+at the last nominally-green commit (589136e) 59 of 66 tests failed. The
+2026-06-10/11 pass repaired the suite (page-object selector bugs, stale
+v1.4.2 expectations, a real core `isDirty` bug) to 61 passing; the remaining
+5 are `test.fixme` because they test features that do not exist yet:
+
+1. **Wizard × Formosaic integration** (2 tests, `wizard.spec.ts`).
+   `Formosaic` ignores `config.wizard`; `WizardForm` is a standalone
+   render-prop component and nothing filters rendered fields per step. Even
+   `packages/examples/checkout` renders all fields below the wizard chrome.
+   Needs a designed integration (e.g. `Formosaic` consuming `config.wizard`,
+   or a documented composition that scopes `FormFields` to the current step).
+2. **FieldArray in adapter registries** (2 tests, `field-array.spec.ts`).
+   No adapter registers `"FieldArray"`; core's `FieldArray` requires a
+   `renderItem` render prop and cannot be injected via the registry as-is.
+   A config with `type: "FieldArray"` renders the missing-component
+   fallback. Needs a registry-compatible wrapper that renders item fields
+   through the injected registry.
+3. **Draft persistence from outside the form** (1 test,
+   `draft-recovery.spec.ts`). `useDraftPersistence` needs live form values,
+   but `Formosaic` exposes no values-change callback, so consumers can only
+   persist stale data. Needs a public API (e.g. `onValuesChange` or built-in
+   draft support via settings).
+
+**Owner:** TBD.
+**Blocker for 1.5.0 release:** no — the 5 tests are skipped with reasons, the
+other 61 pass and now gate CI meaningfully for the first time.
+
+---
+
 ## Upstream (not a Formosaic fix)
 
 ### UP-1 — `@fluentui/react-icons` broken ESM entrypoint

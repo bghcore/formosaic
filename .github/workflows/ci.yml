@@ -37,8 +37,12 @@ jobs:
       - name: Build all packages
         run: npm run build
 
+      # Each package is typechecked against its own tsconfig (core is strict;
+      # adapters intentionally compile with strict: false). A repo-root sweep of
+      # tsconfig.base.json would force `strict` onto every workspace plus
+      # e2e/stories/benchmarks, which have never been strict-clean.
       - name: Typecheck
-        run: npx tsc -p tsconfig.base.json --noEmit
+        run: npm run typecheck
 
       - name: Run unit tests
         run: npm run test

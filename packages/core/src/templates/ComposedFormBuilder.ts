@@ -6,7 +6,7 @@ import { resolveTemplates } from "./TemplateResolver";
 import { compileConnections } from "./ConnectionCompiler";
 import { IResolvedFormConfig } from "../types/IResolvedFormConfig";
 
-export function composeForm(options: IComposeFormOptions): IFormConfig {
+export function composeForm(options: IComposeFormOptions): IResolvedFormConfig {
   const fields: Record<string, IFieldConfig | ITemplateFieldRef> = {};
 
   // Build templateRef entries from fragments
@@ -45,7 +45,7 @@ export function composeForm(options: IComposeFormOptions): IFormConfig {
   };
 
   // Resolve templates
-  const resolved = resolveTemplates(config) as IResolvedFormConfig;
+  const resolved = resolveTemplates(config);
 
   // Compile connections if present
   if (options.connections?.length && resolved._resolvedPorts) {
@@ -92,6 +92,6 @@ export function composeForm(options: IComposeFormOptions): IFormConfig {
  *   connections: [{ name: "copy", when: ..., source: ..., target: ..., effect: "copyValues" }],
  * });
  */
-export function defineComposedForm(options: IComposeFormOptions): IFormConfig {
+export function defineComposedForm(options: IComposeFormOptions): IResolvedFormConfig {
   return composeForm(options);
 }

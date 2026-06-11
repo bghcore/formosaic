@@ -42,6 +42,8 @@ describe("FormErrorBoundary", () => {
 
     expect(screen.queryByTestId("child")).not.toBeInTheDocument();
     expect(screen.getByRole("alert")).toBeInTheDocument();
+    // Crash fallback must interrupt assistive tech immediately (audit 2026-06 finding 20)
+    expect(screen.getByRole("alert")).toHaveAttribute("aria-live", "assertive");
     expect(screen.getByText(/Something went wrong: Test error/)).toBeInTheDocument();
     expect(screen.getByText("Retry")).toBeInTheDocument();
   });

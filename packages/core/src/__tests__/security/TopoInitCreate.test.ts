@@ -18,7 +18,7 @@ import { describe, it, expect, vi } from "vitest";
 import { InitOnCreateFormState } from "../../helpers/FormosaicHelper";
 import { evaluateAllRules } from "../../helpers/RuleEngine";
 import type { IFieldConfig } from "../../types/IFieldConfig";
-import type { IEntityData } from "../../types/IRuntimeFieldState";
+import type { IEntityData } from "../../utils";
 
 describe("P0-6 topological init for create-time computed values", () => {
   /**

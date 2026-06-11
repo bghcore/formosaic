@@ -91,6 +91,23 @@ export function extractDigits(value: string): string {
 }
 
 /**
+ * Parses raw text-input content for a Number field.
+ *
+ * `Number("")` and `Number("   ")` are `0` in JavaScript, so a naive
+ * `!isNaN(Number(raw))` check turns "user cleared the field" into the value 0.
+ * This helper distinguishes the three cases adapters need:
+ *
+ * - empty / whitespace-only input → `null` (the field was cleared)
+ * - unparseable input → `undefined` (ignore the keystroke, keep current value)
+ * - otherwise → the parsed number
+ */
+export function parseNumberInputValue(raw: string): number | null | undefined {
+  if (raw.trim() === "") return null;
+  const parsed = Number(raw);
+  return isNaN(parsed) ? undefined : parsed;
+}
+
+/**
  * Formats a digit string as a phone number.
  * Supports US "(XXX) XXX-XXXX", international "+X XXX XXX XXXX", and raw digits.
  */

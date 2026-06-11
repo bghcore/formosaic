@@ -9,6 +9,7 @@ import {
   getFileNames,
   extractDigits,
   formatPhone,
+  parseNumberInputValue,
   ellipsifyText,
   MAX_FILE_SIZE_MB_DEFAULT,
   DocumentLinksStrings,
@@ -32,6 +33,28 @@ describe("FieldUtils", () => {
 
     it("appends error suffix when error present", () => {
       expect(FieldClassName("fe-textbox", { type: "required", message: "Required" })).toBe("fe-textbox error");
+    });
+  });
+
+  describe("parseNumberInputValue", () => {
+    it("returns null for empty string (cleared field)", () => {
+      expect(parseNumberInputValue("")).toBeNull();
+    });
+
+    it("returns null for whitespace-only input", () => {
+      expect(parseNumberInputValue("   ")).toBeNull();
+    });
+
+    it("returns undefined for unparseable input", () => {
+      expect(parseNumberInputValue("abc")).toBeUndefined();
+      expect(parseNumberInputValue("1.2.3")).toBeUndefined();
+    });
+
+    it("parses integers, decimals, negatives, and zero", () => {
+      expect(parseNumberInputValue("7")).toBe(7);
+      expect(parseNumberInputValue("3.14")).toBe(3.14);
+      expect(parseNumberInputValue("-42")).toBe(-42);
+      expect(parseNumberInputValue("0")).toBe(0);
     });
   });
 

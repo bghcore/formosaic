@@ -40,3 +40,7 @@ Thumbs.db
 
 # Git worktrees
 .worktrees/
+# Playwright artifacts
+playwright-report/
+test-results/
+e2e/app/package-lock.json
