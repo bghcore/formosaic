@@ -127,6 +127,55 @@ When a field's value changes, ALL dependents from the previous value are reverte
 
 ---
 
+## Console Warnings
+
+Beyond `validateFieldConfigs()`, the runtime emits `console.warn` for
+misconfigurations that would otherwise fail silently. Two were added in
+v1.5.0:
+
+### Unregistered validator in a `validate` rule
+
+A typo'd validator `name` used to silently disable the rule. In development
+(`NODE_ENV !== "production"`), referencing a validator that is not in the
+registry now warns once per unknown name:
+
+```
+[formosaic] Validation rule references unregistered validator "requierd";
+the rule is skipped. Register it via registerValidators({ requierd: ... })
+or fix the rule's "name".
+```
+
+**Fix:** correct the `name`, or register the custom validator with
+`registerValidators()` before the form mounts.
+
+### Port-field suffix collision in form connections
+
+Connection port fields are matched by their local suffix (the field name with
+the fragment prefix stripped). If two port fields in the same fragment reduce
+to the same suffix — e.g. `shipping.address.street` and a non-prefixed
+`address.street` — the later one wins and the earlier one used to silently
+drop out of the connection. This now warns at compose time:
+
+```
+[Formosaic] Port fields "shipping.address.street" and "address.street" in
+fragment "shipping" both reduce to suffix "address.street"; "address.street"
+wins and "shipping.address.street" is ignored.
+```
+
+**Fix:** rename one of the fields or adjust the port list so each port field
+has a unique suffix within its fragment.
+
+### Other warnings to watch for
+
+| Warning | Cause |
+|---------|-------|
+| `Lookup table "X" referenced in template but not found` | A template expression uses `$lookup.X` but the table is not in `config.lookups` or the global lookup registry |
+| `Connection "X" has mismatched port fields` | Source and target ports do not pair up; unmatched fields are skipped |
+| `composeForm(): connection rules were defined but there is no owner field to attach them to` | The composed form has no standalone or fragment field to carry the connection rules |
+| `[Formosaic] <dependency-graph message>` | Circular or self dependencies detected at init — see [Config Validation](#config-validation) |
+
+---
+
 ## Template Provenance in DevTools
 
 When using [form templates](/guide/templates), the **Deps tab** in FormDevTools includes a **Source** column that shows the template and fragment each field originated from. This makes it straightforward to trace expanded fields back to their template definition.
