@@ -1,6 +1,6 @@
 # Formosaic -- Full Reference
 
-> A config-driven React form library with a built-in declarative rules engine. Define forms as JSON (`IFormConfig`), swap UI libraries without rewriting logic, and let the engine handle conditional visibility, computed values, validation, and auto-save. 11 UI adapters (Fluent UI, MUI, Ant Design, Mantine, Chakra, Radix, React Aria, headless HTML, Base Web, Atlaskit, HeroUI) and 6,766 tests. MIT licensed. Built on react-hook-form v7.
+> A config-driven React form library with a built-in declarative rules engine. Define forms as JSON (`IFormConfig`), swap UI libraries without rewriting logic, and let the engine handle conditional visibility, computed values, validation, and auto-save. 11 UI adapters (Fluent UI, MUI, Ant Design, Mantine, Chakra, Radix, React Aria, headless HTML, Base Web, Atlaskit, HeroUI) and 6,799 tests. MIT licensed. Built on react-hook-form v7.
 
 This is the extended reference for AI models. For the concise version, see [llms.txt](https://github.com/bghcore/formosaic/blob/main/llms.txt).
 

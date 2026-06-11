@@ -11,6 +11,19 @@ All 13 packages released together. Adapter packages now declare
 `@formosaic/core: ^1.5.0` as their peer range — the Number-field fix relies on
 `parseNumberInputValue`, which first ships in core 1.5.0.
 
+> **Note:** v1.4.2 was tagged but **never reached npm** — its publish run
+> failed on the same build break that took down CI (see "CI restored to
+> green" below), so the npm `latest` remained 1.4.1. Upgrading from 1.4.1
+> brings in both the 1.4.2 changes (including its **breaking changes**:
+> required Toggle validates `true`, validators run for falsy values) and
+> everything below.
+
+### Changed (Node baseline)
+
+- **Node.js 18 and 20 are no longer supported** (both are end-of-life).
+  `engines.node` is now `>=22` on every published package; CI tests on
+  Node 22 and 24, and releases are built on Node 24.
+
 ### Fixed
 
 - **Number fields: clearing the input no longer commits `0`.** `Number("") === 0`

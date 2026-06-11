@@ -25,7 +25,7 @@ This project follows a [Code of Conduct](./CODE_OF_CONDUCT.md). By participating
 
 ## Prerequisites
 
-- **Node.js 20 or later** -- [nodejs.org](https://nodejs.org/)
+- **Node.js 22 or later** (CI tests on 22 and 24) -- [nodejs.org](https://nodejs.org/)
 - **npm** (ships with Node.js) -- the monorepo uses npm workspaces, not yarn or pnpm
 - **Git** -- [git-scm.com](https://git-scm.com/)
 

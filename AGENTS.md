@@ -5,7 +5,7 @@
 ```bash
 npm install --legacy-peer-deps
 npm run build          # Build all packages
-npm run test           # Run 6,766 tests with Vitest
+npm run test           # Run 6,799 tests with Vitest
 npm run test:coverage  # Run tests with coverage report
 npm run test:e2e       # Run 66 Playwright E2E tests
 npm run bench          # Run performance benchmarks
@@ -127,7 +127,7 @@ Build output per package: `dist/index.js` (CJS), `dist/index.mjs` (ESM), `dist/i
 
 ## Testing
 
-6,766 tests using Vitest across 68 test files. 66 Playwright E2E tests across 7 specs. 151 Storybook story exports across 49 files (Fluent UI adapter only today).
+6,799 tests using Vitest across 73 test files. 66 Playwright E2E tests across 7 specs. 151 Storybook story exports across 49 files (Fluent UI adapter only today).
 
 ```bash
 npm run test             # Run all tests
@@ -147,7 +147,7 @@ After any code change, verify:
 npm run build && npm run test
 ```
 
-All packages should build cleanly and all 6,766 tests should pass.
+All packages should build cleanly and all 6,799 tests should pass.
 
 ## Git Workflow
 

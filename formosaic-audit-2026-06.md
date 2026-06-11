@@ -321,6 +321,10 @@ from end users.
     `RenderField.tsx:173` — commit 762e31c fixed three files with the
     `globalThis`-cast idiom but missed this one; tsup's DTS compiler has no
     `@types/node`, so `npm run build` failed in CI. Fixed with the same idiom.
+    **Consequence discovered 2026-06-11: the v1.4.2 npm publish failed on the same
+    build break — npm `latest` was still 1.4.1.** The v1.4.2 fixes (including its
+    documented breaking changes) never reached consumers until the 1.5.0 release;
+    the 1.5.0 CHANGELOG notes this explicitly.
     **(b) The `Typecheck` CI step (added in the v1.4.2 release commit) never passed
     once:** `tsc -p tsconfig.base.json` sweeps the whole repo — forcing `strict`
     onto adapters that intentionally compile with `strict: false`, plus
