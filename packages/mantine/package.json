@@ -64,16 +64,16 @@
     "@mantine/dates": "^7.0.0"
   },
   "devDependencies": {
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-hook-form": "^7.71.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-hook-form": "^7.90.0",
     "@formosaic/core": "*",
-    "@mantine/core": "^7.17.2",
-    "@mantine/dates": "^7.17.2",
-    "dayjs": "^1.11.13",
-    "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3"
+    "@mantine/core": "^9.7.3",
+    "@mantine/dates": "^9.7.3",
+    "dayjs": "^1.11.23",
+    "tsup": "^9.0.0",
+    "typescript": "^7.0.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0"
   }
 }
