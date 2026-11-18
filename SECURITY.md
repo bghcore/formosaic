@@ -31,7 +31,7 @@ not eliminate them.
 | ReDoS on `matches` condition + `pattern` validator — long inputs | Input > 10 000 chars → matcher returns false/skip. |
 | ReDoS on `matches` / `pattern` — long regex sources | Regex source > 256 chars → matcher returns false/skip. |
 | Stack overflow on deeply nested RJSF schemas | `refResolver` `maxDepth` default 64. |
-| Expression sandbox | Uses `expr-eval` — no `new Function()` / `eval`. |
+| Expression sandbox | Uses `expr-eval-fork` `Parser.evaluate` — no `new Function()` / `eval`. |
 
 Every one of these defenses has adversarial regression tests in
 `packages/core/src/__tests__/security/`.

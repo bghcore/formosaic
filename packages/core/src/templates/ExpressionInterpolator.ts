@@ -14,7 +14,7 @@
  * - `==` / `!=`                           — equality / inequality
  * - `condition ? trueExpr : falseExpr`   — ternary (right-associative, nestable)
  *
- * This is intentionally separate from ExpressionEngine.ts (which uses expr-eval
+ * This is intentionally separate from ExpressionEngine.ts (which uses expr-eval-fork
  * for runtime $values/$fn expressions). This module is CSP-safe and uses no eval.
  */
 

@@ -34,7 +34,7 @@
     "@fluentui/react-components": "^9.73.2",
     "@fluentui/react-icons": "^2.0.320",
     "@mantine/hooks": "^8.3.16",
-    "@playwright/test": "^1.60.0",
+    "@playwright/test": "1.61.0",
     "@storybook/addon-docs": "^10.2.15",
     "@storybook/addon-links": "^10.2.15",
     "@storybook/react": "^10.2.15",
@@ -55,7 +55,7 @@
     "storybook": "^10.2.15",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "vite": "^7.3.1",
+    "vite": "7.3.7",
     "vitest": "^4.0.18"
   },
   "version": "1.5.0"
