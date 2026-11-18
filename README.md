@@ -71,7 +71,7 @@ See the [comparison guide](https://formosaic.com/guide/comparison) for a detaile
 | UI adapter system | 11 adapters | 4 adapters | 5 themes | Headless | 6 bridges |
 | Computed values | `$values`, `$fn` | MobX-based | No | No | No |
 | Wizard / multi-step | Built-in | Layout-based | Add-on | Manual | No |
-| Visual form builder | No | Yes (paid) | No | No | No |
+| Visual form builder | Yes (free / open source) | Yes (paid) | No | No | No |
 | AI form generation | No | ChatGPT GPT | No | No | No |
 | Schema import (JSON/Zod) | Both | Proprietary | JSON Schema | No | JSON Schema |
 | License | MIT | MIT core / Paid builder | Apache 2.0 | MIT | MIT |

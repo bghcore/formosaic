@@ -1,11 +1,13 @@
 import { IEntityData } from "../utils";
 import { getValueFunction } from "./ValueFunctionRegistry";
-import { Parser } from "expr-eval";
+import { Parser } from "expr-eval-fork";
 
 /**
- * CSP-SAFE: This module uses expr-eval (https://www.npmjs.com/package/expr-eval) instead of
- * `new Function()` / `eval()`, making expression evaluation safe in environments with strict
- * Content-Security-Policies (CSP) that forbid `script-src 'unsafe-eval'`.
+ * CSP-SAFE: This module uses expr-eval-fork (https://www.npmjs.com/package/expr-eval-fork)
+ * instead of `new Function()` / `eval()`, making expression evaluation safe in environments
+ * with strict Content-Security-Policies (CSP) that forbid `script-src 'unsafe-eval'`.
+ * The fork is a drop-in for expr-eval's Parser.evaluate API and includes the upstream
+ * fixes for prototype pollution and unrestricted function invocation.
  *
  * Evaluates an expression string against form values.
  *
@@ -14,7 +16,7 @@ import { Parser } from "expr-eval";
  * - $fn.name() for value function calls
  * - $parent.fieldName for parent entity references
  * - $root.fieldName alias for $values.fieldName
- * - Math functions (expr-eval builtins): round(), floor(), ceil(), abs(), min(), max(), sqrt(), pow(), log()
+ * - Math functions (parser builtins): round(), floor(), ceil(), abs(), min(), max(), sqrt(), pow(), log()
  * - Arithmetic: +, -, *, /
  * - Comparison: ==, !=, >, <, >=, <=
  * - Logical: and, or, not
@@ -28,7 +30,7 @@ import { Parser } from "expr-eval";
  */
 
 // Private CSP-safe parser singleton.
-// expr-eval 2.x exposes binaryOps/consts as plain objects on each Parser
+// expr-eval-fork exposes binaryOps/consts as plain objects on each Parser
 // instance. We create our own fresh instance in a factory here rather than
 // mutating the library's default — see audit P1-20. This keeps overrides
 // isolated to our own internal parser.
@@ -130,7 +132,7 @@ export function evaluateExpression(
     (_, fieldPath: string) => serializeValue(getNestedValue(values, fieldPath))
   );
 
-  // Step 3 – evaluate with the CSP-safe expr-eval parser
+  // Step 3 – evaluate with the CSP-safe expr-eval-fork parser
   try {
     return _parser.evaluate(resolved, {});
   } catch {

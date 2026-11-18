@@ -182,4 +182,4 @@ All packages should build cleanly and all 6,799 tests should pass.
 - Force-pushing to `main`
 - Committing `.env` files or secrets
 - Adding UI library dependencies (`@fluentui/*`, `@mui/*`) to the core package
-- Adding the visual designer, billing, auth, or a hosted platform app to this repo. This repository is MIT open source (core + UI adapters only). Commercial pieces live in the private `formosaic-private` repo.
+- Adding billing, auth, or a hosted platform app to this repo. Formosaic is a free MIT open-source project (core + UI adapters). The visual form builder is free and open source; there is no paid designer and no commercial split.
